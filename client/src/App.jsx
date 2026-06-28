@@ -1,5 +1,7 @@
 import { AppProvider, useApp } from './context';
+import { AuthProvider, useAuth } from './auth';
 import Sidebar from './components/Sidebar';
+import Login from './screens/Login';
 import Screen01 from './screens/S01_Home';
 import Screen02 from './screens/S02_Connect';
 import Screen03 from './screens/S03_Governance';
@@ -38,6 +40,26 @@ function Layout() {
   );
 }
 
+function AuthGate() {
+  const { user } = useAuth();
+
+  if (user === undefined) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f4f6fb' }}>
+        <div style={{ color: '#9ca3af', fontSize: 14 }}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) return <Login />;
+
+  return (
+    <AppProvider>
+      <Layout />
+    </AppProvider>
+  );
+}
+
 export default function App() {
   return (
     <>
@@ -53,9 +75,9 @@ export default function App() {
         input, textarea, select, button { font-family: 'IBM Plex Sans', sans-serif; }
         a { color: inherit; text-decoration: none; }
       `}</style>
-      <AppProvider>
-        <Layout />
-      </AppProvider>
+      <AuthProvider>
+        <AuthGate />
+      </AuthProvider>
     </>
   );
 }

@@ -15,13 +15,14 @@ from datetime import date, timedelta
 from pathlib import Path
 from queue import Empty, Queue
 
-from flask import Flask, Response, g, jsonify, request, stream_with_context
+from flask import Flask, Response, g, jsonify, request, session, stream_with_context
 from flask_cors import CORS
 
 # ─────────────────────────────────────────────────────────
 # App setup
 # ─────────────────────────────────────────────────────────
 app  = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-in-production')
 CORS(app, origins=['http://localhost:5173'], supports_credentials=True)
 
 BASE     = Path(__file__).parent
@@ -74,6 +75,13 @@ def execute(sql, params=()):
 # Schema
 # ─────────────────────────────────────────────────────────
 SCHEMA = """
+CREATE TABLE IF NOT EXISTS users (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    email      TEXT NOT NULL UNIQUE,
+    name       TEXT NOT NULL,
+    password   TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+);
 CREATE TABLE IF NOT EXISTS connections (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     name          TEXT NOT NULL,
@@ -693,6 +701,12 @@ def remove_share(art_id, share_id):
     execute('DELETE FROM artifact_shares WHERE id=? AND artifact_id=?', (share_id, art_id))
     return '', 204
 
+
+# ─────────────────────────────────────────────────────────
+# Auth
+# ─────────────────────────────────────────────────────────
+from auth import auth_bp
+app.register_blueprint(auth_bp)
 
 # ─────────────────────────────────────────────────────────
 # Entry point

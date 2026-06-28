@@ -1,5 +1,6 @@
 import { C, FONT, MONO } from '../tokens';
 import { useApp } from '../context';
+import { useAuth } from '../auth';
 
 const NAV = [
   { id: 1,  label: 'Workspace',      icon: '⌂',  group: null               },
@@ -16,6 +17,7 @@ const NAV = [
 
 export default function Sidebar() {
   const { screen, nav } = useApp();
+  const { user, logout } = useAuth();
   let lastGroup = null;
 
   return (
@@ -64,6 +66,19 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div style={{ padding: '12px 16px', borderTop: `1px solid ${C.sidebarBorder}` }}>
+        {user && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 140 }}>
+              {user.name}
+            </div>
+            <button onClick={logout} style={{
+              background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)',
+              fontSize: 11, cursor: 'pointer', fontFamily: FONT, padding: '2px 0',
+            }}>
+              Sign out
+            </button>
+          </div>
+        )}
         <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.24)', fontFamily: MONO }}>acme-corp / analytics</div>
       </div>
     </div>

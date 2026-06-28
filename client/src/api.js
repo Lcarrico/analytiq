@@ -2,6 +2,7 @@ const BASE = '/api';
 
 async function req(path, opts = {}) {
   const res = await fetch(`${BASE}${path}`, {
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json', ...opts.headers },
     ...opts,
   });
@@ -19,6 +20,12 @@ const patch= (path, body) => req(path, { method: 'PATCH', body: JSON.stringify(b
 const del  = (path)       => req(path, { method: 'DELETE' });
 
 export const api = {
+  // Auth
+  authLogin:        (body)  => post('/auth/login', body),
+  authRegister:     (body)  => post('/auth/register', body),
+  authLogout:       ()      => post('/auth/logout', {}),
+  authMe:           ()      => get('/auth/me'),
+
   // Health
   health:           ()      => get('/health'),
 
