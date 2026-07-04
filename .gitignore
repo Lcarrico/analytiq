@@ -7,3 +7,4 @@ client/dist/
 *.log
 .DS_Store
 client/vite.config.js.timestamp-*
+client/src/.lint-probe/

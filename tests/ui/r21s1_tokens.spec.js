@@ -64,7 +64,15 @@ test('lint wall rejects new imports of the legacy C palette', async () => {
   try {
     execFileSync('node', [eslint, probe], { stdio: 'pipe', cwd: REPO });
   } catch { failed = true; } finally {
-    fs.rmSync(probeDir, { recursive: true, force: true });
+    // Mount-safe cleanup (adaptation ledger 2026-07-04): some sandboxes mount
+    // the repo with unlink forbidden (EPERM). Overwrite the probe with
+    // lint-clean content so a leftover file can never trip `lint:tokens`;
+    // .lint-probe/ is gitignored.
+    try {
+      fs.rmSync(probeDir, { recursive: true, force: true });
+    } catch {
+      fs.writeFileSync(probe, 'export {};\n');
+    }
   }
   expect(failed, 'probe importing C must be rejected').toBe(true);
 
