@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>Marketing</span><span>/</span><span style="color:#0f172a">Product</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Marketing Landing.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">← Landing</a>
+</div>
+
+<section id="product" data-screen-label="Product page /product" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Product — How it works · <span style="color:#94a3b8">/product</span></div>
+<div style="width:1440px;background:#fff;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07)">
+
+  <div style="height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid #e4e8ef">
+    <a href="Marketing Landing.dc.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+      <svg width="24" height="24" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0f172a"></rect><rect x="5.5" y="12" width="3.2" height="6.5" rx="1.2" fill="#60a5fa"></rect><rect x="10.4" y="8.5" width="3.2" height="10" rx="1.2" fill="#3b82f6"></rect><rect x="15.3" y="5" width="3.2" height="13.5" rx="1.2" fill="#2563eb"></rect></svg>
+      <span style="font-size:16px;font-weight:700;color:#0f172a">Analyt<span style="color:#2563eb">IQ</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:28px;font-size:13.5px;font-weight:500;color:#47516b">
+      <span style="color:#0f172a;font-weight:600">Product</span>
+      <a href="Marketing Solutions.dc.html" style="color:inherit;text-decoration:none" style-hover="color:#0f172a">Solutions</a>
+      <a href="Marketing Templates.dc.html" style="color:inherit;text-decoration:none" style-hover="color:#0f172a">Templates</a>
+      <a href="Marketing Pricing.dc.html" style="color:inherit;text-decoration:none" style-hover="color:#0f172a">Pricing</a>
+      <a href="Marketing Security.dc.html" style="color:inherit;text-decoration:none" style-hover="color:#0f172a">Security</a>
+      <a href="Marketing Docs.dc.html" style="color:inherit;text-decoration:none" style-hover="color:#0f172a">Docs</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <a href="Auth.dc.html" style="font-size:13.5px;font-weight:500;color:#47516b;text-decoration:none">Log in</a>
+      <a href="Auth.dc.html#register" style="display:inline-flex;align-items:center;height:36px;padding:0 16px;background:#2563eb;color:#fff;font-size:13.5px;font-weight:600;border-radius:8px;text-decoration:none" style-hover="background:#1d4ed8">Start free</a>
+    </div>
+  </div>
+
+  <div style="padding:68px 64px 28px 64px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;color:#2563eb">HOW IT WORKS</span>
+    <h1 style="margin:0;font-size:40px;font-weight:700;letter-spacing:-.02em;color:#0f172a">A governed pipeline, not a chatbot</h1>
+    <p style="margin:0;max-width:620px;font-size:15.5px;line-height:1.6;color:#64748b">Every question runs through nine deterministic stages. The LLM plans; validated SQL and gates do the work. Click a stage to jump to it.</p>
+  </div>
+
+  <!-- STEPPER -->
+  <div style="padding:26px 64px 56px 64px;position:sticky;top:0;background:#fff;z-index:2">
+    <div style="max-width:1240px;margin:0 auto;display:flex;align-items:flex-start">
+      <a href="#stage-understand" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none"><span style="width:34px;height:34px;border-radius:50%;background:#2563eb;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">1</span><span style="font-size:11.5px;font-weight:600;color:#0f172a;text-align:center">Understand</span></a>
+      <span style="flex:1;height:2px;background:#e4e8ef;margin-top:16px"></span>
+      <a href="#stage-validate" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none"><span style="width:34px;height:34px;border-radius:50%;border:2px solid #c7d9f8;background:#f8faff;color:#1d4ed8;display:inline-flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">2</span><span style="font-size:11.5px;font-weight:500;color:#47516b;text-align:center">Validate metrics</span></a>
+      <span style="flex:1;height:2px;background:#e4e8ef;margin-top:16px"></span>
+      <a href="#stage-build" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none"><span style="width:34px;height:34px;border-radius:50%;border:2px solid #c7d9f8;background:#f8faff;color:#1d4ed8;display:inline-flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">3</span><span style="font-size:11.5px;font-weight:500;color:#47516b;text-align:center">Build gold data</span></a>
+      <span style="flex:1;height:2px;background:#e4e8ef;margin-top:16px"></span>
+      <a href="#stage-train" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none"><span style="width:34px;height:34px;border-radius:50%;border:2px solid #c7d9f8;background:#f8faff;color:#1d4ed8;display:inline-flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">4</span><span style="font-size:11.5px;font-weight:500;color:#47516b;text-align:center">Train &amp; backtest</span></a>
+      <span style="flex:1;height:2px;background:#e4e8ef;margin-top:16px"></span>
+      <a href="#stage-ship" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none"><span style="width:34px;height:34px;border-radius:50%;border:2px solid #c7d9f8;background:#f8faff;color:#1d4ed8;display:inline-flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">5</span><span style="font-size:11.5px;font-weight:500;color:#47516b;text-align:center">Assemble &amp; share</span></a>
+    </div>
+  </div>
+
+  <!-- STAGE 1 -->
+  <div id="stage-understand" style="padding:34px 64px;background:#f7f8fa;border-top:1px solid #e4e8ef">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.12em;color:#2563eb">STAGE 1 · UNDERSTAND</span>
+        <h2 style="margin:0;font-size:27px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Your question becomes a reviewable plan</h2>
+        <p style="margin:0;font-size:14.5px;line-height:1.65;color:#64748b">AnalytIQ resolves your words against the semantic layer — governed metrics, known dimensions, allowed joins. When it isn't sure, it asks one crisp question instead of guessing. You approve the plan before anything runs.</p>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8">no raw data touches the LLM · plan is auditable JSON</span>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 32px rgba(15,23,42,.06)">
+        <div style="display:flex;justify-content:flex-end"><span style="background:#2563eb;color:#eef4ff;font-size:12px;padding:8px 12px;border-radius:11px 11px 3px 11px">Which locations will miss their Q3 revenue target?</span></div>
+        <div style="border:1px solid #c7d9f8;border-radius:9px;padding:11px 13px;display:flex;flex-direction:column;gap:6px;background:#f8faff">
+          <span style="font-size:11.5px;font-weight:600;color:#0f172a">Review your plan</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;line-height:1.8;color:#64748b">GOAL&nbsp;&nbsp;&nbsp;&nbsp;flag locations &gt;5% below target<br>METRICS&nbsp;net_revenue · target_gap_pct<br>SOURCES&nbsp;sample_retail + q3_targets.xlsx</span>
+          <div style="display:flex;gap:7px"><span style="display:inline-flex;height:24px;padding:0 10px;background:#2563eb;border-radius:6px;color:#fff;font-size:10px;font-weight:600;align-items:center">Approve &amp; Build</span><span style="display:inline-flex;height:24px;padding:0 9px;border:1px solid #d4d9e1;border-radius:6px;color:#334155;font-size:10px;font-weight:600;align-items:center">Edit</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2 -->
+  <div id="stage-validate" style="padding:34px 64px;background:#fff">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center">
+      <div style="background:#0b1220;border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.75;color:#94a3b8;box-shadow:0 12px 32px rgba(15,23,42,.12)">
+        <span><span style="color:#4ade80">✓</span> metric net_revenue → governed definition v4</span>
+        <span><span style="color:#4ade80">✓</span> join orders → stores · n:1 · inflation ×1.0</span>
+        <span><span style="color:#f87171">✕</span> join orders → promotions · m:n <span style="color:#f87171">BLOCKED</span></span>
+        <span style="padding-left:16px;color:#64748b">→ bridge table recommended · queued for steward</span>
+        <span><span style="color:#4ade80">✓</span> 2 PII columns masked · customers.email, zip4</span>
+        <span><span style="color:#4ade80">✓</span> SQL validated · read-only · row limit 5,000</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.12em;color:#2563eb">STAGE 2 · VALIDATE</span>
+        <h2 style="margin:0;font-size:27px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Deterministic gates, not vibes</h2>
+        <p style="margin:0;font-size:14.5px;line-height:1.65;color:#64748b">Every metric resolves to one reviewed definition. Dangerous joins are blocked, PII is masked, and generated SQL must pass safety checks before it can touch your warehouse — read-only, always.</p>
+        <a href="Marketing Security.dc.html" style="font-size:13.5px;font-weight:600;color:#2563eb;text-decoration:none">Security &amp; governance model →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3 -->
+  <div id="stage-build" style="padding:34px 64px;background:#f7f8fa">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.12em;color:#2563eb">STAGE 3 · BUILD</span>
+        <h2 style="margin:0;font-size:27px;font-weight:700;letter-spacing:-.015em;color:#0f172a">An immutable gold table per answer</h2>
+        <p style="margin:0;font-size:14.5px;line-height:1.65;color:#64748b">Each dashboard is fed by a versioned, contract-checked gold table at exactly the right grain. Row counts, reconciliation, and null contracts are enforced — if a gate fails, the build repairs or stops. No silent bad data.</p>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8">GOLD.REV_LOC_WK_V1 · 3,486 rows · gates 6/6 ✓</span>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:9px;box-shadow:0 12px 32px rgba(15,23,42,.06)">
+        <div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#334155">
+          <span style="border:1px solid #e4e8ef;border-radius:6px;padding:5px 9px;background:#fafbfc">orders</span><span style="color:#94a3b8">+</span>
+          <span style="border:1px solid #e4e8ef;border-radius:6px;padding:5px 9px;background:#fafbfc">targets</span><span style="color:#94a3b8">→</span>
+          <span style="border:1px solid #f2ddb0;border-radius:6px;padding:5px 9px;background:#fdf9ef;color:#b45309;font-weight:600">GOLD.REV_LOC_WK_V1</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span style="display:inline-flex;height:21px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;align-items:center">ROW BAND ✓</span>
+          <span style="display:inline-flex;height:21px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;align-items:center">GRAIN UNIQUE ✓</span>
+          <span style="display:inline-flex;height:21px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;align-items:center">RECONCILES GL ✓</span>
+          <span style="display:inline-flex;height:21px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;align-items:center">NULL CONTRACT ✓</span>
+        </div>
+        <svg viewBox="0 0 480 70" style="width:100%;height:70px"><rect x="0" y="26" width="480" height="20" rx="5" fill="#f1f5f9"></rect><rect x="0" y="26" width="316" height="20" rx="5" fill="#2563eb" opacity=".16"></rect><text x="10" y="40" font-family="IBM Plex Mono" font-size="10" fill="#334155">3,486 / 3,600 expected rows</text><text x="360" y="40" font-family="IBM Plex Mono" font-size="10" fill="#15803d">within band ✓</text></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 4 -->
+  <div id="stage-train" style="padding:34px 64px;background:#fff">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 32px rgba(15,23,42,.06)">
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b"><span>candidate leaderboard · 5-window backtest</span><span style="color:#15803d">leakage 14/14 ✓</span></div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:70px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#0f172a;font-weight:600">LightGBM</span><div style="flex:1;height:13px;border-radius:3px;background:#eef1f5;overflow:hidden"><span style="display:block;width:34%;height:100%;background:#15803d"></span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#15803d">4.1%</span></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:70px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">XGBoost</span><div style="flex:1;height:13px;border-radius:3px;background:#eef1f5;overflow:hidden"><span style="display:block;width:40%;height:100%;background:#93c5fd"></span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">4.6%</span></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:70px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">Prophet</span><div style="flex:1;height:13px;border-radius:3px;background:#eef1f5;overflow:hidden"><span style="display:block;width:52%;height:100%;background:#cbd5e1"></span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">5.8%</span></div>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">promotion gate: beat incumbent by ≥0.5pt on ≥3 windows ✓ · model card generated</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.12em;color:#2563eb">STAGE 4 · PREDICT</span>
+        <h2 style="margin:0;font-size:27px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Forecasts earn their place</h2>
+        <p style="margin:0;font-size:14.5px;line-height:1.65;color:#64748b">When your question needs a prediction, candidates compete on rolling backtests with automatic leakage checks. A champion is promoted only when it beats the incumbent — and ships with a model card anyone can read.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 5 -->
+  <div id="stage-ship" style="padding:34px 64px;background:#f7f8fa">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.12em;color:#2563eb">STAGE 5 · SHIP</span>
+        <h2 style="margin:0;font-size:27px;font-weight:700;letter-spacing:-.015em;color:#0f172a">A living artifact, not a screenshot</h2>
+        <p style="margin:0;font-size:14.5px;line-height:1.65;color:#64748b">The result is a versioned dashboard with health scores, narrative insight, and a full audit trail. Refine it in chat, edit it directly, or share it with signed, expiring links and embeds.</p>
+        <div style="display:flex;gap:12px"><a href="Create Workbench.dc.html" style="display:inline-flex;align-items:center;height:40px;padding:0 18px;background:#2563eb;border-radius:8px;color:#fff;font-size:13px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">See the workbench</a><a href="Artifact Sharing.dc.html" style="display:inline-flex;align-items:center;height:40px;padding:0 17px;border:1px solid #d4d9e1;border-radius:8px;color:#0f172a;font-size:13px;font-weight:600;text-decoration:none" style-hover="border-color:#94a3b8">Sharing views</a></div>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:9px;box-shadow:0 12px 32px rgba(15,23,42,.06)">
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">Q3 FORECAST</div><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#0f172a;margin-top:2px">$4.82M</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#dc2626;margin-top:2px">−6.2% vs target</div></div>
+          <div style="flex:1;background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">AT-RISK</div><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#b45309;margin-top:2px">7 / 42</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#64748b;margin-top:2px">3 high</div></div>
+          <div style="flex:1;background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">HEALTH</div><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#15803d;margin-top:2px">96</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#64748b;margin-top:2px">v14</div></div>
+        </div>
+        <svg viewBox="0 0 480 90" style="width:100%;height:90px"><polygon points="300,44 340,40 380,46 420,42 460,50 480,48 480,74 460,68 420,64 380,58 340,60 300,54" fill="rgba(37,99,235,.08)"></polygon><polyline points="0,66 40,60 80,64 120,52 160,56 200,46 240,50 280,40 300,44" fill="none" stroke="#2563eb" stroke-width="2.2"></polyline><polyline points="300,44 340,46 380,52 420,48 460,58 480,56" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-dasharray="5 5"></polyline><line x1="300" y1="18" x2="300" y2="80" stroke="#cbd5e1" stroke-dasharray="3 4"></line></svg>
+        <div style="display:flex;gap:6px"><span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">● HEALTHY</span><span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">SIGNED LINK</span><span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:#f3eefe;color:#7c3aed;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">MODEL CARD</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="padding:72px 64px;background:#0b1220;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px">
+    <h2 style="margin:0;font-size:32px;font-weight:700;letter-spacing:-.02em;color:#f8fafc">Watch it build your first dashboard</h2>
+    <div style="display:flex;gap:14px">
+      <a href="Auth.dc.html#register" style="display:inline-flex;align-items:center;height:44px;padding:0 22px;background:#2563eb;color:#fff;font-size:14px;font-weight:600;border-radius:9px;text-decoration:none" style-hover="background:#1d4ed8">Start free</a>
+      <a href="Marketing Templates.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 22px;border:1px solid rgba(255,255,255,.22);color:#e2e8f0;font-size:14px;font-weight:600;border-radius:9px;text-decoration:none" style-hover="border-color:rgba(255,255,255,.45)">Browse templates</a>
+    </div>
+  </div>
+</div>
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>

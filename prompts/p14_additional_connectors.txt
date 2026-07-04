@@ -1,0 +1,15 @@
+Implement real connectors for BigQuery and PostgreSQL to match the "Coming soon" tiles already shown in S02_Connect.jsx.
+
+For BigQuery:
+1. Add google-cloud-bigquery to requirements.txt.
+2. Accept these form fields: project_id, dataset_id, credentials_json (the service account JSON key — store encrypted, same as Snowflake creds).
+3. In the governance route, detect conn.type === 'bigquery' and use the BigQuery client to run INFORMATION_SCHEMA.COLUMNS queries instead of Snowflake's SHOW COLUMNS.
+
+For PostgreSQL:
+1. psycopg2-binary is already in requirements.txt (added in task #5).
+2. Accept: host, port, database, username, password, schema.
+3. Use information_schema.tables and information_schema.columns for catalog introspection.
+
+In S02_Connect.jsx:
+4. Remove live: false from bigquery and postgres connector entries.
+5. Make the form fields dynamic based on the selected connector type — BigQuery shows project_id + credentials_json upload; Postgres shows host/port/database/username/password/schema.

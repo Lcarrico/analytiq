@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>Marketing</span><span>/</span><span style="color:#0f172a">Solutions</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+</div>
+
+<section id="solutions" data-screen-label="Solutions template /solutions/executives" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Solutions — shared template, persona tabs cover all 6 routes · <span style="color:#94a3b8">/solutions/executives · /data-teams · /operations · /finance · /sales · /customer-success</span></div>
+<div style="width:1440px;background:#fff;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07)">
+
+  <div style="height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid #e4e8ef">
+    <a href="Marketing Landing.dc.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+      <svg width="24" height="24" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0f172a"></rect><rect x="5.5" y="12" width="3.2" height="6.5" rx="1.2" fill="#60a5fa"></rect><rect x="10.4" y="8.5" width="3.2" height="10" rx="1.2" fill="#3b82f6"></rect><rect x="15.3" y="5" width="3.2" height="13.5" rx="1.2" fill="#2563eb"></rect></svg>
+      <span style="font-size:16px;font-weight:700;color:#0f172a">Analyt<span style="color:#2563eb">IQ</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:28px;font-size:13.5px;font-weight:500;color:#47516b">
+      <a href="Marketing Product.dc.html" style="color:inherit;text-decoration:none">Product</a>
+      <span style="color:#0f172a;font-weight:600">Solutions</span>
+      <a href="Marketing Templates.dc.html" style="color:inherit;text-decoration:none">Templates</a>
+      <a href="Marketing Pricing.dc.html" style="color:inherit;text-decoration:none">Pricing</a>
+      <a href="Marketing Security.dc.html" style="color:inherit;text-decoration:none">Security</a>
+      <a href="Marketing Docs.dc.html" style="color:inherit;text-decoration:none">Docs</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <a href="Auth.dc.html" style="font-size:13.5px;font-weight:500;color:#47516b;text-decoration:none">Log in</a>
+      <a href="Auth.dc.html#register" style="display:inline-flex;align-items:center;height:36px;padding:0 16px;background:#2563eb;color:#fff;font-size:13.5px;font-weight:600;border-radius:8px;text-decoration:none" style-hover="background:#1d4ed8">Start free</a>
+    </div>
+  </div>
+
+  <!-- persona tabs -->
+  <div style="display:flex;justify-content:center;gap:8px;padding:22px 40px 0 40px">
+    <span style="display:inline-flex;align-items:center;height:32px;padding:0 15px;border-radius:999px;background:#0f172a;color:#fff;font-size:12.5px;font-weight:600">Executives</span>
+    <span style="display:inline-flex;align-items:center;height:32px;padding:0 15px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:12.5px;font-weight:500;cursor:pointer" style-hover="border-color:#94a3b8">Data teams</span>
+    <span style="display:inline-flex;align-items:center;height:32px;padding:0 15px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:12.5px;font-weight:500;cursor:pointer" style-hover="border-color:#94a3b8">Operations</span>
+    <span style="display:inline-flex;align-items:center;height:32px;padding:0 15px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:12.5px;font-weight:500;cursor:pointer" style-hover="border-color:#94a3b8">Finance</span>
+    <span style="display:inline-flex;align-items:center;height:32px;padding:0 15px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:12.5px;font-weight:500;cursor:pointer" style-hover="border-color:#94a3b8">Sales</span>
+    <span style="display:inline-flex;align-items:center;height:32px;padding:0 15px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:12.5px;font-weight:500;cursor:pointer" style-hover="border-color:#94a3b8">Customer success</span>
+  </div>
+
+  <!-- hero -->
+  <div style="padding:52px 64px 60px 64px;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;max-width:1328px;margin:0 auto">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;color:#2563eb">FOR EXECUTIVES</span>
+      <h1 style="margin:0;font-size:38px;font-weight:700;letter-spacing:-.02em;line-height:1.12;color:#0f172a">Answers before the meeting, not after the sprint</h1>
+      <p style="margin:0;max-width:480px;font-size:15px;line-height:1.65;color:#64748b">Ask the question you'd ask your analyst. Get a governed dashboard with a forecast and a plain-English narrative — in minutes, with an audit trail your data team trusts.</p>
+      <div style="display:flex;gap:12px;margin-top:4px">
+        <a href="Auth.dc.html#register" style="display:inline-flex;align-items:center;height:42px;padding:0 20px;background:#2563eb;border-radius:9px;color:#fff;font-size:13.5px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">Start free</a>
+        <a href="Artifact Sharing.dc.html#present" style="display:inline-flex;align-items:center;height:42px;padding:0 19px;border:1px solid #d4d9e1;border-radius:9px;color:#0f172a;font-size:13.5px;font-weight:600;text-decoration:none" style-hover="border-color:#94a3b8">See present mode</a>
+      </div>
+    </div>
+    <div style="background:#0b1220;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:11px;box-shadow:0 20px 50px rgba(2,6,23,.35)">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12.5px;font-weight:600;color:#e2e8f0">Monday 8am digest</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#64748b">auto-generated</span></div>
+      <span style="font-size:12.5px;line-height:1.65;color:#94a3b8">Q3 tracks at <span style="font-family:'IBM Plex Mono',monospace;color:#f1f5f9">$4.82M</span> (−6.2% vs target). Gap concentrates in <span style="color:#f87171">Northeast</span>; West over-delivers <span style="color:#4ade80">+3.9%</span>. Reallocating promo spend could close ≈40% of the gap.</span>
+      <svg viewBox="0 0 440 84" style="width:100%;height:84px"><polyline points="0,62 40,56 80,60 120,48 160,52 200,42 240,46 270,38" fill="none" stroke="#3b82f6" stroke-width="2.5"></polyline><polyline points="270,38 310,40 350,46 390,42 440,50" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-dasharray="6 5"></polyline><polyline points="0,54 110,46 220,36 330,28 440,22" fill="none" stroke="#64748b" stroke-width="1.6" stroke-dasharray="4 5"></polyline><line x1="270" y1="12" x2="270" y2="74" stroke="rgba(255,255,255,.15)" stroke-dasharray="3 4"></line></svg>
+      <div style="display:flex;gap:6px"><span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:rgba(74,222,128,.12);color:#4ade80;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;border:1px solid rgba(74,222,128,.25)">GOVERNED</span><span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:rgba(96,165,250,.12);color:#60a5fa;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;border:1px solid rgba(96,165,250,.25)">MAPE 4.1%</span></div>
+    </div>
+  </div>
+
+  <!-- template gallery -->
+  <div style="padding:0 64px 56px 64px;max-width:1328px;margin:0 auto;display:flex;flex-direction:column;gap:20px">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.12em;color:#94a3b8">STARTING POINTS FOR EXECUTIVES</span>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <a href="Marketing Templates.dc.html" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:12px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#c7d9f8;box-shadow:0 10px 28px rgba(15,23,42,.08)">
+        <div style="background:#f7f8fa;border-bottom:1px solid #eef1f5;padding:14px"><svg viewBox="0 0 360 66" style="width:100%;height:66px"><polygon points="0,58 0,44 60,40 120,46 180,32 240,36 240,58" fill="rgba(37,99,235,.09)"></polygon><polyline points="0,44 60,40 120,46 180,32 240,36" fill="none" stroke="#2563eb" stroke-width="2"></polyline><polyline points="240,36 300,30 360,34" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="5 4"></polyline><line x1="240" y1="10" x2="240" y2="58" stroke="#cbd5e1" stroke-dasharray="3 4"></line></svg></div>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:5px"><span style="font-size:14px;font-weight:600;color:#0f172a">Exec Weekly Revenue</span><span style="font-size:12px;line-height:1.5;color:#64748b">Trend + forecast + one narrative paragraph.</span></div>
+      </a>
+      <a href="Marketing Templates.dc.html" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:12px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#c7d9f8;box-shadow:0 10px 28px rgba(15,23,42,.08)">
+        <div style="background:#f7f8fa;border-bottom:1px solid #eef1f5;padding:14px"><svg viewBox="0 0 360 66" style="width:100%;height:66px"><rect x="8" y="46" width="330" height="10" rx="5" fill="#eff4ff"></rect><rect x="8" y="30" width="252" height="10" rx="5" fill="#93c5fd"></rect><rect x="8" y="14" width="130" height="10" rx="5" fill="#2563eb"></rect></svg></div>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:5px"><span style="font-size:14px;font-weight:600;color:#0f172a">Board Pack KPIs</span><span style="font-size:12px;line-height:1.5;color:#64748b">The 8 numbers the board asks about, always fresh.</span></div>
+      </a>
+      <a href="Marketing Templates.dc.html" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:12px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#c7d9f8;box-shadow:0 10px 28px rgba(15,23,42,.08)">
+        <div style="background:#f7f8fa;border-bottom:1px solid #eef1f5;padding:14px"><svg viewBox="0 0 360 66" style="width:100%;height:66px"><rect x="8" y="8" width="34" height="24" rx="4" fill="#e8f5ec"></rect><rect x="48" y="8" width="34" height="24" rx="4" fill="#fdf3e3"></rect><rect x="88" y="8" width="34" height="24" rx="4" fill="#e8f5ec"></rect><rect x="8" y="36" width="34" height="24" rx="4" fill="#fdeaea"></rect><rect x="48" y="36" width="34" height="24" rx="4" fill="#e8f5ec"></rect><rect x="88" y="36" width="34" height="24" rx="4" fill="#e8f5ec"></rect><rect x="140" y="12" width="210" height="9" rx="4" fill="#e4e8ef"></rect><rect x="140" y="29" width="160" height="9" rx="4" fill="#e4e8ef"></rect><rect x="140" y="46" width="185" height="9" rx="4" fill="#e4e8ef"></rect></svg></div>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:5px"><span style="font-size:14px;font-weight:600;color:#0f172a">Risk &amp; Exceptions Brief</span><span style="font-size:12px;line-height:1.5;color:#64748b">What broke, what's drifting, who owns it.</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- quote band -->
+  <div style="padding:56px 64px;background:#0b1220">
+    <div style="max-width:860px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:#2563eb">"</span>
+      <p style="margin:0;font-size:21px;line-height:1.55;font-weight:500;color:#e2e8f0">I stopped asking for decks. I ask AnalytIQ on Sunday night and walk into Monday's exec meeting with the answer — and the receipts.</p>
+      <div style="display:flex;align-items:center;gap:11px">
+        <span style="width:34px;height:34px;border-radius:50%;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">RM</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-start"><span style="font-size:13px;font-weight:600;color:#f1f5f9">Rosa Martínez</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">COO · national retail chain</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- feature callouts -->
+  <div style="padding:56px 64px;max-width:1328px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+    <div style="display:flex;flex-direction:column;gap:9px;border:1px solid #e4e8ef;border-radius:12px;padding:20px">
+      <span style="width:32px;height:32px;border-radius:9px;background:#eff4ff;display:inline-flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 12 12"><path d="M3 2.2v7.6L10 6 3 2.2Z" fill="#2563eb"></path></svg></span>
+      <span style="font-size:14.5px;font-weight:600;color:#0f172a">Present mode</span>
+      <span style="font-size:12.5px;line-height:1.55;color:#64748b">Full-screen sections with auto-generated speaker notes.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px;border:1px solid #e4e8ef;border-radius:12px;padding:20px">
+      <span style="width:32px;height:32px;border-radius:9px;background:#fdeaea;display:inline-flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M7.5 2a4 4 0 0 1 4 4v2.5l1 2H2.5l1-2V6a4 4 0 0 1 4-4Z" fill="none" stroke="#dc2626" stroke-width="1.4" stroke-linejoin="round"></path></svg></span>
+      <span style="font-size:14.5px;font-weight:600;color:#0f172a">Alerts that matter</span>
+      <span style="font-size:12.5px;line-height:1.55;color:#64748b">One Slack ping when a region drifts off target — not fifty.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px;border:1px solid #e4e8ef;border-radius:12px;padding:20px">
+      <span style="width:32px;height:32px;border-radius:9px;background:#e8f5ec;display:inline-flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M7.5 1.5 12.5 3.5v3.7c0 3-2.1 4.8-5 5.8-2.9-1-5-2.8-5-5.8V3.5l5-2Z" fill="none" stroke="#15803d" stroke-width="1.4" stroke-linejoin="round"></path></svg></span>
+      <span style="font-size:14.5px;font-weight:600;color:#0f172a">Numbers that reconcile</span>
+      <span style="font-size:12.5px;line-height:1.55;color:#64748b">Every figure traces to one governed definition. No dueling decks.</span>
+    </div>
+  </div>
+
+  <div style="padding:60px 64px;background:#f7f8fa;border-top:1px solid #e4e8ef;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px">
+    <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em;color:#0f172a">Bring one real question. That's the demo.</h2>
+    <div style="display:flex;gap:13px"><a href="Auth.dc.html#register" style="display:inline-flex;align-items:center;height:44px;padding:0 22px;background:#2563eb;border-radius:9px;color:#fff;font-size:14px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">Start free</a><a href="Marketing Landing.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 21px;border:1px solid #d4d9e1;border-radius:9px;color:#0f172a;font-size:14px;font-weight:600;text-decoration:none" style-hover="border-color:#94a3b8">Book a demo</a></div>
+  </div>
+</div>
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>

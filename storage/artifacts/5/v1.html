@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="analytiq:artifact-id" content="5">
+<meta name="analytiq:generated-at" content="2026-07-04T21:38:05.135485+00:00">
+<meta name="analytiq:validator" content="1.0">
+<meta name="analytiq:artifact-type" content="Predictive">
+<title>Net Revenue Forecast</title>
+<style>
+  :root {
+    --primary: #4f7cff;
+    --bg: #f7f8fa; --surface: #fff; --text: #1a202c; --muted: #64748b;
+    --border: #e2e8f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #101418; --surface: #1a2027; --text: #e8edf3;
+             --muted: #93a3b5; --border: #2a3441; }
+  }
+  body { font-family: -apple-system, 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+  .wrap { max-width: 920px; margin: 24px auto; padding: 0 16px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: #64748b; font-size: 12px; margin-bottom: 18px; }
+  .kpis { display: flex; gap: 12px; margin-bottom: 18px; }
+  .kpi { flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
+  .kpi .v { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .kpi .l { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .badge.good { background: #e8f5ec; color: #1e7d3c; }
+  .badge.warn { background: #fdf3e2; color: #946300; }
+  .badge.bad  { background: #fdeaea; color: #b3261e; }
+  .panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; }
+  .legend { font-size: 11px; color: #64748b; margin-top: 8px; }
+  .ci-ribbon { fill: #4f7cff22; stroke: none; }
+  .series-actual { fill: none; stroke: #1a202c; stroke-width: 1.6; }
+  .series-predicted { fill: none; stroke: #4f7cff; stroke-width: 1.6; stroke-dasharray: 4 3; }
+  .cut { stroke: #94a3b8; stroke-dasharray: 2 3; stroke-width: 1; }
+  .hdr { display: flex; gap: 12px; align-items: baseline; margin-bottom: 14px; }
+  .hdr-title { font-size: 18px; font-weight: 700; }
+  .hdr-meta { color: #64748b; font-size: 11px; flex: 1; }
+  .hdr-actions { font-size: 11px; color: #4f7cff; }
+  .panel h2 { font-size: 13px; margin: 0 0 10px; }
+  .panel + .panel { margin-top: 14px; }
+  .empty { color: #94a3b8; font-size: 12px; }
+  .imp-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 11px; }
+  .imp-name { width: 180px; overflow: hidden; text-overflow: ellipsis; }
+  .imp-bar { height: 10px; border-radius: 3px; display: inline-block; }
+  .imp-bar.pos { background: #4f7cff; } .imp-bar.neg { background: #e8618c; }
+  .bd-grid { display: flex; gap: 10px; align-items: flex-end; height: 80px; }
+  .bd-cell { text-align: center; font-size: 10px; }
+  .bd-bar { width: 26px; background: #4f7cff55; border-radius: 3px 3px 0 0; }
+  .forecast-strip { display: flex; gap: 8px; overflow-x: auto; font-size: 10px; }
+  .forecast-point { display: flex; flex-direction: column; gap: 2px; padding: 6px;
+                     background: #f1f5ff; border-radius: 5px; min-width: 52px; }
+  .trial-row { display: flex; gap: 12px; font-size: 11px; padding: 5px 0;
+                border-bottom: 1px solid #eef2f7; }
+  .trial-row span:first-child { width: 120px; font-weight: 600; }
+  .footer { display: flex; gap: 16px; font-size: 10px; color: #64748b; }
+  .hdr-logo { font-weight: 800; color: var(--primary); }
+  .panel { background: var(--surface); border-color: var(--border); }
+  .version-row { font-size: 11px; display: flex; gap: 10px; padding: 3px 0; }
+  .panel-export { float: right; font-size: 10px; color: var(--primary);
+                   background: none; border: none; cursor: pointer; }
+  @media (max-width: 768px) {
+    .kpis { flex-direction: column; }
+    .bd-grid { flex-wrap: wrap; }
+    .drawer { width: 100%; }
+  }
+  @media print {
+    .hdr-actions, .drawer, .panel-export { display: none !important; }
+    .panel { break-inside: avoid; border: none; }
+    body { background: #fff; }
+  }
+  .bd-cell { cursor: pointer; } .bd-cell.active .bd-bar { background: #4f7cff; }
+  .drawer { position: fixed; right: 0; top: 0; bottom: 0; width: 320px; background: #fff;
+             border-left: 1px solid #e2e8f0; padding: 14px; overflow-y: auto; }
+  .drawer-head { display: flex; gap: 8px; justify-content: space-between; }
+  .drill-row { display: flex; justify-content: space-between; font-size: 11px;
+                padding: 3px 0; border-bottom: 1px solid #f1f5f9; }
+  .drill-row.head { font-weight: 700; }
+  .annotation-overlay { font-size: 11px; background: #fff9e6; border: 1px solid #f5e2a5;
+                         border-radius: 5px; padding: 4px 8px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Net Revenue Forecast</h1>
+  <div class="sub">Generated 2026-07-04T21:38:05.135485+00:00 · AnalytIQ self-contained artifact</div>
+
+  <div class="hdr" data-panel="header" role="banner">
+    
+    <span class="hdr-title">Net Revenue Forecast</span>
+    <span class="hdr-meta">Predictive ·
+      last refreshed 2026-07-04T21:38:05.135485+00:00</span>
+    <span class="hdr-actions" aria-label="Share and export">⤴ share · ⬇ export</span>
+  </div>
+
+  <div class="kpis" data-panel="kpi-row" role="group" aria-label="Key performance indicators">
+    <div class="kpi" data-kpi="avg-actual"><div class="v">620</div>
+      <div class="l">Avg daily actual</div></div>
+    <div class="kpi" data-kpi="forecast-avg"><div class="v">632</div>
+      <div class="l">Forecast avg (next window)</div></div>
+    <div class="kpi" data-kpi="mape"><div class="v">3.9%
+      <span class="badge good">MAPE</span></div>
+      <div class="l">Validation error</div></div>
+  </div>
+
+  <div class="panel" data-panel="timeseries">
+    <svg viewBox="0 0 860 300" width="100%" role="img"
+         aria-label="Actual versus predicted time series with confidence interval ribbon">
+      <polygon class="ci-ribbon" points="40.0,158.53 48.76,147.26 57.53,135.68 66.29,134.76 75.06,108.56 83.82,178.34 92.58,180.47 101.35,152.13 110.11,152.44 118.88,128.67 127.64,122.88 136.4,107.65 145.17,177.73 153.93,178.34 162.7,149.09 171.46,133.85 180.22,134.16 188.99,121.66 197.75,97.59 206.52,172.55 215.28,182.91 224.04,140.25 232.81,132.94 241.57,130.19 250.34,105.82 259.1,98.5 267.87,165.54 276.63,170.72 285.39,141.77 294.16,125.01 302.92,113.13 311.69,105.51 320.45,93.63 329.21,153.05 337.98,167.37 346.74,144.82 355.51,126.84 364.27,104.29 373.03,102.47 381.8,84.79 390.56,154.27 399.33,162.49 408.09,135.37 416.85,118.61 425.62,100.64 434.38,100.94 443.15,82.66 451.91,139.64 460.67,162.8 469.44,120.75 478.2,112.83 486.97,93.93 495.73,88.45 504.49,72.3 513.26,135.98 522.02,150.91 530.79,127.76 539.55,104.6 548.31,97.29 557.08,81.75 565.84,68.34 574.61,135.98 583.37,151.83 592.13,121.05 600.9,99.11 609.66,91.8 618.43,82.05 627.19,55.84 635.96,128.98 644.72,134.76 653.48,116.79 662.25,93.32 671.01,82.66 679.78,65.9 688.54,54.93 697.3,121.05 706.07,142.99 714.83,109.17 723.6,97.59 732.36,82.35 741.12,66.51 749.89,54.02 758.65,117.4 767.42,125.93 776.18,100.94 784.94,91.19 793.71,68.34 802.47,52.8 811.24,40.0 820.0,107.34 820.0,239.58 811.24,171.02 802.47,182.6 793.71,196.93 784.94,219.17 776.18,227.7 767.42,251.47 758.65,241.72 749.89,177.12 741.12,188.39 732.36,203.02 723.6,217.04 714.83,227.4 706.07,260.0 697.3,236.84 688.54,170.11 679.78,179.86 671.01,195.4 662.25,204.85 653.48,227.09 644.72,243.85 635.96,236.84 627.19,162.49 618.43,187.48 609.66,196.01 600.9,202.71 592.13,223.43 583.37,252.99 574.61,235.93 565.84,167.06 557.08,179.25 548.31,193.57 539.55,199.67 530.79,221.61 522.02,244.16 513.26,228.01 504.49,163.1 495.73,178.03 486.97,182.3 478.2,199.97 469.44,206.68 460.67,247.51 451.91,223.13 443.15,164.93 434.38,182.6 425.62,181.08 416.85,197.84 408.09,213.38 399.33,239.28 390.56,229.83 381.8,159.14 373.03,175.6 364.27,176.2 355.51,197.53 346.74,214.9 337.98,236.23 329.21,220.69 320.45,160.06 311.69,170.72 302.92,177.12 294.16,187.78 285.39,203.32 276.63,231.05 267.87,224.65 259.1,156.4 250.34,163.1 241.57,186.26 232.81,187.78 224.04,193.88 215.28,235.32 206.52,223.74 197.75,147.56 188.99,170.42 180.22,181.69 171.46,180.78 162.7,194.79 153.93,222.83 145.17,221.0 136.4,149.7 127.64,163.71 118.88,168.28 110.11,190.83 101.35,189.31 92.58,216.43 83.82,213.07 75.06,142.69 66.29,167.67 57.53,167.37 48.76,177.73 40.0,187.78"></polygon>
+      <line class="cut" x1="706.07" y1="40" x2="706.07" y2="260"></line>
+      <path class="series-actual" d="M 40.0 167.37 L 48.76 153.66 L 57.53 153.66 L 66.29 140.86 L 75.06 124.4 L 83.82 186.57 L 92.58 198.75 L 101.35 162.8 L 110.11 174.68 L 118.88 149.39 L 127.64 151.83 L 136.4 134.16 L 145.17 186.57 L 153.93 203.32 L 162.7 177.73 L 171.46 174.99 L 180.22 153.05 L 188.99 129.89 L 197.75 131.72 L 206.52 196.62 L 215.28 189.92 L 224.04 169.81 L 232.81 168.28 L 241.57 163.41 L 250.34 141.47 L 259.1 114.35 L 267.87 189.61 L 276.63 189.92 L 285.39 178.34 L 294.16 159.45 L 302.92 147.56 L 311.69 123.49 L 320.45 119.83 L 329.21 184.13 L 337.98 210.64 L 346.74 185.96 L 355.51 160.97 L 364.27 154.57 L 373.03 148.48 L 381.8 125.01 L 390.56 184.74 L 399.33 212.16 L 408.09 163.1 L 416.85 160.97 L 425.62 147.56 L 434.38 122.88 L 443.15 130.5 L 451.91 186.26 L 460.67 210.03 L 469.44 181.39 L 478.2 157.62 L 486.97 136.29 L 495.73 130.8 L 504.49 109.17 L 513.26 191.75 L 522.02 185.65 L 530.79 159.14 L 539.55 147.26 L 548.31 143.3 L 557.08 122.88 L 565.84 109.17 L 574.61 179.56 L 583.37 208.81 L 592.13 166.15 L 600.9 150.61 L 609.66 154.57 L 618.43 133.55 L 627.19 105.21 L 635.96 196.01 L 644.72 191.75 L 653.48 162.19 L 662.25 158.84 L 671.01 134.76 L 679.78 135.07 L 688.54 121.36 L 697.3 170.72"></path>
+      <path class="series-predicted" d="M 40.0 173.16 L 48.76 162.49 L 57.53 151.52 L 66.29 151.22 L 75.06 125.62 L 83.82 195.71 L 92.58 198.45 L 101.35 170.72 L 110.11 171.63 L 118.88 148.48 L 127.64 143.3 L 136.4 128.67 L 145.17 199.36 L 153.93 200.58 L 162.7 171.94 L 171.46 157.31 L 180.22 157.92 L 188.99 146.04 L 197.75 122.58 L 206.52 198.14 L 215.28 209.11 L 224.04 167.06 L 232.81 160.36 L 241.57 158.23 L 250.34 134.46 L 259.1 127.45 L 267.87 195.1 L 276.63 200.89 L 285.39 172.55 L 294.16 156.4 L 302.92 145.12 L 311.69 138.12 L 320.45 126.84 L 329.21 186.87 L 337.98 201.8 L 346.74 179.86 L 355.51 162.19 L 364.27 140.25 L 373.03 139.03 L 381.8 121.97 L 390.56 192.05 L 399.33 200.89 L 408.09 174.38 L 416.85 158.23 L 425.62 140.86 L 434.38 141.77 L 443.15 123.8 L 451.91 181.39 L 460.67 205.15 L 469.44 163.71 L 478.2 156.4 L 486.97 138.12 L 495.73 133.24 L 504.49 117.7 L 513.26 181.99 L 522.02 197.53 L 530.79 174.68 L 539.55 152.13 L 548.31 145.43 L 557.08 130.5 L 565.84 117.7 L 574.61 185.96 L 583.37 202.41 L 592.13 172.24 L 600.9 150.91 L 609.66 143.91 L 618.43 134.76 L 627.19 109.17 L 635.96 182.91 L 644.72 189.31 L 653.48 171.94 L 662.25 149.09 L 671.01 139.03 L 679.78 122.88 L 688.54 112.52 L 697.3 178.95 L 706.07 201.5 L 714.83 168.28 L 723.6 157.31 L 732.36 142.69 L 741.12 127.45 L 749.89 115.57 L 758.65 179.56 L 767.42 188.7 L 776.18 164.32 L 784.94 155.18 L 793.71 132.63 L 802.47 117.7 L 811.24 105.51 L 820.0 173.46"></path>
+    </svg>
+    <div class="legend">— actual &nbsp;· · · predicted &nbsp;▦ 95% confidence interval
+      &nbsp;| forecast starts at Mar 31</div>
+  </div>
+
+  
+  <div class="panel" data-panel="feature-importance"><h2>Feature importance</h2><p class="empty">Train a model to see SHAP-style importances.</p></div>
+  <div class="panel" data-panel="dimension-breakdown"><h2>Dimension breakdown · weekday</h2><div class="bd-grid" role="img" aria-label="Average by weekday"><div class="bd-cell" data-dim="Mon" onclick="onDimClick('Mon')"><div class="bd-bar" style="height:47px"></div><div class="bd-lbl">Mon</div></div><div class="bd-cell" data-dim="Tue" onclick="onDimClick('Tue')"><div class="bd-bar" style="height:49px"></div><div class="bd-lbl">Tue</div></div><div class="bd-cell" data-dim="Wed" onclick="onDimClick('Wed')"><div class="bd-bar" style="height:52px"></div><div class="bd-lbl">Wed</div></div><div class="bd-cell" data-dim="Thu" onclick="onDimClick('Thu')"><div class="bd-bar" style="height:56px"></div><div class="bd-lbl">Thu</div></div><div class="bd-cell" data-dim="Fri" onclick="onDimClick('Fri')"><div class="bd-bar" style="height:60px"></div><div class="bd-lbl">Fri</div></div><div class="bd-cell" data-dim="Sat" onclick="onDimClick('Sat')"><div class="bd-bar" style="height:42px"></div><div class="bd-lbl">Sat</div></div><div class="bd-cell" data-dim="Sun" onclick="onDimClick('Sun')"><div class="bd-bar" style="height:39px"></div><div class="bd-lbl">Sun</div></div></div></div>
+  <div class="panel" data-panel="forecast"><h2>Forecast · next 14 days</h2><div class="forecast-strip"><div class="forecast-point"><span>Mar 31</span><strong>470.0</strong><em>±192</em></div><div class="forecast-point"><span>Apr 1</span><strong>579.0</strong><em>±194</em></div><div class="forecast-point"><span>Apr 2</span><strong>615.0</strong><em>±196</em></div><div class="forecast-point"><span>Apr 3</span><strong>663.0</strong><em>±198</em></div><div class="forecast-point"><span>Apr 4</span><strong>713.0</strong><em>±200</em></div><div class="forecast-point"><span>Apr 5</span><strong>752.0</strong><em>±202</em></div><div class="forecast-point"><span>Apr 6</span><strong>542.0</strong><em>±204</em></div><div class="forecast-point"><span>Apr 7</span><strong>512.0</strong><em>±206</em></div><div class="forecast-point"><span>Apr 8</span><strong>592.0</strong><em>±208</em></div><div class="forecast-point"><span>Apr 9</span><strong>622.0</strong><em>±210</em></div><div class="forecast-point"><span>Apr 10</span><strong>696.0</strong><em>±211</em></div><div class="forecast-point"><span>Apr 11</span><strong>745.0</strong><em>±213</em></div><div class="forecast-point"><span>Apr 12</span><strong>785.0</strong><em>±215</em></div><div class="forecast-point"><span>Apr 13</span><strong>562.0</strong><em>±217</em></div></div></div>
+  <div class="panel" data-panel="leaderboard"><h2>Model trials</h2><p class="empty">No trials recorded.</p></div>
+  <div class="panel" data-panel="versions"><h2>Version history<button class="panel-export" onclick="exportPanelJson('versions')">JSON</button></h2><p class="empty">First version.</p></div>
+  <div class="panel footer" data-panel="dq-footer"><span>DQ: PASS</span><span>model: —</span><span>manifest: —</span><span>lineage: —</span><span>refreshed: 2026-07-04T21:38:05.135485+00:00</span></div>
+
+  <div id="drill-drawer" class="drawer" hidden aria-label="Drill-through rows">
+    <div class="drawer-head"><strong id="drill-title">Drill-through</strong>
+      <button onclick="exportDrillCsv()">Export CSV</button>
+      <button onclick="closeDrawer()">×</button></div>
+    <div id="drill-body"></div>
+  </div>
+</div>
+<script>
+/* R6S2E1 — unified filter state + click-to-drill (fully inline, offline) */
+window.__DATA__ = [{"id": 541, "pipeline_run_id": 7, "day_index": 0, "date": "Jan 15", "actual": 582.0, "predicted": 563.0, "ci_low": 515.0, "ci_high": 611.0, "is_forecast": 0}, {"id": 542, "pipeline_run_id": 7, "day_index": 1, "date": "Jan 16", "actual": 627.0, "predicted": 598.0, "ci_low": 548.0, "ci_high": 648.0, "is_forecast": 0}, {"id": 543, "pipeline_run_id": 7, "day_index": 2, "date": "Jan 17", "actual": 627.0, "predicted": 634.0, "ci_low": 582.0, "ci_high": 686.0, "is_forecast": 0}, {"id": 544, "pipeline_run_id": 7, "day_index": 3, "date": "Jan 18", "actual": 669.0, "predicted": 635.0, "ci_low": 581.0, "ci_high": 689.0, "is_forecast": 0}, {"id": 545, "pipeline_run_id": 7, "day_index": 4, "date": "Jan 19", "actual": 723.0, "predicted": 719.0, "ci_low": 663.0, "ci_high": 775.0, "is_forecast": 0}, {"id": 546, "pipeline_run_id": 7, "day_index": 5, "date": "Jan 20", "actual": 519.0, "predicted": 489.0, "ci_low": 432.0, "ci_high": 546.0, "is_forecast": 0}, {"id": 547, "pipeline_run_id": 7, "day_index": 6, "date": "Jan 21", "actual": 479.0, "predicted": 480.0, "ci_low": 421.0, "ci_high": 539.0, "is_forecast": 0}, {"id": 548, "pipeline_run_id": 7, "day_index": 7, "date": "Jan 22", "actual": 597.0, "predicted": 571.0, "ci_low": 510.0, "ci_high": 632.0, "is_forecast": 0}, {"id": 549, "pipeline_run_id": 7, "day_index": 8, "date": "Jan 23", "actual": 558.0, "predicted": 568.0, "ci_low": 505.0, "ci_high": 631.0, "is_forecast": 0}, {"id": 550, "pipeline_run_id": 7, "day_index": 9, "date": "Jan 24", "actual": 641.0, "predicted": 644.0, "ci_low": 579.0, "ci_high": 709.0, "is_forecast": 0}, {"id": 551, "pipeline_run_id": 7, "day_index": 10, "date": "Jan 25", "actual": 633.0, "predicted": 661.0, "ci_low": 594.0, "ci_high": 728.0, "is_forecast": 0}, {"id": 552, "pipeline_run_id": 7, "day_index": 11, "date": "Jan 26", "actual": 691.0, "predicted": 709.0, "ci_low": 640.0, "ci_high": 778.0, "is_forecast": 0}, {"id": 553, "pipeline_run_id": 7, "day_index": 12, "date": "Jan 27", "actual": 519.0, "predicted": 477.0, "ci_low": 406.0, "ci_high": 548.0, "is_forecast": 0}, {"id": 554, "pipeline_run_id": 7, "day_index": 13, "date": "Jan 28", "actual": 464.0, "predicted": 473.0, "ci_low": 400.0, "ci_high": 546.0, "is_forecast": 0}, {"id": 555, "pipeline_run_id": 7, "day_index": 14, "date": "Jan 29", "actual": 548.0, "predicted": 567.0, "ci_low": 492.0, "ci_high": 642.0, "is_forecast": 0}, {"id": 556, "pipeline_run_id": 7, "day_index": 15, "date": "Jan 30", "actual": 557.0, "predicted": 615.0, "ci_low": 538.0, "ci_high": 692.0, "is_forecast": 0}, {"id": 557, "pipeline_run_id": 7, "day_index": 16, "date": "Jan 31", "actual": 629.0, "predicted": 613.0, "ci_low": 535.0, "ci_high": 691.0, "is_forecast": 0}, {"id": 558, "pipeline_run_id": 7, "day_index": 17, "date": "Feb 1", "actual": 705.0, "predicted": 652.0, "ci_low": 572.0, "ci_high": 732.0, "is_forecast": 0}, {"id": 559, "pipeline_run_id": 7, "day_index": 18, "date": "Feb 2", "actual": 699.0, "predicted": 729.0, "ci_low": 647.0, "ci_high": 811.0, "is_forecast": 0}, {"id": 560, "pipeline_run_id": 7, "day_index": 19, "date": "Feb 3", "actual": 486.0, "predicted": 481.0, "ci_low": 397.0, "ci_high": 565.0, "is_forecast": 0}, {"id": 561, "pipeline_run_id": 7, "day_index": 20, "date": "Feb 4", "actual": 508.0, "predicted": 445.0, "ci_low": 359.0, "ci_high": 531.0, "is_forecast": 0}, {"id": 562, "pipeline_run_id": 7, "day_index": 21, "date": "Feb 5", "actual": 574.0, "predicted": 583.0, "ci_low": 495.0, "ci_high": 671.0, "is_forecast": 0}, {"id": 563, "pipeline_run_id": 7, "day_index": 22, "date": "Feb 6", "actual": 579.0, "predicted": 605.0, "ci_low": 515.0, "ci_high": 695.0, "is_forecast": 0}, {"id": 564, "pipeline_run_id": 7, "day_index": 23, "date": "Feb 7", "actual": 595.0, "predicted": 612.0, "ci_low": 520.0, "ci_high": 704.0, "is_forecast": 0}, {"id": 565, "pipeline_run_id": 7, "day_index": 24, "date": "Feb 8", "actual": 667.0, "predicted": 690.0, "ci_low": 596.0, "ci_high": 784.0, "is_forecast": 0}, {"id": 566, "pipeline_run_id": 7, "day_index": 25, "date": "Feb 9", "actual": 756.0, "predicted": 713.0, "ci_low": 618.0, "ci_high": 808.0, "is_forecast": 0}, {"id": 567, "pipeline_run_id": 7, "day_index": 26, "date": "Feb 10", "actual": 509.0, "predicted": 491.0, "ci_low": 394.0, "ci_high": 588.0, "is_forecast": 0}, {"id": 568, "pipeline_run_id": 7, "day_index": 27, "date": "Feb 11", "actual": 508.0, "predicted": 472.0, "ci_low": 373.0, "ci_high": 571.0, "is_forecast": 0}, {"id": 569, "pipeline_run_id": 7, "day_index": 28, "date": "Feb 12", "actual": 546.0, "predicted": 565.0, "ci_low": 464.0, "ci_high": 666.0, "is_forecast": 0}, {"id": 570, "pipeline_run_id": 7, "day_index": 29, "date": "Feb 13", "actual": 608.0, "predicted": 618.0, "ci_low": 515.0, "ci_high": 721.0, "is_forecast": 0}, {"id": 571, "pipeline_run_id": 7, "day_index": 30, "date": "Feb 14", "actual": 647.0, "predicted": 655.0, "ci_low": 550.0, "ci_high": 760.0, "is_forecast": 0}, {"id": 572, "pipeline_run_id": 7, "day_index": 31, "date": "Feb 15", "actual": 726.0, "predicted": 678.0, "ci_low": 571.0, "ci_high": 785.0, "is_forecast": 0}, {"id": 573, "pipeline_run_id": 7, "day_index": 32, "date": "Feb 16", "actual": 738.0, "predicted": 715.0, "ci_low": 606.0, "ci_high": 824.0, "is_forecast": 0}, {"id": 574, "pipeline_run_id": 7, "day_index": 33, "date": "Feb 17", "actual": 527.0, "predicted": 518.0, "ci_low": 407.0, "ci_high": 629.0, "is_forecast": 0}, {"id": 575, "pipeline_run_id": 7, "day_index": 34, "date": "Feb 18", "actual": 440.0, "predicted": 469.0, "ci_low": 356.0, "ci_high": 582.0, "is_forecast": 0}, {"id": 576, "pipeline_run_id": 7, "day_index": 35, "date": "Feb 19", "actual": 521.0, "predicted": 541.0, "ci_low": 426.0, "ci_high": 656.0, "is_forecast": 0}, {"id": 577, "pipeline_run_id": 7, "day_index": 36, "date": "Feb 20", "actual": 603.0, "predicted": 599.0, "ci_low": 483.0, "ci_high": 715.0, "is_forecast": 0}, {"id": 578, "pipeline_run_id": 7, "day_index": 37, "date": "Feb 21", "actual": 624.0, "predicted": 671.0, "ci_low": 553.0, "ci_high": 789.0, "is_forecast": 0}, {"id": 579, "pipeline_run_id": 7, "day_index": 38, "date": "Feb 22", "actual": 644.0, "predicted": 675.0, "ci_low": 555.0, "ci_high": 795.0, "is_forecast": 0}, {"id": 580, "pipeline_run_id": 7, "day_index": 39, "date": "Feb 23", "actual": 721.0, "predicted": 731.0, "ci_low": 609.0, "ci_high": 853.0, "is_forecast": 0}, {"id": 581, "pipeline_run_id": 7, "day_index": 40, "date": "Feb 24", "actual": 525.0, "predicted": 501.0, "ci_low": 377.0, "ci_high": 625.0, "is_forecast": 0}, {"id": 582, "pipeline_run_id": 7, "day_index": 41, "date": "Feb 25", "actual": 435.0, "predicted": 472.0, "ci_low": 346.0, "ci_high": 598.0, "is_forecast": 0}, {"id": 583, "pipeline_run_id": 7, "day_index": 42, "date": "Feb 26", "actual": 596.0, "predicted": 559.0, "ci_low": 431.0, "ci_high": 687.0, "is_forecast": 0}, {"id": 584, "pipeline_run_id": 7, "day_index": 43, "date": "Feb 27", "actual": 603.0, "predicted": 612.0, "ci_low": 482.0, "ci_high": 742.0, "is_forecast": 0}, {"id": 585, "pipeline_run_id": 7, "day_index": 44, "date": "Feb 28", "actual": 647.0, "predicted": 669.0, "ci_low": 537.0, "ci_high": 801.0, "is_forecast": 0}, {"id": 586, "pipeline_run_id": 7, "day_index": 45, "date": "Feb 29", "actual": 728.0, "predicted": 666.0, "ci_low": 532.0, "ci_high": 800.0, "is_forecast": 0}, {"id": 587, "pipeline_run_id": 7, "day_index": 46, "date": "Mar 1", "actual": 703.0, "predicted": 725.0, "ci_low": 590.0, "ci_high": 860.0, "is_forecast": 0}, {"id": 588, "pipeline_run_id": 7, "day_index": 47, "date": "Mar 2", "actual": 520.0, "predicted": 536.0, "ci_low": 399.0, "ci_high": 673.0, "is_forecast": 0}, {"id": 589, "pipeline_run_id": 7, "day_index": 48, "date": "Mar 3", "actual": 442.0, "predicted": 458.0, "ci_low": 319.0, "ci_high": 597.0, "is_forecast": 0}, {"id": 590, "pipeline_run_id": 7, "day_index": 49, "date": "Mar 4", "actual": 536.0, "predicted": 594.0, "ci_low": 453.0, "ci_high": 735.0, "is_forecast": 0}, {"id": 591, "pipeline_run_id": 7, "day_index": 50, "date": "Mar 5", "actual": 614.0, "predicted": 618.0, "ci_low": 475.0, "ci_high": 761.0, "is_forecast": 0}, {"id": 592, "pipeline_run_id": 7, "day_index": 51, "date": "Mar 6", "actual": 684.0, "predicted": 678.0, "ci_low": 533.0, "ci_high": 823.0, "is_forecast": 0}, {"id": 593, "pipeline_run_id": 7, "day_index": 52, "date": "Mar 7", "actual": 702.0, "predicted": 694.0, "ci_low": 547.0, "ci_high": 841.0, "is_forecast": 0}, {"id": 594, "pipeline_run_id": 7, "day_index": 53, "date": "Mar 8", "actual": 773.0, "predicted": 745.0, "ci_low": 596.0, "ci_high": 894.0, "is_forecast": 0}, {"id": 595, "pipeline_run_id": 7, "day_index": 54, "date": "Mar 9", "actual": 502.0, "predicted": 534.0, "ci_low": 383.0, "ci_high": 685.0, "is_forecast": 0}, {"id": 596, "pipeline_run_id": 7, "day_index": 55, "date": "Mar 10", "actual": 522.0, "predicted": 483.0, "ci_low": 330.0, "ci_high": 636.0, "is_forecast": 0}, {"id": 597, "pipeline_run_id": 7, "day_index": 56, "date": "Mar 11", "actual": 609.0, "predicted": 558.0, "ci_low": 404.0, "ci_high": 712.0, "is_forecast": 0}, {"id": 598, "pipeline_run_id": 7, "day_index": 57, "date": "Mar 12", "actual": 648.0, "predicted": 632.0, "ci_low": 476.0, "ci_high": 788.0, "is_forecast": 0}, {"id": 599, "pipeline_run_id": 7, "day_index": 58, "date": "Mar 13", "actual": 661.0, "predicted": 654.0, "ci_low": 496.0, "ci_high": 812.0, "is_forecast": 0}, {"id": 600, "pipeline_run_id": 7, "day_index": 59, "date": "Mar 14", "actual": 728.0, "predicted": 703.0, "ci_low": 543.0, "ci_high": 863.0, "is_forecast": 0}, {"id": 601, "pipeline_run_id": 7, "day_index": 60, "date": "Mar 15", "actual": 773.0, "predicted": 745.0, "ci_low": 583.0, "ci_high": 907.0, "is_forecast": 0}, {"id": 602, "pipeline_run_id": 7, "day_index": 61, "date": "Mar 16", "actual": 542.0, "predicted": 521.0, "ci_low": 357.0, "ci_high": 685.0, "is_forecast": 0}, {"id": 603, "pipeline_run_id": 7, "day_index": 62, "date": "Mar 17", "actual": 446.0, "predicted": 467.0, "ci_low": 301.0, "ci_high": 633.0, "is_forecast": 0}, {"id": 604, "pipeline_run_id": 7, "day_index": 63, "date": "Mar 18", "actual": 586.0, "predicted": 566.0, "ci_low": 398.0, "ci_high": 734.0, "is_forecast": 0}, {"id": 605, "pipeline_run_id": 7, "day_index": 64, "date": "Mar 19", "actual": 637.0, "predicted": 636.0, "ci_low": 466.0, "ci_high": 806.0, "is_forecast": 0}, {"id": 606, "pipeline_run_id": 7, "day_index": 65, "date": "Mar 20", "actual": 624.0, "predicted": 659.0, "ci_low": 488.0, "ci_high": 830.0, "is_forecast": 0}, {"id": 607, "pipeline_run_id": 7, "day_index": 66, "date": "Mar 21", "actual": 693.0, "predicted": 689.0, "ci_low": 516.0, "ci_high": 862.0, "is_forecast": 0}, {"id": 608, "pipeline_run_id": 7, "day_index": 67, "date": "Mar 22", "actual": 786.0, "predicted": 773.0, "ci_low": 598.0, "ci_high": 948.0, "is_forecast": 0}, {"id": 609, "pipeline_run_id": 7, "day_index": 68, "date": "Mar 23", "actual": 488.0, "predicted": 531.0, "ci_low": 354.0, "ci_high": 708.0, "is_forecast": 0}, {"id": 610, "pipeline_run_id": 7, "day_index": 69, "date": "Mar 24", "actual": 502.0, "predicted": 510.0, "ci_low": 331.0, "ci_high": 689.0, "is_forecast": 0}, {"id": 611, "pipeline_run_id": 7, "day_index": 70, "date": "Mar 25", "actual": 599.0, "predicted": 567.0, "ci_low": 386.0, "ci_high": 748.0, "is_forecast": 0}, {"id": 612, "pipeline_run_id": 7, "day_index": 71, "date": "Mar 26", "actual": 610.0, "predicted": 642.0, "ci_low": 459.0, "ci_high": 825.0, "is_forecast": 0}, {"id": 613, "pipeline_run_id": 7, "day_index": 72, "date": "Mar 27", "actual": 689.0, "predicted": 675.0, "ci_low": 490.0, "ci_high": 860.0, "is_forecast": 0}, {"id": 614, "pipeline_run_id": 7, "day_index": 73, "date": "Mar 28", "actual": 688.0, "predicted": 728.0, "ci_low": 541.0, "ci_high": 915.0, "is_forecast": 0}, {"id": 615, "pipeline_run_id": 7, "day_index": 74, "date": "Mar 29", "actual": 733.0, "predicted": 762.0, "ci_low": 573.0, "ci_high": 951.0, "is_forecast": 0}, {"id": 616, "pipeline_run_id": 7, "day_index": 75, "date": "Mar 30", "actual": 571.0, "predicted": 544.0, "ci_low": 354.0, "ci_high": 734.0, "is_forecast": 0}, {"id": 617, "pipeline_run_id": 7, "day_index": 76, "date": "Mar 31", "actual": null, "predicted": 470.0, "ci_low": 278.0, "ci_high": 662.0, "is_forecast": 1}, {"id": 618, "pipeline_run_id": 7, "day_index": 77, "date": "Apr 1", "actual": null, "predicted": 579.0, "ci_low": 385.0, "ci_high": 773.0, "is_forecast": 1}, {"id": 619, "pipeline_run_id": 7, "day_index": 78, "date": "Apr 2", "actual": null, "predicted": 615.0, "ci_low": 419.0, "ci_high": 811.0, "is_forecast": 1}, {"id": 620, "pipeline_run_id": 7, "day_index": 79, "date": "Apr 3", "actual": null, "predicted": 663.0, "ci_low": 465.0, "ci_high": 861.0, "is_forecast": 1}, {"id": 621, "pipeline_run_id": 7, "day_index": 80, "date": "Apr 4", "actual": null, "predicted": 713.0, "ci_low": 513.0, "ci_high": 913.0, "is_forecast": 1}, {"id": 622, "pipeline_run_id": 7, "day_index": 81, "date": "Apr 5", "actual": null, "predicted": 752.0, "ci_low": 550.0, "ci_high": 954.0, "is_forecast": 1}, {"id": 623, "pipeline_run_id": 7, "day_index": 82, "date": "Apr 6", "actual": null, "predicted": 542.0, "ci_low": 338.0, "ci_high": 746.0, "is_forecast": 1}, {"id": 624, "pipeline_run_id": 7, "day_index": 83, "date": "Apr 7", "actual": null, "predicted": 512.0, "ci_low": 306.0, "ci_high": 718.0, "is_forecast": 1}, {"id": 625, "pipeline_run_id": 7, "day_index": 84, "date": "Apr 8", "actual": null, "predicted": 592.0, "ci_low": 384.0, "ci_high": 800.0, "is_forecast": 1}, {"id": 626, "pipeline_run_id": 7, "day_index": 85, "date": "Apr 9", "actual": null, "predicted": 622.0, "ci_low": 412.0, "ci_high": 832.0, "is_forecast": 1}, {"id": 627, "pipeline_run_id": 7, "day_index": 86, "date": "Apr 10", "actual": null, "predicted": 696.0, "ci_low": 485.0, "ci_high": 907.0, "is_forecast": 1}, {"id": 628, "pipeline_run_id": 7, "day_index": 87, "date": "Apr 11", "actual": null, "predicted": 745.0, "ci_low": 532.0, "ci_high": 958.0, "is_forecast": 1}, {"id": 629, "pipeline_run_id": 7, "day_index": 88, "date": "Apr 12", "actual": null, "predicted": 785.0, "ci_low": 570.0, "ci_high": 1000.0, "is_forecast": 1}, {"id": 630, "pipeline_run_id": 7, "day_index": 89, "date": "Apr 13", "actual": null, "predicted": 562.0, "ci_low": 345.0, "ci_high": 779.0, "is_forecast": 1}];
+window.__FILTER__ = { weekday: null };
+var WEEKDAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function rowsFor(wd) {
+  return window.__DATA__.filter(function (r) {
+    return wd == null || WEEKDAYS[r.day_index % 7] === wd;
+  });
+}
+function applyFilter(wd) {
+  window.__FILTER__.weekday = wd;
+  var rows = rowsFor(wd).filter(function (r) { return r.actual != null; });
+  var avg = rows.length ? Math.round(rows.reduce(function (a, r) {
+    return a + r.actual; }, 0) / rows.length) : 0;
+  var el = document.querySelector('[data-kpi="avg-actual"] .v');
+  if (el) el.textContent = avg.toLocaleString();
+  document.querySelectorAll('.bd-cell').forEach(function (c) {
+    c.classList.toggle('active', c.getAttribute('data-dim') === wd);
+  });
+}
+function onDimClick(wd) {
+  if (window.__FILTER__.weekday === wd) { openDrawer(wd); return; }
+  applyFilter(wd);
+}
+function openDrawer(wd) {
+  var rows = rowsFor(wd);
+  var body = rows.map(function (r) {
+    return '<div class="drill-row"><span>' + r.date + '</span><span>' +
+      (r.actual == null ? '—' : r.actual) + '</span><span>' + r.predicted + '</span></div>';
+  }).join('');
+  document.getElementById('drill-title').textContent = 'Drill-through · ' + wd;
+  document.getElementById('drill-body').innerHTML =
+    '<div class="drill-row head"><span>date</span><span>actual</span><span>predicted</span></div>' + body;
+  document.getElementById('drill-drawer').hidden = false;
+  window.__DRILL__ = rows;
+}
+function closeDrawer() { document.getElementById('drill-drawer').hidden = true; }
+function exportPanelJson(panel) {
+  var blob = new Blob([JSON.stringify(window.__DATA__, null, 2)],
+                      { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (panel || 'panel') + '_data.json';
+  a.click();
+}
+function exportPanelCsv(panel) { exportDrillCsv(); }
+function exportDrillCsv() {
+  var rows = window.__DRILL__ || window.__DATA__;
+  var csv = 'date,actual,predicted
+' + rows.map(function (r) {
+    return [r.date, r.actual, r.predicted].join(','); }).join('
+');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'drill_export.csv';
+  a.click();
+}
+</script>
+</body>
+</html>

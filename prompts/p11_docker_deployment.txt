@@ -1,0 +1,24 @@
+Make the app deployable. Create production-ready Docker config.
+
+1. Create server/Dockerfile:
+   - Base image: python:3.12-slim
+   - WORKDIR /app
+   - COPY requirements.txt and pip install --no-cache-dir
+   - COPY the rest of server/
+   - EXPOSE 3001
+   - CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:3001", "--timeout", "120", "--worker-class", "gthread", "--threads", "4", "app:app"]
+   - Add gunicorn to requirements.txt
+
+2. Create client/Dockerfile:
+   - Base image: node:20-alpine for build stage
+   - npm ci && npm run build
+   - Second stage: nginx:alpine, copy dist/, add nginx.conf that serves index.html for all routes (SPA fallback) and proxies /api/ to the Flask container.
+
+3. Create docker-compose.yml at the repo root with services:
+   - db: postgres:16-alpine, volume for data, env POSTGRES_DB/USER/PASSWORD
+   - api: builds server/Dockerfile, env DATABASE_URL pointing to db service, depends_on db
+   - web: builds client/Dockerfile, ports 80:80, depends_on api
+
+4. Add .dockerignore files to both server/ and client/.
+
+5. Update README with: docker compose up --build

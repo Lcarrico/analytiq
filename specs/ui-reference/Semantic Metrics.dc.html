@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Metrics &amp; Dimensions</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Semantic Overview.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">← Semantic overview</a>
+</div>
+
+<!-- 01 METRICS CATALOG -->
+<section id="metrics-catalog" data-screen-label="Metrics Catalog /app/semantic/metrics" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Metrics Catalog · <span style="color:#94a3b8">/app/semantic/metrics</span></div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid #eef1f5">
+    <span style="font-size:14.5px;font-weight:600;color:#0f172a">Metrics <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8">48</span></span>
+    <div style="display:flex;gap:9px">
+      <div style="width:230px;height:32px;display:flex;align-items:center;gap:8px;padding:0 11px;border:1px solid #d4d9e1;border-radius:8px;color:#94a3b8;font-size:12px"><svg width="11" height="11" viewBox="0 0 13 13"><circle cx="5.5" cy="5.5" r="4" fill="none" stroke="#94a3b8" stroke-width="1.4"></circle><path d="m8.5 8.5 3 3" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round"></path></svg>Search metrics…</div>
+      <span style="display:inline-flex;align-items:center;height:32px;padding:0 13px;background:#2563eb;border-radius:8px;color:#fff;font-size:12px;font-weight:600;cursor:pointer" style-hover="background:#1d4ed8">+ Calculated metric</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1.3fr 1.9fr .7fr .7fr .9fr .8fr .7fr .6fr .5fr;gap:12px;padding:0 22px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>METRIC</span><span>DEFINITION</span><span>AGG</span><span>FORMAT</span><span>SOURCE</span><span>CONFIDENCE</span><span>OWNER</span><span>USED BY</span><span>VER</span></div>
+  <a href="#metric-detail" style="text-decoration:none;display:grid;grid-template-columns:1.3fr 1.9fr .7fr .7fr .9fr .8fr .7fr .6fr .5fr;gap:12px;padding:0 22px;height:46px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#1d4ed8">net_revenue</span>
+    <span style="font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Item revenue net of discounts &amp; refunds</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">SUM</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">$ USD</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">orders</span>
+    <span><span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">0.95</span></span>
+    <span><span style="width:22px;height:22px;border-radius:50%;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">MO</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">14</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">v4</span>
+  </a>
+  <a href="#metric-detail" style="text-decoration:none;display:grid;grid-template-columns:1.3fr 1.9fr .7fr .7fr .9fr .8fr .7fr .6fr .5fr;gap:12px;padding:0 22px;height:46px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155;background:#fdf9ef" style-hover="background:#fdf6e4">
+    <span style="display:flex;align-items:center;gap:7px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f172a">active_customer</span><span style="display:inline-flex;height:16px;padding:0 6px;border-radius:4px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:600;align-items:center">×2 CONFLICT</span></span>
+    <span style="font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">≥1 completed order, trailing 60/90d (disputed)</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">COUNT D</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">#</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">customers</span>
+    <span><span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">0.58</span></span>
+    <span><span style="width:22px;height:22px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">PS</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">14</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">v3</span>
+  </a>
+  <a href="#metric-detail" style="text-decoration:none;display:grid;grid-template-columns:1.3fr 1.9fr .7fr .7fr .9fr .8fr .7fr .6fr .5fr;gap:12px;padding:0 22px;height:46px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#1d4ed8">gross_margin</span>
+    <span style="font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">(net_revenue − landed_cogs) / net_revenue</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">RATIO</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">order_items</span>
+    <span><span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">0.92</span></span>
+    <span><span style="width:22px;height:22px;border-radius:50%;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">MO</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">7</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">v2</span>
+  </a>
+  <a href="#metric-detail" style="text-decoration:none;display:grid;grid-template-columns:1.3fr 1.9fr .7fr .7fr .9fr .8fr .7fr .6fr .5fr;gap:12px;padding:0 22px;height:46px;align-items:center;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;align-items:center;gap:7px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#94a3b8">basket_size_v1</span><span style="display:inline-flex;height:16px;padding:0 6px;border-radius:4px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:600;align-items:center">DEPRECATED</span></span>
+    <span style="font-size:12px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Superseded by aov v2</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">AVG</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">#</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">orders</span>
+    <span><span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">—</span></span>
+    <span><span style="width:22px;height:22px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">DK</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">0</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">v1</span>
+  </a>
+</div>
+</section>
+
+<div style="display:flex;gap:40px;align-items:flex-start">
+<!-- 02 METRIC DETAIL -->
+<section id="metric-detail" data-screen-label="Metric Detail /app/semantic/metrics/:id" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Metric Detail · <span style="color:#94a3b8">/app/semantic/metrics/:id</span></div>
+<div style="width:760px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="padding:18px 24px;border-bottom:1px solid #eef1f5;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">semantic / metrics</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <h2 style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#0f172a">net_revenue</h2>
+        <span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">GOVERNED · v4</span>
+        <span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">CONF 0.95</span>
+      </div>
+    </div>
+    <span style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border:1px solid #d4d9e1;border-radius:8px;font-size:12px;font-weight:600;color:#334155;cursor:pointer" style-hover="border-color:#94a3b8">Propose change</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:0">
+    <div style="padding:18px 24px;display:flex;flex-direction:column;gap:13px;border-right:1px solid #eef1f5">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">PLAIN-ENGLISH DEFINITION</span>
+        <p style="margin:0;font-size:13px;line-height:1.65;color:#334155">Item-level revenue net of line discounts and refunds. Excludes tax, shipping, and cancelled orders. The single source of truth for "revenue" everywhere in the workspace.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">SQL EXPRESSION <span style="display:inline-flex;height:15px;padding:0 6px;border-radius:4px;background:#f1f5f9;color:#64748b;font-size:8px;font-weight:600;align-items:center;letter-spacing:.04em">ADMIN ONLY</span></span>
+        <div style="background:#0b1220;border-radius:9px;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.7;color:#93c5fd">SUM(oi.qty * oi.unit_price<br>&nbsp;&nbsp;- oi.line_discount) - COALESCE(r.refund_amt, 0)</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div style="display:flex;flex-direction:column;gap:3px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">AGGREGATION</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a">SUM</span></div>
+        <div style="display:flex;flex-direction:column;gap:3px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">FORMAT</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a">$ USD · 2dp</span></div>
+        <div style="display:flex;flex-direction:column;gap:3px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">ALLOWED FILTERS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a">time · region · channel</span></div>
+      </div>
+    </div>
+    <div style="padding:18px 24px;display:flex;flex-direction:column;gap:13px;background:#fafbfc">
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">LINEAGE</span>
+        <div style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#334155">
+          <span style="border:1px solid #e4e8ef;border-radius:6px;padding:4px 8px;background:#fff">orders</span><span style="color:#94a3b8">→</span>
+          <span style="border:1px solid #c7d9f8;border-radius:6px;padding:4px 8px;background:#f8faff;color:#1d4ed8;font-weight:600">net_revenue</span><span style="color:#94a3b8">→</span>
+          <span style="border:1px solid #f2ddb0;border-radius:6px;padding:4px 8px;background:#fdf9ef">GOLD ×3</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">USED BY · 14</span>
+        <span style="font-size:12px;color:#334155;line-height:1.6">Q3 Target Risk · Exec Weekly · Location Performance · Margin Variance · <span style="color:#2563eb;cursor:pointer">+10 more</span></span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">TESTS</span>
+        <span style="display:flex;flex-wrap:wrap;gap:5px"><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">NON-NEGATIVE ✓</span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">RECONCILES GL ✓</span></span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">VERSIONS</span>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:#334155">
+          <span style="display:flex;justify-content:space-between"><span><strong style="font-weight:600">v4</strong> refunds included</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">Jun 20</span></span>
+          <span style="display:flex;justify-content:space-between;color:#64748b"><span>v3 line discounts</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">May 2</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 03 DIMENSIONS CATALOG -->
+<section id="dimensions" data-screen-label="Dimensions Catalog /app/semantic/dimensions" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · Dimensions Catalog · <span style="color:#94a3b8">/app/semantic/dimensions</span></div>
+<div style="width:380px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="padding:16px 20px;border-bottom:1px solid #eef1f5;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:600;color:#0f172a">Dimensions <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">112</span></span></div>
+  <div style="display:flex;align-items:center;gap:9px;padding:11px 20px;background:#f8faff;border-bottom:1px solid #eef1f5;cursor:pointer">
+    <svg width="9" height="9" viewBox="0 0 9 9"><path d="m2 3 2.5 3L7 3" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>
+    <span style="font-size:12.5px;font-weight:600;color:#0f172a">Date</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">18</span>
+  </div>
+  <div style="display:flex;justify-content:space-between;padding:9px 20px 9px 38px;border-bottom:1px solid #f3f5f9;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155"><span>order_week</span><span style="color:#15803d">0.98</span></div>
+  <div style="display:flex;justify-content:space-between;padding:9px 20px 9px 38px;border-bottom:1px solid #f3f5f9;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155"><span>fiscal_quarter</span><span style="color:#15803d">0.96</span></div>
+  <div style="display:flex;align-items:center;gap:9px;padding:11px 20px;border-bottom:1px solid #eef1f5;cursor:pointer">
+    <svg width="9" height="9" viewBox="0 0 9 9"><path d="m3 2 3 2.5L3 7" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>
+    <span style="font-size:12.5px;font-weight:600;color:#0f172a">Geography</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">14</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:9px;padding:11px 20px;border-bottom:1px solid #eef1f5;cursor:pointer">
+    <svg width="9" height="9" viewBox="0 0 9 9"><path d="m3 2 3 2.5L3 7" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>
+    <span style="font-size:12.5px;font-weight:600;color:#0f172a">Category</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">26</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:9px;padding:11px 20px;border-bottom:1px solid #eef1f5;cursor:pointer">
+    <svg width="9" height="9" viewBox="0 0 9 9"><path d="m3 2 3 2.5L3 7" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>
+    <span style="font-size:12.5px;font-weight:600;color:#0f172a">Boolean</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">21</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:9px;padding:11px 20px;border-bottom:1px solid #eef1f5;cursor:pointer">
+    <svg width="9" height="9" viewBox="0 0 9 9"><path d="m3 2 3 2.5L3 7" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>
+    <span style="font-size:12.5px;font-weight:600;color:#0f172a">ID</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">19</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:9px;padding:11px 20px;cursor:pointer">
+    <svg width="9" height="9" viewBox="0 0 9 9"><path d="m3 2 3 2.5L3 7" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>
+    <span style="font-size:12.5px;font-weight:600;color:#0f172a">Text</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">14</span>
+  </div>
+</div>
+</section>
+</div>
+
+</div>
+</x-dc>
+</body>
+</html>

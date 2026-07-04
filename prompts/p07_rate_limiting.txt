@@ -1,0 +1,11 @@
+Add per-IP rate limiting to the Flask API to prevent abuse.
+
+1. Add flask-limiter and redis to server/requirements.txt.
+2. Initialize a Limiter with key_func=get_remote_address and a Redis storage backend (REDIS_URL env var, fallback to in-memory for dev).
+3. Apply limits:
+   - POST /api/connections: 10/minute
+   - POST /api/governance/run: 5/minute
+   - POST /api/pipeline/run: 5/minute
+   - All other routes: 120/minute (global default)
+4. Return 429 with a JSON body { "error": "Rate limit exceeded", "retry_after": <seconds> } on breach.
+5. Add REDIS_URL to .env.example.

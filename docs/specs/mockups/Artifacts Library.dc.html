@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Artifacts</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Artifact Sharing.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">Sharing views →</a>
+</div>
+
+<!-- ============ FRAME 01 · LIBRARY (CARD VIEW) ============ -->
+<section id="library" data-screen-label="Artifacts Library /app/artifacts" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Artifacts Library — card view · <span style="color:#94a3b8">/app/artifacts</span></div>
+<div style="width:1440px;background:#f7f8fa;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07);display:grid;grid-template-columns:240px 1fr">
+
+  <aside style="background:#fbfcfe;border-right:1px solid #e4e8ef;display:flex;flex-direction:column">
+    <div style="height:64px;display:flex;align-items:center;gap:9px;padding:0 20px;border-bottom:1px solid #eef1f5">
+      <svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0f172a"></rect><rect x="5.5" y="12" width="3.2" height="6.5" rx="1.2" fill="#60a5fa"></rect><rect x="10.4" y="8.5" width="3.2" height="10" rx="1.2" fill="#3b82f6"></rect><rect x="15.3" y="5" width="3.2" height="13.5" rx="1.2" fill="#2563eb"></rect></svg>
+      <span style="font-size:14.5px;font-weight:700;color:#0f172a">Analyt<span style="color:#2563eb">IQ</span></span>
+    </div>
+    <nav style="padding:14px 12px 8px 12px;display:flex;flex-direction:column;gap:2px">
+      <a href="App Home.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2.5 6.5 7.5 2l5 4.5V13h-10V6.5Z" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linejoin="round"></path></svg>Home</a>
+      <a href="Create Workbench.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><rect x="2" y="2" width="11" height="11" rx="3" fill="none" stroke="#64748b" stroke-width="1.4"></rect><path d="M7.5 5v5M5 7.5h5" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>Create</a>
+      <a href="Artifacts Library.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:600;color:#1d4ed8;background:#e8effc;text-decoration:none"><svg width="15" height="15" viewBox="0 0 15 15"><rect x="2" y="4.5" width="8.5" height="8.5" rx="2" fill="none" stroke="#1d4ed8" stroke-width="1.4"></rect><path d="M5 2h8v8" fill="none" stroke="#1d4ed8" stroke-width="1.4" stroke-linejoin="round"></path></svg>Artifacts</a>
+    </nav>
+    <div style="padding:12px 22px 4px 22px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.12em;color:#94a3b8">DATA</div>
+    <nav style="padding:4px 12px;display:flex;flex-direction:column;gap:2px">
+      <a href="Data Sources.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><ellipse cx="7.5" cy="3.8" rx="5" ry="2" fill="none" stroke="#64748b" stroke-width="1.4"></ellipse><path d="M2.5 3.8v7.4c0 1.1 2.2 2 5 2s5-.9 5-2V3.8" fill="none" stroke="#64748b" stroke-width="1.4"></path><path d="M2.5 7.5c0 1.1 2.2 2 5 2s5-.9 5-2" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg>Data</a>
+      <a href="Semantic Overview.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><circle cx="4" cy="7.5" r="1.8" fill="none" stroke="#64748b" stroke-width="1.4"></circle><circle cx="11" cy="3.5" r="1.8" fill="none" stroke="#64748b" stroke-width="1.4"></circle><circle cx="11" cy="11.5" r="1.8" fill="none" stroke="#64748b" stroke-width="1.4"></circle><path d="m5.6 6.6 3.8-2.2M5.6 8.4l3.8 2.2" stroke="#64748b" stroke-width="1.4"></path></svg>Semantic Layer</a>
+      <a href="Gold Contracts.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M7.5 1.5 13.5 7.5 7.5 13.5 1.5 7.5Z" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linejoin="round"></path></svg>Gold Tables</a>
+    </nav>
+    <div style="padding:12px 22px 4px 22px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.12em;color:#94a3b8">INTELLIGENCE</div>
+    <nav style="padding:4px 12px;display:flex;flex-direction:column;gap:2px">
+      <a href="Models.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><polyline points="1.5,11.5 5,7.5 8,9.5 13.5,3.5" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="13.5" cy="3.5" r="1.3" fill="#64748b"></circle></svg>Models</a>
+      <a href="Alerts.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M7.5 2a4 4 0 0 1 4 4v2.5l1 2H2.5l1-2V6a4 4 0 0 1 4-4Z" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linejoin="round"></path><path d="M6.2 12.5a1.4 1.4 0 0 0 2.6 0" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg>Alerts</a>
+      <a href="Governance.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M7.5 1.5 12.5 3.5v3.7c0 3-2.1 4.8-5 5.8-2.9-1-5-2.8-5-5.8V3.5l5-2Z" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linejoin="round"></path><path d="m5.3 7.3 1.6 1.6 2.8-3" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Governance</a>
+    </nav>
+    <div style="flex:1"></div>
+    <nav style="padding:8px 12px 10px 12px;display:flex;flex-direction:column;gap:2px;border-top:1px solid #eef1f5">
+      <a href="Collaboration.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><circle cx="5.5" cy="5" r="2.3" fill="none" stroke="#64748b" stroke-width="1.4"></circle><path d="M1.8 13c.3-2.3 1.8-3.6 3.7-3.6s3.4 1.3 3.7 3.6" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path><circle cx="10.8" cy="4.5" r="1.8" fill="none" stroke="#64748b" stroke-width="1.4"></circle><path d="M10.6 8.9c1.6.1 2.6 1.2 2.8 3" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>Team</a>
+      <a href="Admin.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="2.2" fill="none" stroke="#64748b" stroke-width="1.4"></circle><path d="M7.5 1.5v2M7.5 11.5v2M1.5 7.5h2M11.5 7.5h2M3.3 3.3l1.4 1.4M10.3 10.3l1.4 1.4M11.7 3.3l-1.4 1.4M4.7 10.3 3.3 11.7" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>Admin</a>
+      <a href="Billing.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><rect x="1.5" y="3" width="12" height="9" rx="2" fill="none" stroke="#64748b" stroke-width="1.4"></rect><path d="M1.5 6h12" stroke="#64748b" stroke-width="1.4"></path><path d="M4 9.5h3" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>Billing</a>
+      <a href="Settings.dc.html" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:500;color:#47516b;text-decoration:none" style-hover="background:#f1f4f9"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 4.5h7M11.5 4.5H13M2 10.5h3M7.5 10.5H13" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path><circle cx="10" cy="4.5" r="1.6" fill="none" stroke="#64748b" stroke-width="1.4"></circle><circle cx="6" cy="10.5" r="1.6" fill="none" stroke="#64748b" stroke-width="1.4"></circle></svg>Settings</a>
+    </nav>
+  </aside>
+
+  <div style="display:flex;flex-direction:column;min-width:0">
+    <div style="height:64px;background:#fff;border-bottom:1px solid #e4e8ef;display:flex;align-items:center;gap:16px;padding:0 28px">
+      <button style="display:flex;align-items:center;gap:9px;height:36px;padding:0 12px;border:1px solid #e4e8ef;border-radius:8px;background:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#0f172a;cursor:pointer"><span style="width:20px;height:20px;border-radius:6px;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">AR</span>Acme Retail<svg width="9" height="9" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:520px;height:36px;display:flex;align-items:center;gap:9px;padding:0 14px;border:1px solid #e4e8ef;border-radius:999px;background:#f7f8fa;color:#94a3b8;font-size:13px"><svg width="13" height="13" viewBox="0 0 13 13"><circle cx="5.5" cy="5.5" r="4" fill="none" stroke="#94a3b8" stroke-width="1.4"></circle><path d="m8.5 8.5 3 3" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round"></path></svg>Search artifacts, metrics, sources…<span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;border:1px solid #e4e8ef;border-radius:5px;padding:2px 6px;background:#fff">⌘K</span></div></div>
+      <a href="App Home.dc.html#notifications" style="position:relative;width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none"><svg width="16" height="16" viewBox="0 0 15 15"><path d="M7.5 2a4 4 0 0 1 4 4v2.5l1 2H2.5l1-2V6a4 4 0 0 1 4-4Z" fill="none" stroke="#47516b" stroke-width="1.4" stroke-linejoin="round"></path><path d="M6.2 12.5a1.4 1.4 0 0 0 2.6 0" fill="none" stroke="#47516b" stroke-width="1.4"></path></svg><span style="position:absolute;top:3px;right:3px;min-width:15px;height:15px;border-radius:999px;background:#dc2626;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid #fff">3</span></a>
+      <a href="Settings.dc.html#help" style="width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:#47516b;font-size:13.5px;font-weight:600;border:1px solid #e4e8ef">?</a>
+      <span style="width:34px;height:34px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">DK</span>
+    </div>
+
+    <div style="display:flex;min-height:0">
+      <!-- FILTER RAIL -->
+      <div style="width:220px;flex-shrink:0;border-right:1px solid #e4e8ef;background:#fff;padding:22px 18px;display:flex;flex-direction:column;gap:16px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;color:#94a3b8">FILTERS</span>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155;cursor:pointer"><span style="width:15px;height:15px;border-radius:4px;background:#2563eb;display:inline-flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 9 9"><path d="m2 4.5 2 2 3-3.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path></svg></span>Created by me</label>
+          <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155;cursor:pointer"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid #cbd5e1"></span>Shared with me</label>
+          <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155;cursor:pointer"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid #cbd5e1"></span>Predictive</label>
+          <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155;cursor:pointer"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid #cbd5e1"></span>Has warnings</label>
+          <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155;cursor:pointer"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid #cbd5e1"></span>Public links</label>
+          <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155;cursor:pointer"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid #cbd5e1"></span>Needs review</label>
+        </div>
+        <div style="height:1px;background:#eef1f5"></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;color:#94a3b8">FOLDERS</span>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:#334155">
+          <span style="display:flex;justify-content:space-between;cursor:pointer;color:#1d4ed8;font-weight:600">Revenue<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">8</span></span>
+          <span style="display:flex;justify-content:space-between;cursor:pointer">Operations<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">5</span></span>
+          <span style="display:flex;justify-content:space-between;cursor:pointer">Customer<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">4</span></span>
+          <span style="display:flex;justify-content:space-between;cursor:pointer">Finance<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">6</span></span>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div style="flex:1;padding:24px 28px;display:flex;flex-direction:column;gap:18px;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8">acme-retail / artifacts</span>
+            <h1 style="margin:0;font-size:21px;font-weight:600;color:#0f172a">Artifacts <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#94a3b8">23</span></h1>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:260px;height:34px;display:flex;align-items:center;gap:8px;padding:0 12px;border:1px solid #d4d9e1;border-radius:8px;background:#fff;color:#94a3b8;font-size:12.5px"><svg width="12" height="12" viewBox="0 0 13 13"><circle cx="5.5" cy="5.5" r="4" fill="none" stroke="#94a3b8" stroke-width="1.4"></circle><path d="m8.5 8.5 3 3" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round"></path></svg>Filter by name, tag, owner…</div>
+            <span style="display:inline-flex;border:1px solid #d4d9e1;border-radius:8px;overflow:hidden">
+              <span style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;background:#0f172a;color:#fff;font-size:12px;font-weight:600"><svg width="11" height="11" viewBox="0 0 12 12"><rect x="1" y="1" width="4.5" height="4.5" rx="1" fill="#fff"></rect><rect x="6.5" y="1" width="4.5" height="4.5" rx="1" fill="#fff" opacity=".55"></rect><rect x="1" y="6.5" width="4.5" height="4.5" rx="1" fill="#fff" opacity=".55"></rect><rect x="6.5" y="6.5" width="4.5" height="4.5" rx="1" fill="#fff" opacity=".55"></rect></svg>Cards</span>
+              <a href="#library-table" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;background:#fff;color:#64748b;font-size:12px;font-weight:500;text-decoration:none" style-hover="background:#f8fafc"><svg width="11" height="11" viewBox="0 0 12 12"><path d="M1 2.5h10M1 6h10M1 9.5h10" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"></path></svg>Table</a>
+            </span>
+            <a href="Create Workbench.dc.html" style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 15px;background:#2563eb;border-radius:8px;color:#fff;font-size:12.5px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">+ New dashboard</a>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <a href="#artifact-detail" style="text-decoration:none;background:#fff;border:1px solid #e4e8ef;border-radius:11px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#c7d9f8;box-shadow:0 10px 28px rgba(15,23,42,.08)">
+            <div style="background:#f7f8fa;border-bottom:1px solid #eef1f5;padding:14px;display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;gap:6px"><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span></div>
+              <svg viewBox="0 0 320 64" style="width:100%;height:64px"><polygon points="0,56 0,42 40,38 80,44 120,30 160,34 200,24 200,56" fill="rgba(37,99,235,.09)"></polygon><polyline points="0,42 40,38 80,44 120,30 160,34 200,24" fill="none" stroke="#2563eb" stroke-width="2"></polyline><polyline points="200,24 240,20 280,26 320,18" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="5 4"></polyline><line x1="200" y1="8" x2="200" y2="56" stroke="#cbd5e1" stroke-dasharray="3 4"></line></svg>
+            </div>
+            <div style="padding:13px 15px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13.5px;font-weight:600;color:#0f172a">Q3 Revenue Target Risk</span><span style="color:#94a3b8;font-weight:700;letter-spacing:.1em;cursor:pointer">⋯</span></div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#f3eefe;color:#7c3aed;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;letter-spacing:.04em">PREDICTIVE</span>
+                <span style="display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.04em">● HEALTHY</span>
+                <span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px"><span style="width:20px;height:20px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">DK</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">2h</span></span>
+              </div>
+            </div>
+          </a>
+          <a href="#artifact-detail" style="text-decoration:none;background:#fff;border:1px solid #e4e8ef;border-radius:11px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#c7d9f8;box-shadow:0 10px 28px rgba(15,23,42,.08)">
+            <div style="background:#f7f8fa;border-bottom:1px solid #eef1f5;padding:14px;display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;gap:6px"><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span></div>
+              <svg viewBox="0 0 320 64" style="width:100%;height:64px"><rect x="8" y="16" width="24" height="40" rx="3" fill="#2563eb"></rect><rect x="44" y="26" width="24" height="30" rx="3" fill="#93c5fd"></rect><rect x="80" y="20" width="24" height="36" rx="3" fill="#93c5fd"></rect><rect x="116" y="34" width="24" height="22" rx="3" fill="#dbeafe"></rect><rect x="152" y="28" width="24" height="28" rx="3" fill="#93c5fd"></rect><rect x="188" y="42" width="24" height="14" rx="3" fill="#fca5a5"></rect><rect x="224" y="24" width="24" height="32" rx="3" fill="#93c5fd"></rect><rect x="260" y="38" width="24" height="18" rx="3" fill="#dbeafe"></rect><line x1="4" y1="30" x2="316" y2="30" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 4"></line></svg>
+            </div>
+            <div style="padding:13px 15px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13.5px;font-weight:600;color:#0f172a">Location Performance</span><span style="color:#94a3b8;font-weight:700;letter-spacing:.1em;cursor:pointer">⋯</span></div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;letter-spacing:.04em">DASHBOARD</span>
+                <span style="display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.04em">● 2 WARNINGS</span>
+                <span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px"><span style="width:20px;height:20px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">PS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">1d</span></span>
+              </div>
+            </div>
+          </a>
+          <a href="#artifact-detail" style="text-decoration:none;background:#fff;border:1px solid #e4e8ef;border-radius:11px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#c7d9f8;box-shadow:0 10px 28px rgba(15,23,42,.08)">
+            <div style="background:#f7f8fa;border-bottom:1px solid #eef1f5;padding:14px;display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;gap:6px"><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span></div>
+              <svg viewBox="0 0 320 64" style="width:100%;height:64px"><circle cx="42" cy="32" r="24" fill="none" stroke="#eef1f5" stroke-width="10"></circle><circle cx="42" cy="32" r="24" fill="none" stroke="#dc2626" stroke-width="10" stroke-dasharray="40 111" transform="rotate(-90 42 32)"></circle><rect x="90" y="12" width="140" height="8" rx="4" fill="#e4e8ef"></rect><rect x="90" y="28" width="190" height="8" rx="4" fill="#e4e8ef"></rect><rect x="90" y="44" width="110" height="8" rx="4" fill="#e4e8ef"></rect></svg>
+            </div>
+            <div style="padding:13px 15px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13.5px;font-weight:600;color:#0f172a">Churn Risk — Enterprise</span><span style="color:#94a3b8;font-weight:700;letter-spacing:.1em;cursor:pointer">⋯</span></div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#f3eefe;color:#7c3aed;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;letter-spacing:.04em">PREDICTIVE</span>
+                <span style="display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.04em">● HEALTHY</span>
+                <span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px"><span style="width:20px;height:20px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">DK</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">3d</span></span>
+              </div>
+            </div>
+          </a>
+          <a href="#artifact-detail" style="text-decoration:none;background:#fff;border:1px solid #e4e8ef;border-radius:11px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#c7d9f8;box-shadow:0 10px 28px rgba(15,23,42,.08)">
+            <div style="background:#f7f8fa;border-bottom:1px solid #eef1f5;padding:14px;display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;gap:6px"><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span></div>
+              <svg viewBox="0 0 320 64" style="width:100%;height:64px"><rect x="6" y="8" width="28" height="22" rx="4" fill="#e8f5ec"></rect><rect x="40" y="8" width="28" height="22" rx="4" fill="#fdf3e3"></rect><rect x="74" y="8" width="28" height="22" rx="4" fill="#e8f5ec"></rect><rect x="108" y="8" width="28" height="22" rx="4" fill="#fdeaea"></rect><rect x="6" y="34" width="28" height="22" rx="4" fill="#e8f5ec"></rect><rect x="40" y="34" width="28" height="22" rx="4" fill="#e8f5ec"></rect><rect x="74" y="34" width="28" height="22" rx="4" fill="#fdf3e3"></rect><rect x="108" y="34" width="28" height="22" rx="4" fill="#e8f5ec"></rect><rect x="152" y="10" width="160" height="9" rx="4" fill="#e4e8ef"></rect><rect x="152" y="27" width="120" height="9" rx="4" fill="#e4e8ef"></rect><rect x="152" y="44" width="140" height="9" rx="4" fill="#e4e8ef"></rect></svg>
+            </div>
+            <div style="padding:13px 15px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13.5px;font-weight:600;color:#0f172a">Ops Risk Monitor</span><span style="color:#94a3b8;font-weight:700;letter-spacing:.1em;cursor:pointer">⋯</span></div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e0f3f8;color:#0e7490;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;letter-spacing:.04em">PUBLIC LINK</span>
+                <span style="display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.04em">● HEALTHY</span>
+                <span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px"><span style="width:20px;height:20px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">PS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">1w</span></span>
+              </div>
+            </div>
+          </a>
+          <a href="#artifact-detail" style="text-decoration:none;background:#fff;border:1px solid #e4e8ef;border-radius:11px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#c7d9f8;box-shadow:0 10px 28px rgba(15,23,42,.08)">
+            <div style="background:#f7f8fa;border-bottom:1px solid #eef1f5;padding:14px;display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;gap:6px"><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span><span style="flex:1;height:15px;border-radius:4px;background:#e4e8ef"></span></div>
+              <svg viewBox="0 0 320 64" style="width:100%;height:64px"><rect x="8" y="46" width="300" height="10" rx="5" fill="#eff4ff"></rect><rect x="8" y="31" width="240" height="10" rx="5" fill="#dbeafe"></rect><rect x="8" y="16" width="172" height="10" rx="5" fill="#93c5fd"></rect><rect x="8" y="1" width="104" height="10" rx="5" fill="#2563eb"></rect></svg>
+            </div>
+            <div style="padding:13px 15px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13.5px;font-weight:600;color:#0f172a">Sales Pipeline Health</span><span style="color:#94a3b8;font-weight:700;letter-spacing:.1em;cursor:pointer">⋯</span></div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;letter-spacing:.04em">DASHBOARD</span>
+                <span style="display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.04em">● NEEDS REVIEW</span>
+                <span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px"><span style="width:20px;height:20px;border-radius:50%;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">MO</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">2w</span></span>
+              </div>
+            </div>
+          </a>
+          <a href="Create Workbench.dc.html" style="text-decoration:none;border:1.5px dashed #d4d9e1;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:180px" style-hover="border-color:#2563eb;background:#f8faff">
+            <span style="width:36px;height:36px;border-radius:10px;background:#eff4ff;display:inline-flex;align-items:center;justify-content:center;color:#2563eb;font-size:18px;font-weight:600">+</span>
+            <span style="font-size:12.5px;font-weight:600;color:#64748b">New dashboard from a question</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============ FRAME 02 · LIBRARY TABLE VIEW (content crop) ============ -->
+<section id="library-table" data-screen-label="Artifacts table view /app/artifacts" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Library — table view variant · <span style="color:#94a3b8">/app/artifacts?view=table</span> · content area crop</div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07)">
+  <div style="display:grid;grid-template-columns:2fr .9fr .9fr 1fr 1fr .9fr 1fr 44px;gap:12px;padding:0 20px;height:38px;align-items:center;background:#fafbfc;border-bottom:1px solid #e4e8ef;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.06em;color:#64748b">
+    <span style="display:flex;align-items:center;gap:5px;cursor:pointer;color:#0f172a">TITLE <span style="color:#2563eb">↓</span></span><span>OWNER</span><span>TYPE</span><span>DATA HEALTH</span><span>LAST REFRESHED</span><span>SHARE</span><span>TAGS</span><span></span>
+  </div>
+  <a href="#artifact-detail" style="text-decoration:none;display:grid;grid-template-columns:2fr .9fr .9fr 1fr 1fr .9fr 1fr 44px;gap:12px;padding:0 20px;height:46px;align-items:center;border-bottom:1px solid #eef1f5;font-size:13px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-weight:600;color:#0f172a">Q3 Revenue Target Risk</span>
+    <span style="display:flex;align-items:center;gap:7px"><span style="width:22px;height:22px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">DK</span>Dana</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#7c3aed">predictive</span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● 96</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">2h ago</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">workspace</span>
+    <span style="display:flex;gap:4px"><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">rev</span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">q3</span></span>
+    <span style="color:#94a3b8;font-weight:700;cursor:pointer;text-align:center">⋯</span>
+  </a>
+  <a href="#artifact-detail" style="text-decoration:none;display:grid;grid-template-columns:2fr .9fr .9fr 1fr 1fr .9fr 1fr 44px;gap:12px;padding:0 20px;height:46px;align-items:center;border-bottom:1px solid #eef1f5;font-size:13px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-weight:600;color:#0f172a">Location Performance</span>
+    <span style="display:flex;align-items:center;gap:7px"><span style="width:22px;height:22px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">PS</span>Priya</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#1d4ed8">dashboard</span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● 81</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">1d ago</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">private</span>
+    <span style="display:flex;gap:4px"><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">stores</span></span>
+    <span style="color:#94a3b8;font-weight:700;cursor:pointer;text-align:center">⋯</span>
+  </a>
+  <a href="#artifact-detail" style="text-decoration:none;display:grid;grid-template-columns:2fr .9fr .9fr 1fr 1fr .9fr 1fr 44px;gap:12px;padding:0 20px;height:46px;align-items:center;border-bottom:1px solid #eef1f5;font-size:13px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-weight:600;color:#0f172a">Ops Risk Monitor</span>
+    <span style="display:flex;align-items:center;gap:7px"><span style="width:22px;height:22px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">PS</span>Priya</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0e7490">monitor</span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● 93</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">3h ago</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0e7490">public link</span>
+    <span style="display:flex;gap:4px"><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">ops</span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">sla</span></span>
+    <span style="color:#94a3b8;font-weight:700;cursor:pointer;text-align:center">⋯</span>
+  </a>
+  <a href="#artifact-detail" style="text-decoration:none;display:grid;grid-template-columns:2fr .9fr .9fr 1fr 1fr .9fr 1fr 44px;gap:12px;padding:0 20px;height:46px;align-items:center;font-size:13px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-weight:600;color:#0f172a">Sales Pipeline Health</span>
+    <span style="display:flex;align-items:center;gap:7px"><span style="width:22px;height:22px;border-radius:50%;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">MO</span>Marcus</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#1d4ed8">dashboard</span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● 64</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">2w ago</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">workspace</span>
+    <span style="display:flex;gap:4px"><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">sales</span></span>
+    <span style="color:#94a3b8;font-weight:700;cursor:pointer;text-align:center">⋯</span>
+  </a>
+</div>
+</section>
+
+<!-- ============ FRAME 03 · ARTIFACT DETAIL ============ -->
+<section id="artifact-detail" data-screen-label="Artifact Detail /app/artifacts/:id" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · Artifact Detail — Dashboard tab · <span style="color:#94a3b8">/app/artifacts/:id</span> · content area crop</div>
+<div style="width:1180px;background:#f7f8fa;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07);display:flex;flex-direction:column">
+  <div style="background:#fff;border-bottom:1px solid #e4e8ef;padding:20px 26px 0 26px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">artifacts / revenue / <span style="color:#334155">q3-revenue-target-risk</span></span>
+        <div style="display:flex;align-items:center;gap:11px">
+          <h1 style="margin:0;font-size:20px;font-weight:600;color:#0f172a;border-bottom:1px dashed transparent;cursor:text" style-hover="border-color:#c7d9f8">Q3 Revenue Target Risk</h1>
+          <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.04em">● HEALTHY 96</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#f3eefe;color:#7c3aed;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.04em">PREDICTIVE</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.04em">v14</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#64748b"><span style="width:20px;height:20px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">DK</span>Dana Kim · refreshed 2h ago · daily 06:00 PT</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <a href="Create Workbench.dc.html" style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;background:#fff;color:#334155;font-size:12.5px;font-weight:600;text-decoration:none" style-hover="border-color:#94a3b8">Open in workbench</a>
+        <span style="display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;background:#fff;color:#334155;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="border-color:#94a3b8">Duplicate</span>
+        <span style="display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;background:#fff;color:#334155;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="border-color:#94a3b8">Export</span>
+        <a href="Artifact Sharing.dc.html" style="display:inline-flex;align-items:center;height:34px;padding:0 15px;background:#2563eb;border-radius:8px;color:#fff;font-size:12.5px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">Share</a>
+      </div>
+    </div>
+    <div style="display:flex;gap:4px">
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:600;color:#1d4ed8;border-bottom:2px solid #2563eb;cursor:pointer">Dashboard</span>
+      <a href="Inspector Panels.dc.html#insights" style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;text-decoration:none" style-hover="color:#0f172a">Insights</a>
+      <a href="Inspector Panels.dc.html#pipeline-audit" style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;text-decoration:none" style-hover="color:#0f172a">Pipeline</a>
+      <a href="Governance Lineage.dc.html" style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;text-decoration:none" style-hover="color:#0f172a">Lineage</a>
+      <a href="Models.dc.html#model-card" style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;text-decoration:none" style-hover="color:#0f172a">Model</a>
+      <a href="Inspector Panels.dc.html#versions" style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;text-decoration:none" style-hover="color:#0f172a">Versions</a>
+      <a href="Inspector Panels.dc.html#share-panel" style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;text-decoration:none" style-hover="color:#0f172a">Sharing</a>
+      <a href="App Home.dc.html#activity" style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;text-decoration:none" style-hover="color:#0f172a">Activity</a>
+    </div>
+  </div>
+  <div style="padding:20px 26px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">Q3 FORECAST</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:#0f172a">$4.82M</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#dc2626">−6.2% vs target</span></div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">Q3 TARGET</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:#0f172a">$5.14M</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">42 locations</span></div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">AT-RISK</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:#b45309">7 / 42</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#dc2626">3 high severity</span></div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">MAPE</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:#15803d">4.1%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">5-window backtest</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:12px">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:9px">
+        <span style="font-size:13px;font-weight:600;color:#0f172a">Revenue vs target · weekly</span>
+        <svg viewBox="0 0 560 150" style="width:100%;height:150px">
+          <line x1="0" y1="120" x2="560" y2="120" stroke="#eef1f5"></line><line x1="0" y1="75" x2="560" y2="75" stroke="#eef1f5"></line><line x1="0" y1="30" x2="560" y2="30" stroke="#eef1f5"></line>
+          <polygon points="340,58 380,54 420,60 460,56 500,64 530,62 560,68 560,104 530,96 500,100 460,88 420,92 380,82 340,88" fill="rgba(37,99,235,.08)"></polygon>
+          <polyline points="0,96 40,90 80,94 120,82 160,86 200,74 240,78 280,66 320,72 340,68" fill="none" stroke="#2563eb" stroke-width="2.5"></polyline>
+          <polyline points="340,68 380,70 420,76 460,72 500,82 530,80 560,86" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6 5"></polyline>
+          <polyline points="0,86 80,80 160,72 240,64 320,58 420,50 520,44 560,42" fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="4 5"></polyline>
+          <line x1="340" y1="20" x2="340" y2="128" stroke="#cbd5e1" stroke-dasharray="3 4"></line>
+        </svg>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:13px;font-weight:600;color:#0f172a">Target gap by region</span>
+        <div style="display:flex;flex-direction:column;gap:9px;padding-top:2px">
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:60px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">Northeast</span><div style="flex:1"><span style="display:block;width:74%;height:14px;border-radius:3px;background:#dc2626"></span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#dc2626">−9.4%</span></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:60px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">Midwest</span><div style="flex:1"><span style="display:block;width:44%;height:14px;border-radius:3px;background:#f59e0b"></span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#b45309">−5.8%</span></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:60px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">Southeast</span><div style="flex:1"><span style="display:block;width:26%;height:14px;border-radius:3px;background:#f59e0b"></span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#b45309">−5.1%</span></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:60px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">Southwest</span><div style="flex:1"><span style="display:block;width:14%;height:14px;border-radius:3px;background:#93c5fd"></span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b">+1.2%</span></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:60px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">West</span><div style="flex:1"><span style="display:block;width:32%;height:14px;border-radius:3px;background:#2563eb"></span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#15803d">+3.9%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>

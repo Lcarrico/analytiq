@@ -1,0 +1,1299 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/tmp/aiq_par/node_modules/playwright/cli.js",
+      "test",
+      "tests/ui/parity/parity.spec.js",
+      "--reporter=json",
+      "--grep",
+      "Semantic"
+    ],
+    "configFile": "/tmp/aiq_par/playwright.config.mjs",
+    "rootDir": "/tmp/aiq_par/tests/ui",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/aiq_par/tests/logs/ui-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/aiq_par/tests/ui",
+        "testIgnore": [],
+        "testMatch": [
+          "/.*\\.spec\\.js/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": {
+      "command": "python3 /sessions/pensive-gifted-hawking/mnt/analytiq/tests/ui/boot_server.py",
+      "url": "http://127.0.0.1:3111/api/health",
+      "reuseExistingServer": true,
+      "timeout": 60000,
+      "env": {
+        "UI_PORT": "3111"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "parity/parity.spec.js",
+      "file": "parity/parity.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Semantic Metrics › #metrics-catalog",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic/metrics",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 620,
+                      "error": {
+                        "message": "Error: missing component: \"+ Calculated metric\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"+ Calculated metric\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"+ Calculated metric\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"DEPRECATED\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:43.182Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-5a131-ist-on-app-semantic-metrics/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-5a131-ist-on-app-semantic-metrics/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-5a131-ist-on-app-semantic-metrics/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-3bf7cdd94c6839a5f957",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "Semantic Metrics › #metric-detail",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic/metrics/:id",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 602,
+                      "error": {
+                        "message": "Error: missing component: \"Propose change\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"Propose change\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Propose change\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"ADMIN ONLY\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"NON-NEGATIVE ✓\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"RECONCILES GL ✓\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:44.473Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-33312--on-app-semantic-metrics-id/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-33312--on-app-semantic-metrics-id/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-33312--on-app-semantic-metrics-id/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-69fbaffdaf03e3c36591",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "Semantic Metrics › #dimensions",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic/dimensions",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 590,
+                      "error": {
+                        "message": "Error: missing component: \"Date\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"Date\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Date\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Geography\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Category\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Boolean\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"ID\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Text\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:45.770Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-36a21--on-app-semantic-dimensions/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-36a21--on-app-semantic-dimensions/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Met-36a21--on-app-semantic-dimensions/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-6e4ef7f767a8e824bb81",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "Semantic Overview › #sem-overview",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 634,
+                      "error": {
+                        "message": "Error: missing component: \"Regenerate\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"Regenerate\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Regenerate\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:47.031Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-739ee-nents-exist-on-app-semantic/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-739ee-nents-exist-on-app-semantic/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-739ee-nents-exist-on-app-semantic/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-951de548dcdb41d6a8b9",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "Semantic Overview › #explores",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic/explores",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 602,
+                      "error": {
+                        "message": "Error: missing component: \"Revenue\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"Revenue\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Revenue\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Customer\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Inventory\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:48.358Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-27de3-st-on-app-semantic-explores/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-27de3-st-on-app-semantic-explores/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-27de3-st-on-app-semantic-explores/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-11a1cc9b936f5a67b25f",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "Semantic Overview › #explore-detail",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic/explores/:id",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 617,
+                      "error": {
+                        "message": "Error: missing component: \"Revenue\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"Revenue\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Revenue\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Analyze this explore\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"aov\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:49.660Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-634a6-on-app-semantic-explores-id/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-634a6-on-app-semantic-explores-id/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-634a6-on-app-semantic-explores-id/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-4e3a6f95de41f97303b6",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            },
+            {
+              "title": "tab strip (2 tabs)",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 626,
+                      "error": {
+                        "message": "Error: missing tab: Access\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing tab: Access\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:67:55",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 55,
+                          "line": 67
+                        },
+                        "snippet": "  65 |         for (const tab of fr.tabs) {\n  66 |           const present = body.includes(norm(tab));\n> 67 |           expect.soft(present, `missing tab: ${tab}`).toBe(true);\n     |                                                       ^\n  68 |           if (present) {\n  69 |             const loc = page.getByText(tab, { exact: true }).first();\n  70 |             try { await loc.click({ timeout: 1200, trial: false }); }"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 55,
+                            "line": 67
+                          },
+                          "message": "Error: missing tab: Access\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  65 |         for (const tab of fr.tabs) {\n  66 |           const present = body.includes(norm(tab));\n> 67 |           expect.soft(present, `missing tab: ${tab}`).toBe(true);\n     |                                                       ^\n  68 |           if (present) {\n  69 |             const loc = page.getByText(tab, { exact: true }).first();\n  70 |             try { await loc.click({ timeout: 1200, trial: false }); }\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:67:55"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 55,
+                            "line": 67
+                          },
+                          "message": "Error: missing tab: Versions\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  65 |         for (const tab of fr.tabs) {\n  66 |           const present = body.includes(norm(tab));\n> 67 |           expect.soft(present, `missing tab: ${tab}`).toBe(true);\n     |                                                       ^\n  68 |           if (present) {\n  69 |             const loc = page.getByText(tab, { exact: true }).first();\n  70 |             try { await loc.click({ timeout: 1200, trial: false }); }\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:67:55"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:50.951Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-62f3d-re-detail-tab-strip-2-tabs-/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-62f3d-re-detail-tab-strip-2-tabs-/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-62f3d-re-detail-tab-strip-2-tabs-/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 55,
+                        "line": 67
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-dddd13aade016f3a25a0",
+              "file": "parity/parity.spec.js",
+              "line": 62,
+              "column": 11
+            },
+            {
+              "title": "cross-links navigate (4 links)",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 596,
+                      "error": {
+                        "message": "Error: link source missing: \"Analyze this explore\" → /app/create\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: link source missing: \"Analyze this explore\" → /app/create\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:85:88",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 88,
+                          "line": 85
+                        },
+                        "snippet": "  83 |           try { visible = await loc.isVisible(); } catch { /* absent */ }\n  84 |           if (!visible) {\n> 85 |             expect.soft(false, `link source missing: \"${l.text}\" → ${l.target_route}`).toBe(true);\n     |                                                                                        ^\n  86 |             continue;\n  87 |           }\n  88 |           try {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 88,
+                            "line": 85
+                          },
+                          "message": "Error: link source missing: \"Analyze this explore\" → /app/create\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  83 |           try { visible = await loc.isVisible(); } catch { /* absent */ }\n  84 |           if (!visible) {\n> 85 |             expect.soft(false, `link source missing: \"${l.text}\" → ${l.target_route}`).toBe(true);\n     |                                                                                        ^\n  86 |             continue;\n  87 |           }\n  88 |           try {\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:85:88"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 88,
+                            "line": 85
+                          },
+                          "message": "Error: link source missing: \"net_revenue Item revenue net of discount\" → /app/semantic/metrics/:id\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  83 |           try { visible = await loc.isVisible(); } catch { /* absent */ }\n  84 |           if (!visible) {\n> 85 |             expect.soft(false, `link source missing: \"${l.text}\" → ${l.target_route}`).toBe(true);\n     |                                                                                        ^\n  86 |             continue;\n  87 |           }\n  88 |           try {\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:85:88"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 88,
+                            "line": 85
+                          },
+                          "message": "Error: link source missing: \"aov Average order value · net_revenue / \" → /app/semantic/metrics/:id\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  83 |           try { visible = await loc.isVisible(); } catch { /* absent */ }\n  84 |           if (!visible) {\n> 85 |             expect.soft(false, `link source missing: \"${l.text}\" → ${l.target_route}`).toBe(true);\n     |                                                                                        ^\n  86 |             continue;\n  87 |           }\n  88 |           try {\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:85:88"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 88,
+                            "line": 85
+                          },
+                          "message": "Error: link source missing: \"target_gap_pct (forecast − target) / tar\" → /app/semantic/metrics/:id\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  83 |           try { visible = await loc.isVisible(); } catch { /* absent */ }\n  84 |           if (!visible) {\n> 85 |             expect.soft(false, `link source missing: \"${l.text}\" → ${l.target_route}`).toBe(true);\n     |                                                                                        ^\n  86 |             continue;\n  87 |           }\n  88 |           try {\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:85:88"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:52.262Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-e4fdf-oss-links-navigate-4-links-/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-e4fdf-oss-links-navigate-4-links-/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Ove-e4fdf-oss-links-navigate-4-links-/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 88,
+                        "line": 85
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-b5a6624fd7fd27791986",
+              "file": "parity/parity.spec.js",
+              "line": 78,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "Semantic Tools › #field-picker",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic/field-picker",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 621,
+                      "error": {
+                        "message": "Error: missing component: \"Dimensions\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"Dimensions\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Dimensions\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Heads up:\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Preview\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Analyze this →\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Measures\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:53.535Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-b8a57-n-app-semantic-field-picker/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-b8a57-n-app-semantic-field-picker/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-b8a57-n-app-semantic-field-picker/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-944f3361c2a8a46bf9e8",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            },
+            {
+              "title": "cross-links navigate (1 links)",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 496,
+                      "error": {
+                        "message": "Error: link source missing: \"Analyze this →\" → /app/create\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: link source missing: \"Analyze this →\" → /app/create\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:85:88",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 88,
+                          "line": 85
+                        },
+                        "snippet": "  83 |           try { visible = await loc.isVisible(); } catch { /* absent */ }\n  84 |           if (!visible) {\n> 85 |             expect.soft(false, `link source missing: \"${l.text}\" → ${l.target_route}`).toBe(true);\n     |                                                                                        ^\n  86 |             continue;\n  87 |           }\n  88 |           try {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 88,
+                            "line": 85
+                          },
+                          "message": "Error: link source missing: \"Analyze this →\" → /app/create\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  83 |           try { visible = await loc.isVisible(); } catch { /* absent */ }\n  84 |           if (!visible) {\n> 85 |             expect.soft(false, `link source missing: \"${l.text}\" → ${l.target_route}`).toBe(true);\n     |                                                                                        ^\n  86 |             continue;\n  87 |           }\n  88 |           try {\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:85:88"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:54.918Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-68629-oss-links-navigate-1-links-/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-68629-oss-links-navigate-1-links-/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-68629-oss-links-navigate-1-links-/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 88,
+                        "line": 85
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-f788f28aa593389b6a07",
+              "file": "parity/parity.spec.js",
+              "line": 78,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "Semantic Tools › #joins",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic/joins",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 629,
+                      "error": {
+                        "message": "Error: missing component: \"Join paths\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"Join paths\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Join paths\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"SAFE\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"BLOCKED\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Recommend bridge table\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"FAN-OUT RISK\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:56.126Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-7348b-exist-on-app-semantic-joins/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-7348b-exist-on-app-semantic-joins/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-7348b-exist-on-app-semantic-joins/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-bff7d8cc313e4119f6ce",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "Semantic Tools › #derived",
+          "file": "parity/parity.spec.js",
+          "line": 49,
+          "column": 8,
+          "specs": [
+            {
+              "title": "components exist on /app/semantic/derived-tables",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 621,
+                      "error": {
+                        "message": "Error: missing component: \"GOVERNED\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: missing component: \"GOVERNED\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58",
+                        "location": {
+                          "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                          "column": 58,
+                          "line": 57
+                        },
+                        "snippet": "  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"GOVERNED\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Publish\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Schedule\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Governance tags\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"Lineage preview\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"FRESH\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        },
+                        {
+                          "location": {
+                            "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                            "column": 58,
+                            "line": 57
+                          },
+                          "message": "Error: missing component: \"DRAFT\"\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  55 |       for (const label of fr.labels) {\n  56 |         expect.soft(body.includes(norm(label)),\n> 57 |           `missing component: ${JSON.stringify(label)}`).toBe(true);\n     |                                                          ^\n  58 |       }\n  59 |     });\n  60 |\n    at /tmp/aiq_par/tests/ui/parity/parity.spec.js:57:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-04T19:52:57.455Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-347c1-app-semantic-derived-tables/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-347c1-app-semantic-derived-tables/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/aiq_par/tests/logs/ui-artifacts/parity-parity-Semantic-Too-347c1-app-semantic-derived-tables/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/aiq_par/tests/ui/parity/parity.spec.js",
+                        "column": 58,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "46b75b9e0b7f0bcb0357-040531581a52274a2183",
+              "file": "parity/parity.spec.js",
+              "line": 50,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-04T19:52:41.679Z",
+    "duration": 16515.627,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 12,
+    "flaky": 0
+  }
+}

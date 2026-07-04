@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Gold Layer &amp; Contracts</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+</div>
+
+<!-- 01 GOLD TABLES -->
+<section id="gold-tables" data-screen-label="Gold Tables /app/gold" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Gold Tables · <span style="color:#94a3b8">/app/gold</span></div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid #eef1f5">
+    <span style="font-size:14.5px;font-weight:600;color:#0f172a">Gold tables <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8">18</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">immutable per session · versioned · warehouse: ANALYTIQ_GOLD</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.8fr .8fr .8fr .6fr .8fr .8fr .9fr 1.2fr;gap:12px;padding:0 22px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>GOLD TABLE</span><span>SESSION</span><span>GRAIN</span><span>VER</span><span>CREATOR</span><span>ROWS</span><span>STATUS</span><span>LINKED</span></div>
+  <a href="#gold-detail" style="text-decoration:none;display:grid;grid-template-columns:1.8fr .8fr .8fr .6fr .8fr .8fr .9fr 1.2fr;gap:12px;padding:0 22px;height:46px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;align-items:center;gap:9px"><span style="width:9px;height:9px;background:#b45309;transform:rotate(45deg);flex-shrink:0"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f172a">REV_LOC_WK_V1</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">a4f2-9c</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">loc-week</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">v1</span>
+    <span style="display:flex"><span style="width:20px;height:20px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">DK</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">3,486</span>
+    <span><span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">GATES 6/6 ✓</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b">rev_loc_v2 · Q3 Target Risk</span>
+  </a>
+  <a href="#gold-detail" style="text-decoration:none;display:grid;grid-template-columns:1.8fr .8fr .8fr .6fr .8fr .8fr .9fr 1.2fr;gap:12px;padding:0 22px;height:46px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;align-items:center;gap:9px"><span style="width:9px;height:9px;background:#b45309;transform:rotate(45deg);flex-shrink:0"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f172a">CHURN_ACCT_V3</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">b81e-2f</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">account</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">v3</span>
+    <span style="display:flex"><span style="width:20px;height:20px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">PS</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">12,904</span>
+    <span><span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">GATES 5/5 ✓</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b">churn_risk_v3 · Churn Risk</span>
+  </a>
+  <a href="#gold-detail" style="text-decoration:none;display:grid;grid-template-columns:1.8fr .8fr .8fr .6fr .8fr .8fr .9fr 1.2fr;gap:12px;padding:0 22px;height:46px;align-items:center;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;align-items:center;gap:9px"><span style="width:9px;height:9px;background:#b45309;transform:rotate(45deg);flex-shrink:0"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f172a">OPS_RISK_DAY_V2</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">c93a-7b</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">dc-day</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">v2</span>
+    <span style="display:flex"><span style="width:20px;height:20px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">PS</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">28,441</span>
+    <span><span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">1 GATE WARN</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b">Ops Risk Monitor</span>
+  </a>
+</div>
+</section>
+
+<!-- 02 GOLD DETAIL -->
+<section id="gold-detail" data-screen-label="Gold Table Detail /app/gold/:id" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Gold Table Detail — Quality gates tab · <span style="color:#94a3b8">/app/gold/:id</span></div>
+<div style="width:1180px;background:#f7f8fa;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07)">
+  <div style="background:#fff;border-bottom:1px solid #e4e8ef;padding:18px 26px 0 26px;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:11px">
+        <span style="width:36px;height:36px;border-radius:10px;background:#fdf9ef;border:1px solid #f2ddb0;display:inline-flex;align-items:center;justify-content:center"><span style="width:11px;height:11px;background:#b45309;transform:rotate(45deg)"></span></span>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;align-items:center;gap:9px"><h1 style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#0f172a">GOLD.REV_LOC_WK_V1</h1><span style="display:inline-flex;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">IMMUTABLE · GATES ✓</span></div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">session a4f2-9c · grain location-week · 3,486 rows · created today 09:40</span>
+        </div>
+      </div>
+      <span style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border:1px solid #d4d9e1;border-radius:8px;font-size:12px;font-weight:600;color:#334155;cursor:pointer;background:#fff" style-hover="border-color:#94a3b8">Query in warehouse</span>
+    </div>
+    <div style="display:flex;gap:4px">
+      <span style="padding:8px 11px;font-size:12px;font-weight:500;color:#64748b;cursor:pointer">Overview</span>
+      <span style="padding:8px 11px;font-size:12px;font-weight:500;color:#64748b;cursor:pointer">Schema</span>
+      <span style="padding:8px 11px;font-size:12px;font-weight:600;color:#1d4ed8;border-bottom:2px solid #2563eb;cursor:pointer">Quality gates</span>
+      <a href="Governance Lineage.dc.html" style="padding:8px 11px;font-size:12px;font-weight:500;color:#64748b;text-decoration:none">Lineage</a>
+      <span style="padding:8px 11px;font-size:12px;font-weight:500;color:#64748b;cursor:pointer">Artifacts</span>
+      <a href="Models Ops.dc.html#features" style="padding:8px 11px;font-size:12px;font-weight:500;color:#64748b;text-decoration:none">Feature manifest</a>
+      <span style="padding:8px 11px;font-size:12px;font-weight:500;color:#64748b;cursor:pointer">Query contracts</span>
+    </div>
+  </div>
+  <div style="padding:20px 26px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12.5px;font-weight:600;color:#0f172a">Row count band</span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">PASS</span></div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">3,486 rows · expected 3,400–3,600 (42 loc × 83 wks)</span>
+    </div>
+    <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12.5px;font-weight:600;color:#0f172a">Grain uniqueness</span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">PASS</span></div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">(location_id, week) unique · 0 duplicates</span>
+    </div>
+    <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12.5px;font-weight:600;color:#0f172a">Revenue reconciliation</span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">PASS</span></div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">Σ gold = Σ source ± 0.01% · matches GL export</span>
+    </div>
+    <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12.5px;font-weight:600;color:#0f172a">Null contract</span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">PASS</span></div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">required fields 0 nulls · optional ≤ 2%</span>
+    </div>
+    <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12.5px;font-weight:600;color:#0f172a">Time coverage</span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">PASS</span></div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">no week gaps · filter present on all queries</span>
+    </div>
+    <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12.5px;font-weight:600;color:#0f172a">PII scan</span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">PASS</span></div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">0 PII columns propagated · masks enforced upstream</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<div style="display:flex;gap:40px;align-items:flex-start">
+<!-- 03 QUERY CONTRACTS -->
+<section id="query-contracts" data-screen-label="Query Contracts /app/contracts/queries" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · Query Contracts · <span style="color:#94a3b8">/app/contracts/queries</span> · admin</div>
+<div style="width:720px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #eef1f5"><span style="font-size:13.5px;font-weight:600;color:#0f172a">Query contracts · Q3 Target Risk</span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;letter-spacing:.06em">ADMIN</span></div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr .9fr .7fr .8fr .9fr;gap:10px;padding:0 20px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>COMPONENT</span><span>EXPECTED SHAPE</span><span>SQL SAFETY</span><span>ROWS</span><span>TIME FILTER</span><span>RESULT SHAPE</span></div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr .9fr .7fr .8fr .9fr;gap:10px;padding:0 20px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a">section_02 · line</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">week × 2 series</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">SAFE ✓</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">546/5K</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#15803d">✓</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">VALID ✓</span></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr .9fr .7fr .8fr .9fr;gap:10px;padding:0 20px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a">section_04 · bar</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">region × 1 measure</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">SAFE ✓</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">5/5K</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#15803d">✓</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">VALID ✓</span></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr .9fr .7fr .8fr .9fr;gap:10px;padding:0 20px;height:44px;align-items:center;font-size:12px;color:#334155;background:#fdf9ef">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a">section_05 · table</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">location × 4 cols</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">SAFE ✓</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#b45309">1 repair</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#15803d">✓</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">REPAIRED</span></span>
+  </div>
+</div>
+</section>
+
+<!-- 04 DATA CONTRACTS -->
+<section id="data-contracts" data-screen-label="Data Contracts /app/contracts/data" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">04</span> · Data Contracts · <span style="color:#94a3b8">/app/contracts/data</span> · admin</div>
+<div style="width:560px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:grid;grid-template-columns:1.5fr .8fr .9fr 1fr;gap:10px;padding:0 20px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>REQUIRED FIELDS</span><span>SLA</span><span>FAILURES · 30D</span><span>BLOCKING</span></div>
+  <div style="display:flex;flex-direction:column;gap:8px;padding:13px 20px;border-bottom:1px solid #f3f5f9">
+    <div style="display:grid;grid-template-columns:1.5fr .8fr .9fr 1fr;gap:10px;align-items:center;font-size:12px;color:#334155">
+      <span style="display:flex;flex-wrap:wrap;gap:4px"><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">order_ts</span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">net_amount</span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">store_id</span></span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">1h</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#15803d">0</span>
+      <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">ENFORCED</span></span>
+    </div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">orders → net_revenue · affected: 14 artifacts</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px;padding:13px 20px">
+    <div style="display:grid;grid-template-columns:1.5fr .8fr .9fr 1fr;gap:10px;align-items:center;font-size:12px;color:#334155">
+      <span style="display:flex;flex-wrap:wrap;gap:4px"><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">event_id</span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">qty</span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#475569;font-family:'IBM Plex Mono',monospace;font-size:9px;align-items:center">ts</span></span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">30m</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#dc2626">14</span>
+      <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">BLOCKING NOW</span></span>
+    </div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">wms_events → ops_risk · affected: Ops Risk Monitor, SLA Breach Predictor <span style="color:#2563eb;cursor:pointer">▾ expand</span></span>
+  </div>
+</div>
+</section>
+</div>
+
+</div>
+</x-dc>
+</body>
+</html>

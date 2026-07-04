@@ -1,4 +1,6 @@
 import { createContext, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { SCREEN_ROUTES } from './routes';
 
 const Ctx = createContext(null);
 
@@ -15,8 +17,14 @@ export function AppProvider({ children }) {
     selectedGrain:  'Location · Day',
   });
 
+  const navigate = useNavigate();
   const update = (patch) => setState(s => ({ ...s, ...patch }));
-  const nav    = (screen) => update({ screen });
+  // R15S1E1: legacy nav(n) now drives the router (URL = source of truth)
+  const nav = (screen) => {
+    update({ screen });
+    const route = SCREEN_ROUTES[screen];
+    if (route) navigate(route);
+  };
 
   return (
     <Ctx.Provider value={{ ...state, update, nav }}>

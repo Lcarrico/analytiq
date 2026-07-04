@@ -1,0 +1,17 @@
+Let users schedule artifact refreshes so dashboards don't go stale.
+
+1. Add a schedules table: id, artifact_id, org_id, cron_expr (e.g. "0 6 * * 1" = every Monday at 6am), next_run_at, last_run_at, enabled (bool), created_at.
+
+2. Add routes:
+   - GET /api/artifacts/:id/schedule — get current schedule
+   - PUT /api/artifacts/:id/schedule — upsert schedule (body: { cron_expr })
+   - DELETE /api/artifacts/:id/schedule — disable
+
+3. Add a scheduler thread that starts with the app (threading.Thread, daemon=True). Every 60 seconds it queries for schedules WHERE next_run_at <= NOW() AND enabled = true, then for each:
+   - Looks up the artifact → its pipeline_run → its session
+   - Calls the pipeline run logic to retrain and regenerate chart_data
+   - Updates the artifact's pipeline_run_id to the new run
+   - Computes next_run_at using croniter (add to requirements.txt)
+   - Sends the "forecast is ready" email notification
+
+4. In S10_Artifacts.jsx, add a schedule button next to each artifact that calls the schedule API with a simple dropdown: Daily / Weekly / Monthly.

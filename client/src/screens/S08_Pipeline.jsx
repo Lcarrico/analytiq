@@ -13,6 +13,7 @@ const PIPE_STEPS = [
 
 export default function Screen08() {
   const { pipelineRunId, selectedMetric, update, nav } = useApp();
+  const [steps, setSteps] = useState([]);
   const [step,    setStep]    = useState(0);
   const [status,  setStatus]  = useState('running');
   const [log,     setLog]     = useState([]);
@@ -45,8 +46,19 @@ export default function Screen08() {
 
     es.onerror = () => { es.close(); };
 
-    return () => { es.close(); };
+    const t = setInterval(() => {
+      api.pipelineSteps(pipelineRunId).then(setSteps).catch(() => {});
+    }, 1200);
+    api.pipelineSteps(pipelineRunId).then(setSteps).catch(() => {});
+    return () => { es.close(); clearInterval(t); };
   }, [pipelineRunId]);
+
+  const flagStep = (step) => {
+    const reason = 'flagged from pipeline audit panel';
+    api.flagStep(pipelineRunId, step, reason)
+      .then(() => api.pipelineSteps(pipelineRunId).then(setSteps))
+      .catch(() => {});
+  };
 
   // Auto-scroll log
   useEffect(() => {
@@ -134,6 +146,38 @@ export default function Screen08() {
           </div>
         </Card>
       </div>
+      {steps.length > 0 && (
+        <Card>
+          <div style={{ fontSize: 11, fontWeight: 700, color: C.textSec, textTransform: 'uppercase',
+                        letterSpacing: '0.06em', fontFamily: MONO, marginBottom: 8 }}>
+            Pipeline audit trail
+          </div>
+          {steps.map(st => (
+            <div key={st.step} style={{ padding: '8px 0', borderBottom: `1px solid ${C.border}` }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <span style={{ fontSize: 12, fontWeight: 600, fontFamily: FONT }}>
+                  {st.step}. {st.label}
+                </span>
+                {st.flagged ? (
+                  <Badge variant="default" xs>flagged</Badge>
+                ) : (
+                  <button onClick={() => flagStep(st.step)}
+                          style={{ fontSize: 10, border: `1px solid ${C.border}`, background: 'none',
+                                   borderRadius: 4, cursor: 'pointer', color: C.textSec }}>
+                    flag for review
+                  </button>
+                )}
+              </div>
+              <div style={{ fontSize: 11, color: C.textSec, fontFamily: FONT, marginTop: 2 }}>
+                {st.description}
+              </div>
+              <div style={{ fontSize: 10, color: C.textTer, fontFamily: MONO, marginTop: 2 }}>
+                in: {st.input_schema.join(' · ')} → out: {st.output_schema.join(' · ')}
+              </div>
+            </div>
+          ))}
+        </Card>
+      )}
     </div>
   );
 }

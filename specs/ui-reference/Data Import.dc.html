@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Data Import Flows</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Data Sources.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">← Sources</a>
+</div>
+
+<div style="display:flex;gap:40px;align-items:flex-start">
+<!-- 01 FILE UPLOAD -->
+<section id="upload" data-screen-label="File Upload /app/data/upload" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · File Upload — schema preview step · <span style="color:#94a3b8">/app/data/upload</span></div>
+<div style="width:720px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);padding:24px 28px;display:flex;flex-direction:column;gap:16px">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8"><span>UPLOAD A FILE</span><span>STEP 2 / 3 · SCHEMA</span></div>
+    <div style="height:5px;border-radius:999px;background:#eef1f5;overflow:hidden"><span style="display:block;width:66%;height:100%;background:#2563eb;border-radius:999px"></span></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;border:1px solid #e4e8ef;border-radius:10px;padding:12px 14px;background:#fafbfc">
+    <span style="width:34px;height:34px;border-radius:9px;background:#e8f5ec;display:inline-flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 13 13"><rect x="1.5" y="2.5" width="10" height="8" rx="1.5" fill="none" stroke="#15803d" stroke-width="1.3"></rect><path d="M1.5 5.5h10M4.5 2.5v8" stroke="#15803d" stroke-width="1.1"></path></svg></span>
+    <div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;font-weight:600;color:#0f172a">store_traffic_2026.csv</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">8.4 MB · 214,882 rows · 9 columns detected</span></div>
+    <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#2563eb;cursor:pointer">Replace</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <label style="font-size:11.5px;font-weight:600;color:#334155">Table name</label>
+    <input value="store_traffic" style="height:36px;border:1px solid #d4d9e1;border-radius:8px;padding:0 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a;outline:none;width:280px" style-focus="border-color:#2563eb">
+  </div>
+  <div style="border:1px solid #e4e8ef;border-radius:9px;overflow:hidden">
+    <div style="display:grid;grid-template-columns:1.4fr 1.1fr 1fr .9fr;gap:12px;padding:0 16px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>COLUMN</span><span>DETECTED TYPE</span><span>SAMPLE</span><span>NULLS</span></div>
+    <div style="display:grid;grid-template-columns:1.4fr 1.1fr 1fr .9fr;gap:12px;padding:0 16px;height:42px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12.5px;color:#334155"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">visit_date</span><span><span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:1px solid #d4d9e1;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8;cursor:pointer">DATE ▾</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">2026-06-28</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">0.0%</span></div>
+    <div style="display:grid;grid-template-columns:1.4fr 1.1fr 1fr .9fr;gap:12px;padding:0 16px;height:42px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12.5px;color:#334155"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">store_id</span><span><span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:1px solid #d4d9e1;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8;cursor:pointer">ID ▾</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">ST-0042</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">0.0%</span></div>
+    <div style="display:grid;grid-template-columns:1.4fr 1.1fr 1fr .9fr;gap:12px;padding:0 16px;height:42px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12.5px;color:#334155"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">foot_traffic</span><span><span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:1px solid #d4d9e1;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8;cursor:pointer">INTEGER ▾</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">1,204</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#b45309">2.8%</span></div>
+    <div style="display:grid;grid-template-columns:1.4fr 1.1fr 1fr .9fr;gap:12px;padding:0 16px;height:42px;align-items:center;font-size:12.5px;color:#334155;background:#fdf9ef"><span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">manager_email<span style="display:inline-flex;height:16px;padding:0 6px;border-radius:4px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:600;align-items:center">PII</span></span><span><span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:1px solid #d4d9e1;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8;cursor:pointer">TEXT ▾</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">j•••@acme…</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">0.1%</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+    <div style="border:1px solid #e4e8ef;border-radius:9px;padding:12px 14px;display:flex;flex-direction:column;gap:3px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">ROWS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:#0f172a">214,882</span></div>
+    <div style="border:1px solid #e4e8ef;border-radius:9px;padding:12px 14px;display:flex;flex-direction:column;gap:3px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">HEALTH</span><span style="font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:#15803d">96</span></div>
+    <div style="border:1px solid #e4e8ef;border-radius:9px;padding:12px 14px;display:flex;flex-direction:column;gap:3px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">PII FLAGS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:#b45309">1 · masked</span></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid #eef1f5">
+    <span style="font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">← Back</span>
+    <a href="Data Sources.dc.html" style="display:inline-flex;align-items:center;height:36px;padding:0 16px;background:#2563eb;border-radius:8px;color:#fff;font-size:12.5px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">Add to workspace</a>
+  </div>
+</div>
+</section>
+
+<!-- 02 WEBHOOK -->
+<section id="webhook" data-screen-label="Webhook Connector /app/data/webhook" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Webhook Connector · <span style="color:#94a3b8">/app/data/webhook</span></div>
+<div style="width:680px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);padding:24px 28px;display:flex;flex-direction:column;gap:16px">
+  <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:600;color:#0f172a">Webhook · wms_events</span><span style="font-size:12px;color:#64748b">Push events to this endpoint; payloads are validated against the schema below.</span></div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <label style="font-size:11.5px;font-weight:600;color:#334155">Endpoint URL</label>
+    <div style="display:flex;align-items:center;gap:8px;background:#f7f8fa;border:1px solid #e4e8ef;border-radius:8px;padding:8px 11px">
+      <span style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155">https://ingest.analytiq.app/wh/acme-retail/wms_events_8842</span>
+      <span style="display:inline-flex;height:25px;padding:0 10px;background:#2563eb;border-radius:6px;color:#fff;font-size:10.5px;font-weight:600;align-items:center;cursor:pointer" style-hover="background:#1d4ed8">Copy</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Signing secret</label>
+      <div style="display:flex;align-items:center;gap:8px;border:1px solid #d4d9e1;border-radius:8px;padding:8px 11px">
+        <span style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#334155">whsec_••••••••••••••••••••3kfa</span>
+        <svg width="13" height="13" viewBox="0 0 14 14" style="cursor:pointer"><path d="M1.5 7s2-4 5.5-4 5.5 4 5.5 4-2 4-5.5 4S1.5 7 1.5 7Z" fill="none" stroke="#64748b" stroke-width="1.2"></path><circle cx="7" cy="7" r="1.7" fill="none" stroke="#64748b" stroke-width="1.2"></circle></svg>
+      </div>
+    </div>
+    <span style="display:inline-flex;align-items:center;height:36px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;font-size:12px;font-weight:600;color:#334155;cursor:pointer" style-hover="border-color:#94a3b8">Send test event</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <label style="font-size:11.5px;font-weight:600;color:#334155">Expected payload schema</label>
+    <div style="background:#0b1220;border-radius:9px;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.7;color:#93c5fd">{ "event_id": <span style="color:#4ade80">"string"</span>, "warehouse": <span style="color:#4ade80">"string"</span>,<br>&nbsp;&nbsp;"event_type": <span style="color:#4ade80">"pick|pack|ship|exception"</span>,<br>&nbsp;&nbsp;"ts": <span style="color:#4ade80">"ISO-8601"</span>, "qty": <span style="color:#fbbf24">number</span> }</div>
+  </div>
+  <div style="border:1px solid #e4e8ef;border-radius:9px;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fafbfc;border-bottom:1px solid #eef1f5"><span style="font-size:12px;font-weight:600;color:#0f172a">Recent events</span><span style="display:inline-flex;align-items:center;gap:5px;height:18px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600">4 FAILING</span></div>
+    <div style="display:grid;grid-template-columns:1fr .8fr 1.6fr 1.2fr;gap:10px;padding:0 14px;height:32px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>TIMESTAMP</span><span>STATUS</span><span>PAYLOAD</span><span>FAILURE REASON</span></div>
+    <div style="display:grid;grid-template-columns:1fr .8fr 1.6fr 1.2fr;gap:10px;padding:0 14px;height:38px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:11.5px;color:#334155"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">09:41:02</span><span><span style="display:inline-flex;height:17px;padding:0 7px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">400</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b">{"event_id":"e-99120",…}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#dc2626">qty is string, expected number</span></div>
+    <div style="display:grid;grid-template-columns:1fr .8fr 1.6fr 1.2fr;gap:10px;padding:0 14px;height:38px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:11.5px;color:#334155"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">09:38:44</span><span><span style="display:inline-flex;height:17px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">200</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b">{"event_id":"e-99119",…}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">—</span></div>
+    <div style="display:grid;grid-template-columns:1fr .8fr 1.6fr 1.2fr;gap:10px;padding:0 14px;height:38px;align-items:center;font-size:11.5px;color:#334155"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">09:36:15</span><span><span style="display:inline-flex;height:17px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">200</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b">{"event_id":"e-99118",…}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">—</span></div>
+  </div>
+</div>
+</section>
+</div>
+
+<div style="display:flex;gap:40px;align-items:flex-start">
+<!-- 03 REST API -->
+<section id="rest-api" data-screen-label="REST API Connector /app/data/api" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · REST API Connector · <span style="color:#94a3b8">/app/data/api</span></div>
+<div style="width:900px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);display:grid;grid-template-columns:1fr 1fr;overflow:hidden">
+  <div style="padding:24px 26px;display:flex;flex-direction:column;gap:13px;border-right:1px solid #eef1f5">
+    <span style="font-size:15px;font-weight:600;color:#0f172a">Connection</span>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Endpoint URL</label>
+      <div style="height:36px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a">https://api.shopify.com/admin/2026-01/orders.json</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:11.5px;font-weight:600;color:#334155">Method</label><div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a;cursor:pointer">GET<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:11.5px;font-weight:600;color:#334155">Auth</label><div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#0f172a;cursor:pointer">Bearer token<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Headers</label>
+      <div style="display:flex;gap:8px"><div style="flex:1;height:32px;border:1px solid #d4d9e1;border-radius:7px;padding:0 10px;display:flex;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#334155">X-Shopify-Access-Token</div><div style="flex:1;height:32px;border:1px solid #d4d9e1;border-radius:7px;padding:0 10px;display:flex;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">••••••••</div></div>
+      <span style="font-size:11px;font-weight:600;color:#2563eb;cursor:pointer">+ Add header</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:11.5px;font-weight:600;color:#334155">Pagination</label><div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#0f172a;cursor:pointer">Cursor · page_info<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:11.5px;font-weight:600;color:#334155">Poll every</label><div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a;cursor:pointer">15 min<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">JSON path → rows</label>
+      <div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a">$.orders[*]</div>
+    </div>
+  </div>
+  <div style="padding:24px 26px;display:flex;flex-direction:column;gap:12px;background:#fafbfc">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:15px;font-weight:600;color:#0f172a">Response preview</span>
+      <span style="display:inline-flex;align-items:center;height:30px;padding:0 13px;background:#2563eb;border-radius:7px;color:#fff;font-size:11.5px;font-weight:600;cursor:pointer" style-hover="background:#1d4ed8">Test response</span>
+    </div>
+    <div style="background:#0b1220;border-radius:9px;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.7;color:#94a3b8;flex:1">
+      <span style="color:#4ade80">200 OK</span> · 412ms · 50 records<br>
+      {<br>&nbsp;&nbsp;<span style="color:#93c5fd">"orders"</span>: [{<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93c5fd">"id"</span>: <span style="color:#fbbf24">5512094</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93c5fd">"created_at"</span>: <span style="color:#4ade80">"2026-07-03T09:12:44Z"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93c5fd">"total_price"</span>: <span style="color:#4ade80">"212.40"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93c5fd">"line_items"</span>: [ … ]<br>&nbsp;&nbsp;}, … ]<br>}
+    </div>
+    <div style="border:1px solid #e4e8ef;border-radius:9px;overflow:hidden;background:#fff">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #eef1f5"><span style="font-size:11.5px;font-weight:600;color:#0f172a">Ingest preview</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">first 3 rows</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px;padding:0 13px;height:28px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>ID</span><span>CREATED_AT</span><span>TOTAL</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px;padding:0 13px;height:32px;align-items:center;border-bottom:1px solid #f3f5f9;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#334155"><span>5512094</span><span>2026-07-03 09:12</span><span>$212.40</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px;padding:0 13px;height:32px;align-items:center;border-bottom:1px solid #f3f5f9;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#334155"><span>5512093</span><span>2026-07-03 09:08</span><span>$64.10</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px;padding:0 13px;height:32px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#334155"><span>5512092</span><span>2026-07-03 09:01</span><span>$388.95</span></div>
+    </div>
+    <a href="Data Sources.dc.html" style="align-self:flex-end;display:inline-flex;align-items:center;height:34px;padding:0 15px;background:#2563eb;border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">Save connector</a>
+  </div>
+</div>
+</section>
+
+<!-- 04 DBT IMPORT -->
+<section id="dbt" data-screen-label="dbt Import /app/data/dbt" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">04</span> · dbt Import — mapping step · <span style="color:#94a3b8">/app/data/dbt</span></div>
+<div style="width:680px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);padding:24px 28px;display:flex;flex-direction:column;gap:15px">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:600;color:#0f172a">Import dbt project</span><span style="font-size:12px;color:#64748b">Models &amp; docs become semantic-layer candidates; tests are inherited as quality gates.</span></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;border:1px solid #e4e8ef;border-radius:10px;padding:11px 14px;background:#fafbfc">
+    <svg width="16" height="16" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="#b45309" stroke-width="1.3"></circle><circle cx="7" cy="7" r="1.6" fill="#b45309"></circle></svg>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#334155">github.com/acme-retail/dbt-core-models</span>
+    <span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;margin-left:auto">✓ CONNECTED · main</span>
+  </div>
+  <div style="border:1px solid #e4e8ef;border-radius:9px;overflow:hidden">
+    <div style="display:grid;grid-template-columns:1.5fr 1.5fr 1fr;gap:10px;padding:0 16px;height:34px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>DBT MODEL</span><span>SEMANTIC CANDIDATE</span><span>TESTS</span></div>
+    <div style="display:grid;grid-template-columns:1.5fr 1.5fr 1fr;gap:10px;padding:0 16px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a">fct_orders</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px solid #c7d9f8;border-radius:7px;background:#f8faff;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8;cursor:pointer">Orders explore ▾</span>
+      <span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-self:center">6 INHERITED</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1.5fr 1.5fr 1fr;gap:10px;padding:0 16px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a">dim_customers</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px solid #c7d9f8;border-radius:7px;background:#f8faff;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8;cursor:pointer">Customer dims ▾</span>
+      <span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-self:center">4 INHERITED</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1.5fr 1.5fr 1fr;gap:10px;padding:0 16px;height:44px;align-items:center;font-size:12px;color:#334155">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a">fct_margin_daily</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px dashed #d4d9e1;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b;cursor:pointer">Skip ▾</span>
+      <span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-self:center">1 FAILING</span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:13px;border-top:1px solid #eef1f5">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">14 models found · 2 selected for import</span>
+    <a href="Semantic Overview.dc.html" style="display:inline-flex;align-items:center;height:36px;padding:0 16px;background:#2563eb;border-radius:8px;color:#fff;font-size:12.5px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">Import to semantic layer</a>
+  </div>
+</div>
+</section>
+</div>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Alerts</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+</div>
+
+<!-- 01 ALERTS CENTER -->
+<section id="alerts-center" data-screen-label="Alerts Center /app/alerts" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Alerts Center · <span style="color:#94a3b8">/app/alerts</span></div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid #eef1f5">
+    <div style="display:flex;gap:7px">
+      <span style="display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;background:#0f172a;color:#fff;font-size:11.5px;font-weight:600">All · 14</span>
+      <span style="display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Metric threshold</span>
+      <span style="display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Anomaly</span>
+      <span style="display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Freshness</span>
+      <span style="display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Schema drift</span>
+      <span style="display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Model drift</span>
+      <span style="display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Artifact health</span>
+    </div>
+    <a href="#create-alert" style="display:inline-flex;align-items:center;height:34px;padding:0 15px;background:#2563eb;border-radius:8px;color:#fff;font-size:12.5px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">+ Create alert</a>
+  </div>
+  <div style="display:grid;grid-template-columns:2fr .9fr .9fr 1fr .7fr;gap:12px;padding:0 22px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>ALERT</span><span>TYPE</span><span>STATUS</span><span>LAST TRIGGERED</span><span>MUTE</span></div>
+  <a href="#alert-detail" style="text-decoration:none;display:grid;grid-template-columns:2fr .9fr .9fr 1fr .7fr;gap:12px;padding:0 22px;height:48px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;align-items:center;gap:10px"><span style="width:26px;height:26px;border-radius:7px;background:#fdeaea;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 15 15"><polyline points="1.5,11.5 5,7.5 8,9.5 13.5,3.5" fill="none" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></span><span style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#0f172a">Daily revenue vs forecast guard</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">net_revenue &lt; forecast −8% · by region</span></span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">threshold</span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600">● FIRING</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">12m ago</span>
+    <span><span style="width:30px;height:17px;border-radius:999px;background:#cbd5e1;position:relative;display:inline-block"><span style="position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff"></span></span></span>
+  </a>
+  <a href="#alert-detail" style="text-decoration:none;display:grid;grid-template-columns:2fr .9fr .9fr 1fr .7fr;gap:12px;padding:0 22px;height:48px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;align-items:center;gap:10px"><span style="width:26px;height:26px;border-radius:7px;background:#fdf3e3;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 15 15"><path d="M7.5 2 14 13H1L7.5 2Z" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round"></path></svg></span><span style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#0f172a">Returns spike anomaly watch</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">returns_rate · 3σ from 28d baseline</span></span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">anomaly</span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600">● FIRING</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">1h ago</span>
+    <span><span style="width:30px;height:17px;border-radius:999px;background:#cbd5e1;position:relative;display:inline-block"><span style="position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff"></span></span></span>
+  </a>
+  <a href="#alert-detail" style="text-decoration:none;display:grid;grid-template-columns:2fr .9fr .9fr 1fr .7fr;gap:12px;padding:0 22px;height:48px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;align-items:center;gap:10px"><span style="width:26px;height:26px;border-radius:7px;background:#e0f3f8;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="#0e7490" stroke-width="1.3"></circle><path d="M7.5 4.5V8l2 1.4" fill="none" stroke="#0e7490" stroke-width="1.3" stroke-linecap="round"></path></svg></span><span style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#0f172a">POS feed freshness SLA</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">prod_pos sync &gt; 60m late</span></span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">freshness</span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600">● OK</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">2d ago</span>
+    <span><span style="width:30px;height:17px;border-radius:999px;background:#cbd5e1;position:relative;display:inline-block"><span style="position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff"></span></span></span>
+  </a>
+  <a href="#alert-detail" style="text-decoration:none;display:grid;grid-template-columns:2fr .9fr .9fr 1fr .7fr;gap:12px;padding:0 22px;height:48px;align-items:center;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;align-items:center;gap:10px"><span style="width:26px;height:26px;border-radius:7px;background:#f3eefe;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 15 15"><polyline points="1.5,11.5 5,7.5 8,9.5 13.5,3.5" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="13.5" cy="3.5" r="1.3" fill="#7c3aed"></circle></svg></span><span style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#0f172a">Churn model drift monitor</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">churn_risk_v3 · PSI &gt; 0.25</span></span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">model drift</span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600">MUTED · 7D</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">Jun 28</span>
+    <span><span style="width:30px;height:17px;border-radius:999px;background:#2563eb;position:relative;display:inline-block"><span style="position:absolute;top:2px;right:2px;width:13px;height:13px;border-radius:50%;background:#fff"></span></span></span>
+  </a>
+</div>
+</section>
+
+<div style="display:flex;gap:40px;align-items:flex-start">
+<!-- 02 CREATE ALERT -->
+<section id="create-alert" data-screen-label="Create Alert /app/alerts/new" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Create Alert (modal) · <span style="color:#94a3b8">/app/alerts/new</span></div>
+<div style="width:520px;background:#fff;border:1px solid #d8dce3;border-radius:14px;box-shadow:0 24px 64px rgba(15,23,42,.18);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #eef1f5">
+    <span style="font-size:14.5px;font-weight:600;color:#0f172a">Create alert</span>
+    <span style="width:26px;height:26px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;color:#64748b;cursor:pointer;border:1px solid #e4e8ef;font-size:12px">✕</span>
+  </div>
+  <div style="padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Watch</label>
+      <div style="height:36px;border:1px solid #d4d9e1;border-radius:8px;padding:0 12px;display:flex;align-items:center;gap:9px;font-size:12.5px;color:#0f172a;cursor:pointer" style-hover="border-color:#94a3b8"><span style="width:7px;height:7px;border-radius:50%;background:#2563eb"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#1d4ed8">net_revenue</span><span style="color:#94a3b8">· Revenue explore</span><svg width="9" height="9" viewBox="0 0 9 9" style="margin-left:auto"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Condition</label>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px">
+        <div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#0f172a;cursor:pointer">falls below<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div>
+        <div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">forecast −8%</div>
+        <div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#0f172a;cursor:pointer">by region<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="font-size:11.5px;font-weight:600;color:#334155">Check frequency</label>
+        <div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#0f172a;cursor:pointer">Daily · 07:00 PT<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="font-size:11.5px;font-weight:600;color:#334155">Owner</label>
+        <div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;gap:8px;font-size:12px;color:#0f172a;cursor:pointer"><span style="width:20px;height:20px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">DK</span>Dana Kim</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Deliver to</label>
+      <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155;cursor:pointer"><span style="width:15px;height:15px;border-radius:4px;background:#2563eb;display:inline-flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 9 9"><path d="m2 4.5 2 2 3-3.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path></svg></span>Email · rev-ops@acmeretail.com</label>
+      <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155;cursor:pointer"><span style="width:15px;height:15px;border-radius:4px;background:#2563eb;display:inline-flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 9 9"><path d="m2 4.5 2 2 3-3.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path></svg></span>Slack · #rev-ops</label>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #e4e8ef;border-radius:9px;padding:10px 13px">
+      <div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:12px;font-weight:600;color:#0f172a">Mute rules</span><span style="font-size:11px;color:#94a3b8">Max 1 notification per region per 24h</span></div>
+      <span style="width:34px;height:20px;border-radius:999px;background:#2563eb;position:relative;cursor:pointer"><span style="position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#fff"></span></span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:9px;padding:14px 20px;border-top:1px solid #eef1f5;background:#fafbfc">
+    <span style="display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;color:#334155;font-size:12px;font-weight:600;cursor:pointer;background:#fff" style-hover="border-color:#94a3b8">Cancel</span>
+    <span style="display:inline-flex;align-items:center;height:34px;padding:0 15px;background:#2563eb;border-radius:8px;color:#fff;font-size:12px;font-weight:600;cursor:pointer" style-hover="background:#1d4ed8">Save alert</span>
+  </div>
+</div>
+</section>
+
+<!-- 03 ALERT DETAIL -->
+<section id="alert-detail" data-screen-label="Alert Detail /app/alerts/:id" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · Alert Detail · <span style="color:#94a3b8">/app/alerts/:id</span></div>
+<div style="width:720px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid #eef1f5">
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <div style="display:flex;align-items:center;gap:9px"><span style="font-size:14.5px;font-weight:600;color:#0f172a">Daily revenue vs forecast guard</span><span style="display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600">● FIRING</span></div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">created by DK · checked daily 07:00 PT · linked: Q3 Target Risk</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <span style="display:inline-flex;align-items:center;height:30px;padding:0 12px;border:1px solid #d4d9e1;border-radius:7px;font-size:11.5px;font-weight:600;color:#334155;cursor:pointer" style-hover="border-color:#94a3b8">Mute 24h</span>
+      <span style="display:inline-flex;align-items:center;height:30px;padding:0 12px;border:1px solid #d4d9e1;border-radius:7px;font-size:11.5px;font-weight:600;color:#334155;cursor:pointer" style-hover="border-color:#94a3b8">Edit</span>
+      <span style="display:inline-flex;align-items:center;height:30px;padding:0 12px;color:#dc2626;font-size:11.5px;font-weight:600;cursor:pointer">Delete</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:0">
+    <div style="border-right:1px solid #eef1f5;padding:16px 22px;display:flex;flex-direction:column;gap:4px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8;padding-bottom:6px">TRIGGER HISTORY</span>
+      <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f3f5f9">
+        <span style="width:26px;height:26px;border-radius:7px;background:#fdeaea;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;color:#dc2626">−8</span>
+        <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:12px;color:#334155"><strong style="font-weight:600">Northeast</strong> −8.4% vs forecast</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">today 07:00 · email ✓ · slack ✓</span></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">12m</span>
+      </div>
+      <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f3f5f9">
+        <span style="width:26px;height:26px;border-radius:7px;background:#fdf3e3;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;color:#b45309">−6</span>
+        <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:12px;color:#334155"><strong style="font-weight:600">Northeast</strong> −6.1% vs forecast</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">Jul 2 07:00 · email ✓ · slack ✓</span></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">1d</span>
+      </div>
+      <div style="display:flex;gap:12px;padding:10px 0">
+        <span style="width:26px;height:26px;border-radius:7px;background:#e8f5ec;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;color:#15803d">OK</span>
+        <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:12px;color:#334155">All regions within band</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">Jul 1 07:00 · no delivery</span></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">2d</span>
+      </div>
+    </div>
+    <div style="padding:16px 22px;display:flex;flex-direction:column;gap:12px;background:#fafbfc">
+      <div style="display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">TRIGGER LOGIC</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.6;color:#334155">net_revenue &lt; forecast × 0.92<br>grain: region · window: day</span></div>
+      <div style="display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">SUBSCRIBERS</span><span style="display:flex"><span style="width:22px;height:22px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;border:2px solid #fff">DK</span><span style="width:22px;height:22px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;border:2px solid #fff;margin-left:-6px">PS</span><span style="width:22px;height:22px;border-radius:50%;background:#f1f5f9;color:#64748b;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;border:2px solid #fff;margin-left:-6px">+4</span></span></div>
+      <div style="display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">LINKED ARTIFACTS</span><a href="Artifacts Library.dc.html#artifact-detail" style="font-size:12px;color:#2563eb;text-decoration:none">Q3 Revenue Target Risk →</a></div>
+      <div style="display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">MUTE RULES</span><span style="font-size:11.5px;color:#334155">1 per region per 24h · quiet hours 22:00–06:00</span></div>
+    </div>
+  </div>
+</div>
+</section>
+</div>
+
+</div>
+</x-dc>
+</body>
+</html>

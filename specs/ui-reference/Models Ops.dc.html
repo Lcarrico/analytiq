@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Model Ops</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Models.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">← Models</a>
+</div>
+
+<!-- 01 LEADERBOARD -->
+<section id="leaderboard" data-screen-label="Model Leaderboard /app/models/runs/:id/leaderboard" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Model Leaderboard · <span style="color:#94a3b8">/app/models/runs/:id/leaderboard</span></div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);display:grid;grid-template-columns:1.7fr 1fr;overflow:hidden">
+  <div style="border-right:1px solid #eef1f5">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid #eef1f5">
+      <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:14.5px;font-weight:600;color:#0f172a">Candidate leaderboard · run 8842</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">ranked by mean MAPE across 5 backtest windows</span></div>
+      <span style="display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px;border:1px solid #d4d9e1;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#334155;cursor:pointer">windows: mean ▾</span>
+    </div>
+    <div style="display:grid;grid-template-columns:.5fr 1.4fr 1fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>RANK</span><span>CANDIDATE</span><span>MAPE</span><span>MAE</span><span>TRAIN TIME</span><span>SELECT</span></div>
+    <div style="display:grid;grid-template-columns:.5fr 1.4fr 1fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:48px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155;background:#f8faff">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#15803d">#1</span>
+      <span style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:#0f172a">LightGBM</span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">CHAMPION</span></span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#15803d">4.1% ±0.4</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">$4.9K</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">18s</span>
+      <span><span style="width:15px;height:15px;border-radius:50%;border:5px solid #2563eb;background:#fff;display:inline-block"></span></span>
+    </div>
+    <div style="display:grid;grid-template-columns:.5fr 1.4fr 1fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:48px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#64748b">#2</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:#0f172a">XGBoost</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">4.6% ±0.5</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">$5.3K</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">24s</span>
+      <span><span style="width:15px;height:15px;border-radius:50%;border:1.5px solid #cbd5e1;display:inline-block"></span></span>
+    </div>
+    <div style="display:grid;grid-template-columns:.5fr 1.4fr 1fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:48px;align-items:center;border-bottom:1px solid #eef1f5;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#64748b">#3</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:#0f172a">Prophet</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">5.8% ±0.7</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">$6.8K</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">11s</span>
+      <span><span style="width:15px;height:15px;border-radius:50%;border:1.5px solid #cbd5e1;display:inline-block"></span></span>
+    </div>
+    <div style="display:grid;grid-template-columns:.5fr 1.4fr 1fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:48px;align-items:center;font-size:12.5px;color:#334155" style-hover="background:#f8fafc">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#64748b">#4</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:#0f172a">Ridge</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">7.2% ±0.9</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">$8.1K</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">3s</span>
+      <span><span style="width:15px;height:15px;border-radius:50%;border:1.5px solid #cbd5e1;display:inline-block"></span></span>
+    </div>
+    <div style="display:flex;gap:9px;padding:14px 22px;border-top:1px solid #eef1f5;background:#fafbfc">
+      <span style="display:inline-flex;align-items:center;height:34px;padding:0 15px;background:#2563eb;border-radius:8px;color:#fff;font-size:12px;font-weight:600;cursor:pointer" style-hover="background:#1d4ed8">Promote champion</span>
+      <span style="display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;color:#334155;font-size:12px;font-weight:600;cursor:pointer" style-hover="border-color:#94a3b8">Override champion…</span>
+    </div>
+  </div>
+  <div style="padding:18px 22px;display:flex;flex-direction:column;gap:13px;background:#fafbfc">
+    <span style="font-size:13px;font-weight:600;color:#0f172a">Trade-off · LightGBM vs XGBoost</span>
+    <svg viewBox="0 0 300 150" style="width:100%;height:150px">
+      <line x1="34" y1="10" x2="34" y2="126" stroke="#e4e8ef"></line><line x1="34" y1="126" x2="300" y2="126" stroke="#e4e8ef"></line>
+      <text x="6" y="16" font-family="IBM Plex Mono" font-size="8" fill="#94a3b8">error</text><text x="262" y="142" font-family="IBM Plex Mono" font-size="8" fill="#94a3b8">cost/run</text>
+      <circle cx="96" cy="46" r="8" fill="#2563eb"></circle><text x="86" y="30" font-family="IBM Plex Mono" font-size="8.5" fill="#1d4ed8">lgbm</text>
+      <circle cx="150" cy="60" r="8" fill="#94a3b8"></circle><text x="140" y="82" font-family="IBM Plex Mono" font-size="8.5" fill="#64748b">xgb</text>
+      <circle cx="88" cy="96" r="8" fill="#cbd5e1"></circle><text x="76" y="116" font-family="IBM Plex Mono" font-size="8.5" fill="#94a3b8">prophet</text>
+      <circle cx="52" cy="112" r="8" fill="#e4e8ef"></circle><text x="44" y="140" font-family="IBM Plex Mono" font-size="8.5" fill="#94a3b8">ridge</text>
+    </svg>
+    <div style="border:1px solid #e4e8ef;border-radius:9px;background:#fff;padding:12px 14px;display:flex;flex-direction:column;gap:7px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">WHY LIGHTGBM WON</span>
+      <span style="font-size:12px;line-height:1.6;color:#334155">Best error on 4 of 5 windows, stable across holiday weeks, and 25% cheaper per training run than XGBoost. Ridge is fast but underfits promo interactions.</span>
+    </div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">promotion gate: champion must beat incumbent by ≥0.5pt MAPE on ≥3 windows ✓</span>
+  </div>
+</div>
+</section>
+
+<div style="display:flex;gap:40px;align-items:flex-start">
+<!-- 02 FEATURE MANIFEST -->
+<section id="features" data-screen-label="Feature Manifest /app/models/features/:id" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Feature Manifest Viewer · <span style="color:#94a3b8">/app/models/features/:id</span></div>
+<div style="width:720px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 20px;border-bottom:1px solid #eef1f5"><span style="font-size:14px;font-weight:600;color:#0f172a">Feature manifest · rev_loc_v2</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">12 used · 2 dropped</span></div>
+  <div style="display:grid;grid-template-columns:1.3fr 1fr .8fr 1fr .9fr .8fr;gap:10px;padding:0 20px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>FEATURE</span><span>ENCODING</span><span>IMPUTATION</span><span>LEAKAGE RISK</span><span>IMPORTANCE</span><span>STATUS</span></div>
+  <div style="display:grid;grid-template-columns:1.3fr 1fr .8fr 1fr .9fr .8fr;gap:10px;padding:0 20px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a;border-bottom:1px dashed #d4d9e1;cursor:help;width:fit-content">foot_traffic_7d</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">rolling mean</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">ffill</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">LOW</span></span>
+    <span><svg width="70" height="10" viewBox="0 0 70 10"><rect width="70" height="10" rx="3" fill="#eef1f5"></rect><rect width="62" height="10" rx="3" fill="#7c3aed"></rect></svg></span>
+    <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">APPROVED</span></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.3fr 1fr .8fr 1fr .9fr .8fr;gap:10px;padding:0 20px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a;border-bottom:1px dashed #d4d9e1;cursor:help;width:fit-content">promo_depth</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">numeric</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">zero</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">LOW</span></span>
+    <span><svg width="70" height="10" viewBox="0 0 70 10"><rect width="70" height="10" rx="3" fill="#eef1f5"></rect><rect width="45" height="10" rx="3" fill="#8b5cf6"></rect></svg></span>
+    <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">APPROVED</span></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.3fr 1fr .8fr 1fr .9fr .8fr;gap:10px;padding:0 20px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155;background:#fdf6f6">
+    <span style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;text-decoration:line-through">future_promo_flag</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">boolean</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">—</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">HIGH</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">—</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">DROPPED</span></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.3fr 1fr .8fr 1fr .9fr .8fr;gap:10px;padding:0 20px;height:44px;align-items:center;font-size:12px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a;border-bottom:1px dashed #d4d9e1;cursor:help;width:fit-content">weather_idx</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">bucketed</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">median</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">MEDIUM</span></span>
+    <span><svg width="70" height="10" viewBox="0 0 70 10"><rect width="70" height="10" rx="3" fill="#eef1f5"></rect><rect width="22" height="10" rx="3" fill="#c4b5fd"></rect></svg></span>
+    <span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">REVIEW</span></span>
+  </div>
+</div>
+</section>
+
+<!-- 03 RETRAIN CENTER -->
+<section id="retrain" data-screen-label="Retrain Center /app/models/retrain" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · Retrain Center · <span style="color:#94a3b8">/app/models/retrain</span></div>
+<div style="width:520px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;gap:7px;padding:14px 18px;border-bottom:1px solid #eef1f5">
+    <span style="display:inline-flex;align-items:center;height:27px;padding:0 12px;border-radius:999px;background:#0f172a;color:#fff;font-size:11.5px;font-weight:600">All · 5</span>
+    <span style="display:inline-flex;align-items:center;height:27px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Scheduled · 2</span>
+    <span style="display:inline-flex;align-items:center;height:27px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Drift · 2</span>
+    <span style="display:inline-flex;align-items:center;height:27px;padding:0 12px;border-radius:999px;border:1px solid #d4d9e1;color:#47516b;font-size:11.5px;font-weight:500;cursor:pointer">Failed · 1</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:11px;padding:13px 18px;border-bottom:1px solid #f3f5f9">
+    <span style="width:7px;height:7px;border-radius:50%;background:#b45309"></span>
+    <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f172a">inventory_demand_v1</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">drift-triggered · PSI 0.31 &gt; 0.25</span></div>
+    <span style="display:inline-flex;height:28px;padding:0 12px;background:#2563eb;border-radius:7px;color:#fff;font-size:11px;font-weight:600;align-items:center;cursor:pointer" style-hover="background:#1d4ed8">Retrain now</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:11px;padding:13px 18px;border-bottom:1px solid #f3f5f9">
+    <span style="width:7px;height:7px;border-radius:50%;background:#b45309"></span>
+    <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f172a">churn_risk_v3</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">drift-triggered · label shift detected</span></div>
+    <span style="display:inline-flex;height:28px;padding:0 12px;background:#2563eb;border-radius:7px;color:#fff;font-size:11px;font-weight:600;align-items:center;cursor:pointer" style-hover="background:#1d4ed8">Retrain now</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:11px;padding:13px 18px;border-bottom:1px solid #f3f5f9">
+    <span style="width:7px;height:7px;border-radius:50%;background:#2563eb"></span>
+    <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f172a">rev_loc_v2</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">scheduled · weekly Sun 03:00</span></div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">next in 2d</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:11px;padding:13px 18px">
+    <span style="width:7px;height:7px;border-radius:50%;background:#dc2626"></span>
+    <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f172a">sla_breach_v2</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#dc2626">failed · training data gate: label nulls 4%</span></div>
+    <span style="display:inline-flex;height:28px;padding:0 12px;border:1px solid #d4d9e1;border-radius:7px;color:#334155;font-size:11px;font-weight:600;align-items:center;cursor:pointer" style-hover="border-color:#94a3b8">View logs</span>
+  </div>
+</div>
+</section>
+</div>
+
+</div>
+</x-dc>
+</body>
+</html>

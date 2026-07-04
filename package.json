@@ -2,14 +2,22 @@
   "name": "analytiq",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["client"],
+  "workspaces": [
+    "client"
+  ],
   "scripts": {
-    "dev": "concurrently -n server,client -c cyan,magenta \"python server/app.py\" \"npm run dev --workspace=client\"",
-    "dev:server": "python server/app.py",
+    "dev": "concurrently -n server,client -c cyan,magenta \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": ".venv\\Scripts\\python.exe server/app.py",
     "dev:client": "npm run dev --workspace=client",
-    "build": "npm run build --workspace=client"
+    "build": "npm run build --workspace=client -- --emptyOutDir=false",
+    "test:ui": "bash tests/ui/run_ui.sh",
+    "lint:tokens": "eslint client/src",
+    "test:parity": "bash tests/ui/parity/run_parity.sh"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@playwright/test": "^1.61.1",
+    "@sparticuz/chromium": "^149.0.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^10.6.0"
   }
 }

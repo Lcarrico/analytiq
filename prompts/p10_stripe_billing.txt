@@ -1,0 +1,13 @@
+Add subscription billing so you can charge customers. Use Stripe Checkout for simplicity — no custom payment UI needed.
+
+1. Add stripe to server/requirements.txt.
+2. Read STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET from env.
+3. Add a subscriptions table: id, org_id, stripe_customer_id, stripe_subscription_id, plan (free|pro|enterprise), status, current_period_end.
+4. Add these routes:
+   - POST /api/billing/checkout — create a Stripe Checkout session for the 'pro' price ID (read STRIPE_PRO_PRICE_ID from env), return { url }.
+   - POST /api/billing/portal — create a Stripe Customer Portal session, return { url }.
+   - POST /api/billing/webhook — verify Stripe signature, handle checkout.session.completed (activate subscription) and customer.subscription.deleted (downgrade to free).
+5. Add a plan_gate(required_plan) decorator. Apply it to:
+   - POST /api/pipeline/run — require 'pro'
+   - POST /api/governance/run with >3 tables — require 'pro'
+6. Add STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRO_PRICE_ID to .env.example.

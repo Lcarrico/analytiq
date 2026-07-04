@@ -1,0 +1,11 @@
+Send transactional emails when key events occur. Use the Resend API (resend.com) — it has a generous free tier and a clean Python SDK.
+
+1. Add resend to server/requirements.txt.
+2. Read RESEND_API_KEY and FROM_EMAIL from env vars.
+3. Write a send_email(to, subject, html) helper that calls resend.Emails.send. If RESEND_API_KEY is not set, log the email to stdout instead (dev mode).
+4. Send emails on these events:
+   - Governance run complete → email the connection owner: subject "Governance complete — N tables cataloged", body includes health summary.
+   - Pipeline run complete → email the session owner: subject "Your forecast is ready", body includes MAPE and a link to the artifact.
+   - Artifact shared → email the new collaborator: subject "[Name] shared an artifact with you", body includes artifact title and role.
+5. Trigger each send in a daemon thread so it never blocks the API response.
+6. Add RESEND_API_KEY and FROM_EMAIL to .env.example.

@@ -1,0 +1,13 @@
+The artifact list in S10_Artifacts.jsx will break as data grows. Add search, filtering, and pagination.
+
+Server (GET /api/artifacts):
+1. Accept query params: q (title search), type (Predictive|Descriptive), dq_status (pass|warn), page (default 1), per_page (default 20).
+2. Build the WHERE clause dynamically from present params.
+3. Return { items: [...], total: N, page: P, per_page: 20 } instead of a bare array.
+
+Client (S10_Artifacts.jsx):
+4. Add a search input at the top that debounces 300ms before calling the API.
+5. Add Type and DQ Status filter dropdowns next to the search input.
+6. Add pagination controls at the bottom: Previous / Page N of M / Next.
+7. Reset to page 1 whenever search or filters change.
+8. Update api.js — getArtifacts() should accept { q, type, dq_status, page } and append them as URL search params.

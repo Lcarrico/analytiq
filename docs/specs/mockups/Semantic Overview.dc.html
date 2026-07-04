@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Semantic Layer</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Semantic Metrics.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">Metrics + dimensions →</a>
+  <a href="Semantic Tools.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">Joins + field picker →</a>
+</div>
+
+<!-- 01 OVERVIEW -->
+<section id="sem-overview" data-screen-label="Semantic Overview /app/semantic" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Semantic Layer Overview · <span style="color:#94a3b8">/app/semantic</span> · content crop</div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);padding:26px 30px;display:flex;flex-direction:column;gap:18px">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8">acme-retail / semantic</span>
+      <h1 style="margin:0;font-size:20px;font-weight:600;color:#0f172a">Semantic layer</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px">
+      <span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600">MANIFEST v11 ACTIVE</span>
+      <span style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border:1px solid #d4d9e1;border-radius:8px;font-size:12px;font-weight:600;color:#334155;cursor:pointer" style-hover="border-color:#94a3b8">Regenerate</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+    <a href="#explores" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px" style-hover="border-color:#c7d9f8;box-shadow:0 6px 18px rgba(15,23,42,.06)"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">EXPLORES</span><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#0f172a">6</span><span style="font-size:11.5px;color:#64748b">all healthy</span></a>
+    <a href="Semantic Metrics.dc.html" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px" style-hover="border-color:#c7d9f8;box-shadow:0 6px 18px rgba(15,23,42,.06)"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">METRICS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#0f172a">48</span><span style="font-size:11.5px;color:#64748b">44 governed · 4 draft</span></a>
+    <a href="Semantic Metrics.dc.html#dimensions" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px" style-hover="border-color:#c7d9f8;box-shadow:0 6px 18px rgba(15,23,42,.06)"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">DIMENSIONS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#0f172a">112</span><span style="font-size:11.5px;color:#64748b">6 categories</span></a>
+    <a href="Semantic Tools.dc.html" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px" style-hover="border-color:#c7d9f8;box-shadow:0 6px 18px rgba(15,23,42,.06)"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">JOIN PATHS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#0f172a">19</span><span style="font-size:11.5px;color:#b45309">1 blocked m:n</span></a>
+    <a href="Governance.dc.html#review-queue" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px" style-hover="border-color:#c7d9f8;box-shadow:0 6px 18px rgba(15,23,42,.06)"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">CONFLICTS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#b45309">1</span><span style="font-size:11.5px;color:#64748b">active_customer ×2</span></a>
+    <a href="Governance Lineage.dc.html#manifests" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px" style-hover="border-color:#c7d9f8;box-shadow:0 6px 18px rgba(15,23,42,.06)"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">VERSION</span><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#0f172a">v11</span><span style="font-size:11.5px;color:#b45309">v12 pending review</span></a>
+    <a href="Admin Security.dc.html#rls" style="text-decoration:none;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;grid-column:span 2" style-hover="border-color:#c7d9f8;box-shadow:0 6px 18px rgba(15,23,42,.06)"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">ACCESS POLICIES</span><div style="display:flex;align-items:baseline;gap:14px"><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#0f172a">4 RLS policies</span><span style="font-size:11.5px;color:#64748b">region-scoped viewers · finance-only margin metrics</span></div></a>
+  </div>
+</div>
+</section>
+
+<!-- 02 EXPLORES LIST -->
+<section id="explores" data-screen-label="Explores List /app/semantic/explores" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Explores List · <span style="color:#94a3b8">/app/semantic/explores</span></div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:grid;grid-template-columns:1.7fr .8fr .9fr 1.1fr .9fr .9fr 1fr;gap:12px;padding:0 22px;height:38px;align-items:center;background:#fafbfc;border-bottom:1px solid #e4e8ef;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>EXPLORE</span><span>METRICS</span><span>DIMENSIONS</span><span>ACCESS</span><span>HEALTH</span><span>CONFIDENCE</span><span>USED BY</span></div>
+  <a href="#explore-detail" style="text-decoration:none;display:grid;grid-template-columns:1.7fr .8fr .9fr 1.1fr .9fr .9fr 1fr;gap:12px;padding:0 22px;height:48px;align-items:center;border-bottom:1px solid #eef1f5;font-size:13px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#0f172a">Revenue</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">orders + order_items + stores</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">14</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">31</span>
+    <span style="display:flex"><span style="width:20px;height:20px;border-radius:50%;background:#0e7490;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #fff">DK</span><span style="width:20px;height:20px;border-radius:50%;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #fff;margin-left:-6px">MO</span><span style="width:20px;height:20px;border-radius:50%;background:#f1f5f9;color:#64748b;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #fff;margin-left:-6px">+9</span></span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● 96</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#15803d">0.95</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">14 dashboards</span>
+  </a>
+  <a href="#explore-detail" style="text-decoration:none;display:grid;grid-template-columns:1.7fr .8fr .9fr 1.1fr .9fr .9fr 1fr;gap:12px;padding:0 22px;height:48px;align-items:center;border-bottom:1px solid #eef1f5;font-size:13px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#0f172a">Customer</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">customers + orders</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">9</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">24</span>
+    <span style="display:flex"><span style="width:20px;height:20px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #fff">PS</span><span style="width:20px;height:20px;border-radius:50%;background:#f1f5f9;color:#64748b;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #fff;margin-left:-6px">+6</span></span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● 84</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#b45309">0.71</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">8 dashboards</span>
+  </a>
+  <a href="#explore-detail" style="text-decoration:none;display:grid;grid-template-columns:1.7fr .8fr .9fr 1.1fr .9fr .9fr 1fr;gap:12px;padding:0 22px;height:48px;align-items:center;font-size:13px;color:#334155" style-hover="background:#f8fafc">
+    <span style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#0f172a">Inventory</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">inventory_snapshots + products</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">7</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">18</span>
+    <span style="display:flex"><span style="width:20px;height:20px;border-radius:50%;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #fff">MO</span><span style="width:20px;height:20px;border-radius:50%;background:#f1f5f9;color:#64748b;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #fff;margin-left:-6px">+4</span></span>
+    <span><span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● 91</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#15803d">0.88</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">5 dashboards</span>
+  </a>
+</div>
+</section>
+
+<!-- 03 EXPLORE DETAIL -->
+<section id="explore-detail" data-screen-label="Explore Detail /app/semantic/explores/:id" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · Explore Detail — Metrics tab · <span style="color:#94a3b8">/app/semantic/explores/:id</span></div>
+<div style="width:1180px;background:#f7f8fa;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07)">
+  <div style="background:#fff;border-bottom:1px solid #e4e8ef;padding:20px 26px 0 26px;display:flex;flex-direction:column;gap:13px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">semantic / explores / <span style="color:#334155">revenue</span></span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <h1 style="margin:0;font-size:19px;font-weight:600;color:#0f172a">Revenue</h1>
+          <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● HEALTHY 96</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">3 tables · confidence 0.95</span>
+        </div>
+      </div>
+      <a href="Create Workbench.dc.html" style="display:inline-flex;align-items:center;height:34px;padding:0 15px;background:#2563eb;border-radius:8px;color:#fff;font-size:12.5px;font-weight:600;text-decoration:none" style-hover="background:#1d4ed8">Analyze this explore</a>
+    </div>
+    <div style="display:flex;gap:4px">
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:600;color:#1d4ed8;border-bottom:2px solid #2563eb;cursor:pointer">Metrics · 14</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Dimensions · 31</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Joins · 4</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Access</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Artifacts · 14</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Versions</span>
+    </div>
+  </div>
+  <div style="padding:20px 26px">
+    <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1.4fr 2fr .8fr .8fr .9fr;gap:12px;padding:0 20px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>METRIC</span><span>DEFINITION</span><span>FORMAT</span><span>VERSION</span><span>USED BY</span></div>
+      <a href="Semantic Metrics.dc.html#metric-detail" style="text-decoration:none;display:grid;grid-template-columns:1.4fr 2fr .8fr .8fr .9fr;gap:12px;padding:0 20px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12.5px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#1d4ed8">net_revenue</span><span style="font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Item revenue net of discounts and refunds</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">$ USD</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">v4</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">14</span></a>
+      <a href="Semantic Metrics.dc.html#metric-detail" style="text-decoration:none;display:grid;grid-template-columns:1.4fr 2fr .8fr .8fr .9fr;gap:12px;padding:0 20px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12.5px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#1d4ed8">aov</span><span style="font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Average order value · net_revenue / orders</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">$ USD</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">v2</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">9</span></a>
+      <a href="Semantic Metrics.dc.html#metric-detail" style="text-decoration:none;display:grid;grid-template-columns:1.4fr 2fr .8fr .8fr .9fr;gap:12px;padding:0 20px;height:44px;align-items:center;font-size:12.5px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#1d4ed8">target_gap_pct</span><span style="font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">(forecast − target) / target, weekly grain</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">v1</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">3</span></a>
+    </div>
+  </div>
+</div>
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>

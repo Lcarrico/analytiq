@@ -1,0 +1,11 @@
+Add export capabilities to the dashboard artifact screen (S09_Dashboard.jsx).
+
+1. Add a server route: GET /api/artifacts/:id/export?format=csv|json
+   - csv: returns the chart_data rows as a CSV file (Content-Disposition: attachment; filename="artifact-<id>.csv")
+   - json: returns the full artifact JSON including kpis and chart_data rows
+
+2. In S09_Dashboard.jsx, add an Export dropdown button next to the existing action buttons with options: "Download CSV", "Download JSON", "Copy PNG".
+
+3. For "Copy PNG", use the browser's html2canvas library loaded from CDN to screenshot the chart container div and copy it to the clipboard via the Clipboard API. Show a "Copied!" toast on success.
+
+4. For CSV and JSON, trigger a file download by creating a temporary <a> element with href pointing to the export API URL and clicking it.

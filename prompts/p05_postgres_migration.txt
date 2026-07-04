@@ -1,0 +1,9 @@
+Replace the SQLite backend with PostgreSQL so the app can handle concurrent writes in production.
+
+1. Add psycopg2-binary to server/requirements.txt.
+2. Replace the sqlite3 connection helpers (get_db, thread_db, execute, one, many) with psycopg2 equivalents that use a connection pool (psycopg2.pool.ThreadedConnectionPool, min=2, max=10).
+3. Read the DSN from DATABASE_URL env var; fall back to postgresql://localhost/analytiq_dev for local development.
+4. Convert SQLite-specific syntax: datetime('now') → NOW(), INTEGER PRIMARY KEY AUTOINCREMENT → SERIAL PRIMARY KEY, PRAGMA statements → remove them (PostgreSQL handles this natively).
+5. Update .env.example with DATABASE_URL=postgresql://user:pass@host/db.
+6. Keep the schema creation logic (init_db) so it still runs CREATE TABLE IF NOT EXISTS on startup.
+7. Update the README with `createdb analytiq_dev` as a setup step.

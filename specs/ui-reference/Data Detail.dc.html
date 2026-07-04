@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Data Detail Screens</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Data Sources.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">← Sources</a>
+</div>
+
+<!-- 01 SOURCE DETAIL -->
+<section id="source-detail" data-screen-label="Source Detail /app/data/sources/:id" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Source Detail — Health tab · <span style="color:#94a3b8">/app/data/sources/:id</span> · content crop</div>
+<div style="width:1180px;background:#f7f8fa;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07);display:flex;flex-direction:column">
+  <div style="background:#fff;border-bottom:1px solid #e4e8ef;padding:20px 26px 0 26px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="width:42px;height:42px;border-radius:11px;background:#e0f3f8;display:inline-flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 13 13"><path d="M6.5 1 12 4.2v4.6L6.5 12 1 8.8V4.2L6.5 1Z" fill="none" stroke="#0e7490" stroke-width="1.2" stroke-linejoin="round"></path><path d="M6.5 4.2 9.2 5.8v2.4L6.5 9.6 3.8 8.2V5.8l2.7-1.6Z" fill="#0e7490" opacity=".35"></path></svg></span>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <h1 style="margin:0;font-size:19px;font-weight:600;color:#0f172a">prod_pos</h1>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">snowflake · us-west-2</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● CONNECTED</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">2 ISSUES</span>
+          </div>
+          <span style="font-size:12px;color:#64748b">42 tables in scope · read-only role ANALYTIQ_READONLY · owner Marcus Oduya</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:9px">
+        <span style="display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;background:#fff;font-size:12.5px;font-weight:600;color:#334155;cursor:pointer" style-hover="border-color:#94a3b8">Sync now</span>
+        <span style="display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;background:#fff;font-size:12.5px;font-weight:600;color:#334155;cursor:pointer" style-hover="border-color:#94a3b8">Settings</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:4px">
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Overview</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Tables</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:600;color:#1d4ed8;border-bottom:2px solid #2563eb;cursor:pointer">Health</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Schema Drift</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">PII</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Freshness</span>
+      <a href="Governance Lineage.dc.html" style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;text-decoration:none" style-hover="color:#0f172a">Lineage</a>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Sync Logs</span>
+      <span style="padding:9px 12px;font-size:12.5px;font-weight:500;color:#64748b;cursor:pointer">Settings</span>
+    </div>
+  </div>
+  <div style="padding:22px 26px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">HEALTH SCORE</span><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:#15803d">94</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">+2 vs last week</span></div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">TABLES HEALTHY</span><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:#0f172a">40/42</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#b45309">2 warnings</span></div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">FRESHNESS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:#b45309">40m late</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">SLA 1h · at risk</span></div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">GATES · 7D</span><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:#0f172a">248/252</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#64748b">4 failed → repaired</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:12px">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 18px;display:flex;flex-direction:column;gap:9px">
+        <span style="font-size:13px;font-weight:600;color:#0f172a">Health score · 30 days</span>
+        <svg viewBox="0 0 620 130" style="width:100%;height:130px">
+          <line x1="0" y1="104" x2="620" y2="104" stroke="#eef1f5"></line><line x1="0" y1="66" x2="620" y2="66" stroke="#eef1f5"></line><line x1="0" y1="28" x2="620" y2="28" stroke="#eef1f5"></line>
+          <text x="0" y="26" font-family="IBM Plex Mono" font-size="9" fill="#94a3b8">100</text><text x="0" y="102" font-family="IBM Plex Mono" font-size="9" fill="#94a3b8">80</text>
+          <polygon points="30,52 90,48 150,56 210,44 270,80 330,72 390,50 450,46 510,42 570,38 620,40 620,110 30,110" fill="rgba(21,128,61,.07)"></polygon>
+          <polyline points="30,52 90,48 150,56 210,44 270,80 330,72 390,50 450,46 510,42 570,38 620,40" fill="none" stroke="#15803d" stroke-width="2.2"></polyline>
+          <circle cx="270" cy="80" r="4" fill="#fff" stroke="#b45309" stroke-width="2"></circle>
+          <text x="252" y="98" font-family="IBM Plex Mono" font-size="8.5" fill="#b45309">null spike</text>
+        </svg>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #eef1f5"><span style="font-size:13px;font-weight:600;color:#0f172a">Open issues</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8">2</span></div>
+        <div style="display:flex;gap:11px;padding:12px 16px;border-bottom:1px solid #f3f5f9">
+          <span style="width:26px;height:26px;border-radius:7px;background:#fdf3e3;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 15 15"><path d="M7.5 2 14 13H1L7.5 2Z" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round"></path></svg></span>
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:600;color:#0f172a">Schema drift · orders.discount_pct</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">FLOAT → STRING · queued for review</span></div>
+        </div>
+        <div style="display:flex;gap:11px;padding:12px 16px">
+          <span style="width:26px;height:26px;border-radius:7px;background:#fdf3e3;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="#b45309" stroke-width="1.3"></circle><path d="M7.5 4.5V8l2 1.4" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linecap="round"></path></svg></span>
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:600;color:#0f172a">Null spike · inventory_snapshots.on_hand</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">2.8% nulls vs 0.4% baseline · Jun 18</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 02 TABLE DETAIL -->
+<section id="table-detail" data-screen-label="Table Detail /app/data/tables/:id" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Table Detail · <span style="color:#94a3b8">/app/data/tables/:id</span> · content crop</div>
+<div style="width:1180px;background:#f7f8fa;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07);display:flex;flex-direction:column">
+  <div style="background:#fff;border-bottom:1px solid #e4e8ef;padding:20px 26px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">data / prod_pos / <span style="color:#334155">orders</span></span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <h1 style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600;color:#0f172a">orders</h1>
+        <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">● HEALTHY 96</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600">1 DRIFT</span>
+      </div>
+    </div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">1,204,318 rows · 24 columns · grain: order</span>
+  </div>
+  <div style="padding:22px 26px;display:grid;grid-template-columns:1.7fr 1fr;gap:14px">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600;color:#0f172a">Business definition</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8;border-bottom:1px dashed #c7d9f8;cursor:text">editable</span></div>
+        <p style="margin:0;font-size:12.5px;line-height:1.6;color:#334155">One row per customer order across all channels. Includes cancelled orders (flag <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d4ed8">is_cancelled</span>); excludes drafts. Primary revenue source for the <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d4ed8">net_revenue</span> metric.</p>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:2px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">HEALTH TREND</span>
+          <svg width="120" height="22" viewBox="0 0 120 22"><polyline points="0,14 15,12 30,15 45,10 60,16 75,9 90,8 105,6 120,7" fill="none" stroke="#15803d" stroke-width="1.8"></polyline></svg>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#15803d">96 / 100</span>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1.5fr .8fr 1.1fr .9fr .9fr;gap:10px;padding:0 18px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>COLUMN</span><span>NULL RATE</span><span>SEMANTIC TYPE</span><span>CONFIDENCE</span><span>PII RISK</span></div>
+        <div style="display:grid;grid-template-columns:1.5fr .8fr 1.1fr .9fr .9fr;gap:10px;padding:0 18px;height:40px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">order_id</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">0.0%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#1d4ed8">primary key</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">0.99</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">none</span></div>
+        <div style="display:grid;grid-template-columns:1.5fr .8fr 1.1fr .9fr .9fr;gap:10px;padding:0 18px;height:40px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">order_ts</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">0.0%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#1d4ed8">event time</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">0.98</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">none</span></div>
+        <div style="display:grid;grid-template-columns:1.5fr .8fr 1.1fr .9fr .9fr;gap:10px;padding:0 18px;height:40px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155;background:#fdf9ef" style-hover="background:#fdf6e4"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">discount_pct</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">0.4%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#b45309">drifted · was ratio</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#b45309">0.61</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">none</span></div>
+        <div style="display:grid;grid-template-columns:1.5fr .8fr 1.1fr .9fr .9fr;gap:10px;padding:0 18px;height:40px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">store_id</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">0.0%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#1d4ed8">foreign key → stores</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">0.97</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">none</span></div>
+        <div style="display:grid;grid-template-columns:1.5fr .8fr 1.1fr .9fr .9fr;gap:10px;padding:0 18px;height:40px;align-items:center;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0f172a">customer_email</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px">1.2%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#1d4ed8">contact</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">0.95</span><span><span style="display:inline-flex;height:18px;padding:0 8px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">HIGH · MASKED</span></span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:7px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">FRESHNESS</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:600;color:#0f172a">18m ago</span>
+        <span style="font-size:11.5px;color:#64748b">loads hourly · SLA 1h · <span style="color:#15803d;font-weight:600">on time</span></span>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;overflow:hidden">
+        <div style="padding:12px 16px;border-bottom:1px solid #eef1f5"><span style="font-size:13px;font-weight:600;color:#0f172a">Downstream</span></div>
+        <a href="Semantic Metrics.dc.html#metric-detail" style="text-decoration:none;display:flex;align-items:center;gap:9px;padding:10px 16px;border-bottom:1px solid #f3f5f9" style-hover="background:#f8fafc"><span style="width:6px;height:6px;border-radius:50%;background:#2563eb"></span><span style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155">net_revenue · metric</span></a>
+        <a href="Gold Contracts.dc.html" style="text-decoration:none;display:flex;align-items:center;gap:9px;padding:10px 16px;border-bottom:1px solid #f3f5f9" style-hover="background:#f8fafc"><span style="width:6px;height:6px;border-radius:50%;background:#b45309"></span><span style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155">GOLD.REV_LOC_WK_V1</span></a>
+        <a href="Artifacts Library.dc.html#artifact-detail" style="text-decoration:none;display:flex;align-items:center;gap:9px;padding:10px 16px;border-bottom:1px solid #f3f5f9" style-hover="background:#f8fafc"><span style="width:6px;height:6px;border-radius:50%;background:#7c3aed"></span><span style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155">Q3 Revenue Target Risk</span></a>
+        <a href="Artifacts Library.dc.html#artifact-detail" style="text-decoration:none;display:flex;align-items:center;gap:9px;padding:10px 16px" style-hover="background:#f8fafc"><span style="width:6px;height:6px;border-radius:50%;background:#7c3aed"></span><span style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155">Location Performance</span></a>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:9px">
+        <span style="font-size:13px;font-weight:600;color:#0f172a">Quality gates</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;align-items:center">PK UNIQUE ✓</span>
+          <span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;align-items:center">NULLS &lt; 2% ✓</span>
+          <span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;align-items:center">ROW COUNT ✓</span>
+          <span style="display:inline-flex;height:20px;padding:0 9px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;align-items:center">DRIFT !</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>

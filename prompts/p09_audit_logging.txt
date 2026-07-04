@@ -1,0 +1,12 @@
+Add an immutable audit log so enterprise buyers can see who did what.
+
+1. Add an audit_logs table to the schema: id, org_id, user_email, action, resource_type, resource_id, metadata (JSON), created_at. No UPDATE or DELETE ever touches this table.
+2. Write a log_action(action, resource_type, resource_id, metadata={}) helper that inserts a row. Read user_email and org_id from Flask g (populated by the auth middleware).
+3. Call log_action for every mutating operation:
+   - "connection.created" / "connection.deleted"
+   - "governance.started" / "governance.completed"
+   - "semantic.accepted" / "semantic.edited" / "semantic.rejected"
+   - "pipeline.started" / "pipeline.completed"
+   - "artifact.created" / "artifact.deleted"
+   - "share.added" / "share.removed"
+4. Add GET /api/audit-logs?resource_type=&resource_id=&limit=50 route that returns logs filtered by org_id (current org only, never cross-tenant).

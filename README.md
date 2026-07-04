@@ -8,19 +8,22 @@ Full-stack agentic analytics platform. Ask a business question in plain English 
 |----------|-------------------------------------------------------|
 | Frontend | React 18 + Vite 5 + Recharts                          |
 | Backend  | Python / Flask                                        |
-| Database | SQLite via Python's **built-in** `sqlite3` (no install)|
+| Database | PostgreSQL via `psycopg2` (connection pool)            |
 | Realtime | Server-Sent Events (SSE) for live progress            |
 
 ## Prerequisites
 
 - Python ≥ 3.10
 - Node.js ≥ 18 + npm ≥ 9
-- No native compilation needed — `sqlite3` is part of the Python standard library
+- PostgreSQL ≥ 14
 
 ## Quick start
 
 ```bash
-# 1. Python dependencies (just flask + flask-cors)
+# 0. Create the PostgreSQL database
+createdb analytiq_dev
+
+# 1. Python dependencies
 pip install -r server/requirements.txt
 
 # 2. Node dependencies (React + Vite + Recharts)
@@ -48,7 +51,7 @@ npm run dev --workspace=client
 
 ## Demo data
 
-On first launch Flask auto-seeds the SQLite DB with:
+On first launch Flask auto-seeds the database with:
 - 1 Snowflake connection
 - 1 completed governance run (47 tables, 183 definitions)
 - 3 workspace artifacts (the first has full chart data)
@@ -96,11 +99,40 @@ Screen 10  Artifact list        → share modal (Viewer / Editor / Owner)
 
 ## Database
 
-SQLite file: `server/data/analytiq.db`  
-Delete it and restart `python server/app.py` to reset to demo data.
+PostgreSQL database: `analytiq_dev` (default).
+Set `DATABASE_URL` to override (e.g. `postgresql://user:pass@host/db`).
+
+To reset to demo data, drop and recreate the database:
+
+```bash
+dropdb analytiq_dev
+createdb analytiq_dev
+python server/app.py   # re-seeds on next start
+```
+
+## Docker deployment
+
+```bash
+docker compose up --build
+```
+
+Open **http://localhost** — nginx serves the client and proxies `/api/*` to Flask.
+
+To stop and remove containers:
+
+```bash
+docker compose down
+```
+
+To also wipe the database volume:
+
+```bash
+docker compose down -v
+```
 
 ## Environment
 
 ```bash
-PORT=3001       # Flask port (default 3001)
+PORT=3001                                        # Flask port (default 3001)
+DATABASE_URL=postgresql://localhost/analytiq_dev  # PostgreSQL DSN (default)
 ```

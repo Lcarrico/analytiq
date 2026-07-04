@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Sharing &amp; Present</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Artifacts Library.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">← Artifacts</a>
+</div>
+
+<!-- 01 PUBLIC VIEWER -->
+<section id="public-viewer" data-screen-label="Public Artifact Viewer /share/:token" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Public Artifact Viewer · <span style="color:#94a3b8">/share/:token</span> · no app shell</div>
+<div style="width:1280px;background:#f4f5f8;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07);display:flex;flex-direction:column">
+  <div style="height:54px;background:#fff;border-bottom:1px solid #e4e8ef;display:flex;align-items:center;gap:12px;padding:0 28px">
+    <span style="width:24px;height:24px;border-radius:7px;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">AR</span>
+    <span style="font-size:13.5px;font-weight:600;color:#0f172a">Acme Retail Analytics</span>
+    <span style="width:1px;height:20px;background:#e4e8ef"></span>
+    <span style="font-size:13px;color:#64748b">Ops Risk Monitor</span>
+    <span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 9px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.04em"><span style="width:5px;height:5px;border-radius:50%;background:#15803d"></span>DATA 3H OLD</span>
+    <div style="flex:1"></div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">read-only · expires Aug 2</span>
+    <a href="Auth.dc.html#register" style="display:inline-flex;align-items:center;height:32px;padding:0 14px;border:1px solid #d4d9e1;border-radius:8px;color:#334155;font-size:12.5px;font-weight:600;text-decoration:none" style-hover="border-color:#94a3b8">Request access</a>
+  </div>
+  <div style="height:42px;background:#fff;border-bottom:1px solid #e4e8ef;display:flex;align-items:center;gap:8px;padding:0 28px">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#94a3b8">FILTERS</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;background:#eff4ff;border:1px solid #c7d9f8;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:10.5px">last 30 days ▾</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;background:#eff4ff;border:1px solid #c7d9f8;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:10.5px">region: all ▾</span>
+    <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">viewer filters permitted · no editing</span>
+  </div>
+  <div style="padding:26px 90px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">OPEN RISKS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:#b45309">12</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#dc2626">3 critical</span></div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">SLA COMPLIANCE</span><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:#0f172a">97.2%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">+0.8pt m/m</span></div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:#94a3b8">MEAN TIME TO RESOLVE</span><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:#0f172a">6.4h</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#15803d">−1.1h m/m</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:12px">
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:9px">
+        <span style="font-size:13px;font-weight:600;color:#0f172a">Risk events · daily</span>
+        <svg viewBox="0 0 560 140" style="width:100%;height:140px">
+          <line x1="0" y1="112" x2="560" y2="112" stroke="#eef1f5"></line><line x1="0" y1="70" x2="560" y2="70" stroke="#eef1f5"></line><line x1="0" y1="28" x2="560" y2="28" stroke="#eef1f5"></line>
+          <rect x="10" y="72" width="22" height="40" rx="3" fill="#93c5fd"></rect><rect x="46" y="58" width="22" height="54" rx="3" fill="#93c5fd"></rect><rect x="82" y="80" width="22" height="32" rx="3" fill="#93c5fd"></rect><rect x="118" y="46" width="22" height="66" rx="3" fill="#f59e0b"></rect><rect x="154" y="66" width="22" height="46" rx="3" fill="#93c5fd"></rect><rect x="190" y="74" width="22" height="38" rx="3" fill="#93c5fd"></rect><rect x="226" y="34" width="22" height="78" rx="3" fill="#dc2626"></rect><rect x="262" y="60" width="22" height="52" rx="3" fill="#93c5fd"></rect><rect x="298" y="70" width="22" height="42" rx="3" fill="#93c5fd"></rect><rect x="334" y="52" width="22" height="60" rx="3" fill="#f59e0b"></rect><rect x="370" y="78" width="22" height="34" rx="3" fill="#93c5fd"></rect><rect x="406" y="64" width="22" height="48" rx="3" fill="#93c5fd"></rect><rect x="442" y="84" width="22" height="28" rx="3" fill="#93c5fd"></rect><rect x="478" y="72" width="22" height="40" rx="3" fill="#93c5fd"></rect><rect x="514" y="88" width="22" height="24" rx="3" fill="#93c5fd"></rect>
+        </svg>
+      </div>
+      <div style="background:#fff;border:1px solid #e4e8ef;border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:13px;font-weight:600;color:#0f172a">Top risk sources</span>
+        <div style="display:flex;flex-direction:column;gap:9px;padding-top:2px">
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:78px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">cold chain</span><div style="flex:1"><span style="display:block;width:82%;height:13px;border-radius:3px;background:#dc2626"></span></div></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:78px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">carrier delay</span><div style="flex:1"><span style="display:block;width:64%;height:13px;border-radius:3px;background:#f59e0b"></span></div></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:78px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">stockout</span><div style="flex:1"><span style="display:block;width:46%;height:13px;border-radius:3px;background:#2563eb"></span></div></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="width:78px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#64748b;text-align:right">labor gap</span><div style="flex:1"><span style="display:block;width:31%;height:13px;border-radius:3px;background:#93c5fd"></span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="height:44px;display:flex;align-items:center;justify-content:center;gap:8px;border-top:1px solid #e4e8ef;background:#fff">
+    <svg width="14" height="14" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0f172a"></rect><rect x="5.5" y="12" width="3.2" height="6.5" rx="1.2" fill="#60a5fa"></rect><rect x="10.4" y="8.5" width="3.2" height="10" rx="1.2" fill="#3b82f6"></rect><rect x="15.3" y="5" width="3.2" height="13.5" rx="1.2" fill="#2563eb"></rect></svg>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8">Powered by AnalytIQ</span>
+  </div>
+</div>
+</section>
+
+<div style="display:flex;gap:40px;align-items:flex-start">
+<!-- 02 EXPIRED TOKEN -->
+<section id="expired" data-screen-label="Expired share token /share/:token" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Expired token state · <span style="color:#94a3b8">/share/:token</span></div>
+<div style="width:620px;height:440px;background:#f4f5f8;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07);display:flex;flex-direction:column">
+  <div style="height:48px;background:#fff;border-bottom:1px solid #e4e8ef;display:flex;align-items:center;gap:10px;padding:0 22px">
+    <span style="width:22px;height:22px;border-radius:6px;background:#7c3aed;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">AR</span>
+    <span style="font-size:12.5px;font-weight:600;color:#0f172a">Acme Retail Analytics</span>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:0 60px">
+    <span style="width:56px;height:56px;border-radius:16px;background:#fdf3e3;display:inline-flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#b45309" stroke-width="1.8"></circle><path d="M12 7v5l3 2" fill="none" stroke="#b45309" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
+    <h2 style="margin:0;font-size:19px;font-weight:600;color:#0f172a">This share link has expired</h2>
+    <span style="font-size:13px;line-height:1.6;color:#64748b">The link to <strong style="font-weight:600">Ops Risk Monitor</strong> expired on Aug 2, 2026, or was revoked by the workspace owner.</span>
+    <span style="display:inline-flex;align-items:center;height:36px;padding:0 16px;background:#2563eb;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#1d4ed8">Request a new link</span>
+  </div>
+</div>
+</section>
+
+<!-- 03 EMBED PREVIEW -->
+<section id="embed" data-screen-label="Embed Preview /app/artifacts/:id/embed" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · Embed Preview · <span style="color:#94a3b8">/app/artifacts/:id/embed</span></div>
+<div style="width:1100px;background:#fff;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07);display:grid;grid-template-columns:1.35fr 1fr">
+  <div style="background:#f7f8fa;border-right:1px solid #e4e8ef;padding:22px;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600;color:#0f172a">Live preview</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8">16:9 · iframe</span></div>
+    <div style="border:1px solid #d4d9e1;border-radius:10px;background:#fff;overflow:hidden">
+      <div style="height:30px;background:#f1f3f7;border-bottom:1px solid #e4e8ef;display:flex;align-items:center;gap:6px;padding:0 12px">
+        <span style="width:8px;height:8px;border-radius:50%;background:#d4d9e1"></span><span style="width:8px;height:8px;border-radius:50%;background:#d4d9e1"></span>
+        <span style="flex:1;height:16px;border-radius:5px;background:#fff;border:1px solid #e4e8ef;display:flex;align-items:center;padding:0 8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#94a3b8">acme-portal.example.com/analytics</span>
+      </div>
+      <div style="padding:14px;display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:9px"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">OPEN RISKS</div><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#b45309;margin-top:2px">12</div></div>
+          <div style="flex:1;background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:9px"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">SLA</div><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#0f172a;margin-top:2px">97.2%</div></div>
+          <div style="flex:1;background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:9px"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">MTTR</div><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#0f172a;margin-top:2px">6.4h</div></div>
+        </div>
+        <div style="background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:10px">
+          <svg viewBox="0 0 420 80" style="width:100%;height:80px"><rect x="8" y="38" width="16" height="34" rx="2" fill="#93c5fd"></rect><rect x="34" y="28" width="16" height="44" rx="2" fill="#93c5fd"></rect><rect x="60" y="44" width="16" height="28" rx="2" fill="#93c5fd"></rect><rect x="86" y="20" width="16" height="52" rx="2" fill="#f59e0b"></rect><rect x="112" y="34" width="16" height="38" rx="2" fill="#93c5fd"></rect><rect x="138" y="12" width="16" height="60" rx="2" fill="#dc2626"></rect><rect x="164" y="30" width="16" height="42" rx="2" fill="#93c5fd"></rect><rect x="190" y="40" width="16" height="32" rx="2" fill="#93c5fd"></rect><rect x="216" y="24" width="16" height="48" rx="2" fill="#f59e0b"></rect><rect x="242" y="44" width="16" height="28" rx="2" fill="#93c5fd"></rect><rect x="268" y="34" width="16" height="38" rx="2" fill="#93c5fd"></rect><rect x="294" y="48" width="16" height="24" rx="2" fill="#93c5fd"></rect><rect x="320" y="38" width="16" height="34" rx="2" fill="#93c5fd"></rect><rect x="346" y="52" width="16" height="20" rx="2" fill="#93c5fd"></rect><rect x="372" y="42" width="16" height="30" rx="2" fill="#93c5fd"></rect></svg>
+        </div>
+        <div style="display:flex;justify-content:center;align-items:center;gap:6px"><svg width="10" height="10" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0f172a"></rect><rect x="5.5" y="12" width="3.2" height="6.5" rx="1.2" fill="#60a5fa"></rect><rect x="10.4" y="8.5" width="3.2" height="10" rx="1.2" fill="#3b82f6"></rect><rect x="15.3" y="5" width="3.2" height="13.5" rx="1.2" fill="#2563eb"></rect></svg><span style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">Powered by AnalytIQ</span></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:22px;display:flex;flex-direction:column;gap:15px">
+    <span style="font-size:14px;font-weight:600;color:#0f172a">Embed settings</span>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Embed code</label>
+      <div style="background:#0b1220;border-radius:9px;padding:12px 14px;position:relative">
+        <code style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.7;color:#93c5fd;display:block;white-space:pre-wrap">&lt;iframe src="https://analytiq.app/embed/
+  tok_9f2ae81cc4" width="100%"
+  height="480" frameborder="0"&gt;&lt;/iframe&gt;</code>
+        <span style="position:absolute;top:9px;right:9px;display:inline-flex;height:24px;padding:0 10px;background:rgba(255,255,255,.1);border-radius:6px;color:#e2e8f0;font-size:10.5px;font-weight:600;align-items:center;cursor:pointer" style-hover="background:rgba(255,255,255,.18)">Copy</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Token scope</label>
+      <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155"><span style="width:15px;height:15px;border-radius:4px;background:#2563eb;display:inline-flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 9 9"><path d="m2 4.5 2 2 3-3.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path></svg></span>Read-only data</label>
+      <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155"><span style="width:15px;height:15px;border-radius:4px;background:#2563eb;display:inline-flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 9 9"><path d="m2 4.5 2 2 3-3.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path></svg></span>Viewer filters</label>
+      <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid #cbd5e1"></span>Drill-through</label>
+      <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;color:#334155"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid #cbd5e1"></span>Data export</label>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="font-size:11.5px;font-weight:600;color:#334155">Expires</label>
+        <div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#334155;cursor:pointer">Oct 1, 2026<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="font-size:11.5px;font-weight:600;color:#334155">Refresh</label>
+        <div style="height:34px;border:1px solid #d4d9e1;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#334155;cursor:pointer">On load<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label style="font-size:11.5px;font-weight:600;color:#334155">Allowed domains</label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;border:1px solid #d4d9e1;border-radius:8px;padding:8px;min-height:40px">
+        <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:10.5px">acme-portal.example.com<span style="color:#94a3b8;cursor:pointer">✕</span></span>
+        <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:10.5px">*.acmeretail.com<span style="color:#94a3b8;cursor:pointer">✕</span></span>
+        <span style="display:inline-flex;align-items:center;height:24px;color:#94a3b8;font-size:11.5px">Add domain…</span>
+      </div>
+    </div>
+    <span style="align-self:flex-start;display:inline-flex;align-items:center;height:36px;padding:0 16px;background:#2563eb;border-radius:8px;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:#1d4ed8">Save embed settings</span>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- 04 PRESENT MODE -->
+<section id="present" data-screen-label="Present Mode /app/artifacts/:id/present" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">04</span> · Present Mode · <span style="color:#94a3b8">/app/artifacts/:id/present</span> · full-screen, chrome-free</div>
+<div style="width:1280px;height:640px;background:#0b1220;border:1px solid #d8dce3;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.07);position:relative;display:flex;flex-direction:column">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 90px">
+    <div style="width:100%;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:24px;font-weight:600;color:#f8fafc">Revenue vs target · weekly</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b">section 2 / 6</span>
+      </div>
+      <div style="background:#0f1729;border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:26px 30px">
+        <svg viewBox="0 0 1080 300" style="width:100%;height:300px">
+          <line x1="0" y1="240" x2="1080" y2="240" stroke="rgba(255,255,255,.08)"></line><line x1="0" y1="160" x2="1080" y2="160" stroke="rgba(255,255,255,.05)"></line><line x1="0" y1="80" x2="1080" y2="80" stroke="rgba(255,255,255,.05)"></line>
+          <polygon points="660,120 740,112 820,124 900,116 980,132 1080,128 1080,208 980,192 900,200 820,180 740,184 660,176" fill="rgba(37,99,235,.15)"></polygon>
+          <polyline points="0,192 80,180 160,188 240,164 320,172 400,148 480,156 560,132 640,144 660,138" fill="none" stroke="#3b82f6" stroke-width="3.5"></polyline>
+          <polyline points="660,138 740,142 820,152 900,146 980,164 1080,160" fill="none" stroke="#60a5fa" stroke-width="3.5" stroke-dasharray="9 8"></polyline>
+          <polyline points="0,172 160,160 320,144 480,128 640,116 820,100 1000,88 1080,84" fill="none" stroke="#64748b" stroke-width="2.5" stroke-dasharray="6 7"></polyline>
+          <line x1="660" y1="40" x2="660" y2="256" stroke="rgba(255,255,255,.16)" stroke-dasharray="4 6"></line>
+          <circle cx="660" cy="138" r="6" fill="#3b82f6"></circle>
+        </svg>
+      </div>
+      <div style="display:flex;gap:26px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#94a3b8"><span style="color:#3b82f6">— actual</span><span style="color:#60a5fa">-- forecast ±CI</span><span style="color:#64748b">-- target</span></div>
+    </div>
+  </div>
+  <!-- floating controls -->
+  <div style="position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:4px;background:rgba(15,23,41,.92);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:6px 8px;box-shadow:0 12px 40px rgba(2,6,23,.5)">
+    <span style="width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:#e2e8f0;cursor:pointer" style-hover="background:rgba(255,255,255,.1)"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M7.5 2 3.5 6l4 4" fill="none" stroke="#e2e8f0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;padding:0 8px">2 / 6</span>
+    <span style="width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:#e2e8f0;cursor:pointer" style-hover="background:rgba(255,255,255,.1)"><svg width="12" height="12" viewBox="0 0 12 12"><path d="m4.5 2 4 4-4 4" fill="none" stroke="#e2e8f0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+    <span style="width:1px;height:20px;background:rgba(255,255,255,.14);margin:0 4px"></span>
+    <span style="display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px;border-radius:8px;color:#e2e8f0;font-size:12px;cursor:pointer;background:rgba(255,255,255,.08)">Notes</span>
+    <span style="width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:#e2e8f0;cursor:pointer" style-hover="background:rgba(255,255,255,.1)">✕</span>
+  </div>
+  <!-- notes drawer -->
+  <div style="background:rgba(11,18,32,.97);border-top:1px solid rgba(255,255,255,.1);padding:16px 90px 48px 90px;display:flex;flex-direction:column;gap:6px">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;color:#64748b">PRESENTER NOTES · AUTO-GENERATED NARRATIVE</span>
+    <span style="font-size:14px;line-height:1.65;color:#cbd5e1;max-width:960px">Q3 tracks at <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f1f5f9">$4.82M</span> against a $5.14M target. The divergence starts in week 27 and concentrates in Northeast, where the June flagship closure cut foot traffic 12%. Forecast confidence is high (MAPE 4.1%); reallocating promo budget from West could close roughly 40% of the gap.</span>
+  </div>
+</div>
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>

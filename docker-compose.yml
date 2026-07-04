@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: analytiq
+      POSTGRES_USER: analytiq
+      POSTGRES_PASSWORD: analytiq
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analytiq"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: server
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://analytiq:analytiq@db:5432/analytiq
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+</helmet>
+<div style="min-height:100vh;background:#e9ebef;padding:48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;font-family:'IBM Plex Sans',sans-serif">
+
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478">
+  <span style="font-weight:600;color:#0f172a">AnalytIQ</span><span>/</span><span>App</span><span>/</span><span style="color:#0f172a">Admin — Security &amp; Audit</span>
+  <a href="Index.dc.html" style="margin-left:16px;color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">All screens ↗</a>
+  <a href="Admin.dc.html" style="color:#2563eb;text-decoration:none;border:1px solid #c7d9f8;border-radius:999px;padding:3px 10px;background:#eff4ff">← Admin</a>
+</div>
+
+<!-- 01 AUDIT LOG -->
+<section id="audit" data-screen-label="Audit Log /app/admin/audit" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">01</span> · Audit Log · <span style="color:#94a3b8">/app/admin/audit</span></div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;align-items:center;gap:9px;padding:14px 22px;border-bottom:1px solid #eef1f5">
+    <div style="height:32px;display:flex;align-items:center;gap:8px;padding:0 11px;border:1px solid #d4d9e1;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155;cursor:pointer">event: all ▾</div>
+    <div style="height:32px;display:flex;align-items:center;gap:8px;padding:0 11px;border:1px solid #d4d9e1;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155;cursor:pointer">actor: all ▾</div>
+    <div style="height:32px;display:flex;align-items:center;gap:8px;padding:0 11px;border:1px solid #d4d9e1;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155;cursor:pointer">Jun 26 → Jul 3 ▾</div>
+    <div style="height:32px;display:flex;align-items:center;gap:8px;padding:0 11px;border:1px solid #d4d9e1;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#334155;cursor:pointer">severity: all ▾</div>
+    <span style="margin-left:auto;display:inline-flex;align-items:center;height:32px;padding:0 13px;border:1px solid #d4d9e1;border-radius:8px;font-size:12px;font-weight:600;color:#334155;cursor:pointer" style-hover="border-color:#94a3b8">Export CSV/JSON</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 2.2fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>TIMESTAMP</span><span>EVENT</span><span>DETAIL</span><span>ACTOR</span><span>TARGET</span><span>SEVERITY</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 2.2fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">Jul 3 09:41:48</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8">model.promote</span><span style="font-size:11.5px;color:#64748b">rev_loc_v2 promoted as champion · gate passed</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">system</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">run 8842</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">INFO</span></span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 2.2fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">Jul 3 08:12:04</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8">share.create</span><span style="font-size:11.5px;color:#64748b">public signed link · Ops Risk Monitor · expires Aug 2 · password on</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">priya@</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">tok_9f2ae8</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">NOTICE</span></span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 2.2fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">Jul 2 16:44:19</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#dc2626">auth.failed</span><span style="font-size:11.5px;color:#64748b">5 failed SSO attempts · unknown-device · IP 203.0.113.9 · locked 15m</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">jon@</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">session</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">WARN</span></span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 2.2fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:44px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">Jul 2 11:03:52</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8">governance.approve</span><span style="font-size:11.5px;color:#64748b">metric net_revenue v4 approved · 14 artifacts re-validated</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">marcus@</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">sem v11</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">INFO</span></span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 2.2fr 1fr .9fr .7fr;gap:12px;padding:0 22px;height:44px;align-items:center;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">Jul 1 03:00:11</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#1d4ed8">secret.rotate</span><span style="font-size:11.5px;color:#64748b">snowflake key pair rotated · automatic 90-day policy</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">system</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">prod_pos</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">INFO</span></span></div>
+</div>
+</section>
+
+<div style="display:flex;gap:40px;align-items:flex-start">
+<!-- 02 SECRETS -->
+<section id="secrets" data-screen-label="Secrets /app/admin/secrets" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">02</span> · Secrets &amp; Credentials · <span style="color:#94a3b8">/app/admin/secrets</span></div>
+<div style="width:720px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #eef1f5"><span style="font-size:13.5px;font-weight:600;color:#0f172a">Secrets &amp; credentials</span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:5px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center;letter-spacing:.06em">ADMIN · ENCRYPTED AT REST</span></div>
+  <div style="display:grid;grid-template-columns:1.4fr 1.2fr .9fr .9fr .8fr .7fr;gap:10px;padding:0 20px;height:36px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>CONNECTOR</span><span>CREDENTIAL</span><span>ROTATED</span><span>LAST USED</span><span>STATUS</span><span></span></div>
+  <div style="display:grid;grid-template-columns:1.4fr 1.2fr .9fr .9fr .8fr .7fr;gap:10px;padding:0 20px;height:46px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#0f172a">snowflake · prod_pos</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">key pair ••••3kfa</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">Jul 1</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">18m ago</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">HEALTHY</span></span>
+    <span style="font-size:11px;font-weight:600;color:#2563eb;cursor:pointer">Rotate</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.4fr 1.2fr .9fr .9fr .8fr .7fr;gap:10px;padding:0 20px;height:46px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155;background:#fdf9ef">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#0f172a">shopify · rest api</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">bearer ••••81xx</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#b45309">142d ago</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">12m ago</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#fdf3e3;color:#b45309;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">STALE</span></span>
+    <span style="font-size:11px;font-weight:600;color:#2563eb;cursor:pointer">Rotate</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.4fr 1.2fr .9fr .9fr .8fr .7fr;gap:10px;padding:0 20px;height:46px;align-items:center;font-size:12px;color:#334155" style-hover="background:#f8fafc">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#0f172a">wms · webhook</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">signing ••••9m2p</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px">Jun 4</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#dc2626">6h ago</span>
+    <span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#fdeaea;color:#dc2626;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">4 FAILURES</span></span>
+    <span style="font-size:11px;font-weight:600;color:#2563eb;cursor:pointer">Rotate</span>
+  </div>
+</div>
+</section>
+
+<!-- 03 SHARING GOVERNANCE -->
+<section id="sharing-gov" data-screen-label="Sharing Governance /app/admin/sharing" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">03</span> · Sharing Governance · <span style="color:#94a3b8">/app/admin/sharing</span></div>
+<div style="width:440px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+  <span style="font-size:13.5px;font-weight:600;color:#0f172a">Sharing rules</span>
+  <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:12.5px;font-weight:600;color:#0f172a">Public links allowed</span><span style="font-size:11px;color:#94a3b8">Signed, expiring, revocable</span></div><span style="width:34px;height:20px;border-radius:999px;background:#2563eb;position:relative;cursor:pointer"><span style="position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#fff"></span></span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12.5px;color:#334155">Max link expiration</span><div style="width:110px;height:32px;border:1px solid #d4d9e1;border-radius:8px;padding:0 10px;display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0f172a;cursor:pointer">90 days<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div></div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:12.5px;color:#334155">Embed allowed domains</span>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;border:1px solid #d4d9e1;border-radius:8px;padding:8px">
+      <span style="display:inline-flex;align-items:center;gap:6px;height:23px;padding:0 9px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:10px">*.acmeretail.com<span style="color:#94a3b8;cursor:pointer">✕</span></span>
+      <span style="display:inline-flex;align-items:center;gap:6px;height:23px;padding:0 9px;border-radius:999px;background:#eff4ff;color:#1d4ed8;font-family:'IBM Plex Mono',monospace;font-size:10px">acme-portal.example.com<span style="color:#94a3b8;cursor:pointer">✕</span></span>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12.5px;color:#334155">External viewers</span><span style="width:34px;height:20px;border-radius:999px;background:#2563eb;position:relative;cursor:pointer"><span style="position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#fff"></span></span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12.5px;color:#334155">Cross-workspace sharing</span><span style="width:34px;height:20px;border-radius:999px;background:#cbd5e1;position:relative;cursor:pointer"><span style="position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff"></span></span></div>
+  <div style="display:flex;flex-direction:column;gap:7px">
+    <span style="font-size:12.5px;color:#334155">Token scopes permitted</span>
+    <label style="display:flex;align-items:center;gap:9px;font-size:12px;color:#334155"><span style="width:15px;height:15px;border-radius:4px;background:#2563eb;display:inline-flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 9 9"><path d="m2 4.5 2 2 3-3.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path></svg></span>Read-only</label>
+    <label style="display:flex;align-items:center;gap:9px;font-size:12px;color:#334155"><span style="width:15px;height:15px;border-radius:4px;background:#2563eb;display:inline-flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 9 9"><path d="m2 4.5 2 2 3-3.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path></svg></span>Interactive (viewer filters)</label>
+    <label style="display:flex;align-items:center;gap:9px;font-size:12px;color:#94a3b8"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid #cbd5e1"></span>Admin embeds</label>
+  </div>
+  <span style="align-self:flex-start;display:inline-flex;align-items:center;height:34px;padding:0 15px;background:#2563eb;border-radius:8px;color:#fff;font-size:12px;font-weight:600;cursor:pointer" style-hover="background:#1d4ed8">Save rules</span>
+</div>
+</section>
+</div>
+
+<!-- 04 RLS -->
+<section id="rls" data-screen-label="Row-Level Security /app/admin/rls" style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6478"><span style="font-weight:600;color:#0f172a">04</span> · Row-Level Security + "test as user" simulator · <span style="color:#94a3b8">/app/admin/rls</span></div>
+<div style="width:1180px;background:#fff;border:1px solid #d8dce3;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.07);display:grid;grid-template-columns:1fr 1.2fr;overflow:hidden">
+  <div style="border-right:1px solid #eef1f5">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #eef1f5"><span style="font-size:13.5px;font-weight:600;color:#0f172a">Policies <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8">4</span></span><span style="display:inline-flex;align-items:center;height:30px;padding:0 12px;background:#2563eb;border-radius:7px;color:#fff;font-size:11.5px;font-weight:600;cursor:pointer" style-hover="background:#1d4ed8">+ Policy</span></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1.6fr .7fr;gap:10px;padding:0 20px;height:34px;align-items:center;background:#fafbfc;border-bottom:1px solid #eef1f5;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.06em;color:#64748b"><span>EXPLORE</span><span>RULE</span><span>STATUS</span></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1.6fr .7fr;gap:10px;padding:0 20px;height:46px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155;background:#f8faff"><span style="font-weight:600;color:#0f172a">Revenue</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">region = user.assigned_regions</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">ON</span></span></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1.6fr .7fr;gap:10px;padding:0 20px;height:46px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-weight:600;color:#0f172a">Margin</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">role IN (finance, owner)</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">ON</span></span></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1.6fr .7fr;gap:10px;padding:0 20px;height:46px;align-items:center;border-bottom:1px solid #f3f5f9;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-weight:600;color:#0f172a">Customer</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">pii_masked = TRUE for non-stewards</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#e8f5ec;color:#15803d;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">ON</span></span></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1.6fr .7fr;gap:10px;padding:0 20px;height:46px;align-items:center;font-size:12px;color:#334155" style-hover="background:#f8fafc"><span style="font-weight:600;color:#0f172a">Inventory</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b">warehouse = user.dc_scope</span><span><span style="display:inline-flex;height:18px;padding:0 7px;border-radius:999px;background:#f1f5f9;color:#64748b;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;align-items:center">DRAFT</span></span></div>
+  </div>
+  <div style="padding:18px 22px;display:flex;flex-direction:column;gap:12px;background:#fafbfc">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:13.5px;font-weight:600;color:#0f172a">Test as user</span>
+      <div style="height:32px;display:flex;align-items:center;gap:8px;padding:0 11px;border:1px solid #d4d9e1;border-radius:8px;background:#fff;font-size:12px;color:#0f172a;cursor:pointer"><span style="width:20px;height:20px;border-radius:50%;background:#b45309;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">PS</span>Priya Shah · Analyst<svg width="8" height="8" viewBox="0 0 9 9"><path d="m1.5 3 3 3 3-3" fill="none" stroke="#64748b" stroke-width="1.4"></path></svg></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;background:#eff4ff;border:1px solid #c7d9f8;border-radius:8px;padding:9px 12px"><svg width="12" height="12" viewBox="0 0 15 15"><path d="M7.5 1.5 12.5 3.5v3.7c0 3-2.1 4.8-5 5.8-2.9-1-5-2.8-5-5.8V3.5l5-2Z" fill="none" stroke="#1d4ed8" stroke-width="1.3" stroke-linejoin="round"></path></svg><span style="font-size:11.5px;color:#1e3a8a">Priya sees <strong style="font-weight:600">Northeast + Midwest only</strong> · margin metrics hidden · PII masked</span></div>
+    <div style="border:1px solid #e4e8ef;border-radius:10px;background:#fff;overflow:hidden">
+      <div style="height:34px;display:flex;align-items:center;gap:8px;padding:0 13px;border-bottom:1px solid #eef1f5"><span style="font-size:11.5px;font-weight:600;color:#0f172a">Q3 Revenue Target Risk</span><span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#94a3b8">simulated · read-only</span></div>
+      <div style="padding:12px;display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:9px"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">NE FORECAST</div><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#0f172a;margin-top:2px">$1.38M</div></div>
+          <div style="flex:1;background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:9px"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#94a3b8">MW FORECAST</div><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#0f172a;margin-top:2px">$1.02M</div></div>
+          <div style="flex:1;background:#f1f5f9;border:1px dashed #d4d9e1;border-radius:8px;padding:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><svg width="11" height="11" viewBox="0 0 15 15"><rect x="2" y="6" width="11" height="7" rx="1.5" fill="none" stroke="#94a3b8" stroke-width="1.3"></rect><path d="M5 6V4a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="#94a3b8" stroke-width="1.3"></path></svg><span style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:#94a3b8">MARGIN HIDDEN</span></div>
+        </div>
+        <div style="background:#fafbfc;border:1px solid #eef1f5;border-radius:8px;padding:10px">
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:56px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#64748b;text-align:right">Northeast</span><span style="width:62%;height:11px;border-radius:3px;background:#dc2626"></span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:56px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#64748b;text-align:right">Midwest</span><span style="width:38%;height:11px;border-radius:3px;background:#f59e0b"></span></div>
+            <div style="display:flex;align-items:center;gap:8px;opacity:.45"><span style="width:56px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8;text-align:right">4 regions</span><span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#94a3b8">filtered by policy region = user.assigned_regions</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>

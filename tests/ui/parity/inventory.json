@@ -1,0 +1,2219 @@
+{
+ "generated_from": "docs/specs/mockups",
+ "frames": [
+  {
+   "file": "Admin Security.dc.html",
+   "frame": "audit",
+   "name": "Audit Log",
+   "route": "/app/admin/audit",
+   "labels": [
+    "Export CSV/JSON",
+    "INFO",
+    "NOTICE",
+    "WARN"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Admin Security.dc.html",
+   "frame": "secrets",
+   "name": "Secrets",
+   "route": "/app/admin/secrets",
+   "labels": [
+    "Secrets & credentials",
+    "HEALTHY",
+    "Rotate",
+    "STALE"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Admin Security.dc.html",
+   "frame": "sharing-gov",
+   "name": "Sharing Governance",
+   "route": "/app/admin/sharing",
+   "labels": [
+    "Sharing rules",
+    "Public links allowed",
+    "Save rules"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Admin Security.dc.html",
+   "frame": "rls",
+   "name": "Row-Level Security",
+   "route": "/app/admin/rls",
+   "labels": [
+    "Policies",
+    "+ Policy",
+    "Revenue",
+    "ON",
+    "Margin",
+    "Customer",
+    "Inventory",
+    "DRAFT",
+    "Test as user",
+    "PS"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Admin Usage.dc.html",
+   "frame": "usage-analytics",
+   "name": "Usage and Cost",
+   "route": "/app/admin/usage",
+   "labels": [
+    "Usage & cost",
+    "Export",
+    "Top users by consumption",
+    "DK",
+    "PS",
+    "Cost by workspace area"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Admin.dc.html",
+   "frame": "admin-overview",
+   "name": "Admin Overview",
+   "route": "/app/admin",
+   "labels": [
+    "DATA",
+    "INTELLIGENCE",
+    "Admin",
+    "Acme Retail",
+    "AR",
+    "DK",
+    "Workspace administration",
+    "ENFORCED"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "?",
+     "target_route": "/app/help"
+    }
+   ]
+  },
+  {
+   "file": "Admin.dc.html",
+   "frame": "roles",
+   "name": "Roles and Permissions",
+   "route": "/app/admin/roles",
+   "labels": [
+    "Roles & permissions",
+    "+ Custom role",
+    "SENSITIVE"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Admin.dc.html",
+   "frame": "sso",
+   "name": "SSO Settings",
+   "route": "/app/admin/sso",
+   "labels": [
+    "Single sign-on",
+    "\u25cf ENFORCED",
+    "Identity provider SSO URL",
+    "Entity ID",
+    "\u2713 VERIFIED",
+    "Default role for new users",
+    "Session lifetime",
+    "Save configuration",
+    "Test login"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Admin.dc.html",
+   "frame": "branding",
+   "name": "Workspace Branding",
+   "route": "/app/admin/branding",
+   "labels": [
+    "Workspace branding",
+    "Logo",
+    "AR",
+    "Accent",
+    "Font",
+    "Theme scope",
+    "Dashboard header",
+    "Share",
+    "Email digest",
+    "View dashboard",
+    "Save branding"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Alerts.dc.html",
+   "frame": "alerts-center",
+   "name": "Alerts Center",
+   "route": "/app/alerts",
+   "labels": [
+    "+ Create alert",
+    "Daily revenue vs forecast guard",
+    "\u25cf FIRING",
+    "Returns spike anomaly watch",
+    "\u25cf OK"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Alerts.dc.html",
+   "frame": "create-alert",
+   "name": "Create Alert",
+   "route": "/app/alerts/new",
+   "labels": [
+    "Create alert",
+    "Watch",
+    "Condition",
+    "Check frequency",
+    "Owner",
+    "DK",
+    "Deliver to",
+    "Mute rules",
+    "Cancel",
+    "Save alert"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Alerts.dc.html",
+   "frame": "alert-detail",
+   "name": "Alert Detail",
+   "route": "/app/alerts/:id",
+   "labels": [
+    "Daily revenue vs forecast guard",
+    "\u25cf FIRING",
+    "Edit",
+    "Delete",
+    "OK",
+    "DK",
+    "PS"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "App Home.dc.html",
+   "frame": "home",
+   "name": "Workspace Home",
+   "route": "/app",
+   "labels": [
+    "Home",
+    "DATA",
+    "INTELLIGENCE",
+    "Acme Retail",
+    "AR",
+    "DK",
+    "Create",
+    "Recent artifacts",
+    "View library \u2192",
+    "\u25cf HEALTHY",
+    "Data health",
+    "Details \u2192",
+    "Active pipeline runs",
+    "Alerts firing",
+    "All alerts \u2192",
+    "HIGH",
+    "MED",
+    "Awaiting review",
+    "Open review queue \u2192",
+    "Suggested analyses",
+    "Recently viewed",
+    "Usage & cost",
+    "ADMIN",
+    "Usage & limits \u2192"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "View library \u2192",
+     "target_route": "/app/artifacts"
+    },
+    {
+     "text": "Details \u2192",
+     "target_route": "/app/governance"
+    },
+    {
+     "text": "Margin variance by SKU training model st",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "Weekly ops risk refresh running queries ",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "All alerts \u2192",
+     "target_route": "/app/alerts"
+    },
+    {
+     "text": "Schema drift: orders.discount_pct DRIFT",
+     "target_route": "/app/governance/review"
+    },
+    {
+     "text": "Open review queue \u2192",
+     "target_route": "/app/governance/review"
+    },
+    {
+     "text": "Weekend vs weekday margin by region +",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "Promo lift on new spring SKUs +",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "Marketing Spend Efficiency Wed",
+     "target_route": "/app/artifacts/:id"
+    },
+    {
+     "text": "Inventory Demand \u2014 West Mon",
+     "target_route": "/app/artifacts/:id"
+    },
+    {
+     "text": "Usage & limits \u2192",
+     "target_route": "/app/billing/usage"
+    }
+   ]
+  },
+  {
+   "file": "App Home.dc.html",
+   "frame": "activity",
+   "name": "Recent Activity",
+   "route": "/app/activity",
+   "labels": [
+    "Home",
+    "DATA",
+    "INTELLIGENCE",
+    "Acme Retail",
+    "AR",
+    "DK",
+    "Recent activity",
+    "All",
+    "MO",
+    "PS",
+    "SYS",
+    "Load more"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Daily revenue vs forecast",
+     "target_route": "/app/alerts/:id"
+    },
+    {
+     "text": "Ops Risk Monitor",
+     "target_route": "/share/:token"
+    },
+    {
+     "text": "orders.discount_pct",
+     "target_route": "/app/data/tables/:id"
+    }
+   ]
+  },
+  {
+   "file": "App Home.dc.html",
+   "frame": "notifications",
+   "name": "Notifications",
+   "route": "/app/notifications",
+   "labels": [
+    "Notifications",
+    "Mark all read",
+    "All",
+    "TODAY",
+    "High alert:",
+    "YESTERDAY",
+    "EARLIER",
+    "Jon Reyes"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Artifact Sharing.dc.html",
+   "frame": "public-viewer",
+   "name": "Public Artifact Viewer",
+   "route": "/share/:token",
+   "labels": [
+    "AR",
+    "Acme Retail Analytics",
+    "Request access",
+    "Top risk sources"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Request access",
+     "target_route": "/register"
+    }
+   ]
+  },
+  {
+   "file": "Artifact Sharing.dc.html",
+   "frame": "expired",
+   "name": "Expired share token",
+   "route": "/share/:token",
+   "labels": [
+    "AR",
+    "Acme Retail Analytics",
+    "This share link has expired",
+    "Ops Risk Monitor",
+    "Request a new link"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Artifact Sharing.dc.html",
+   "frame": "embed",
+   "name": "Embed Preview",
+   "route": "/app/artifacts/:id/embed",
+   "labels": [
+    "Live preview",
+    "Embed settings",
+    "Embed code",
+    "Copy",
+    "Token scope",
+    "Expires",
+    "Refresh",
+    "Allowed domains",
+    "Save embed settings"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Artifact Sharing.dc.html",
+   "frame": "present",
+   "name": "Present Mode",
+   "route": "/app/artifacts/:id/present",
+   "labels": [],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Artifacts Library.dc.html",
+   "frame": "library",
+   "name": "Artifacts Library",
+   "route": "/app/artifacts",
+   "labels": [
+    "Artifacts",
+    "DATA",
+    "INTELLIGENCE",
+    "Acme Retail",
+    "AR",
+    "DK",
+    "Revenue",
+    "Cards",
+    "+ New dashboard",
+    "PREDICTIVE",
+    "\u25cf HEALTHY",
+    "DASHBOARD",
+    "PS",
+    "Ops Risk Monitor",
+    "PUBLIC LINK",
+    "Sales Pipeline Health",
+    "\u25cf NEEDS REVIEW",
+    "MO",
+    "New dashboard from a question"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "+ New dashboard",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "+ New dashboard from a question",
+     "target_route": "/app/create"
+    }
+   ]
+  },
+  {
+   "file": "Artifacts Library.dc.html",
+   "frame": "library-table",
+   "name": "Artifacts table view",
+   "route": "/app/artifacts",
+   "labels": [
+    "DK",
+    "PS",
+    "Ops Risk Monitor",
+    "Sales Pipeline Health",
+    "MO"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Artifacts Library.dc.html",
+   "frame": "artifact-detail",
+   "name": "Artifact Detail",
+   "route": "/app/artifacts/:id",
+   "labels": [
+    "PREDICTIVE",
+    "DK",
+    "Open in workbench",
+    "Duplicate",
+    "Export",
+    "Share",
+    "Dashboard",
+    "Target gap by region"
+   ],
+   "tabs": [
+    "Dashboard",
+    "Insights",
+    "Pipeline",
+    "Lineage",
+    "Model",
+    "Versions",
+    "Sharing",
+    "Activity"
+   ],
+   "links": [
+    {
+     "text": "Open in workbench",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "Share",
+     "target_route": "/share/:token"
+    },
+    {
+     "text": "Lineage",
+     "target_route": "/app/governance/lineage"
+    },
+    {
+     "text": "Model",
+     "target_route": "/app/models/:id"
+    },
+    {
+     "text": "Activity",
+     "target_route": "/app/activity"
+    }
+   ]
+  },
+  {
+   "file": "Auth.dc.html",
+   "frame": "login",
+   "name": "Login",
+   "route": "/login",
+   "labels": [
+    "Log in",
+    "Email",
+    "Password",
+    "Continue with Google",
+    "Continue with Microsoft",
+    "Enterprise SSO",
+    "Email me a link"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Log in",
+     "target_route": "/app"
+    },
+    {
+     "text": "Privacy & security",
+     "target_route": "/security"
+    }
+   ]
+  },
+  {
+   "file": "Auth.dc.html",
+   "frame": "register",
+   "name": "Register step 1",
+   "route": "/register",
+   "labels": [
+    "Account",
+    "Create your account",
+    "Full name",
+    "Work email",
+    "Password",
+    "Continue"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Auth.dc.html",
+   "frame": "register-3",
+   "name": "Register step 3 roles",
+   "route": "/register",
+   "labels": [
+    "Role",
+    "What best describes you?",
+    "Business User",
+    "Analyst",
+    "Data Admin",
+    "Executive",
+    "Continue"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Auth.dc.html",
+   "frame": "register-4",
+   "name": "Register step 4 invite + path",
+   "route": "/register",
+   "labels": [
+    "Kickoff",
+    "Invite teammates",
+    "Choose your first path",
+    "Start with sample data",
+    "Connect a warehouse",
+    "Upload a file",
+    "Create workspace"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Create workspace",
+     "target_route": "/onboarding/workspace"
+    }
+   ]
+  },
+  {
+   "file": "Auth.dc.html",
+   "frame": "forgot",
+   "name": "Forgot password",
+   "route": "/forgot-password",
+   "labels": [
+    "Reset password",
+    "Email",
+    "Send reset link",
+    "Check your email",
+    "Resend email"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Auth.dc.html",
+   "frame": "verify",
+   "name": "Email verification",
+   "route": "/verify-email",
+   "labels": [
+    "Verify your email",
+    "Resend email"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Auth.dc.html",
+   "frame": "sso",
+   "name": "SSO callback loading",
+   "route": "/sso/callback",
+   "labels": [
+    "Signing you in\u2026"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Auth.dc.html",
+   "frame": "sso-error",
+   "name": "SSO callback error",
+   "route": "/sso/callback",
+   "labels": [
+    "No workspace access",
+    "Contact your admin"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Billing.dc.html",
+   "frame": "plan",
+   "name": "Billing Plan",
+   "route": "/app/billing",
+   "labels": [
+    "DATA",
+    "INTELLIGENCE",
+    "Billing",
+    "Acme Retail",
+    "AR",
+    "DK",
+    "Billing & usage",
+    "Plan & seats",
+    "Business plan",
+    "ACTIVE",
+    "Seats",
+    "Included tokens",
+    "Change plan",
+    "Add seats",
+    "Current cycle",
+    "Manage \u2192",
+    "Starter",
+    "Downgrade",
+    "Team",
+    "CURRENT PLAN",
+    "Business",
+    "Your plan",
+    "Enterprise",
+    "Custom",
+    "Talk to sales"
+   ],
+   "tabs": [
+    "Plan & seats",
+    "Usage & limits",
+    "Invoices",
+    "Payment methods"
+   ],
+   "links": [
+    {
+     "text": "Add seats",
+     "target_route": "/app/team/invite"
+    }
+   ]
+  },
+  {
+   "file": "Billing.dc.html",
+   "frame": "usage",
+   "name": "Token Usage",
+   "route": "/app/billing/usage",
+   "labels": [
+    "Token usage \u2014 current cycle",
+    "Export CSV",
+    "Cost analytics \u2192",
+    "Daily consumption",
+    "Limits & overage policy",
+    "Soft alert threshold",
+    "When the cap is reached",
+    "Top consumers",
+    "DK",
+    "PS",
+    "MO"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Cost analytics \u2192",
+     "target_route": "/app/admin"
+    }
+   ]
+  },
+  {
+   "file": "Billing.dc.html",
+   "frame": "invoices",
+   "name": "Invoices and Payment",
+   "route": "/app/billing/invoices",
+   "labels": [
+    "DEFAULT",
+    "Add payment method",
+    "Invoices",
+    "Download all",
+    "OPEN",
+    "PDF \u2193",
+    "PAID",
+    "Billing contact",
+    "Edit",
+    "Acme Retail, Inc.",
+    "Invoice settings"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Collaboration.dc.html",
+   "frame": "comments-inbox",
+   "name": "Comments Inbox",
+   "route": "/app/comments",
+   "labels": [
+    "PS",
+    "MO",
+    "JR",
+    "Jon Reyes"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Ops Risk Monitor \u2197",
+     "target_route": "/share/:token"
+    }
+   ]
+  },
+  {
+   "file": "Collaboration.dc.html",
+   "frame": "invite",
+   "name": "Invite Members",
+   "route": "/app/team/invite",
+   "labels": [
+    "Invite members",
+    "Emails",
+    "Role",
+    "Explore access",
+    "Artifact access",
+    "Admin privileges",
+    "Cancel",
+    "Send invites"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "manage seats",
+     "target_route": "/app/billing"
+    }
+   ]
+  },
+  {
+   "file": "Collaboration.dc.html",
+   "frame": "team",
+   "name": "Team Members",
+   "route": "/app/team",
+   "labels": [
+    "Team",
+    "+ Invite",
+    "DK",
+    "OWNER",
+    "ACTIVE",
+    "MO",
+    "DATA STEWARD",
+    "PS",
+    "ANALYST",
+    "AT",
+    "Amara Torres",
+    "VIEWER"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Create Workbench.dc.html",
+   "frame": "create",
+   "name": "Create Workbench",
+   "route": "/app/create",
+   "labels": [
+    "GOVERNED",
+    "Versions",
+    "Share",
+    "DK",
+    "\"miss the target\"",
+    "Use recommended",
+    "Review your plan",
+    "\u2713 APPROVED",
+    "Approve & Build",
+    "Edit plan",
+    "Use sample data",
+    "Pick fields visually",
+    "Building your dashboard",
+    "\u25b6 SKIP TO RESULT",
+    "\u2713 Understanding request",
+    "\u2713 Validating metrics",
+    "\u2713 Planning dashboard",
+    "\u2713 Building data",
+    "\u2713 Running queries",
+    "\u2713 Generating charts",
+    "Training model",
+    "Live event log",
+    "Revenue",
+    "PS",
+    "CONTRACT \u2713",
+    "Target gap by region",
+    "HIGH",
+    "MED",
+    "What's driving the forecast",
+    "Narrative",
+    "Design",
+    "Title",
+    "Metric",
+    "Dimension",
+    "Chart type",
+    "Time grain",
+    "Compare vs target",
+    "CONTRACT PASSED",
+    "SQL VALIDATED",
+    "Why this chart?"
+   ],
+   "tabs": [
+    "Design",
+    "Data",
+    "Pipeline",
+    "Lineage",
+    "Model",
+    "Comments",
+    "Share"
+   ],
+   "links": [
+    {
+     "text": "Pick fields visually",
+     "target_route": "/app/semantic/field-picker"
+    }
+   ]
+  },
+  {
+   "file": "Data Detail.dc.html",
+   "frame": "source-detail",
+   "name": "Source Detail",
+   "route": "/app/data/sources/:id",
+   "labels": [
+    "\u25cf CONNECTED",
+    "Sync now",
+    "Settings",
+    "Health",
+    "Open issues"
+   ],
+   "tabs": [
+    "Overview",
+    "Tables",
+    "Health",
+    "Schema Drift",
+    "PII",
+    "Freshness",
+    "Lineage",
+    "Sync Logs",
+    "Settings"
+   ],
+   "links": []
+  },
+  {
+   "file": "Data Detail.dc.html",
+   "frame": "table-detail",
+   "name": "Table Detail",
+   "route": "/app/data/tables/:id",
+   "labels": [
+    "Business definition",
+    "on time",
+    "Downstream",
+    "Quality gates",
+    "PK UNIQUE \u2713",
+    "ROW COUNT \u2713",
+    "DRIFT !"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "net_revenue \u00b7 metric",
+     "target_route": "/app/semantic/metrics/:id"
+    },
+    {
+     "text": "Location Performance",
+     "target_route": "/app/artifacts/:id"
+    }
+   ]
+  },
+  {
+   "file": "Data Import.dc.html",
+   "frame": "upload",
+   "name": "File Upload",
+   "route": "/app/data/upload",
+   "labels": [
+    "Replace",
+    "Table name",
+    "PII",
+    "Add to workspace"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Add to workspace",
+     "target_route": "/app/data/sources"
+    }
+   ]
+  },
+  {
+   "file": "Data Import.dc.html",
+   "frame": "webhook",
+   "name": "Webhook Connector",
+   "route": "/app/data/webhook",
+   "labels": [
+    "Endpoint URL",
+    "Copy",
+    "Signing secret",
+    "Send test event",
+    "Expected payload schema",
+    "Recent events"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Data Import.dc.html",
+   "frame": "rest-api",
+   "name": "REST API Connector",
+   "route": "/app/data/api",
+   "labels": [
+    "Connection",
+    "Endpoint URL",
+    "Method",
+    "Auth",
+    "Headers",
+    "+ Add header",
+    "Pagination",
+    "Poll every",
+    "JSON path \u2192 rows",
+    "Response preview",
+    "Test response",
+    "Ingest preview",
+    "Save connector"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Save connector",
+     "target_route": "/app/data/sources"
+    }
+   ]
+  },
+  {
+   "file": "Data Import.dc.html",
+   "frame": "dbt",
+   "name": "dbt Import",
+   "route": "/app/data/dbt",
+   "labels": [
+    "Import dbt project",
+    "Import to semantic layer"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Import to semantic layer",
+     "target_route": "/app/semantic"
+    }
+   ]
+  },
+  {
+   "file": "Data Sources.dc.html",
+   "frame": "sources",
+   "name": "Data Sources",
+   "route": "/app/data/sources",
+   "labels": [
+    "DATA",
+    "Data",
+    "INTELLIGENCE",
+    "Acme Retail",
+    "AR",
+    "DK",
+    "Data sources",
+    "+ Add source",
+    "\u25cf CONNECTED",
+    "MO",
+    "PS",
+    "STATIC",
+    "\u25cf FAILING"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "prod_pos \u00b7 Snowflake warehouse \u25cf CONNECT",
+     "target_route": "/app/data/sources/:id"
+    },
+    {
+     "text": "marketing_gbq \u00b7 BigQuery warehouse \u25cf CON",
+     "target_route": "/app/data/sources/:id"
+    },
+    {
+     "text": "{ } shopify_orders \u00b7 REST API api poll \u25cf",
+     "target_route": "/app/data/sources/:id"
+    }
+   ]
+  },
+  {
+   "file": "Data Sources.dc.html",
+   "frame": "connect",
+   "name": "Add Data Source",
+   "route": "/app/data/connect",
+   "labels": [
+    "Connect a source",
+    "Snowflake",
+    "BigQuery",
+    "Databricks SQL",
+    "Redshift",
+    "Postgres",
+    "MySQL",
+    "DB",
+    "DuckDB",
+    "CSV / XLSX / Parquet",
+    "REST API",
+    "Webhook",
+    "dbt Project",
+    "Google Sheets",
+    "Request a connector"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "CSV / XLSX / Parquet FILE UPLOAD",
+     "target_route": "/app/data/upload"
+    },
+    {
+     "text": "{ } REST API POLL",
+     "target_route": "/app/data/api"
+    },
+    {
+     "text": "Webhook PUSH",
+     "target_route": "/app/data/webhook"
+    },
+    {
+     "text": "dbt Project MODELS + TESTS",
+     "target_route": "/app/data/dbt"
+    }
+   ]
+  },
+  {
+   "file": "Data Sources.dc.html",
+   "frame": "wizard",
+   "name": "Connector Setup",
+   "route": "/app/data/connect/snowflake",
+   "labels": [
+    "Scope & tables",
+    "Connection verified",
+    "Choose schemas & tables",
+    "Database",
+    "Role",
+    "SALES",
+    "HR",
+    "PII LIKELY",
+    "Test connection",
+    "Continue \u2192 Run health check"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Continue \u2192 Run health check",
+     "target_route": "/app/data/sources/:id"
+    }
+   ]
+  },
+  {
+   "file": "Errors.dc.html",
+   "frame": "errors",
+   "name": "Error Pages",
+   "route": null,
+   "labels": [
+    "Page not found",
+    "Go home",
+    "Contact admin",
+    "Token expired",
+    "Request new link",
+    "Workspace not found",
+    "Switch workspace",
+    "Artifact unavailable",
+    "Open library",
+    "Pipeline failed",
+    "Connector failed",
+    "Open connector",
+    "Data access denied",
+    "Request access"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Go home",
+     "target_route": "/app"
+    },
+    {
+     "text": "Open library",
+     "target_route": "/app/artifacts"
+    },
+    {
+     "text": "Open connector",
+     "target_route": "/app/data/webhook"
+    }
+   ]
+  },
+  {
+   "file": "Gold Contracts.dc.html",
+   "frame": "gold-tables",
+   "name": "Gold Tables",
+   "route": "/app/gold",
+   "labels": [
+    "Gold tables",
+    "DK",
+    "PS"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Gold Contracts.dc.html",
+   "frame": "gold-detail",
+   "name": "Gold Table Detail",
+   "route": "/app/gold/:id",
+   "labels": [
+    "Query in warehouse",
+    "Quality gates",
+    "Row count band",
+    "PASS",
+    "Grain uniqueness",
+    "Revenue reconciliation",
+    "Null contract",
+    "Time coverage",
+    "PII scan"
+   ],
+   "tabs": [
+    "Overview",
+    "Schema",
+    "Quality gates",
+    "Lineage",
+    "Artifacts",
+    "Feature manifest",
+    "Query contracts"
+   ],
+   "links": [
+    {
+     "text": "Feature manifest",
+     "target_route": "/app/models/features/:id"
+    }
+   ]
+  },
+  {
+   "file": "Gold Contracts.dc.html",
+   "frame": "query-contracts",
+   "name": "Query Contracts",
+   "route": "/app/contracts/queries",
+   "labels": [
+    "ADMIN",
+    "SAFE \u2713",
+    "VALID \u2713",
+    "REPAIRED"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Gold Contracts.dc.html",
+   "frame": "data-contracts",
+   "name": "Data Contracts",
+   "route": "/app/contracts/data",
+   "labels": [
+    "ENFORCED",
+    "BLOCKING NOW"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Governance Lineage.dc.html",
+   "frame": "lineage",
+   "name": "Lineage Graph",
+   "route": "/app/governance/lineage",
+   "labels": [
+    "stores",
+    "Auto-layout",
+    "Export \u2193",
+    "Open table detail \u2192"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Open table detail \u2192",
+     "target_route": "/app/data/tables/:id"
+    }
+   ]
+  },
+  {
+   "file": "Governance Lineage.dc.html",
+   "frame": "manifests",
+   "name": "Manifest Versions",
+   "route": "/app/governance/manifests",
+   "labels": [
+    "REVIEW REQUIRED",
+    "collapse \u25b4",
+    "+ ADD",
+    "~ MOD",
+    "\u2212 DEL",
+    "ACTIVE",
+    "expand \u25be",
+    "SUPERSEDED"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Governance Lineage.dc.html",
+   "frame": "preagg",
+   "name": "Pre-Aggregation",
+   "route": "/app/governance/preaggregations",
+   "labels": [
+    "Recommended rollups",
+    "HIGH VALUE",
+    "Approve & materialize",
+    "Dismiss",
+    "MEDIUM",
+    "Approve",
+    "Monthly cost ceiling"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Governance.dc.html",
+   "frame": "gov-overview",
+   "name": "Governance Overview",
+   "route": "/app/governance",
+   "labels": [
+    "Governance"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Governance.dc.html",
+   "frame": "review-queue",
+   "name": "Human Review Queue",
+   "route": "/app/governance/review",
+   "labels": [
+    "Bulk approve",
+    "Assign \u25be",
+    "CONFLICT",
+    "MO",
+    "Accept",
+    "Edit",
+    "Reject",
+    "PII",
+    "BRIDGE",
+    "DK",
+    "DRIFT",
+    "PS"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Governance.dc.html",
+   "frame": "review-detail",
+   "name": "Definition Review",
+   "route": "/app/governance/review/:id",
+   "labels": [
+    "Metric conflict \u00b7",
+    "cancellations and full refunds",
+    "Request changes",
+    "Reject proposal"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Governance.dc.html",
+   "frame": "rules",
+   "name": "Data Quality Rules",
+   "route": "/app/governance/rules",
+   "labels": [
+    "Quality rules",
+    "+ Add rule",
+    "aov distribution drift",
+    "Edit rule",
+    "Rule type",
+    "Target",
+    "Threshold",
+    "Custom test",
+    "Save rule",
+    "Cancel"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Inspector Panels.dc.html",
+   "frame": "data-contract",
+   "name": "Inspector Data Contract tab",
+   "route": null,
+   "labels": [
+    "Data",
+    "PASSED"
+   ],
+   "tabs": [
+    "Design",
+    "Data",
+    "Filters",
+    "Pipeline",
+    "Lineage",
+    "Model"
+   ],
+   "links": []
+  },
+  {
+   "file": "Inspector Panels.dc.html",
+   "frame": "pipeline-audit",
+   "name": "Inspector Pipeline Audit tab",
+   "route": null,
+   "labels": [
+    "Pipeline",
+    "ALL GATES \u2713",
+    "Validating metrics",
+    "Fork from here",
+    "Building data",
+    "Running queries",
+    "Training model",
+    "Assembling dashboard"
+   ],
+   "tabs": [
+    "Design",
+    "Data",
+    "Filters",
+    "Pipeline",
+    "Lineage"
+   ],
+   "links": []
+  },
+  {
+   "file": "Inspector Panels.dc.html",
+   "frame": "insights",
+   "name": "Insight panel",
+   "route": null,
+   "labels": [
+    "Insights",
+    "Investigate"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Inspector Panels.dc.html",
+   "frame": "share-panel",
+   "name": "Share modal",
+   "route": null,
+   "labels": [
+    "Public signed link",
+    "Copy link",
+    "PDF",
+    "PNG",
+    "Advanced settings",
+    "Expires",
+    "Scope",
+    "Revoke link"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Embed",
+     "target_route": "/app/artifacts/:id/embed"
+    }
+   ]
+  },
+  {
+   "file": "Inspector Panels.dc.html",
+   "frame": "versions",
+   "name": "Version history",
+   "route": null,
+   "labels": [
+    "Version history",
+    "DK",
+    "Restore",
+    "Compare",
+    "PS"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Inspector Panels.dc.html",
+   "frame": "comments-drawer",
+   "name": "Comments drawer",
+   "route": null,
+   "labels": [
+    "Comments",
+    "\u00a7 Target gap by region",
+    "PS",
+    "DK",
+    "Ask AI to apply",
+    "Convert to request",
+    "\u00a7 Narrative",
+    "MO"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Inspector Panels.dc.html",
+   "frame": "comment-popover",
+   "name": "Inline comment popover",
+   "route": null,
+   "labels": [
+    "Target gap by region",
+    "PS",
+    "DK"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Marketing Docs.dc.html",
+   "frame": "docs",
+   "name": "Docs",
+   "route": "/docs",
+   "labels": [
+    "Start free",
+    "Quickstart",
+    "Use sample data",
+    "Approve & Build",
+    "Note:",
+    "Share",
+    "Open the workbench",
+    "Security model",
+    "Yes",
+    "No",
+    "Next: Connect Snowflake \u2192",
+    "Pick your data"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Analyt IQ Docs",
+     "target_route": "/"
+    },
+    {
+     "text": "analytiq.app \u2197",
+     "target_route": "/"
+    },
+    {
+     "text": "Start free",
+     "target_route": "/register"
+    },
+    {
+     "text": "Open the workbench",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "Security model",
+     "target_route": "/security"
+    }
+   ]
+  },
+  {
+   "file": "Marketing Landing.dc.html",
+   "frame": "landing",
+   "name": "Landing",
+   "route": "/",
+   "labels": [
+    "Start free",
+    "CONVERSATIONAL ANALYTICS",
+    "Book a demo",
+    "LIVE BUILD",
+    "WHY NOT NORMAL BI?",
+    "Dashboards shouldn't take a sprint",
+    "Traditional BI",
+    "AnalytIQ",
+    "Governed metrics",
+    "Predictive models",
+    "Shareable artifacts",
+    "Aa",
+    "No SQL required",
+    "USE CASES",
+    "Browse all templates \u2192",
+    "Operational Risk Monitor",
+    "Sales Pipeline Health",
+    "GOVERNED BY DESIGN",
+    "Security \u2192",
+    "See how it works",
+    "PRODUCT",
+    "SOLUTIONS",
+    "RESOURCES",
+    "COMPANY"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Product",
+     "target_route": "/product"
+    },
+    {
+     "text": "Solutions",
+     "target_route": "/solutions/executives"
+    },
+    {
+     "text": "Templates",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Pricing",
+     "target_route": "/pricing"
+    },
+    {
+     "text": "Security",
+     "target_route": "/security"
+    },
+    {
+     "text": "Docs",
+     "target_route": "/docs"
+    },
+    {
+     "text": "Log in",
+     "target_route": "/login"
+    },
+    {
+     "text": "View a sample dashboard \u2192",
+     "target_route": "/share/:token"
+    },
+    {
+     "text": "Browse all templates \u2192",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Revenue Forecast \"Where does revenue lan",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Customer Churn Risk \"Which accounts are ",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Operational Risk Monitor \"Flag the store",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Margin Variance \"Which SKUs and supplier",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Inventory Demand Forecast \"What do we ne",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Security \u2192",
+     "target_route": "/security"
+    },
+    {
+     "text": "See how it works",
+     "target_route": "/product"
+    },
+    {
+     "text": "How it works",
+     "target_route": "/product"
+    },
+    {
+     "text": "Create Workbench",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "For executives",
+     "target_route": "/solutions/executives"
+    },
+    {
+     "text": "For data teams",
+     "target_route": "/solutions/executives"
+    },
+    {
+     "text": "For finance",
+     "target_route": "/solutions/executives"
+    },
+    {
+     "text": "For operations",
+     "target_route": "/solutions/executives"
+    },
+    {
+     "text": "Documentation",
+     "target_route": "/docs"
+    },
+    {
+     "text": "Quickstart",
+     "target_route": "/docs"
+    },
+    {
+     "text": "Changelog",
+     "target_route": "/docs"
+    }
+   ]
+  },
+  {
+   "file": "Marketing Pricing.dc.html",
+   "frame": "pricing",
+   "name": "Pricing",
+   "route": "/pricing",
+   "labels": [
+    "Pricing",
+    "Start free",
+    "Annual",
+    "Starter",
+    "Team",
+    "Start trial",
+    "MOST POPULAR",
+    "Business",
+    "Enterprise",
+    "Custom",
+    "Talk to sales",
+    "Questions",
+    "What counts as a token?"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Start trial",
+     "target_route": "/register"
+    },
+    {
+     "text": "Talk to sales",
+     "target_route": "/"
+    }
+   ]
+  },
+  {
+   "file": "Marketing Product.dc.html",
+   "frame": "product",
+   "name": "Product page",
+   "route": "/product",
+   "labels": [
+    "Product",
+    "Start free",
+    "HOW IT WORKS",
+    "Understand",
+    "Review your plan",
+    "Approve & Build",
+    "Edit",
+    "Deterministic gates, not vibes",
+    "Security & governance model \u2192",
+    "ROW BAND \u2713",
+    "GRAIN UNIQUE \u2713",
+    "RECONCILES GL \u2713",
+    "NULL CONTRACT \u2713",
+    "LightGBM",
+    "Forecasts earn their place",
+    "See the workbench",
+    "Sharing views",
+    "\u25cf HEALTHY",
+    "SIGNED LINK",
+    "MODEL CARD",
+    "Browse templates"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Security & governance model \u2192",
+     "target_route": "/security"
+    },
+    {
+     "text": "See the workbench",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "Sharing views",
+     "target_route": "/share/:token"
+    },
+    {
+     "text": "Browse templates",
+     "target_route": "/templates"
+    }
+   ]
+  },
+  {
+   "file": "Marketing Security.dc.html",
+   "frame": "security",
+   "name": "Security page",
+   "route": "/security",
+   "labels": [
+    "Security",
+    "Start free",
+    "SECURITY & GOVERNANCE",
+    "No raw data to LLMs",
+    "Read-only warehouse access",
+    "Deterministic validation gates",
+    "PII detected, masked, human-reviewed",
+    "Row-level security with a simulator",
+    "Workspace-scoped everything"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Marketing Solutions.dc.html",
+   "frame": "solutions",
+   "name": "Solutions template",
+   "route": "/solutions/executives",
+   "labels": [
+    "Solutions",
+    "Start free",
+    "Executives",
+    "FOR EXECUTIVES",
+    "See present mode",
+    "GOVERNED",
+    "STARTING POINTS FOR EXECUTIVES",
+    "Exec Weekly Revenue",
+    "Board Pack KPIs",
+    "Risk & Exceptions Brief",
+    "RM",
+    "Rosa Mart\u00ednez",
+    "Present mode",
+    "Alerts that matter",
+    "Numbers that reconcile",
+    "Book a demo"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "See present mode",
+     "target_route": "/app/artifacts/:id/present"
+    },
+    {
+     "text": "Exec Weekly Revenue Trend + forecast + o",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Risk & Exceptions Brief What broke, what",
+     "target_route": "/templates"
+    },
+    {
+     "text": "Book a demo",
+     "target_route": "/"
+    }
+   ]
+  },
+  {
+   "file": "Marketing Templates.dc.html",
+   "frame": "templates",
+   "name": "Templates Gallery",
+   "route": "/templates",
+   "labels": [
+    "Templates",
+    "Start free",
+    "All templates",
+    "Operational Risk Monitor",
+    "Sales Pipeline Health",
+    "Anomaly Monitor"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Models Ops.dc.html",
+   "frame": "leaderboard",
+   "name": "Model Leaderboard",
+   "route": "/app/models/runs/:id/leaderboard",
+   "labels": [
+    "LightGBM",
+    "CHAMPION",
+    "XGBoost",
+    "Prophet",
+    "Ridge",
+    "Override champion\u2026"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Models Ops.dc.html",
+   "frame": "features",
+   "name": "Feature Manifest",
+   "route": "/app/models/features/:id",
+   "labels": [
+    "LOW",
+    "APPROVED",
+    "HIGH",
+    "DROPPED",
+    "MEDIUM",
+    "REVIEW"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Models Ops.dc.html",
+   "frame": "retrain",
+   "name": "Retrain Center",
+   "route": "/app/models/retrain",
+   "labels": [
+    "Retrain now",
+    "View logs"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Models.dc.html",
+   "frame": "models-overview",
+   "name": "Models Overview",
+   "route": "/app/models",
+   "labels": [
+    "Predictive models",
+    "Retrain center \u2192",
+    "CHAMPION",
+    "Retrain",
+    "Card",
+    "Retrain now",
+    "RUN FAILED",
+    "View logs"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Retrain center \u2192",
+     "target_route": "/app/models/retrain"
+    }
+   ]
+  },
+  {
+   "file": "Models.dc.html",
+   "frame": "run-detail",
+   "name": "Training Run Detail",
+   "route": "/app/models/runs/:id",
+   "labels": [
+    "Summary",
+    "LightGBM",
+    "Backtest error by window"
+   ],
+   "tabs": [
+    "Summary",
+    "Backtest windows",
+    "Candidates",
+    "Features",
+    "Leakage",
+    "Logs"
+   ],
+   "links": [
+    {
+     "text": "Candidates",
+     "target_route": "/app/models/runs/:id/leaderboard"
+    },
+    {
+     "text": "Features",
+     "target_route": "/app/models/features/:id"
+    }
+   ]
+  },
+  {
+   "file": "Models.dc.html",
+   "frame": "model-card",
+   "name": "Model Card",
+   "route": "/app/models/:id",
+   "labels": [
+    "NO OVERFIT",
+    "Retrain"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Onboarding.dc.html",
+   "frame": "workspace-wizard",
+   "name": "Workspace Setup",
+   "route": "/onboarding/workspace",
+   "labels": [
+    "Make it yours",
+    "Logo",
+    "AR",
+    "acme-mark.svg",
+    "Accent color",
+    "Font",
+    "Timezone",
+    "Currency",
+    "Live preview",
+    "Acme Retail Analytics",
+    "Share",
+    "Finish setup"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Onboarding.dc.html",
+   "frame": "start-mode",
+   "name": "Choose Starting Mode",
+   "route": "/onboarding/start",
+   "labels": [
+    "Where's your data?",
+    "FASTEST",
+    "Use sample data",
+    "Upload a file",
+    "Connect warehouse",
+    "Import dbt project",
+    "REST API / Webhook"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Upload a file CSV, XLSX, Parquet \u2014 typed",
+     "target_route": "/app/data/upload"
+    },
+    {
+     "text": "Connect warehouse Snowflake, BigQuery, D",
+     "target_route": "/app/data/connect"
+    },
+    {
+     "text": "Import dbt project Models & tests become",
+     "target_route": "/app/data/dbt"
+    },
+    {
+     "text": "{ } REST API / Webhook Poll an endpoint ",
+     "target_route": "/app/data/api"
+    }
+   ]
+  },
+  {
+   "file": "Onboarding.dc.html",
+   "frame": "source-health",
+   "name": "First Dataset Health",
+   "route": "/onboarding/source-health",
+   "labels": [
+    "Here's what we found in",
+    "Safe to analyze",
+    "daily",
+    "HEALTHY",
+    "NULL SPIKE",
+    "Continue"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Onboarding.dc.html",
+   "frame": "template-picker",
+   "name": "First Dashboard Template Picker",
+   "route": "/onboarding/templates",
+   "labels": [
+    "Recommended for your data",
+    "Revenue Trend + Forecast"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Revenue Trend + Forecast You have transa",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "Inventory Demand Watch Daily snapshots f",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "Skip \u2014 start from scratch with a blank p",
+     "target_route": "/app/create"
+    }
+   ]
+  },
+  {
+   "file": "Semantic Metrics.dc.html",
+   "frame": "metrics-catalog",
+   "name": "Metrics Catalog",
+   "route": "/app/semantic/metrics",
+   "labels": [
+    "Metrics",
+    "+ Calculated metric",
+    "MO",
+    "PS",
+    "DEPRECATED",
+    "DK"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Semantic Metrics.dc.html",
+   "frame": "metric-detail",
+   "name": "Metric Detail",
+   "route": "/app/semantic/metrics/:id",
+   "labels": [
+    "Propose change",
+    "ADMIN ONLY",
+    "NON-NEGATIVE \u2713",
+    "RECONCILES GL \u2713"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Semantic Metrics.dc.html",
+   "frame": "dimensions",
+   "name": "Dimensions Catalog",
+   "route": "/app/semantic/dimensions",
+   "labels": [
+    "Dimensions",
+    "Date",
+    "Geography",
+    "Category",
+    "Boolean",
+    "ID",
+    "Text"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Semantic Overview.dc.html",
+   "frame": "sem-overview",
+   "name": "Semantic Overview",
+   "route": "/app/semantic",
+   "labels": [
+    "Semantic layer",
+    "Regenerate"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Semantic Overview.dc.html",
+   "frame": "explores",
+   "name": "Explores List",
+   "route": "/app/semantic/explores",
+   "labels": [
+    "Revenue",
+    "DK",
+    "MO",
+    "Customer",
+    "PS",
+    "Inventory"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Semantic Overview.dc.html",
+   "frame": "explore-detail",
+   "name": "Explore Detail",
+   "route": "/app/semantic/explores/:id",
+   "labels": [
+    "Revenue",
+    "Analyze this explore",
+    "aov"
+   ],
+   "tabs": [
+    "Access",
+    "Versions"
+   ],
+   "links": [
+    {
+     "text": "Analyze this explore",
+     "target_route": "/app/create"
+    },
+    {
+     "text": "net_revenue Item revenue net of discount",
+     "target_route": "/app/semantic/metrics/:id"
+    },
+    {
+     "text": "aov Average order value \u00b7 net_revenue / ",
+     "target_route": "/app/semantic/metrics/:id"
+    },
+    {
+     "text": "target_gap_pct (forecast \u2212 target) / tar",
+     "target_route": "/app/semantic/metrics/:id"
+    }
+   ]
+  },
+  {
+   "file": "Semantic Tools.dc.html",
+   "frame": "field-picker",
+   "name": "Visual Field Picker",
+   "route": "/app/semantic/field-picker",
+   "labels": [
+    "Dimensions",
+    "Heads up:",
+    "Preview",
+    "Analyze this \u2192",
+    "Measures"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Analyze this \u2192",
+     "target_route": "/app/create"
+    }
+   ]
+  },
+  {
+   "file": "Semantic Tools.dc.html",
+   "frame": "joins",
+   "name": "Join Path Manager",
+   "route": "/app/semantic/joins",
+   "labels": [
+    "Join paths",
+    "SAFE",
+    "BLOCKED",
+    "Recommend bridge table",
+    "FAN-OUT RISK"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Semantic Tools.dc.html",
+   "frame": "derived",
+   "name": "Derived Tables",
+   "route": "/app/semantic/derived-tables",
+   "labels": [
+    "GOVERNED",
+    "Publish",
+    "Schedule",
+    "Governance tags",
+    "Lineage preview",
+    "FRESH",
+    "DRAFT"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Settings.dc.html",
+   "frame": "profile",
+   "name": "User Settings",
+   "route": "/app/settings/profile",
+   "labels": [
+    "Profile",
+    "DK",
+    "Upload avatar",
+    "Full name",
+    "Email",
+    "Default workspace",
+    "Password",
+    "Change via IdP",
+    "Save changes"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Settings.dc.html",
+   "frame": "preferences",
+   "name": "Preferences",
+   "route": "/app/settings/preferences",
+   "labels": [
+    "Preferences",
+    "Default date range",
+    "Dashboard theme",
+    "Chart density",
+    "Comfortable",
+    "Show technical detail",
+    "Prompt style",
+    "Save preferences"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Settings.dc.html",
+   "frame": "api-keys",
+   "name": "API Keys",
+   "route": "/app/settings/api-keys",
+   "labels": [
+    "API keys",
+    "+ Create key",
+    "ci-exports",
+    "Revoke",
+    "portal-embed"
+   ],
+   "tabs": [],
+   "links": []
+  },
+  {
+   "file": "Settings.dc.html",
+   "frame": "help",
+   "name": "Help Center",
+   "route": "/app/help",
+   "labels": [
+    "How can we help?",
+    "Getting started",
+    "Understanding health scores",
+    "Why was my chart blocked?",
+    "Contact support"
+   ],
+   "tabs": [],
+   "links": [
+    {
+     "text": "Why was my chart blocked? Validation gat",
+     "target_route": "/docs"
+    }
+   ]
+  }
+ ]
+}
