@@ -226,6 +226,24 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
 **Current position:** R33 · Sprint R33S1 · Epic E1 (models) · R33S1E1-US1  ← next story
+
+> **Session 9 stop note (2026-07-05, paused green for GitHub push):** RELEASE R32
+> CLOSED — 32/64 stories, program halfway. This session shipped 7 stories:
+> R32S1E3 (definition diff), E4 (DQ rules + settings-aware gate engine),
+> E5 (lineage graph, 6 node kinds, ?node= deep links), E6 (manifest versions
+> + pre-agg; S13 retired) closing sprint R32S1; R32S2E1 (semantic overview /
+> explores / detail; S05 retired with evolution-proposals, evidence-triage and
+> schema-compare panels rehomed onto the overview; vocab ledger pruned),
+> E2 (metrics + dimensions catalogs, conflict/deprecated lifecycle), E3 (field
+> picker + DEP seeded preview endpoint, join paths, derived tables w/ dry run)
+> closing sprint R32S2 and the release. Gates: backend 440/440 · UI 153/153 ·
+> zero-key boot all 8 services local · client shell 200. Tree clean at
+> 6835c09 (+ this note). Next: R33S1E1-US1 models overview (`/app/models`,
+> replaces S14) — recon done: frames in `Models.dc.html` (6 KPI cards +
+> status-typed table w/ per-state actions); substrate = training jobs/trials/
+> promote (:5782–5849), registry models/challenger (:5944–6035), model_cards
+> (:6037), insights (:6052); plan is an aggregate `GET /api/models/overview`
+> RED-first, then the screen. No R33 code written yet — clean seam.
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
