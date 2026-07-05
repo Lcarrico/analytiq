@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · R32 · Sprint R32S1 · Epic E3 (definition diff) · R32S1E3-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · R32 · Sprint R32S1 · Epic E4 (DQ rules) · R32S1E4-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R31 · Sprint R31S1 · R32 · Sprint R32S1 · Epic E3 (definition diff) · R32S1E3-US1  ← next story
+**Current position:** R31 · Sprint R31S1 · R32 · Sprint R32S1 · Epic E4 (DQ rules) · R32S1E4-US1  ← next story
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -305,7 +305,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 ### Milestone UP-C — Trust surfaces at parity
 - [x] R32S1E1-US1 governance overview KPI tiles (DEP counts aggregate) [was R25S1E1] ✅ (new /api/governance/summary aggregate over the real substrate; overview KPI cards + amber pill + span-2 health-trend sparkline; ops-page leaks absent — UI 136/136 · backend 426/426, 2026-07-05)
 - [x] R32S1E2-US1 review queue (tabs+counts, bulk, typed pills, Accept/Edit/Reject) [was R25S1E2] ✅ (typed tab counts, bulk approve, checkbox table, TYPE pills, colored confidence, real Accept/Edit/Reject over the reviews API w/ server audits; governanceLatest run_id shape fixed workspace-wide — UI 137/137 · backend 426/426, 2026-07-05)
-- [ ] R32S1E3-US1 definition-review diff (side-by-side, dark SQL diff, audit line) [was R25S1E3]
+- [x] R32S1E3-US1 definition-review diff (side-by-side, dark SQL diff, audit line) [was R25S1E3] — done: GovernanceDiff.jsx (`/app/governance/review/:id`, CURRENT vs PROPOSED w/ derived expression block, evidence + affected chips, editable final def, approve→accept/edit + reject, audited); queue name-cell deep-links; `GET /api/reviews/items/<id>` (+404). BE 427/427, UI 139/139.
 - [ ] R32S1E4-US1 DQ rules master-detail (replaces S13 raw config 1:1) [was R25S1E4]
 - [ ] R32S1E5-US1 lineage graph (6 node types, downstream highlight, ?node= deep links) [was R25S1E5]
 - [ ] R32S1E6-US1 manifest versions + pre-agg recs; S13 retired/redirected [was R25S1E6]

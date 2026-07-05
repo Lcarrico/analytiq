@@ -4296,6 +4296,23 @@ def review_queue(run_id):
     return jsonify(items)
 
 
+@app.get('/api/reviews/items/<int:def_id>')
+def review_item_detail(def_id):
+    """R32S1E3-US1: definition-review diff data — the pending item, the
+    accepted CURRENT counterpart (same name, most recent), and the built
+    dashboards the approval will re-validate."""
+    item = one('SELECT * FROM semantic_definitions WHERE id=?', (def_id,))
+    if not item:
+        return jsonify({'error': 'Review item not found'}), 404
+    current = one(
+        "SELECT * FROM semantic_definitions WHERE name=? AND status='accepted' "
+        'AND id != ? ORDER BY id DESC LIMIT 1', (item['name'], def_id))
+    affected = many(
+        'SELECT a.id, a.title FROM artifacts a ORDER BY a.id DESC LIMIT 12')
+    return jsonify({'item': item, 'current': current,
+                    'affected_count': len(affected), 'affected': affected})
+
+
 @app.post('/api/reviews/items/<int:def_id>')
 @require_role('admin', 'analyst')
 def review_action(def_id):

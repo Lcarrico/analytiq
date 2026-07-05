@@ -10,7 +10,8 @@ import KitGallery from './screens/KitGallery';  // R21S1E2
 import Home from './screens/Home';               // R22S1E1
 import Activity from './screens/Activity';       // R31S2E1
 import Governance from './screens/Governance';   // R32S1E1
-import GovernanceReview from './screens/GovernanceReview';   // R32S1E2
+import GovernanceReview from './screens/GovernanceReview';
+import GovernanceDiff from './screens/GovernanceDiff';   // R32S1E2
 import Team from './screens/Team';
 import PublicViewer from './screens/PublicViewer';
 import Billing from './screens/Billing';
@@ -91,6 +92,7 @@ function Layout() {
         <Route path="/app/activity" element={<Activity />} />  {/* R31S2E1 */}
         <Route path="/app/governance" element={<Governance />} />  {/* R32S1E1 — admin-gated in-component */}
         <Route path="/app/governance/review" element={<GovernanceReview />} />  {/* R32S1E2 */}
+        <Route path="/app/governance/review/:id" element={<GovernanceDiff />} />  {/* R32S1E3 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}

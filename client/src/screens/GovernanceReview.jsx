@@ -3,6 +3,7 @@
 // checkboxes, TYPE pills, colored mono confidence, and real Accept / Edit /
 // Reject decisions over the reviews API (every decision audited server-side).
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Avatar, Btn, Checkbox, PageHeader, Spinner } from '../components/ui';
 import { Forbidden, useRole } from '../components/roles';
 import { FONT, MONO, P } from '../tokens';
@@ -18,6 +19,7 @@ const TYPE_PILL = {
 
 export default function GovernanceReview() {
   const role = useRole();
+  const navigate = useNavigate();
   const [items, setItems] = useState(null);
   const [tab, setTab] = useState('all');
   const [checked, setChecked] = useState({});
@@ -128,9 +130,11 @@ export default function GovernanceReview() {
               <Checkbox checked={!!checked[it.id]}
                         onChange={v => setChecked(c => ({ ...c, [it.id]: v }))} />
               <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 12.5, fontWeight: 600, color: P.ink, fontFamily: FONT,
+                <div data-testid="review-item-name"
+                     onClick={() => navigate(`/app/governance/review/${it.id}`)}
+                     style={{ fontSize: 12.5, fontWeight: 600, color: P.ink, fontFamily: FONT,
                               overflow: 'hidden', textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap' }}>
+                              whiteSpace: 'nowrap', cursor: 'pointer' }}>
                   {it.name ? `"${it.name}"` : 'Inferred definition'} · {it.explore || 'workspace'}
                 </div>
                 <div style={{ fontFamily: MONO, fontSize: 10, color: P.faint,
