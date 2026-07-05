@@ -1215,7 +1215,7 @@ Mockup: `Artifacts Library.dc.html` Frame 03 · PRD: ch13 §3 (tab distribution;
 #### Epic R30S2E1 — Workbench chrome & session topbar
 Mockup: `Create Workbench.dc.html` session chrome · PRD: ch11 chrome + Part I §2 approved deviation (e) · Current: `Workbench.jsx` R16 chrome
 
-- [ ] **R30S2E1-US1** — session chrome (carried from R23S1E1-US1, **AMENDED: keep the rail**)
+- [x] **R30S2E1-US1** — session chrome (carried from R23S1E1-US1, **AMENDED: keep the rail**) ✅ 2026-07-05 (spec r30s2_chrome ×3 · UI 100/100 · backend 419/419; Versions ships disabled until R30S3E5, Share enables post-build; flows migrated w/ citation)
   - AC:
     - [ ] **Amendment (Reconciliation (e)):** the collapsed 64px icon rail STAYS on this route (approved deviation — the mockup removes the sidebar entirely; we keep the rail, collapsed by default, expandable); the old "no app sidebar on this route" AC is void
     - [ ] Dedicated 56px session topbar: logo→/app, divider, title block (session name 13/600 + mono session id + sources line), green GOVERNED pill, spacer, mono "autosaved {t} ago", Versions secondary btn (opens R30S3E5 panel; until then a stub asserting the trigger), Share primary, avatar

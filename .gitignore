@@ -8,3 +8,6 @@ client/dist/
 .DS_Store
 client/vite.config.js.timestamp-*
 client/src/.lint-probe/
+analytiq.db
+analytiq.db-shm
+analytiq.db-wal
