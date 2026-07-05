@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S3 · Epic E3 (insights panel) · R30S3E3-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S3 · Epic E4 (share modal) · R30S3E4-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R30 · Sprint R30S3 · Epic E3 (insights panel) · R30S3E3-US1  ← next story, full ACs + tasks in RELEASE_PLAN
+**Current position:** R30 · Sprint R30S3 · Epic E4 (share modal) · R30S3E4-US1  ← next story, full ACs + tasks in RELEASE_PLAN
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -281,7 +281,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R30S2 sprint regression recorded: backend 419/419 · UI 110/110 (2026-07-05) — SPRINT R30S2 CLOSED (6/6 stories)
 - [x] R30S3E1-US1 data trust contracts panel (expected bands; gate dump gone) [was R23S2E1] ✅ (human-named trust accordions w/ PASSED/1 WARNING pills + tinted warning headers; Rows/Range/Query/Freshness/Gates rows; raw gate:PASS dump dead; r17s1 migrated — UI 111/111 · backend 419/419, 2026-07-05)
 - [x] R30S3E2-US1 pipeline audit panel (human stage names; admin block) [was R23S2E2] ✅ (RUN header + ALL GATES pill, stage cards w/ status circles + repair labels, Input/Gate result/Output rows, §5.6 admin-toggle tech block, real Fork-from-here via session fork; r16s2+r17s1 migrated — UI 113/113 · backend 419/419, 2026-07-05)
-- [ ] R30S3E3-US1 insights panel (tinted tiles, CONF pills, Investigate→chat) [was R23S2E3]
+- [x] R30S3E3-US1 insights panel (tinted tiles, CONF pills, Investigate→chat) [was R23S2E3] ✅ (auto-detected mono header, tinted tiles, colored mono categories — no snake_case, Investigate seeds a workbench planning turn from drill_question — UI 114/114 · backend 419/419, 2026-07-05)
 - [ ] R30S3E4-US1 share modal 520 (visibility cards, 7-tile distribute, advanced) [was R23S2E4]
 - [ ] R30S3E5-US1 version history (topbar-opened; dependency chips; hash leak gone) [was R23S2E5]
 - [ ] R30S3E6-US1 comments drawer + pins (R18 APIs; contract-lock) [was R23S2E6]
@@ -374,6 +374,20 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - UI: `npm run test:ui` (native) / chunked: `bash /tmp/ui_chunks.sh reset` then repeat
 - Build: `npm run build` · Lint wall: `npm run lint:tokens` · Parity scoreboard: `npm run test:parity`
 - Zero-key boot: `python3 server/app.py` → `/api/platform/status` all `local`
+
+## Session stop note (2026-07-05, UI Parity session 4)
+R30S2 CLOSED (6/6; gate UI 110/110 · backend 419/419). R30S3 E1–E3 shipped:
+trust-contract accordions (raw gate dump dead) · pipeline audit (RUN header,
+repair states, §5.6 admin toggle, real session fork) · insights panel on the
+detail tab (Investigate seeds the workbench). Suites at stop: backend 419/419
+· UI 114/114 · build + lint green. 13/64 stories done.
+Next: R30S3E4-US1 (canonical 520px share modal — visibility cards, token URL,
+7-tile distribute, advanced settings; share_links + embed token APIs exist),
+then E5 versions panel (wb-versions topbar button is wired-disabled), E6
+comments drawer + pins (R18 APIs), E7 wizard retirement (S06–S09 tombstones +
+redirects + lint-grandfather prune), E8 vocab gate — then the R30 RELEASE gate
++ zero-key boot check. Remaining §5.1 leaks live only in S11 (auth, R31S1E1)
+and S13 raw config (R32S1E4) — the E8 ledger lists them allowed-until.
 
 ## Session stop note (2026-07-05, UI Parity session 3)
 R30S2E3 shipped whole (US1 building telemetry · US2 canvas toolbar/filters/

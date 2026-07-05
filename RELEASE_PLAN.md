@@ -1357,7 +1357,7 @@ Mockup: `Inspector Panels.dc.html` pipeline frame · PRD: ch12 pipeline tab (§5
 #### Epic R30S3E3 — Insights panel
 Mockup: `Inspector Panels.dc.html` insights frame · PRD: ch12 insights tab · Current: plain list over insights API
 
-- [ ] **R30S3E3-US1** — Insights panel at parity (carried from R23S2E3-US1)
+- [x] **R30S3E3-US1** — Insights panel at parity (carried from R23S2E3-US1) ✅ 2026-07-05 (spec r30s3_insights · panel lives on the artifact detail Insights tab per the R30S2E4 tab ruling; CONF pills render when detail_json carries confidence)
   - AC:
     - [ ] Header "Insights · auto-detected n"; cards with tinted icon tiles + category color per type chip ANOMALY/TREND/CORRELATION; mono CONF pills; rich finding copy w/ bold numbers; Investigate primary per card → seeds a chat follow-up
   - Tasks — Backend/API: N/A — consumes existing insights API (R7/R12)

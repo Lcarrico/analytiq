@@ -208,21 +208,53 @@ export default function ArtifactDetail() {
       </>
     ),
     Insights: (
+      /* R30S3E3 — frame anatomy: tinted tile + colored mono category + rich
+         copy + Investigate seeding a workbench planning turn */
       <div data-testid="tab-insights" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <span data-testid="insights-header"
+              style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '.06em', color: P.faint }}>
+          auto-detected · {insights == null ? '…' : insights.length}
+        </span>
         {insights === null ? <Spinner /> : insights.length === 0 ? (
           <span style={{ fontSize: 12.5, color: P.muted, fontFamily: FONT }}>
             No insights detected for this artifact yet.
           </span>
-        ) : insights.map((i, n) => (
-          <Card key={n} p={14}>
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-              <Badge tint={i.kind === 'anomaly' ? 'red' : i.kind === 'trend' ? 'blue' : 'purple'} xs>
-                {(i.kind || 'insight').replace(/_/g, ' ')}
-              </Badge>
-              <span style={{ fontSize: 12.5, fontFamily: FONT, color: P.body }}>{i.summary}</span>
-            </div>
-          </Card>
-        ))}
+        ) : insights.map((i, n) => {
+          const kind = (i.kind || 'insight').toLowerCase();
+          const [tileBg, catColor, label] =
+            kind === 'anomaly' ? [P.redBg, P.red, 'ANOMALY']
+            : kind === 'trend' ? [P.accentSoft, P.accentHover, 'TREND']
+            : kind === 'correlation' ? [P.purpleBg, P.purple, 'CORRELATION']
+            : [P.purpleBg, P.purple, kind.replace(/_/g, ' ').toUpperCase()];
+          return (
+            <Card key={n} p={14} data-testid={`insight-card-${n}`}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <span data-testid="insight-tile"
+                      style={{ width: 24, height: 24, borderRadius: 7, background: tileBg,
+                               flexShrink: 0, display: 'inline-flex', alignItems: 'center',
+                               justifyContent: 'center' }}>
+                  <svg width="11" height="11" viewBox="0 0 12 12">
+                    <polyline points="1,9 4,5 7,7 11,2" fill="none" stroke={catColor}
+                              strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </span>
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 5 }}>
+                  <span data-testid="insight-category"
+                        style={{ fontFamily: MONO, fontSize: 9.5, letterSpacing: '.06em',
+                                 color: catColor }}>{label}</span>
+                  <span style={{ fontSize: 12, lineHeight: 1.55, fontFamily: FONT, color: P.body }}>
+                    {i.summary}
+                  </span>
+                </div>
+                <Btn size="sm" variant={n === 0 ? 'primary' : 'outline'}
+                     data-testid="insight-investigate"
+                     onClick={() => navigate(`/app/create/new?q=${encodeURIComponent(i.drill_question || i.summary)}`)}>
+                  Investigate
+                </Btn>
+              </div>
+            </Card>
+          );
+        })}
       </div>
     ),
     Pipeline: (
