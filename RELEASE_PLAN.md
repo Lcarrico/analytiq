@@ -1172,7 +1172,7 @@ Mockup: `Artifacts Library.dc.html` Frame 01 · PRD: ch13 §1 (incl. §1.7 extra
 #### Epic R30S1E3 — Library table view
 Mockup: `Artifacts Library.dc.html` Frame 02 · PRD: ch13 §2 · Current: R15S2 DataTable view (wrong columns, no scored health pill)
 
-- [ ] **R30S1E3-US1** — table view at parity (carried from R22S2E2-US1)
+- [x] **R30S1E3-US1** — table view at parity (carried from R22S2E2-US1) ✅ 2026-07-05 (spec r30s1_library_table ×2 green · UI 93/93 · backend 416/416 · share cell: public-link state renders when payload provides it, R30S3E4)
   - AC:
     - [ ] DataTable grid `2fr .9fr .9fr 1fr 1fr .9fr 1fr 44px`: TITLE (sort ↓ indicator) / OWNER avatar+name / TYPE mono chip / DATA HEALTH ● scored pill (e.g. `● 96 HEALTHY`) / LAST REFRESHED relative / SHARE / TAGS chips / ⋯
     - [ ] Rows h46 → detail route; `?view=table` persists across reload; ⋯ menu identical to card view (incl. relocated extras per (d))

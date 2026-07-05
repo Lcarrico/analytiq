@@ -35,6 +35,10 @@ function rel(ts) {
   return `${Math.round(s / 86400)}d ago`;
 }
 const initials = (email) => (email || '?').split('@')[0].slice(0, 2).toUpperCase();
+const firstName = (email) => {
+  const n = (email || '').split('@')[0].split(/[._-]/)[0];
+  return n ? n[0].toUpperCase() + n.slice(1) : '—';
+};
 
 // Folder taxonomy (frame FOLDERS list); counts derive from loaded titles.
 const FOLDERS = [
@@ -509,19 +513,79 @@ export default function Artifacts() {
              the grid mounted (no detach mid-read, no flash) R30S1E2-US1 */
           <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}><Spinner size={32} /></div>
         ) : view === 'table' ? (
+          /* R30S1E3-US1 — Frame 02 exact columns; ⋯ reuses the card menu */
           <DataTable
             testid="artifacts-table"
             rowKey="id"
+            rowH={46}
+            onRowClick={openArtifact}
             columns={[
-              { key: 'title', label: 'Title', sortable: true, width: '2fr' },
-              { key: 'type', label: 'Type', width: '110px',
-                render: r => <StatusBadge status={r.type === 'Predictive' ? 'green' : 'gray'}>{r.type}</StatusBadge> },
-              { key: 'dq_status', label: 'DQ', width: '100px',
-                render: r => <StatusBadge status={r.dq_status === 'pass' ? 'green' : 'amber'}>{r.dq_status}</StatusBadge> },
-              { key: 'mape', label: 'MAPE', sortable: true, mono: true, width: '90px',
-                sortValue: r => r.mape ?? 999 },
-              { key: 'owner', label: 'Owner', width: '1fr' },
-              { key: 'created_at', label: 'Created', mono: true, width: '150px' },
+              { key: 'title', label: 'Title', sortable: true, width: '2fr',
+                render: r => <span style={{ fontWeight: 600, color: P.ink }}>{r.title}</span> },
+              { key: 'owner', label: 'Owner', width: '.9fr',
+                render: r => (
+                  <span data-testid="owner-cell"
+                        style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <Avatar data-testid="avatar" initials={initials(r.owner)} size={22} />
+                    {firstName(r.owner)}
+                  </span>
+                ) },
+              { key: 'type', label: 'Type', width: '.9fr',
+                render: r => (
+                  <span data-testid="type-cell"
+                        style={{ fontFamily: MONO, fontSize: 10.5,
+                                 color: r.type === 'Predictive' ? P.purple : P.accentHover }}>
+                    {r.type === 'Predictive' ? 'predictive' : 'dashboard'}
+                  </span>
+                ) },
+              { key: 'health', label: 'Data health', width: '1fr',
+                render: r => {
+                  const s = health[r.id];
+                  return (
+                    <span data-testid="health-cell">
+                      <StatusBadge status={s == null ? 'gray' : s >= 90 ? 'green' : s >= 70 ? 'amber' : 'red'}>
+                        {s == null ? '—' : s}
+                      </StatusBadge>
+                    </span>
+                  );
+                } },
+              { key: 'created_at', label: 'Last refreshed', width: '1fr',
+                render: r => (
+                  <span data-testid="refreshed-cell"
+                        style={{ fontFamily: MONO, fontSize: 11 }}>{rel(r.created_at)}</span>
+                ) },
+              { key: 'share', label: 'Share', width: '.9fr',
+                render: r => (
+                  <span data-testid="share-cell"
+                        style={{ fontFamily: MONO, fontSize: 10.5,
+                                 color: r.has_public_link ? P.cyan : P.muted }}>
+                    {r.has_public_link ? 'public link'
+                      : (r.share_count || 0) > 0 ? 'workspace' : 'private'}
+                  </span>
+                ) },
+              { key: 'tags', label: 'Tags', width: '1fr',
+                render: r => (
+                  <span data-testid="tags-cell" style={{ display: 'flex', gap: 4 }}>
+                    {(r.tags || []).slice(0, 3).map(t => (
+                      <span key={t}
+                            style={{ display: 'inline-flex', alignItems: 'center', height: 18,
+                                     padding: '0 7px', borderRadius: 5, background: P.grayBg,
+                                     color: P.itemInk, fontFamily: MONO, fontSize: 9 }}>{t}</span>
+                    ))}
+                  </span>
+                ) },
+              { key: 'menu', label: '', width: '44px',
+                render: r => (
+                  <span data-menu-root
+                        style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}
+                        onClick={e => e.stopPropagation()}>
+                    <button data-testid="card-menu-trigger" aria-label="More actions"
+                            onClick={() => setMenuFor(menuFor === r.id ? null : r.id)}
+                            style={{ border: 'none', background: 'none', cursor: 'pointer',
+                                     fontSize: 15, color: P.faint, lineHeight: 1 }}>⋯</button>
+                    {menuFor === r.id && cardMenu(r)}
+                  </span>
+                ) },
             ]}
             rows={visible}
           />

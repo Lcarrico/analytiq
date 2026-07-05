@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S1 · Epic E3 (library table) · R30S1E3-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S1 · Epic E4 (artifact detail) · R30S1E4-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R30 · Sprint R30S1 · Epic E3 (library table) · R30S1E3-US1  ← next story, full ACs + tasks in RELEASE_PLAN
+**Current position:** R30 · Sprint R30S1 · Epic E4 (artifact detail) · R30S1E4-US1  ← next story, full ACs + tasks in RELEASE_PLAN
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -269,7 +269,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 ### Milestone UP-A — The product spine is demo-honest
 - [x] R30S1E1-US1 pricing data hotfix — ch02 facts live on /pricing; 3-test data lock stays green through R34S1E4 (UI 85/85 · backend 416/416, 2026-07-04)
 - [x] R30S1E2-US1 library card view + rail; ROI → per-card ⋯, Sandbox/Health → header ⋯ (ruling recorded); FTS leak gone; 13 legacy specs migrated w/ citations (UI 91/91 · backend 416/416, 2026-07-04)
-- [ ] R30S1E3-US1 library table view (exact columns, sort, ?view=table) [was R22S2E2]
+- [x] R30S1E3-US1 library table view — Frame 02 columns (owner avatar+name, scored health pill, relative times, share, tags, ⋯), sort indicator, ?view=table reload-persistent (UI 93/93 · backend 416/416, 2026-07-05)
 - [ ] R30S1E4-US1 artifact detail (8 tabs; internals off Dashboard; CENTERPIECE gone) [was R22S2E3]
 - [ ] R30S1 sprint regression recorded
 - [ ] R30S2E1-US1 workbench chrome: 56px session topbar; 64px rail KEPT (e) [was R23S1E1]
