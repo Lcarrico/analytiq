@@ -288,7 +288,15 @@ export default function ArtifactDetail() {
     ),
     Lineage: (
       <div data-testid="tab-lineage" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div style={monoLabel}>Source lineage</div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+          <div style={monoLabel}>Source lineage</div>
+          <span data-testid="open-in-lineage"
+                onClick={() => navigate(`/app/governance/lineage?node=${encodeURIComponent(`artifact:${id}`)}`)}
+                style={{ marginLeft: 'auto', fontSize: 11.5, color: P.accent,
+                         cursor: 'pointer', fontFamily: FONT }}>
+            Open in lineage graph
+          </span>
+        </div>
         {explain === null ? <Spinner /> : explain === false ? (
           <span style={{ fontSize: 12.5, color: P.muted, fontFamily: FONT }}>No lineage recorded.</span>
         ) : (

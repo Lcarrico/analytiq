@@ -3468,9 +3468,33 @@ def lineage_dag(id):
     m = json.loads(row['manifest_json'])
     nodes = [{'id': t['name'], 'kind': 'table', 'label': t['name'],
               'health_score': t.get('health_score'), 'freshness': t.get('freshness'),
+              'row_count': t.get('row_count'),
               'dq_gate_status': t.get('dq_gate_status')} for t in m.get('tables', [])]
     edges = [{'from': e['from'], 'to': e['to'], 'on': e.get('on'), 'kind': 'join'}
              for e in m.get('lineage_edges', [])]
+
+    # R32S1E5: the connection is a source node feeding root tables (no
+    # incoming join edge), and accepted metric definitions join the graph.
+    conn_row = one('SELECT * FROM connections WHERE id=?', (id,))
+    if conn_row:
+        sid = f'source:{id}'
+        nodes.append({'id': sid, 'kind': 'source',
+                      'label': conn_row.get('account') or conn_row.get('type') or 'source'})
+        targets = {e['to'] for e in edges}
+        for t in m.get('tables', []):
+            if t['name'] not in targets:
+                edges.append({'from': sid, 'to': t['name'], 'kind': 'loads'})
+    fact_anchor_m = next((t['name'] for t in m.get('tables', [])
+                          if t['name'].startswith('fact')),
+                         (m.get('tables') or [{}])[0].get('name'))
+    for d in many("SELECT sd.* FROM semantic_definitions sd JOIN governance_runs gr "
+                  "ON sd.run_id = gr.id WHERE gr.connection_id=? AND sd.status='accepted' "
+                  "AND lower(sd.type)='metric' ORDER BY sd.id", (id,)):
+        nid = f"metric:{d['id']}"
+        nodes.append({'id': nid, 'kind': 'metric', 'label': d['name'],
+                      'explore': d['explore']})
+        if fact_anchor_m:
+            edges.append({'from': fact_anchor_m, 'to': nid, 'kind': 'defines'})
 
     # downstream: gold tables + artifacts reachable through sessions of this connection
     sessions = many('SELECT id FROM sessions WHERE connection_id=?', (id,))
@@ -3483,6 +3507,13 @@ def lineage_dag(id):
                           'status': g['status']})
             if fact_anchor:
                 edges.append({'from': fact_anchor, 'to': nid, 'kind': 'materializes'})
+        for mr in many('SELECT * FROM model_registry WHERE session_id=?', (s['id'],)):
+            nid = f"model:{mr['id']}"
+            nodes.append({'id': nid, 'kind': 'model',
+                          'label': f"{mr['model_id']} v{mr['version']}",
+                          'status': mr['status']})
+            if fact_anchor:
+                edges.append({'from': fact_anchor, 'to': nid, 'kind': 'trains'})
         for r_ in many('SELECT id FROM pipeline_runs WHERE session_id=?', (s['id'],)):
             for a in many('SELECT * FROM artifacts WHERE pipeline_run_id=?', (r_['id'],)):
                 nid = f"artifact:{a['id']}"
