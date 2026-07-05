@@ -12,9 +12,9 @@ test('expert user sees inline assumptions instead of a clarifying question', asy
   expect(thr.mode).toBe('expert');
 
   await page.goto('/app');   // R23: '/' is the marketing landing
-  await page.goto('/app/create/quick');   // R16S1E1: workbench owns /app/create; quick-plan moved
-  await page.locator('input').first().fill('How is net revenue trending lately');
-  await page.keyboard.press('Enter');
+  await page.goto('/app/create/new');   // R30S3E7: quick-plan retired — surfaces ported to the workbench
+  await page.getByTestId('workbench-input').fill('How is net revenue trending lately');
+  await page.getByTestId('workbench-send').click();
 
   await expect(page.getByText(/Assumptions: grain assumed/)).toBeVisible();
   await expect(page.getByText(/horizon assumed 14 days/)).toBeVisible();

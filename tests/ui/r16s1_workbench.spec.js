@@ -59,7 +59,9 @@ test('ambiguous prompt yields clarification chips that resolve to a plan', async
   await expect(page.getByTestId('plan-card')).toBeVisible();
 });
 
-test('legacy quick-plan screen remains reachable', async ({ page }) => {
+test('legacy quick-plan route redirects into the workbench', async ({ page }) => {
+  // R30S3E7-US1: S06–S09 retired — named children land on the start state
   await page.goto('/app/create/quick');
-  await expect(page.locator('input').first()).toBeVisible();   // S06 body
+  await expect.poll(() => new URL(page.url()).pathname).toBe('/app/create/new');
+  await expect(page.getByTestId('workbench-start')).toBeVisible();
 });

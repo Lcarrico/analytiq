@@ -18,10 +18,7 @@ import Screen02 from './screens/S02_Connect';
 import Screen03 from './screens/S03_Governance';
 import Screen04 from './screens/S04_TableHealth';
 import Screen05 from './screens/S05_Semantic';
-import Screen06 from './screens/S06_Analysis';
-import Screen07 from './screens/S07_Confirm';
-import Screen08 from './screens/S08_Pipeline';
-import Screen09 from './screens/S09_Dashboard';
+// R30S3E7: S06–S09 retired — the workbench owns the whole loop
 import Artifacts from './screens/Artifacts';   // R30S1E2
 import ArtifactDetail from './screens/ArtifactDetail';   // R30S1E4
 import Screen11 from './screens/S11_Account';
@@ -34,10 +31,6 @@ const SCREENS = {
   3:  Screen03,
   4:  Screen04,
   5:  Screen05,
-  6:  Screen06,
-  7:  Screen07,
-  8:  Screen08,
-  9:  Screen09,
   10: Artifacts,   // R30S1E2 — Frame 01 library (cards + rail + ⋯ menus)
   11: Screen11,
   12: Screen12,
@@ -49,11 +42,16 @@ const SCREENS = {
 // (quick/confirm/run/result) fall through to the wizard screens.
 function WorkbenchGuard() {
   // one Route pattern for new + numeric ids keeps the workbench mounted
-  // across the new→session navigation (chat state survives); named legacy
-  // children (quick/confirm/run/result) fall through to wizard screens.
+  // across the new→session navigation (chat state survives). R30S3E7: the
+  // named wizard children retired — quick/confirm/run land on the workbench
+  // start state; result lands on the artifacts library.
   const { pathname } = useLocation();
   const seg = pathname.split('/').pop();
   if (seg === 'new' || /^\d+$/.test(seg)) return <Workbench />;
+  if (seg === 'result') return <Navigate to="/app/artifacts" replace />;
+  if (['quick', 'confirm', 'run'].includes(seg)) {
+    return <Navigate to="/app/create/new" replace />;
+  }
   return <ScreenAt />;
 }
 

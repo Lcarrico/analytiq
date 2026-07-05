@@ -1416,7 +1416,7 @@ Mockup: `Inspector Panels.dc.html` comments frames · PRD: ch12 §6–7 · Curre
 #### Epic R30S3E7 — Legacy wizard retirement
 Current: S06_Analysis/S07_Confirm/S08_Pipeline/S09_Dashboard still routed for legacy child routes
 
-- [ ] **R30S3E7-US1** — S06–S09 retired once workbench parity lands: named child routes (`quick/confirm/run/result`) redirect into the workbench/artifact surfaces; S09's CENTERPIECE instance dies here; lint grandfather list pruned; mount forbids file deletion → files tombstoned (`// retired R30S3E7` + empty export) with a grep-test asserting no imports remain (adaptation ledger)
+- [x] **R30S3E7-US1** — S06–S09 retired once workbench parity lands: named child routes (`quick/confirm/run/result`) redirect into the workbench/artifact surfaces; S09's CENTERPIECE instance dies here; lint grandfather list pruned; mount forbids file deletion → files tombstoned (`// retired R30S3E7` + empty export) with a grep-test asserting no imports remain (adaptation ledger) ✅ 2026-07-05 (spec r30s3_retire ×2 · S06's R10 surfaces now live in the workbench planning turn — feature parity preserved, not deleted)
   - Tasks — Backend/API: N/A · UI/E2E: <!-- task elaboration pending Phase 1a --> RED redirect spec → tombstone + redirects → migrate/cite affected legacy specs → gate
   - Touches: `client/src/App.jsx`, `client/src/routes.js`, `client/src/screens/S06–S09*.jsx` (tombstones), `eslint.config.mjs`, `tests/ui/r30s3_retire.spec.js`
   - Story Dependencies: R30S2E3 (canvas parity), R30S1E4 (detail replaces S09 result view)

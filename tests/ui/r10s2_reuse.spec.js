@@ -11,9 +11,9 @@ test('analysis screen offers prior plans as starting points', async ({ page, req
                     { timeout: 20_000 }).toBe('done');
 
   await page.goto('/app');   // R23: '/' is the marketing landing
-  await page.goto('/app/create/quick');   // R16S1E1: workbench owns /app/create; quick-plan moved
-  await page.locator('input').first().fill('Forecast net revenue for the next 14 days by location');
-  await page.keyboard.press('Enter');
+  await page.goto('/app/create/new');   // R30S3E7: quick-plan retired — surfaces ported to the workbench
+  await page.getByTestId('workbench-input').fill('Forecast net revenue for the next 14 days by location');
+  await page.getByTestId('workbench-send').click();
 
   const chips = page.getByTestId('reuse-candidates');
   await expect(chips).toBeVisible();

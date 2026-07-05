@@ -143,6 +143,8 @@ export default function Workbench() {
   const [versionsOpen, setVersionsOpen] = useState(false);   // R30S3E5
   const [commentsOpen, setCommentsOpen] = useState(false);    // R30S3E6
   const [comments, setComments] = useState([]);
+  const [warm, setWarm] = useState(null);              // R30S3E7 ← S06 warm start
+  useEffect(() => { api.warmStart().then(setWarm).catch(() => {}); }, []);
   useEffect(() => {
     if (!artifact) return;
     api.getComments(artifact.id).then(setComments).catch(() => {});
@@ -211,13 +213,26 @@ export default function Workbench() {
         // R30S2E2 — mono status lines under the ask (frame): sources matched,
         // metric resolved against the governed layer.
         const nSrc = 1 + (p.explores_used?.length || 0);
-        setMsgs(m => [...m, {
-          role: 'ai', plan: p, sid,
-          status: [
-            `matched ${nSrc} source${nSrc === 1 ? '' : 's'} · sample_retail${(p.explores_used || []).map(e => `, ${e}`).join('')}`,
-            `resolved metric · ${p.target_metric} (governed)`,
-          ],
-        }]);
+        const status = [
+          `matched ${nSrc} source${nSrc === 1 ? '' : 's'} · sample_retail${(p.explores_used || []).map(e => `, ${e}`).join('')}`,
+          `resolved metric · ${p.target_metric} (governed)`,
+        ];
+        if (p.assumptions?.length) {
+          // R30S3E7 (from S06/R10S2E4): expert-mode defaults surfaced inline
+          status.push(`Assumptions: ${p.assumptions.join('; ')}.`);
+        }
+        const msgId = Date.now() + Math.random();
+        const planMsg = { id: msgId, role: 'ai', plan: p, sid, status, related: [], reuse: [] };
+        setMsgs(m => [...m, planMsg]);
+        // R30S3E7 (from S06/R10S1E2+R10S2E7): KG neighbors + prior validated
+        // plans — map by id: the two fetches race and identity-mapping loses
+        // the second update (root-caused)
+        api.kgRelated(p.target_metric)
+          .then(r => setMsgs(m => m.map(x => x.id === msgId ? { ...x, related: r.related || [] } : x)))
+          .catch(() => {});
+        api.reuseCandidates(p.target_metric)
+          .then(r => setMsgs(m => m.map(x => x.id === msgId ? { ...x, reuse: r.candidates || [] } : x)))
+          .catch(() => {});
       }
     } catch {
       setMsgs(m => [...m, { role: 'ai', text: 'Planning failed — try rephrasing the question.' }]);
@@ -331,6 +346,21 @@ export default function Workbench() {
                           margin: '6px 0 22px' }}>
               Ask a business question — the pipeline plans, validates, and builds a governed dashboard.
             </div>
+            {warm?.has_history && (
+              <div data-testid="warm-start-hints"
+                   style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center',
+                            justifyContent: 'center', margin: '0 0 14px', fontSize: 11,
+                            fontFamily: MONO, color: P.muted }}>
+                <span>From your history:</span>
+                {(warm.likely_intents || []).slice(0, 2).map(li => (
+                  <span key={li.intent} style={{ border: `1px solid ${P.border}`, borderRadius: 10,
+                                                 padding: '2px 8px' }}>{li.intent} ×{li.count}</span>
+                ))}
+                {(warm.recent_metrics || []).slice(0, 3).map(m2 => (
+                  <span key={m2} style={{ color: P.faint }}>{m2}</span>
+                ))}
+              </div>
+            )}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 22 }}>
               {EXAMPLES.map(ex => (
                 <button key={ex.kind} onClick={() => { setInput(ex.text); }}
@@ -417,6 +447,36 @@ export default function Workbench() {
                         confidence {m.conf} — worth confirming
                       </span>
                     )}
+                  </div>
+                )}
+                {m.reuse?.length > 0 && (
+                  <div data-testid="reuse-candidates"
+                       style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center',
+                                margin: '2px 0 8px 32px' }}>
+                    <span style={{ fontSize: 10.5, color: P.faint, fontFamily: MONO }}>
+                      Start from a prior analysis:
+                    </span>
+                    {m.reuse.slice(0, 3).map(cand => (
+                      <span key={cand.plan_uid} title={`similarity ${cand.similarity}`}
+                            style={{ fontSize: 10.5, fontFamily: MONO, border: `1px solid ${P.accentBorder}`,
+                                     borderRadius: 10, padding: '2px 8px', color: P.accentHover }}>
+                        {cand.payload.metric} · {Math.round(cand.similarity * 100)}%
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {m.related?.length > 0 && (
+                  <div data-testid="kg-related"
+                       style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center',
+                                margin: '2px 0 8px 32px' }}>
+                    <span style={{ fontSize: 10.5, color: P.faint, fontFamily: MONO }}>Related:</span>
+                    {m.related.map(r2 => (
+                      <span key={r2.metric} style={{ fontSize: 10.5, fontFamily: MONO,
+                                                     border: `1px solid ${P.border}`, borderRadius: 10,
+                                                     padding: '2px 8px', color: P.muted }}>
+                        {r2.metric}
+                      </span>
+                    ))}
                   </div>
                 )}
                 {m.plan && (
