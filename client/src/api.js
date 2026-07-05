@@ -152,6 +152,8 @@ export const api = {
   reviewQueueRanked: (rid)  => get(`/reviews/${rid}?ranked=1`),
   reviewAction:     (id, body) => post(`/reviews/items/${id}`, body),   // R32S1E2
   getReviewItem:    (id)  => get(`/reviews/items/${id}`),               // R32S1E3
+  getDqRules:       (cid) => get(`/dq/rules?connection_id=${cid}`),     // R32S1E4
+  putDqRule:        (id, body) => put(`/dq/rules/${id}`, body),          // R32S1E4
   reuseCandidates:  (metric) => get(`/reuse_candidates?metric=${encodeURIComponent(metric)}`),
   explainArtifact:  (id)    => get(`/artifacts/${id}/explain`),
   pipelineReplay:   (runId) => get(`/pipeline/${runId}/replay`),

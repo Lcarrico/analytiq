@@ -442,6 +442,15 @@ CREATE TABLE IF NOT EXISTS semantic_definitions (
     definition TEXT, confidence REAL, explore TEXT,
     status     TEXT DEFAULT 'pending'
 );
+CREATE TABLE IF NOT EXISTS dq_rule_settings (
+    id            INTEGER PRIMARY KEY,
+    connection_id INTEGER NOT NULL,
+    rule_id       TEXT NOT NULL,
+    enabled       INTEGER NOT NULL DEFAULT 1,
+    block_on_failure INTEGER,
+    updated_at    TEXT DEFAULT (datetime('now')),
+    UNIQUE(connection_id, rule_id)
+);
 CREATE TABLE IF NOT EXISTS sessions (
     id             INTEGER PRIMARY KEY,
     parent_session_id INTEGER,
@@ -1309,6 +1318,7 @@ def init_db():
         # lightweight migrations for pre-existing dev databases
         for ddl in ('ALTER TABLE task_dispatches ADD COLUMN tokens INTEGER NOT NULL DEFAULT 0',
                     'ALTER TABLE audit_logs ADD COLUMN severity TEXT DEFAULT \'info\'',
+                    'ALTER TABLE dq_custom_tests ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1',
                     'ALTER TABLE artifacts ADD COLUMN layout_json TEXT',
                     'ALTER TABLE artifacts ADD COLUMN confidence REAL',
                     'ALTER TABLE artifacts ADD COLUMN confidence_json TEXT',
@@ -3679,6 +3689,93 @@ def compile_dq_expression(table: str, expression: str):
                   '"<column> IS [NOT] NULL"')
 
 
+RULE_THRESHOLDS = {
+    'schema_fingerprint': 'recorded per run',
+    'pk_uniqueness': '100% unique',
+    'null_rate_for_key_columns': 'below key-column caps',
+    'row_count_minimum': 'above table minimums',
+    'freshness_sla': 'within table SLA',
+    'pii_detection': 'no unapproved PII',
+    'distribution_shift': 'within 50% of baseline',
+}
+
+
+def _rule_settings(cid):
+    return {r['rule_id']: r for r in many(
+        'SELECT rule_id, enabled, block_on_failure FROM dq_rule_settings '
+        'WHERE connection_id=?', (cid,))}
+
+
+@app.get('/api/dq/rules')
+def list_dq_rules():
+    """R32S1E4: merged rule catalog — system gate rules + custom tests,
+    with per-connection enable / block-on-failure settings applied."""
+    import dq as dq_mod
+    cid = request.args.get('connection_id')
+    if not cid:
+        return jsonify({'error': 'connection_id required'}), 400
+    settings = _rule_settings(cid)
+    rules = []
+    for rule_id, name, severity in dq_mod.MVP_RULES:
+        s = settings.get(rule_id, {})
+        block = s.get('block_on_failure')
+        rules.append({
+            'rule_id': rule_id, 'rule_name': name, 'severity': severity,
+            'kind': 'system', 'threshold': RULE_THRESHOLDS.get(rule_id, '—'),
+            'enabled': bool(s.get('enabled', 1)),
+            'block_on_failure': bool(block if block is not None
+                                     else severity == 'critical'),
+        })
+    for t in many('SELECT * FROM dq_custom_tests WHERE connection_id=? ORDER BY id', (cid,)):
+        rid = f"custom:{t['id']}"
+        s = settings.get(rid, {})
+        block = s.get('block_on_failure')
+        rules.append({
+            'rule_id': rid, 'rule_name': t['expression'], 'severity': 'custom',
+            'kind': 'custom', 'threshold': '0 violations',
+            'table': t['table_name'], 'last_status': t['last_status'],
+            'enabled': bool(t['enabled']),
+            'block_on_failure': bool(block) if block is not None else False,
+        })
+    return jsonify({'rules': rules})
+
+
+@app.put('/api/dq/rules/<rule_id>')
+@require_role('admin', 'analyst')
+def put_dq_rule(rule_id):
+    import dq as dq_mod
+    b = request.get_json() or {}
+    cid = b.get('connectionId')
+    if not cid:
+        return jsonify({'error': 'connectionId required'}), 400
+    known = {r[0] for r in dq_mod.MVP_RULES}
+    if rule_id.startswith('custom:'):
+        tid = rule_id.split(':', 1)[1]
+        row = one('SELECT id FROM dq_custom_tests WHERE id=? AND connection_id=?', (tid, cid))
+        if not row:
+            return jsonify({'error': 'Custom test not found'}), 404
+        if 'enabled' in b:
+            execute('UPDATE dq_custom_tests SET enabled=? WHERE id=?',
+                    (1 if b['enabled'] else 0, tid))
+    elif rule_id not in known:
+        return jsonify({'error': 'Unknown rule'}), 404
+    prev = one('SELECT * FROM dq_rule_settings WHERE connection_id=? AND rule_id=?',
+               (cid, rule_id)) or {}
+    enabled = b.get('enabled', bool(prev.get('enabled', 1)))
+    block = b.get('block_on_failure', prev.get('block_on_failure'))
+    execute('INSERT INTO dq_rule_settings (connection_id, rule_id, enabled, block_on_failure) '
+            'VALUES (?,?,?,?) ON CONFLICT(connection_id, rule_id) DO UPDATE SET '
+            "enabled=excluded.enabled, block_on_failure=excluded.block_on_failure, "
+            "updated_at=datetime('now')",
+            (cid, rule_id, 1 if enabled else 0,
+             None if block is None else (1 if block else 0)))
+    log_action('dq.rule_updated', 'connection', cid,
+               {'rule_id': rule_id, 'enabled': bool(enabled),
+                'block_on_failure': None if block is None else bool(block)})
+    return jsonify({'rule_id': rule_id, 'enabled': bool(enabled),
+                    'block_on_failure': None if block is None else bool(block)})
+
+
 @app.post('/api/dq/tests')
 @require_role('admin', 'analyst')
 def create_dq_test():
@@ -3709,7 +3806,8 @@ def run_dq_tests():
     cid = request.args.get('connection_id') or (request.get_json(silent=True) or {}).get('connectionId')
     if not cid:
         return jsonify({'error': 'connection_id required'}), 400
-    tests = many('SELECT * FROM dq_custom_tests WHERE connection_id=? ORDER BY id', (cid,))
+    tests = many('SELECT * FROM dq_custom_tests WHERE connection_id=? AND enabled=1 '
+                 'ORDER BY id', (cid,))
     db = get_db()
     results = []
     for t in tests:
@@ -3762,7 +3860,9 @@ def dq_evaluate():
     if errs:
         return jsonify({'error': 'Invalid governance manifest', 'errors': errs}), 400
 
-    result = dq_mod.evaluate_manifest(manifest_dict, baseline=baseline)
+    result = dq_mod.evaluate_manifest(
+        manifest_dict, baseline=baseline,
+        settings=_rule_settings(connection_id) if connection_id else None)
     result['trace_id'] = uuid.uuid4().hex
 
     execute('INSERT INTO dq_gate_results (connection_id, manifest_version, outcome, '
@@ -4276,10 +4376,11 @@ def governance_summary():
 @app.get('/api/governance/latest')
 def latest_governance_run():
     """R10S2E6: newest governance run — lets review surfaces deep-link."""
-    row = one('SELECT id FROM governance_runs ORDER BY id DESC LIMIT 1')
+    row = one('SELECT id, connection_id FROM governance_runs ORDER BY id DESC LIMIT 1')
     if not row:
         return jsonify({'error': 'No governance runs yet'}), 404
-    return jsonify({'run_id': row['id']})
+    # R32S1E4: connection_id lets rule surfaces scope settings without a wizard context
+    return jsonify({'run_id': row['id'], 'connection_id': row['connection_id']})
 
 
 @app.get('/api/reviews/<int:run_id>')

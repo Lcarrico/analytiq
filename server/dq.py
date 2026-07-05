@@ -128,7 +128,8 @@ def _worst(outcomes):
     return max(outcomes, key=lambda o: order[o]) if outcomes else 'PASS'
 
 
-def evaluate_manifest(manifest: dict, baseline: dict | None = None) -> dict:
+def evaluate_manifest(manifest: dict, baseline: dict | None = None,
+                      settings: dict | None = None) -> dict:
     """Evaluate the MVP DQ rule set against a governance manifest.
 
     Deterministic: identical input manifests produce identical result hashes.
@@ -220,7 +221,24 @@ def evaluate_manifest(manifest: dict, baseline: dict | None = None) -> dict:
         add('distribution_shift', *names['distribution_shift'], 'PASS',
             'No baseline manifest available — first evaluation', {'baseline_version': None})
 
-    outcome = _worst([r['outcome'] for r in rules])
+    # R32S1E4: per-connection rule settings — disabled rules are SKIPPED
+    # (excluded from the overall outcome); block_on_failure raises or lowers
+    # a failing rule between WARN and BLOCK. Deterministic given settings.
+    for r in rules:
+        s = (settings or {}).get(r['rule_id'])
+        if not s:
+            continue
+        if not s.get('enabled', 1):
+            r['outcome'] = 'SKIPPED'
+            r['suggested_remediation'] = None
+            r['human_readable_message'] += ' — skipped (rule disabled)'
+        elif s.get('block_on_failure') is not None:
+            if r['outcome'] == 'BLOCK' and not s['block_on_failure']:
+                r['outcome'] = 'WARN'
+            elif r['outcome'] == 'WARN' and s['block_on_failure']:
+                r['outcome'] = 'BLOCK'
+
+    outcome = _worst([r['outcome'] for r in rules if r['outcome'] != 'SKIPPED'])
     result_hash = _hashlib.sha256(_json.dumps(
         {'rules': rules, 'outcome': outcome,
          'manifest_version': manifest.get('manifest_version')},
