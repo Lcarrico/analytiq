@@ -184,6 +184,7 @@ export const api = {
   // ── Governance depth (R3S1) ──
   getManifest:      (id, v) => get(`/integrations/${id}/manifest${v ? `?version=${v}` : ''}`),
   manifestVersions: (id)    => get(`/integrations/${id}/manifest/versions`),
+  manifestVersionsDiffs: (id) => get(`/integrations/${id}/manifest/versions?diffs=1`),  // R32S1E6
   rollbackManifest: (id, version) => post(`/integrations/${id}/manifest/rollback`, { version }),
   approvePii:       (id, body)    => post(`/integrations/${id}/manifest/approve_pii`, body),
   healthHistory:    (id, table)   => get(`/integrations/${id}/health_history${table ? `?table=${table}` : ''}`),

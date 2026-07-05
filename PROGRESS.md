@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · R32 · Sprint R32S1 · Epic E6 (manifests + pre-agg) · R32S1E6-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · R32 · Sprint R32S2 · Epic E1 (semantic overview) · R32S2E1-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R31 · Sprint R31S1 · R32 · Sprint R32S1 · Epic E6 (manifests + pre-agg) · R32S1E6-US1  ← next story
+**Current position:** R31 · Sprint R31S1 · R32 · Sprint R32S2 · Epic E1 (semantic overview) · R32S2E1-US1  ← next story
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -308,8 +308,8 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R32S1E3-US1 definition-review diff (side-by-side, dark SQL diff, audit line) [was R25S1E3] — done: GovernanceDiff.jsx (`/app/governance/review/:id`, CURRENT vs PROPOSED w/ derived expression block, evidence + affected chips, editable final def, approve→accept/edit + reject, audited); queue name-cell deep-links; `GET /api/reviews/items/<id>` (+404). BE 427/427, UI 139/139.
 - [x] R32S1E4-US1 DQ rules master-detail (replaces S13 raw config 1:1) [was R25S1E4] — done: GovernanceRules.jsx (`/app/governance/rules` master-detail, typed pills, live toggles, editor w/ type dropdown + admin SQL + block-on-failure); `GET/PUT /api/dq/rules` merged catalog + settings (audited); engine honors disable→SKIPPED + block up/downgrade; run skips disabled tests. BE 431/431, UI 141/141.
 - [x] R32S1E5-US1 lineage graph (6 node types, downstream highlight, ?node= deep links) [was R25S1E5] — done: GovernanceLineage.jsx (`/app/governance/lineage` dot-grid canvas, 6-kind legend/columns, zoom/auto-layout, downstream BFS highlight, detail panel w/ IMPACT IF BROKEN, `?node=` deep links; ArtifactDetail lineage tab links in); /api/lineage grew source/metric/model nodes + row_count. BE 432/432, UI 143/143.
-- [ ] R32S1E6-US1 manifest versions + pre-agg recs; S13 retired/redirected [was R25S1E6]
-- [ ] R32S1 sprint regression recorded
+- [x] R32S1E6-US1 manifest versions + pre-agg recs; S13 retired/redirected [was R25S1E6] — done: GovernanceManifests.jsx (status pills REVIEW REQUIRED/ACTIVE/SUPERSEDED, expandable +ADD/~MOD/−DEL diffs via `?diffs=1`, Approve→review queue, real audited Rollback) + GovernancePreagg.jsx (value pills, hit share, demo-derived speedup/cost + $50 ceiling; materialize/dismiss owned by R36S1); S13 retired (tombstone, routes live under /app/governance/*); Btn now forwards native disabled. BE 433/433, UI 145/145.
+- [x] R32S1 sprint regression recorded — full suites green at sprint close: backend 433/433 · UI 145/145 (2026-07-05)
 - [ ] R32S2E1-US1 semantic overview + explores + explore detail (replaces S05) [was R25S2E1]
 - [ ] R32S2E2-US1 metrics catalog + metric detail + dimensions [was R25S2E2]
 - [ ] R32S2E3-US1 field picker + joins + derived tables (DEP bounded preview) [was R25S2E3]

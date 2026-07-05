@@ -1491,8 +1491,8 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] **R32S1E3-US1** — definition-review diff (side-by-side highlights, dark SQL diff w/ green tokens, evidence + affected chips, editable final, "Approve — re-validate N dashboards" + audit-log line) over semantic proposals APIs (:2463–2493) · [was R25S1E3]
 - [x] **R32S1E4-US1** — DQ rules master-detail replacing S13 raw config 1:1 (rules table w/ toggles + edit panel w/ type dropdown, target/threshold, admin-only custom SQL, block-on-failure) over thresholds/dq-tests APIs · [was R25S1E4]
 - [x] **R32S1E5-US1** — lineage graph (dot-grid canvas, 6 node types + legend, selected/downstream highlight, controls, details panel w/ IMPACT IF BROKEN, `?node=` deep links from canvas/inspector/detail) over `/api/lineage` :3453 · [was R25S1E5]
-- [ ] **R32S1E6-US1** — manifest versions (typed +ADD/~MOD/−DEL chips, expand diff, Approve/Rollback w/ audit) + pre-agg recommendations (value pills, speedup/cost bars, ceiling) over :3496–3562/:4067; S13 retired/redirected · [was R25S1E6]
-- [ ] R32S1 sprint regression recorded
+- [x] **R32S1E6-US1** — manifest versions (typed +ADD/~MOD/−DEL chips, expand diff, Approve/Rollback w/ audit) + pre-agg recommendations (value pills, speedup/cost bars, ceiling) over :3496–3562/:4067; S13 retired/redirected · [was R25S1E6]
+- [x] R32S1 sprint regression recorded — full suites green at sprint close: backend 433/433 · UI 145/145 (2026-07-05)
 
 ### Sprint R32S2 — Semantic layer (ch17, 9 screens) <!-- task elaboration pending Phase 1a -->
 - [ ] **R32S2E1-US1** — semantic overview cards + MANIFEST pill + Regenerate; explores list (avatars, scored pills, confidence); explore detail (tabs, "Analyze this explore" → workbench); replaces S05 · [was R25S2E1]

@@ -56,7 +56,7 @@ export function Btn({ children, variant = 'primary', size = 'md', onClick, disab
                       icon, full, style: extraStyle, ...rest }) {
   const v = BTN_V[variant] || BTN_V.primary;
   return (
-    <button {...rest} onClick={disabled ? undefined : onClick}
+    <button {...rest} disabled={disabled} onClick={disabled ? undefined : onClick}
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         gap: 7, height: BTN_H[size] || 34, padding: size === 'sm' ? '0 10px' : '0 14px',

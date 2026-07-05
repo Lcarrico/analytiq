@@ -3557,9 +3557,47 @@ def get_governance_manifest(id):
 
 @app.get('/api/integrations/<int:id>/manifest/versions')
 def list_manifest_versions(id):
-    return jsonify(many(
-        'SELECT id, version, run_id, created_at FROM governance_manifests '
-        'WHERE connection_id=? ORDER BY id DESC', (id,)))
+    rows = many('SELECT id, version, run_id, created_at FROM governance_manifests '
+                'WHERE connection_id=? ORDER BY id DESC', (id,))
+    if not request.args.get('diffs'):
+        return jsonify(rows)
+    # R32S1E6: annotate with status + structural changes vs previous version.
+    payloads = {r['id']: json.loads(one(
+        'SELECT manifest_json FROM governance_manifests WHERE id=?',
+        (r['id'],))['manifest_json']) for r in rows}
+    for i, r in enumerate(rows):
+        pending = one('SELECT COUNT(*) AS n FROM semantic_definitions '
+                      "WHERE run_id=? AND status='pending' AND confidence < ?",
+                      (r['run_id'], REVIEW_CONFIDENCE_THRESHOLD))['n']
+        if i > 0:
+            r['status'] = 'SUPERSEDED'
+        elif pending:
+            r['status'] = 'REVIEW REQUIRED'
+        else:
+            r['status'] = 'ACTIVE'
+        cur = {t['name']: t for t in payloads[r['id']].get('tables', [])}
+        prev_row = rows[i + 1] if i + 1 < len(rows) else None
+        prev = ({t['name']: t for t in payloads[prev_row['id']].get('tables', [])}
+                if prev_row else {})
+        added = sorted(set(cur) - set(prev)) if prev_row else []
+        removed = sorted(set(prev) - set(cur)) if prev_row else []
+        modified = []
+        if prev_row:
+            for name in sorted(set(cur) & set(prev)):
+                reasons = []
+                if cur[name].get('health_score') != prev[name].get('health_score'):
+                    reasons.append(f"health {prev[name].get('health_score')} → "
+                                   f"{cur[name].get('health_score')}")
+                if len(cur[name].get('columns') or []) != len(prev[name].get('columns') or []):
+                    reasons.append('column set changed')
+                if cur[name].get('dq_gate_status') != prev[name].get('dq_gate_status'):
+                    reasons.append(f"gate {prev[name].get('dq_gate_status')} → "
+                                   f"{cur[name].get('dq_gate_status')}")
+                if reasons:
+                    modified.append({'table': name, 'reason': ' · '.join(reasons)})
+        r['changes'] = {'added': added, 'modified': modified, 'removed': removed}
+        r['pending_reviews'] = pending
+    return jsonify(rows)
 
 
 @app.post('/api/integrations/<int:id>/manifest/approve_pii')

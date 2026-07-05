@@ -13,7 +13,9 @@ import Governance from './screens/Governance';   // R32S1E1
 import GovernanceReview from './screens/GovernanceReview';
 import GovernanceDiff from './screens/GovernanceDiff';
 import GovernanceRules from './screens/GovernanceRules';
-import GovernanceLineage from './screens/GovernanceLineage';   // R32S1E2
+import GovernanceLineage from './screens/GovernanceLineage';
+import GovernanceManifests from './screens/GovernanceManifests';
+import GovernancePreagg from './screens/GovernancePreagg';   // R32S1E2
 import Team from './screens/Team';
 import PublicViewer from './screens/PublicViewer';
 import Billing from './screens/Billing';
@@ -31,7 +33,6 @@ import Artifacts from './screens/Artifacts';   // R30S1E2
 import ArtifactDetail from './screens/ArtifactDetail';   // R30S1E4
 import Screen11 from './screens/S11_Account';
 import Screen12 from './screens/S12_Platform';
-import Screen13 from './screens/S13_GovernanceOps';
 import Screen14 from './screens/S14_Models';
 
 const SCREENS = {
@@ -42,7 +43,6 @@ const SCREENS = {
   10: Artifacts,   // R30S1E2 — Frame 01 library (cards + rail + ⋯ menus)
   11: Screen11,
   12: Screen12,
-  13: Screen13,
   14: Screen14,
 };
 
@@ -97,6 +97,8 @@ function Layout() {
         <Route path="/app/governance/review/:id" element={<GovernanceDiff />} />  {/* R32S1E3 */}
         <Route path="/app/governance/rules" element={<GovernanceRules />} />  {/* R32S1E4 */}
         <Route path="/app/governance/lineage" element={<GovernanceLineage />} />  {/* R32S1E5 */}
+        <Route path="/app/governance/manifests" element={<GovernanceManifests />} />  {/* R32S1E6 */}
+        <Route path="/app/governance/preaggregations" element={<GovernancePreagg />} />  {/* R32S1E6 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}
