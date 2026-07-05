@@ -10,6 +10,9 @@ test('account screen lists agent memory and deletes an entry', async ({ page, re
 
   await page.goto('/app');   // R23: '/' is the marketing landing
   await page.getByTestId('app-sidebar').getByRole('link', { name: 'Settings', exact: true }).click();
+  // R31S1E1-US1: the memory surface sits behind the explicit admin affordance
+  // now (§5.6) — the always-on debug panel was a §5.1 leak
+  await page.getByTestId('memory-toggle').evaluate(el => el.click());   // R31S1E1 affordance
   const panel = page.getByTestId('memory-panel');
   await expect(panel).toBeVisible();
   const row = panel.getByTestId(`memory-row-${created.id}`);

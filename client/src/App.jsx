@@ -12,6 +12,7 @@ import Team from './screens/Team';
 import PublicViewer from './screens/PublicViewer';
 import Billing from './screens/Billing';
 import { Landing, Pricing } from './screens/Marketing';
+import { Login, Register } from './screens/Auth';   // R31S1E1 — standalone
 import { Forbidden, useRole } from './components/roles';
 import { ROUTE_SCREENS } from './routes';
 import Screen02 from './screens/S02_Connect';
@@ -118,6 +119,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/login" element={<Login />} />       {/* R31S1E1 */}
+          <Route path="/register" element={<Register />} />
           <Route path="/share/:token" element={<PublicViewer />} />
           <Route path="*" element={<Layout />} />
         </Routes>

@@ -1449,7 +1449,7 @@ PRD §5.1 — gating suite over the kill-list
 
 #### Epic R31S1E1 — Standalone auth shell + login + register wizard (was R28S1E1)
 Mockup: `Auth.dc.html` · PRD ch08 · Current: S11_Account renders sign-in/register INSIDE Shell; leaks "PBKDF2…"/"Agent memory" (S11:58/:87)
-- [ ] **R31S1E1-US1** — standalone shell (`#f2f4f8`, radial glow, centered logo, 420px card); login rebuilt (labeled fields, forgot link, 3 SSO buttons, magic-link box, "Log in" copy); register = 4-step wizard (stepper, strength meter, role cards 2×2, invite chips + first-path rows). **Explicit AC: "PBKDF2"/"Agent memory" copy unreachable from any auth surface.** SSO/magic-link are visual states over demo auth (fallback: R1 email outbox for the magic-link stub; accepts-any on demo)
+- [x] **R31S1E1-US1** — standalone shell (`#f2f4f8`, radial glow, centered logo, 420px card); login rebuilt (labeled fields, forgot link, 3 SSO buttons, magic-link box, "Log in" copy); register = 4-step wizard (stepper, strength meter, role cards 2×2, invite chips + first-path rows). **Explicit AC: "PBKDF2"/"Agent memory" copy unreachable from any auth surface.** SSO/magic-link are visual states over demo auth (fallback: R1 email outbox for the magic-link stub; accepts-any on demo) ✅ 2026-07-05 (specs r31s1_auth ×3 · role cards map onto real roles (business/executive→viewer); SSO buttons route to the R31S1E2 callback; magic link = demo confirmation state)
   - Touches: `client/src/screens/Auth.jsx` (new), `client/src/App.jsx`, `client/src/routes.js`, retire `S11_Account.jsx` auth surfaces, `tests/ui/r31s1_auth.spec.js` · Deps: none · DoD: +PAR-1 Auth frames 1–2
 
 #### Epic R31S1E2 — Auth secondary states (was R28S1E2)

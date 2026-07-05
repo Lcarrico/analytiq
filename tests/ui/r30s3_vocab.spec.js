@@ -18,8 +18,8 @@ const KILL = ['PBKDF2', 'Agent memory', 'CENTERPIECE', 'gate:PASS', '(§', 'Deep
 
 // file → [kill-string, owning story that retires it]
 const ALLOWED_UNTIL = {
-  'screens/S11_Account.jsx': [['PBKDF2', 'R31S1E1'], ['Agent memory', 'R31S1E1'],
-                              ['(§', 'R31S1E1']],
+  // S11 pruned 2026-07-05 — R31S1E1 shipped the standalone auth and stripped
+  // the settings screen
   'screens/S05_Semantic.jsx': [['(§', 'R32S2E1']],   // retires with the semantic overview
   'screens/S12_Platform.jsx': [['(§', 'R36S2E4']],   // retires with admin security screens
 };

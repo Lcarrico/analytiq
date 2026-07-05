@@ -15,7 +15,6 @@ export default [
       'client/src/screens/S03_Governance.jsx',
       'client/src/screens/S04_TableHealth.jsx',
       'client/src/screens/S05_Semantic.jsx',
-      'client/src/screens/S11_Account.jsx',
       'client/src/screens/S12_Platform.jsx',
       'client/src/screens/S13_GovernanceOps.jsx',
       'client/src/screens/S14_Models.jsx',
