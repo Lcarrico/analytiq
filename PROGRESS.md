@@ -312,4 +312,76 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [ ] R32S1 sprint regression recorded
 - [ ] R32S2E1-US1 semantic overview + explores + explore detail (replaces S05) [was R25S2E1]
 - [ ] R32S2E2-US1 metrics catalog + metric detail + dimensions [was R25S2E2]
-- [ ] R32S2E3-US1 field picker + joins + derived tables (DEP bounded preview) [w
+- [ ] R32S2E3-US1 field picker + joins + derived tables (DEP bounded preview) [was R25S2E3]
+- [ ] R32S2 sprint regression recorded
+- [ ] R32 release regression + zero-key boot recorded
+
+## Release R33 — PRD Phase 4: Prediction & distribution (pending)
+### Milestone UP-D — Models trusted, artifacts delivered
+- [ ] R33S1E1-US1 models overview (KPIs + status pills + per-state actions) [was R26S1E1]
+- [ ] R33S1E2-US1 training run detail (tabs, stat cards, backtest chart, log) [was R26S1E2]
+- [ ] R33S1E3-US1 model card (metrics tiles, importance bars, SHAP, linked artifacts) [was R26S1E3]
+- [ ] R33S1E4-US1 leaderboard + feature manifest + retrain center [was R26S1E4]
+- [ ] R33S1 sprint regression recorded
+- [ ] R33S2E1-US1 public viewer parity + expired card (diff vs CODE, Reconciliation (c)) [was R28S2E2]
+- [ ] R33S2E2-US1 embed preview + settings (DEP embed settings kv) [was R28S2E3a]
+- [ ] R33S2E3-US1 present mode (dark stage + notes drawer) [was R28S2E3b]
+- [ ] R33S2E4-US1 error template ×8 [was R28S2E1]
+- [ ] R33S2 sprint regression recorded
+- [ ] R33 release regression + zero-key boot recorded
+
+## Release R34 — PRD Phase 5: Marketing (pending)
+### Milestone UP-E — Marketing at parity
+- [ ] R34S1E1-US1 MarketingNav + dark 5-col footer [was R29S1E1]
+- [ ] R34S1E2-US1 landing rebuild (hero preview, BI compare, use cases, trust, CTA) [was R29S1E2]
+- [ ] R34S1E3-US1 product page (stepper + 5 stages) [was R29S1E3]
+- [ ] R34S1E4-US1 pricing restyle (toggle/table/FAQ; r30s1 data lock stays green) [was R29S1E4]
+- [ ] R34S1 sprint regression recorded
+- [ ] R34S2E1-US1 solutions ×6 · R34S2E2-US1 templates · R34S2E3-US1 security · R34S2E4-US1 docs [was R29S2E1–E4]
+- [ ] R34S2 sprint regression recorded
+- [ ] R34 release regression + zero-key boot recorded
+
+## Release R35 — Unreviewed: Data layer (audit-first) (pending)
+### Milestone UP-F — Data surfaces at parity
+- [ ] R35S1E1-US1 sources · E2 connect grid · E3 snowflake wizard · E4 imports ×4 [was R24S1]
+- [ ] R35S1 sprint regression recorded
+- [ ] R35S2E1-US1 source detail · E2 table detail [was R24S2]
+- [ ] R35S2 sprint regression recorded
+- [ ] R35 release regression + zero-key boot recorded
+
+## Release R36 — Unreviewed: Gold/Alerts + Org/Admin/Billing/Settings (audit-first) (pending)
+### Milestone UP-G — Operate & administer at parity
+- [ ] R36S1E1-US1 gold list+detail · E2 contracts ×2 · E3 alerts (DEP alerts CRUD) [was R26S2]
+- [ ] R36S1 sprint regression recorded
+- [ ] R36S2E1-US1 collab ×3 · E2 admin+roles (DEP) · E3 SSO+branding (DEP) · E4 security ×4 · E5 usage [was R27S1]
+- [ ] R36S2 sprint regression recorded
+- [ ] R36S3E1-US1 billing ×3 (DEP) · E2 settings ×4 + technical-detail toggle (DEP) [was R27S2]
+- [ ] R36S3 sprint regression recorded
+- [ ] R36 release regression + zero-key boot recorded
+
+## Adaptation ledger (UI Parity & Build-Out Program)
+- Pending R22S1E2→R29 scope retired & re-planned as R30–R36 per PRD v1.0 + user decisions (a)–(f) — see RELEASE_PLAN Reconciliation block. (Phase 1)
+- PRD §8 screenshots/ folder superseded by docs/specs/parity/ + PAR-1 scoreboard; sign-off recorded. (Phase 1)
+- PRD ch11 Clarify / ch14 share-viewer "MISSING" claims stale vs code — stories diff against code. (Phase 1)
+- Sandbox mount forbids unlink: git lock files mv'd aside pre-commit; tmp_obj warnings cosmetic; S06–S09/S10 "deletion" = tombstone + no-import grep test. (Phase 2+)
+- HOST-side file writes truncate on mount sync — ALL source edits bash-side via anchor-asserted python patches; 2026-07-04 truncation incident hit RELEASE_PLAN/PROGRESS tails (planner agent write); reconstructed 2026-07-05 from git + recon + PRD; original R22S1E2 task chain lost, rewritten under R31S2E1. (Phase 1/incident)
+- Suites run chunked under the 45s call wall: /tmp/be_chunks.sh + /tmp/ui_chunks.sh (state-file runners, local UI mirror). (Phase 2)
+- lint-probe cleanup made mount-safe (overwrite fallback + gitignore). (Phase 2)
+- pytest + server requirements reinstalled in fresh sandbox (user site). (Phase 2)
+
+## Verification (UI Parity & Build-Out Program)
+- Backend: `python3 -m pytest tests/ --ignore=tests/ui` (or chunked: `bash /tmp/be_chunks.sh reset` then repeat)
+- UI: `npm run test:ui` (native) / chunked: `bash /tmp/ui_chunks.sh reset` then repeat
+- Build: `npm run build` · Lint wall: `npm run lint:tokens` · Parity scoreboard: `npm run test:parity`
+- Zero-key boot: `python3 server/app.py` → `/api/platform/status` all `local`
+
+## Session stop note (2026-07-05, UI Parity session 1)
+R30S1 E1–E3 shipped green: pricing data hotfix (3-test ch02 lock) · library card
+grid + rail + ⋯ menus (13 legacy specs migrated w/ citations; 2 flake classes
+root-caused in-screen) · Frame-02 table view (exact columns, reload-persistent
+?view=table). Suites at stop: backend 416/416 · UI 93/93 · build + lint green.
+Next: R30S1E4-US1 (artifact detail — 8 tabs, internals off Dashboard,
+CENTERPIECE kill, S10 tombstone) closes Sprint R30S1 → run the sprint gate.
+Truncation incident (see ledger) repaired: both tracking files reconstructed
+and re-verified (check_tree green) — trust bash-side reads of these files, and
+re-verify tails after any host-side write.

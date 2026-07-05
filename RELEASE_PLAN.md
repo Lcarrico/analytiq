@@ -1394,4 +1394,197 @@ Mockup: `Inspector Panels.dc.html` versions frame · PRD: ch12 versions (§5.1 r
   - Tasks — Backend/API: N/A — consumes existing UAS versions endpoint
   - Tasks — UI/E2E:
     - [ ] TASK1 RED: `tests/ui/r30s3_versions.spec.js` — topbar-opened; row anatomy + dependency chips; restore triggers existing flow; no 8-hex-hash pattern in DOM
-    - [ ] TASK2 Implement p
+    - [ ] TASK2 Implement panel opened from the R30S2E1 topbar Versions button over the existing UAS versions API; dependency chips from version metadata
+    - [ ] TASK3 Verification gate: story spec + full suites
+  - Test Plan — Backend/API: none · UI/E2E: TASK1 assertions (topbar-open, row anatomy, chips, no hash leak)
+  - Touches: `client/src/screens/Workbench.jsx`, `client/src/components/VersionsPanel.jsx` (new), `tests/ui/r30s3_versions.spec.js`
+  - Story Dependencies: R30S2E1-US1 (topbar Versions button)
+  - DoD: story spec + full regression green · PAR-1: `Inspector Panels` versions frame flips ✅
+
+#### Epic R30S3E6 — Comments drawer + inline pins
+Mockup: `Inspector Panels.dc.html` comments frames · PRD: ch12 §6–7 · Current: none (R18 comments APIs exist: inbox :7722, resolve :7714)
+
+- [ ] **R30S3E6-US1** — 400px drawer (Open/Resolved pill counts, section-anchor chips `§ <section>`, nested replies, "Ask AI to apply" + "Convert to request", composer) + numbered inline pins with popover (comment row + resolve + reply)
+  - AC: drawer opens from canvas toolbar comment icon; threads anchored to sections; resolve round-trips the R18 API; pins render on anchored sections with popover reply; §5.1-clean copy
+  - Tasks — Backend/API: N/A — R18 comments contract locked (contract-lock test cites this story)
+  - Tasks — UI/E2E: <!-- task elaboration pending Phase 1a --> RED `tests/ui/r30s3_comments.spec.js` → implement drawer + pins → gate
+  - Touches: `client/src/screens/Workbench.jsx`, `client/src/components/CommentsDrawer.jsx` (new), `tests/ui/r30s3_comments.spec.js`
+  - Story Dependencies: R30S2E3-US3 (section selection provides anchors)
+  - DoD: story spec + full regression green · PAR-1: comments frames flip ✅
+
+#### Epic R30S3E7 — Legacy wizard retirement
+Current: S06_Analysis/S07_Confirm/S08_Pipeline/S09_Dashboard still routed for legacy child routes
+
+- [ ] **R30S3E7-US1** — S06–S09 retired once workbench parity lands: named child routes (`quick/confirm/run/result`) redirect into the workbench/artifact surfaces; S09's CENTERPIECE instance dies here; lint grandfather list pruned; mount forbids file deletion → files tombstoned (`// retired R30S3E7` + empty export) with a grep-test asserting no imports remain (adaptation ledger)
+  - Tasks — Backend/API: N/A · UI/E2E: <!-- task elaboration pending Phase 1a --> RED redirect spec → tombstone + redirects → migrate/cite affected legacy specs → gate
+  - Touches: `client/src/App.jsx`, `client/src/routes.js`, `client/src/screens/S06–S09*.jsx` (tombstones), `eslint.config.mjs`, `tests/ui/r30s3_retire.spec.js`
+  - Story Dependencies: R30S2E3 (canvas parity), R30S1E4 (detail replaces S09 result view)
+  - DoD: full regression green · no `S0[6-9]_` imports (grep test)
+
+#### Epic R30S3E8 — Forbidden-vocabulary enforcement (NEW)
+PRD §5.1 — gating suite over the kill-list
+
+- [ ] **R30S3E8-US1** — `tests/ui/r30s3_vocab.spec.js`: child_process grep + rendered-DOM spot checks over the §5.1 kill-list (snake_case section ids, pipeline step ids, `gate:PASS` dumps, ref hashes, spec citations `§N.N`, "PBKDF2", "Agent memory", "FTS", "CENTERPIECE"); allowed-until ledger maps each remaining leak to its owning story (S11:58/:87→R31S1E1 · Inspector.jsx:69→R30S2E4 · BuildCanvas.jsx:162→R30S2E3 · S09:95→R30S3E7); suite GATES from R30S3 close onward, ledger shrinks to zero by R31S1
+  - Tasks — Backend/API: N/A · UI/E2E: <!-- task elaboration pending Phase 1a -->
+  - Touches: `tests/ui/r30s3_vocab.spec.js`
+  - Story Dependencies: R30S2E4, R30S3E1–E7 (their de-leaks precede the gate flipping strict)
+  - DoD: suite green with ledger empty for all landed stories
+
+#### Sprint R30S3 regression gates
+- [ ] Backend full · UI full green (recorded in PROGRESS) · vocabulary suite gating
+
+### Release R30 close-out
+- [ ] All 18 stories ✅ · full backend+UI regression + zero-key boot check recorded · PAR-1 flips: Artifacts Library ×3 · Create Workbench ×5 states · Inspector Panels ×7
+
+## Release R31 — PRD Phase 2: First-Run Journey (ch08 · ch09 · ch10)
+
+> Register → onboard → live home. Auth/onboarding are standalone shells (PRD §5.3); PBKDF2/Agent-memory leaks die here.
+
+### Milestone UP-B — Register → onboard → live home
+#### Milestone Success Criteria
+- [ ] 8 auth screens + 4 onboarding screens exist standalone (no app shell pre-login); register is the 4-step wizard; activity page live + linked ×2; home polish deltas closed
+
+### Sprint R31S1 — Auth & onboarding (ch08/09) <!-- task elaboration pending Phase 1a -->
+
+#### Epic R31S1E1 — Standalone auth shell + login + register wizard (was R28S1E1)
+Mockup: `Auth.dc.html` · PRD ch08 · Current: S11_Account renders sign-in/register INSIDE Shell; leaks "PBKDF2…"/"Agent memory" (S11:58/:87)
+- [ ] **R31S1E1-US1** — standalone shell (`#f2f4f8`, radial glow, centered logo, 420px card); login rebuilt (labeled fields, forgot link, 3 SSO buttons, magic-link box, "Log in" copy); register = 4-step wizard (stepper, strength meter, role cards 2×2, invite chips + first-path rows). **Explicit AC: "PBKDF2"/"Agent memory" copy unreachable from any auth surface.** SSO/magic-link are visual states over demo auth (fallback: R1 email outbox for the magic-link stub; accepts-any on demo)
+  - Touches: `client/src/screens/Auth.jsx` (new), `client/src/App.jsx`, `client/src/routes.js`, retire `S11_Account.jsx` auth surfaces, `tests/ui/r31s1_auth.spec.js` · Deps: none · DoD: +PAR-1 Auth frames 1–2
+
+#### Epic R31S1E2 — Auth secondary states (was R28S1E2)
+- [ ] **R31S1E2-US1** — forgot-password (form + sent states), verify-email, SSO callback signing-in + no-workspace-access (red glow variant)
+  - Touches: `client/src/screens/Auth.jsx`, `tests/ui/r31s1_auth_states.spec.js` · Deps: R31S1E1-US1 · DoD: +PAR-1 Auth frames 3–8
+
+#### Epic R31S1E3 — Onboarding ×4 (was R28S1E3)
+- [ ] **R31S1E3-US1** — workspace-branding wizard (5-step header, dropzone, accent swatches, live preview wired to GET/PUT `/api/branding`), starting-mode 5 cards (FASTEST pill), source-health preview (green banner, 4 KPIs, profiled table w/ PII pills, sticky footer), template picker (data-aware rationale + match pills); register step 4 → onboarding → home flow wired
+  - Touches: `client/src/screens/Onboarding.jsx` (new), `client/src/App.jsx`, `client/src/routes.js`, `tests/ui/r31s1_onboarding.spec.js` · Deps: R31S1E1-US1 · DoD: +PAR-1 Onboarding ×4
+
+### Sprint R31S2 — Home & activity completion (ch10) <!-- task elaboration pending Phase 1a (E2); E1 detail below -->
+
+#### Epic R31S2E1 — Recent Activity page (was R22S1E2 — carried; original full task chain lost to the 2026-07-04 truncation incident, reconstructed from recon + PRD ch10)
+Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activity` route, no `/api/activity` (substrate: `/api/workspace/activity` :7662 over `audit_logs`)
+- [ ] **R31S2E1-US1** — full app-shell page at `/app/activity` (content max-width 1000): breadcrumb + H1 "Recent activity"; filter pill row (All dark-active · Builds · Governance · Data · Sharing) + mono date-range; timeline card rows = 28px tinted icon tile + connector line, rich text w/ actor bold + artifact link, mono metadata line, mono time, 26px actor avatar; SYS avatar for system events; "Load more" cursor pagination
+  - AC: `DEP: GET /api/activity` — typed projection over `audit_logs` (kind buckets build/governance/alert/share/drift/model · actor · entity link · metadata line · cursor pagination); events from seeded demo data render grouped by day
+  - AC: **"View all activity →" links in BOTH the Home header row and the notifications drawer footer** (PRD ch10 required addition)
+  - Tasks — Backend/API: <!-- task elaboration pending Phase 1a --> RED `tests/test_r31s2_activity.py` (projection contract, kind filters, cursor) → `server/activity.py` projection → gate
+  - Tasks — UI/E2E: RED `tests/ui/r31s2_activity.spec.js` (route, pills filter server-side, row anatomy, links ×2, load-more) → screen + links → gate
+  - Touches: `server/activity.py` (new), `server/app.py` (route wire), `client/src/screens/Activity.jsx` (new), `client/src/screens/Home.jsx`, `client/src/components/Shell.jsx` (drawer footer), `client/src/routes.js`, tests above · Deps: none · DoD: +PAR-1 App Home frame 02
+
+#### Epic R31S2E2 — Home polish deltas (NEW, ch10 §2–7)
+- [ ] **R31S2E2-US1** — bell badge hidden at zero (+ migrate the r18 "badge stays mounted at 0" contract, cite); data-health values color-coded + ring thresholds (amber <85); awaiting-review widget (amber count, colored dot bullets, bottom link); recently-viewed 34×16 thumbs; usage w/w delta + 7-bar mini chart; varied artifact previews + mono timestamps; empty-state captions 12.5/#64748b
+  - Touches: `client/src/screens/Home.jsx`, `client/src/components/Shell.jsx`, `tests/ui/r31s2_home_polish.spec.js`, migrate `tests/ui/r18s1_*`/`r22s1_home` expectations (cite) · Deps: none · DoD: +PAR-1 App Home frame 01 full
+
+#### Sprint R31 regression gates
+- [ ] R31S1 · R31S2 full backend+UI regression recorded
+### Release R31 close-out
+- [ ] Release regression + zero-key boot check recorded · PAR-1 flips: Auth ×8 · Onboarding ×4 · App Home ×3
+
+## Release R32 — PRD Phase 3: Governance & Data Trust (ch15 · ch16 · ch17)
+
+### Milestone UP-C — Trust surfaces at parity
+- [ ] Governance ops page split into 4 designed routes + lineage/manifests/pre-agg; semantic layer's 9 screens live; S13/S05 retired
+
+### Sprint R32S1 — Governance (ch15 + ch16) <!-- task elaboration pending Phase 1a -->
+- [ ] **R32S1E1-US1** — governance overview KPI cards (clickable, colored counts, health-trend span-2 sparkline). `DEP:` counts aggregate endpoint if absent · Touches: `client/src/screens/Governance.jsx` (new), `server/app.py` · [was R25S1E1]
+- [ ] **R32S1E2-US1** — human review queue (tab counts, bulk approve/assign, typed pills CONFLICT/PII/BRIDGE/DRIFT, confidence colors, Accept/Edit/Reject) over R10 triage APIs · [was R25S1E2]
+- [ ] **R32S1E3-US1** — definition-review diff (side-by-side highlights, dark SQL diff w/ green tokens, evidence + affected chips, editable final, "Approve — re-validate N dashboards" + audit-log line) over semantic proposals APIs (:2463–2493) · [was R25S1E3]
+- [ ] **R32S1E4-US1** — DQ rules master-detail replacing S13 raw config 1:1 (rules table w/ toggles + edit panel w/ type dropdown, target/threshold, admin-only custom SQL, block-on-failure) over thresholds/dq-tests APIs · [was R25S1E4]
+- [ ] **R32S1E5-US1** — lineage graph (dot-grid canvas, 6 node types + legend, selected/downstream highlight, controls, details panel w/ IMPACT IF BROKEN, `?node=` deep links from canvas/inspector/detail) over `/api/lineage` :3453 · [was R25S1E5]
+- [ ] **R32S1E6-US1** — manifest versions (typed +ADD/~MOD/−DEL chips, expand diff, Approve/Rollback w/ audit) + pre-agg recommendations (value pills, speedup/cost bars, ceiling) over :3496–3562/:4067; S13 retired/redirected · [was R25S1E6]
+- [ ] R32S1 sprint regression recorded
+
+### Sprint R32S2 — Semantic layer (ch17, 9 screens) <!-- task elaboration pending Phase 1a -->
+- [ ] **R32S2E1-US1** — semantic overview cards + MANIFEST pill + Regenerate; explores list (avatars, scored pills, confidence); explore detail (tabs, "Analyze this explore" → workbench); replaces S05 · [was R25S2E1]
+- [ ] **R32S2E2-US1** — metrics catalog (conflict `×2 CONFLICT` tinted rows, deprecated gray rows) + metric detail (plain-English def, ADMIN ONLY dark SQL, lineage chips, tests, versions) + dimensions catalog (collapsible categories w/ confidence) · [was R25S2E2]
+- [ ] **R32S2E3-US1** — field picker (3-panel, cardinality warning banner, live preview `100-row cap · Nms` — `DEP:` bounded read-only preview endpoint, seeded deterministic) + join paths (SAFE/BLOCKED/FAN-OUT pills, bridge-table rec CTA) + derived-tables editor (dark SQL validate, schedule, tags, dry run, FRESH/STALE list) · [was R25S2E3]
+- [ ] R32S2 sprint regression recorded
+### Release R32 close-out
+- [ ] Release regression + zero-key boot recorded · PAR-1 flips: Governance ×4 · Governance Lineage ×3 · Semantic ×9
+
+## Release R33 — PRD Phase 4: Prediction & Distribution (ch18 · ch14)
+
+### Milestone UP-D — Models trusted, artifacts delivered
+- [ ] Models pillar's 6 screens live over existing model-ops APIs; sharing surfaces at parity; error template ×8
+
+### Sprint R33S1 — Models & model ops (ch18) <!-- task elaboration pending Phase 1a -->
+- [ ] **R33S1E1-US1** — models overview (6 KPI cards + table w/ CHAMPION/DRIFT/RUN FAILED pills, per-state actions Retrain/Card/Retrain-now/View-logs) over model_cards/trials APIs; replaces S14 · [was R26S1E1]
+- [ ] **R33S1E2-US1** — training run detail (tabs Summary/Backtest/Candidates/Features/Leakage/Logs; 3 stat cards; backtest bar chart; dark mono log) · [was R26S1E2]
+- [ ] **R33S1E3-US1** — model card (purpose/target/algo/data/features, MAPE/MAE/RMSE tiles, purple importance bars, SHAP dot plot, linked artifacts) — deep-linked from inspector/detail/driver card · [was R26S1E3]
+- [ ] **R33S1E4-US1** — leaderboard (ranked table ±bands, trade-off scatter, WHY panel, promotion-gate footnote, Promote/Override) + feature manifest (encoding/imputation/leakage/importance/status, dropped strike-through row) + retrain center (filter pills w/ counts, reason rows + actions) · [was R26S1E4]
+- [ ] R33S1 sprint regression recorded
+
+### Sprint R33S2 — Sharing surfaces + errors (ch14) <!-- task elaboration pending Phase 1a -->
+> Reconciliation (c): PublicViewer exists (R19) — stories diff against CODE.
+- [ ] **R33S2E1-US1** — public viewer parity (workspace-brand bar, viewer filter bar, KPI grid + 2 charts, Powered-by footer) + designed expired-token card · [was R28S2E2]
+- [ ] **R33S2E2-US1** — embed preview page (fake browser frame live preview + settings: dark code block w/ Copy, scope checkboxes, expires/refresh, allowed-domains chips, Save). `DEP:` embed settings persistence (additive kv on artifact_shares) · [was R28S2E3a]
+- [ ] **R33S2E3-US1** — present mode (dark stage, slide header `section n / m`, chart panel, floating control pill, presenter-notes drawer from narrative engine) wired from canvas ▶ + Solutions page · [was R28S2E3b]
+- [ ] **R33S2E4-US1** — error-page template ×8 states (404/403/token expired/workspace not found/artifact unavailable/pipeline failed/connector failed/data access denied) · [was R28S2E1]
+- [ ] R33S2 sprint regression recorded
+### Release R33 close-out
+- [ ] Release regression + zero-key boot recorded · PAR-1 flips: Models ×3 · Models Ops ×3 · Artifact Sharing ×4 · Errors board
+
+## Release R34 — PRD Phase 5: Marketing Site (ch01–07)
+
+### Milestone UP-E — Marketing at parity
+- [ ] 7 marketing pages at designed routes; shared nav/footer; pricing restyle keeps R30S1E1 data lock green
+
+### Sprint R34S1 — Shared chrome + Landing + Product + Pricing restyle <!-- task elaboration pending Phase 1a -->
+- [ ] **R34S1E1-US1** — MarketingNav (logo mark + 6 links + Log in/Start free) + dark 5-col MarketingFooter (+legal bar) shared components · [was R29S1E1]
+- [ ] **R34S1E2-US1** — landing rebuild (dark hero + populated live-build preview, BI comparison, value props w/ icon chips, use-cases 3×2, trust strip, CTA band w/ mono terminal); `r29s1_marketing.spec.js` → `r34s1_marketing.spec.js` rename-on-touch · [was R29S1E2]
+- [ ] **R34S1E3-US1** — product page (header, sticky 5-step stepper, 5 alternating stage sections, dark CTA) · [was R29S1E3]
+- [ ] **R34S1E4-US1** — pricing restyle (header + Monthly/Annual −20% toggle, /mo mono prices, descriptors, CTAs per card, floating MOST POPULAR pill + 2px glow, dark Enterprise card, comparison table, FAQ accordion, footer). **AC: plan data still matches ch02 exactly — `r30s1_pricing_data.spec.js` stays green (regression lock)** · [was R29S1E4]
+- [ ] R34S1 sprint regression recorded
+
+### Sprint R34S2 — Solutions + Templates + Security + Docs <!-- task elaboration pending Phase 1a -->
+- [ ] **R34S2E1-US1** — solutions template ×6 persona routes (tabs, hero + dark digest card, starting points ×3, quote band, callouts, CTA) · [was R29S2E1]
+- [ ] **R34S2E2-US1** — templates gallery (250px filter rail, grid header w/ count + search, 10 template cards w/ SVG art) · [was R29S2E2]
+- [ ] **R34S2E3-US1** — security page (compliance pills, sticky jump nav, 8 tinted section cards) · [was R29S2E3]
+- [ ] **R34S2E4-US1** — docs page (slim docs nav w/ ⌘K, nav tree, Quickstart article w/ terminal block + amber callout, on-this-page rail) · [was R29S2E4]
+- [ ] R34S2 sprint regression recorded
+### Release R34 close-out
+- [ ] Release regression + zero-key boot recorded · PAR-1 flips: Marketing ×7
+
+## Release R35 — Unreviewed Area: Data Layer — PRD §8 audit-first
+
+> FIRST TASK of the opening story: re-verify frame vs mockup file before RED (PRD §8 audit gate).
+
+### Milestone UP-F — Data surfaces at parity
+### Sprint R35S1 — Sources, connect grid, wizard, imports <!-- task elaboration pending Phase 1a -->
+- [ ] **R35S1E1-US1** — sources list (audit-first task line) · [was R24S1E1]
+- [ ] **R35S1E2-US1** — add-source connector grid · [was R24S1E2]
+- [ ] **R35S1E3-US1** — snowflake connector wizard · [was R24S1E3]
+- [ ] **R35S1E4-US1** — import flows ×4 (file upload, REST API, webhook, dbt) over R2 connectors · [was R24S1E4]
+- [ ] R35S1 sprint regression recorded
+### Sprint R35S2 — Source & table detail <!-- task elaboration pending Phase 1a -->
+- [ ] **R35S2E1-US1** — source detail tabs · [was R24S2E1]
+- [ ] **R35S2E2-US1** — table detail (profile, columns, PII flags) · [was R24S2E2]
+- [ ] R35S2 sprint regression recorded
+### Release R35 close-out
+- [ ] Release regression + zero-key boot recorded · PAR-1 flips: Data Sources ×3 · Data Import ×4 · Data Detail ×2
+
+## Release R36 — Unreviewed Areas: Gold/Alerts + Org, Admin, Billing & Settings — PRD §8 audit-first
+
+> Same audit-first task line as R35. R30S3 panels shipped role-gated; they flip to toggle-gated when R36S3E2's technical-detail toggle lands (cite there).
+
+### Milestone UP-G — Operate & administer at parity
+### Sprint R36S1 — Gold & contracts + Alerts <!-- task elaboration pending Phase 1a -->
+- [ ] **R36S1E1-US1** — gold tables list + gold detail · [was R26S2E1]
+- [ ] **R36S1E2-US1** — data contracts + query contracts screens (admin) · [was R26S2E2]
+- [ ] **R36S1E3-US1** — alerts center / create alert / alert detail. `DEP:` alerts CRUD (`server/alerts.py` + SQLite tables + seeded trigger history; only GET :3437 exists) · [was R26S2E3]
+- [ ] R36S1 sprint regression recorded
+### Sprint R36S2 — Collaboration + Admin control plane <!-- task elaboration pending Phase 1a -->
+- [ ] **R36S2E1-US1** — comments inbox + team members + invite members · [was R27S1E1]
+- [ ] **R36S2E2-US1** — admin overview + roles & permissions matrix. `DEP:` roles kv + audit row · [was R27S1E2]
+- [ ] **R36S2E3-US1** — SSO settings + workspace branding admin. `DEP:` workspace settings kv (branding API exists) · [was R27S1E3]
+- [ ] **R36S2E4-US1** — admin security ×4 (secrets, audit log, sharing governance, RLS w/ simulator) over :6885/:7518/:7488/:7504 · [was R27S1E4]
+- [ ] **R36S2E5-US1** — usage & cost dashboard over `/api/billing/usage` :7449 (additive aggregate only) · [was R27S1E5]
+- [ ] R36S2 sprint regression recorded
+### Sprint R36S3 — Billing + Settings <!-- task elaboration pending Phase 1a -->
+- [ ] **R36S3E1-US1** — billing plan & seats, invoices + payment methods, token usage meters. `DEP:` seeded demo invoice/payment endpoints (Stripe checkout/portal exist :6914–6965) · [was R27S2E1]
+- [ ] **R36S3E2-US1** — settings ×4 (profile, preferences, API keys, help center) + **app-wide technical-detail toggle** (admin-gated blocks flip from role-gated to toggle-gated; cite R30S3 panels). `DEP:` prefs kv + hashed API keys (revoke → 410) · [was R27S2E2]
+- [ ] R36S3 sprint regression recorded
+### Release R36 close-out
+- [ ] Release regression + zero-key boot recorded · PAR-1 flips: Gold Contracts ×4 · Alerts ×3 · Collaboration ×3 · Admin ×4 · Admin Security ×4 · Admin Usage · Billing ×3 · Settings ×4
+
+## Program close (R30–R36)
+- [ ] All 64 stories ✅ · every sprint + release regression line green · zero-key boot green · PAR-1 scoreboard: 95/95 frames ✅ or explicitly deferred with sign-off (PRD §7)
