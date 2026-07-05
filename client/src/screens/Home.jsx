@@ -116,17 +116,26 @@ export default function Home() {
         <Card data-testid="home-widget-health">
           <WidgetTitle link="Details →" onLink={() => navigate('/app/governance')}>Data health</WidgetTitle>
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-            <span data-testid="home-health-donut">
-              <Donut value={d?.health?.score ?? 0} label={d?.health?.score ?? '—'} sub="/ 100" />
+            <span data-testid="home-health-donut"
+                  data-tint={(d?.health?.score ?? 0) >= 85 ? 'green' : 'amber'}>
+              <Donut value={d?.health?.score ?? 0} label={d?.health?.score ?? '—'} sub="/ 100"
+                     color={(d?.health?.score ?? 0) >= 85 ? P.green : P.amber} />
             </span>
             <div style={{ flex: 1 }}>
-              {(d?.health?.rows || []).map(r => (
-                <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between',
-                                            padding: '3px 0' }}>
-                  <span style={{ fontSize: 12, fontFamily: FONT, color: P.body }}>{r.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 11.5, color: P.ink }}>{r.value}</span>
-                </div>
-              ))}
+              {(d?.health?.rows || []).map(r => {
+                // R31S2E2: problem rows read amber, healthy rows green
+                const warn = /drift|pii|flag|stale|breach/i.test(r.label)
+                  && !/^0\b/.test(String(r.value));
+                return (
+                  <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between',
+                                              padding: '3px 0' }}>
+                    <span style={{ fontSize: 12, fontFamily: FONT, color: P.body }}>{r.label}</span>
+                    <span data-testid="health-value" data-state={warn ? 'warn' : 'ok'}
+                          style={{ fontFamily: MONO, fontSize: 11.5,
+                                   color: warn ? P.amber : P.green }}>{r.value}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </Card>
@@ -145,7 +154,7 @@ export default function Home() {
             </div>
           ))}
           {!(d?.runs || []).length && (
-            <span style={{ fontSize: 12, color: P.muted, fontFamily: FONT }}>No runs in flight</span>
+            <span style={{ fontSize: 12.5, color: P.muted, fontFamily: FONT }}>No runs in flight</span>
           )}
         </Card>
 
@@ -162,26 +171,44 @@ export default function Home() {
             </div>
           ))}
           {!(d?.alerts || []).length && (
-            <span style={{ fontSize: 12, color: P.muted, fontFamily: FONT }}>Quiet — nothing firing</span>
+            <span style={{ fontSize: 12.5, color: P.muted, fontFamily: FONT }}>Quiet — nothing firing</span>
           )}
         </Card>
 
         <Card data-testid="home-widget-review">
-          <WidgetTitle link="Open review queue →" onLink={() => navigate('/app/governance')}>
-            Awaiting review
-          </WidgetTitle>
+          {/* R31S2E2 (frame): amber count in the header, dot bullets, link at
+              the BOTTOM */}
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 10 }}>
+            <span style={{ fontSize: 13, fontWeight: 600, fontFamily: FONT, color: P.ink }}>
+              Awaiting review
+            </span>
+            <span data-testid="review-count"
+                  style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 18, fontWeight: 600,
+                           color: P.amber }}>
+              {d?.review?.count ?? (d?.review?.items || []).length}
+            </span>
+          </div>
           {(d?.review?.items || []).map(it => (
             <div key={it.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 0' }}>
+              <span data-testid="review-dot"
+                    style={{ width: 7, height: 7, borderRadius: 4, flexShrink: 0,
+                             background: it.chip === 'PII' ? P.red
+                               : it.chip === 'DRIFT' ? P.amber : P.purple }} />
               <span style={{ flex: 1, fontSize: 12, fontFamily: FONT, color: P.body,
                              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {it.label}
               </span>
-              <Badge tint={CHIP_TINT[it.chip] || 'blue'} xs>{it.chip}</Badge>
+              <span style={{ fontFamily: MONO, fontSize: 9, color: P.faint }}>{it.chip}</span>
             </div>
           ))}
           {!(d?.review?.items || []).length && (
-            <span style={{ fontSize: 12, color: P.muted, fontFamily: FONT }}>Queue is clear</span>
+            <span style={{ fontSize: 12.5, color: P.muted, fontFamily: FONT }}>Queue is clear</span>
           )}
+          <a data-testid="review-bottom-link" onClick={() => navigate('/app/governance')}
+             style={{ display: 'inline-block', marginTop: 8, fontSize: 12, fontWeight: 600,
+                      color: P.accentHover, fontFamily: FONT, cursor: 'pointer' }}>
+            Open review queue →
+          </a>
         </Card>
 
         <Card data-testid="home-widget-suggested">
@@ -204,11 +231,20 @@ export default function Home() {
 
         <Card data-testid="home-widget-viewed">
           <WidgetTitle>Recently viewed</WidgetTitle>
-          {(d?.recently_viewed || []).map(v => (
+          {(d?.recently_viewed || []).map((v, vi) => (
             <div key={v.id} onClick={() => navigate('/app/artifacts')}
-                 style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0',
+                 style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 0',
                           cursor: 'pointer' }}>
-              <span style={{ fontSize: 12.5, fontFamily: FONT, color: P.body,
+              <svg data-testid="viewed-thumb" width="34" height="16" viewBox="0 0 34 16"
+                   style={{ flexShrink: 0 }}>
+                {vi % 2 === 0
+                  ? <polyline points="1,13 9,7 17,10 25,4 33,7" fill="none" stroke={P.accent}
+                              strokeWidth="1.4" />
+                  : <g>{[2, 9, 16, 23, 30].map((x, i2) => (
+                      <rect key={x} x={x} y={13 - (i2 % 3) * 4 - 3} width="3.5"
+                            height={(i2 % 3) * 4 + 3} fill={P.grayBar} rx="1" />))}</g>}
+              </svg>
+              <span style={{ flex: 1, fontSize: 12.5, fontFamily: FONT, color: P.body,
                              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {v.title}
               </span>
@@ -230,9 +266,28 @@ export default function Home() {
               <Badge tint="gray" xs>ADMIN</Badge>
             </div>
             <div style={{ ...T.kpi, color: P.ink }}>{fmtTokens(d.usage.tokens_used)}</div>
-            <div style={{ fontSize: 12, color: P.muted, fontFamily: FONT, margin: '3px 0 10px' }}>
-              tokens this week · {d.usage.pct}% of plan
+            <div style={{ display: 'flex', gap: 8, alignItems: 'baseline',
+                          margin: '3px 0 8px' }}>
+              <span style={{ fontSize: 12, color: P.muted, fontFamily: FONT }}>
+                tokens this week · {d.usage.pct}% of plan
+              </span>
+              {d.usage.wow_delta != null && (
+                <span data-testid="usage-wow"
+                      style={{ fontFamily: MONO, fontSize: 10.5, fontWeight: 600,
+                               color: d.usage.wow_delta <= 0 ? P.green : P.amber }}>
+                  {d.usage.wow_delta > 0 ? '+' : ''}{d.usage.wow_delta}% w/w
+                </span>
+              )}
             </div>
+            <svg data-testid="usage-bars" width="120" height="26" viewBox="0 0 120 26"
+                 style={{ display: 'block', marginBottom: 8 }}>
+              {(d.usage.daily || [0, 0, 0, 0, 0, 0, 0]).map((v, i) => {
+                const max = Math.max(1, ...(d.usage.daily || [1]));
+                const h = Math.max(2, Math.round((v / max) * 22));
+                return <rect key={i} x={i * 17 + 2} y={24 - h} width="11" height={h}
+                             rx="2" fill={i === 6 ? P.accent : P.grayBar} />;
+              })}
+            </svg>
             <a onClick={() => navigate('/app/billing/usage')}
                style={{ fontSize: 12, fontWeight: 500, fontFamily: FONT, color: P.accent,
                         cursor: 'pointer' }}>Usage & limits →</a>

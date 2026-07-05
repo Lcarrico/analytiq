@@ -370,13 +370,15 @@ export default function Shell({ children }) {
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         color: T.item, cursor: 'pointer' }}>
             <Icon name="Bell" size={17} />
-            {/* badge stays mounted at 0 — r18 contract asserts its text */}
-            <span data-testid="bell-count"
+            {/* R31S2E2 (PRD ch10): badge unmounts at zero — r15s1/r18s1 migrated */}
+            {notifs.unread > 0 && (
+          <span data-testid="bell-count"
                   style={{ position: 'absolute', top: 3, right: 3, minWidth: 15,
                            height: 15, borderRadius: 999, background: '#dc2626', color: '#fff',
                            fontSize: 9, fontWeight: 600, fontFamily: MONO, display: 'flex',
                            alignItems: 'center', justifyContent: 'center', padding: '0 3px',
                            boxShadow: '0 0 0 2px #fff' }}>{notifs.unread}</span>
+            )}
           </div>
           <a title="Help" data-testid="help-btn" href="/app/help"
              style={{ width: 34, height: 34, borderRadius: 8, border: `1px solid ${T.border}`,

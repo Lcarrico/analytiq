@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · Sprint R31S2 · Epic E2 (home polish) · R31S2E2-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · R32 · Sprint R32S1 · Epic E1 (governance overview) · R32S1E1-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R31 · Sprint R31S1 · Sprint R31S2 · Epic E2 (home polish) · R31S2E2-US1  ← next story (closes R31)
+**Current position:** R31 · Sprint R31S1 · R32 · Sprint R32S1 · Epic E1 (governance overview) · R32S1E1-US1  ← next story (PRD Phase 3 begins)
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -297,9 +297,9 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R31S1E3-US1 onboarding ×4 (branding/start-mode/source-health/template picker) [was R28S1E3] ✅ (branding wizard w/ live-preview swatches persisting through PUT /api/branding; 5 starting-mode cards; source-health preview over the REAL profiling path (connection→governance run→cataloged tables, latest-run reuse); data-aware template picker seeding the workbench; register→onboarding flow wired — UI 132/132 · backend 423/423, 2026-07-05)
 - [x] R31S1 sprint regression recorded: backend 423/423 · UI 132/132 (2026-07-05) — SPRINT R31S1 CLOSED (3/3)
 - [x] R31S2E1-US1 activity page (DEP /api/activity; +View-all links ×2) [was R22S1E2, full carry] ✅ (server/activity.py typed projection over audit_logs — kind buckets, cursor pagination, entity links; /app/activity page w/ filter pills + timeline anatomy + Load more; View-all links in Home header AND drawer footer; ▾ glyph → svg per the emoji gate — UI 134 · backend 425/425, 2026-07-05)
-- [ ] R31S2E2-US1 home polish deltas (bell-at-zero hidden + r18 contract migrated; ring thresholds; thumbs; usage mini-chart) [NEW, ch10 §2–7]
-- [ ] R31S2 sprint regression recorded
-- [ ] R31 release regression + zero-key boot recorded
+- [x] R31S2E2-US1 home polish deltas (bell-at-zero hidden + r18 contract migrated; ring thresholds; thumbs; usage mini-chart) [NEW, ch10 §2–7] ✅ (bell badge unmounts at zero + r15s1/r18s1 contracts migrated; health values state-colored + donut threshold; review widget amber count/dot bullets/bottom link; viewed thumbs; usage w/w delta + 7-bar chart from new server daily series; captions 12.5 — UI 135/135 · backend 425/425, 2026-07-05)
+- [x] R31S2 sprint regression recorded: backend 425/425 · UI 135/135 (2026-07-05) — SPRINT R31S2 CLOSED (2/2)
+- [x] R31 release regression + zero-key boot recorded: backend 425/425 · UI 135/135 · boot check PASSED — 8 services local, shell 200 (2026-07-05) — RELEASE R31 CLOSED (5/5 stories)
 
 ## Release R32 — PRD Phase 3: Governance & data trust (pending)
 ### Milestone UP-C — Trust surfaces at parity
@@ -374,6 +374,19 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - UI: `npm run test:ui` (native) / chunked: `bash /tmp/ui_chunks.sh reset` then repeat
 - Build: `npm run build` · Lint wall: `npm run lint:tokens` · Parity scoreboard: `npm run test:parity`
 - Zero-key boot: `python3 server/app.py` → `/api/platform/status` all `local`
+
+## Session stop note (2026-07-05, UI Parity session 7)
+RELEASE R31 CLOSED — all 5 stories (PRD Phase 2 complete): standalone auth +
+register wizard, auth states ×4, onboarding ×4 (real branding/profiling
+substrates), activity page (new /api/activity typed projection), home polish
+(bell-at-zero, health coding, review anatomy, thumbs, usage series). Gates:
+backend 425/425 · UI 135/135 · zero-key boot 8 services local + shell 200.
+23/64 stories done; releases R30+R31 fully closed.
+Next: RELEASE R32 (PRD Phase 3 — governance & semantic): R32S1E1 governance
+overview KPI cards (DEP: counts aggregate if absent — check /api/governance
+endpoints first), then queue/diff/rules/lineage/manifests, then R32S2
+semantic ×3. S05/S13 retire in this release (their vocab-ledger entries and
+eslint grandfather lines go with them).
 
 ## Session stop note (2026-07-05, UI Parity session 6)
 R31S1 E1+E2 shipped: standalone /login + /register 4-step wizard over the

@@ -15,7 +15,9 @@ test('shell renders sidebar groups, breadcrumbs and topbar', async ({ page }) =>
   // frame's `acme-retail / <area>` format (was a shell strip w/ raw path).
   await expect(page.getByTestId('breadcrumbs')).toContainText('acme-retail / artifacts');
   await expect(page.getByTestId('topbar')).toBeVisible();
-  await expect(page.getByTestId('bell-count')).toBeVisible();
+  // R31S2E2-US1: the badge unmounts at zero unread (PRD ch10 §2.1) — the
+  // bell itself is the stable marker
+  await expect(page.getByTestId('bell')).toBeVisible();
 });
 
 test('sidebar collapses to an icon rail and back', async ({ page }) => {

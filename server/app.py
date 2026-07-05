@@ -7697,8 +7697,19 @@ def home_summary():
     if current_role() in ('admin', 'owner'):
         used = one('SELECT COALESCE(SUM(tokens),0) AS t FROM task_dispatches')['t']
         included = PLANS[_current_plan()]['tokens']
+        # R31S2E2: 7-day series + w/w delta for the frame's usage mini chart
+        daily = [one("SELECT COALESCE(SUM(tokens),0) AS t FROM task_dispatches "
+                     "WHERE date(created_at) = date('now', ?)", (f'-{d} days',))['t']
+                 for d in range(6, -1, -1)]
+        this_wk = one("SELECT COALESCE(SUM(tokens),0) AS t FROM task_dispatches "
+                      "WHERE created_at >= datetime('now', '-7 days')")['t']
+        last_wk = one("SELECT COALESCE(SUM(tokens),0) AS t FROM task_dispatches "
+                      "WHERE created_at >= datetime('now', '-14 days') "
+                      "AND created_at < datetime('now', '-7 days')")['t']
+        wow = round((this_wk - last_wk) / last_wk * 100) if last_wk else None
         usage = {'tokens_used': used,
-                 'pct': round(used / included * 100, 2) if included else 0}
+                 'pct': round(used / included * 100, 2) if included else 0,
+                 'daily': daily, 'wow_delta': wow}
 
     return jsonify({'greeting': f'Good morning, {first}', 'date_line': date_line,
                     'recents': recents, 'health': health, 'runs': runs,

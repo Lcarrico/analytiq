@@ -18,7 +18,7 @@ test('mention raises the bell badge; drawer lists it; mark-all clears', async ({
   await expect(drawer).toBeVisible();
   await expect(drawer.getByText(/mentioned you/).first()).toBeVisible();
   await drawer.getByTestId('mark-all-read').click();
-  await expect(page.getByTestId('bell-count')).toHaveText('0');
+  await expect(page.getByTestId('bell-count')).toHaveCount(0);   // R31S2E2: unmounts at zero
 });
 
 test('team page invites members and shows seat usage', async ({ page }) => {

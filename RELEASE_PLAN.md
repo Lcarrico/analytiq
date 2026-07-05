@@ -1472,7 +1472,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
   - Touches: `server/activity.py` (new), `server/app.py` (route wire), `client/src/screens/Activity.jsx` (new), `client/src/screens/Home.jsx`, `client/src/components/Shell.jsx` (drawer footer), `client/src/routes.js`, tests above · Deps: none · DoD: +PAR-1 App Home frame 02
 
 #### Epic R31S2E2 — Home polish deltas (NEW, ch10 §2–7)
-- [ ] **R31S2E2-US1** — bell badge hidden at zero (+ migrate the r18 "badge stays mounted at 0" contract, cite); data-health values color-coded + ring thresholds (amber <85); awaiting-review widget (amber count, colored dot bullets, bottom link); recently-viewed 34×16 thumbs; usage w/w delta + 7-bar mini chart; varied artifact previews + mono timestamps; empty-state captions 12.5/#64748b
+- [x] **R31S2E2-US1** — bell badge hidden at zero (+ migrate the r18 "badge stays mounted at 0" contract, cite); data-health values color-coded + ring thresholds (amber <85); awaiting-review widget (amber count, colored dot bullets, bottom link); recently-viewed 34×16 thumbs; usage w/w delta + 7-bar mini chart; varied artifact previews + mono timestamps; empty-state captions 12.5/#64748b ✅ 2026-07-05 (spec r31s2_home_polish · usage.daily + wow_delta added server-side from task_dispatches)
   - Touches: `client/src/screens/Home.jsx`, `client/src/components/Shell.jsx`, `tests/ui/r31s2_home_polish.spec.js`, migrate `tests/ui/r18s1_*`/`r22s1_home` expectations (cite) · Deps: none · DoD: +PAR-1 App Home frame 01 full
 
 #### Sprint R31 regression gates
