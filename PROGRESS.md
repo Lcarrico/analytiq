@@ -375,6 +375,21 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - Build: `npm run build` · Lint wall: `npm run lint:tokens` · Parity scoreboard: `npm run test:parity`
 - Zero-key boot: `python3 server/app.py` → `/api/platform/status` all `local`
 
+## Session stop note (2026-07-05, UI Parity session 2)
+Sprint R30S1 CLOSED (4/4: pricing lock · library cards+rail+⋯ · Frame-02
+table · artifact detail w/ 8 routed tabs + PATCH rename + S10 tombstone;
+gate: backend 419/419 · UI 97/97). R30S2 underway: E1 session topbar +
+forced rail (flows migrated) and E2 chat parity (status lines, Review-your-
+plan card, clarify chips, agent tiles, follow-ups) both shipped green.
+Suites at stop: backend 419/419 · UI 103/103 · build + lint green.
+Next story R30S2E3-US1 (center states: building event log + 9 stage chips +
+PII banner + SKIP TO RESULT, then US2 canvas toolbar/filters/human formatting
+and US3 section-select) — the program's largest story; start it fresh.
+Env additions this session: git index relocated OFF the mount
+(GIT_INDEX_FILE=/tmp/analytiq.index — mount zero-truncates large index
+writes; corrupt index recovered via same-dir rename + reset); root
+analytiq.db* untracked + gitignored.
+
 ## Session stop note (2026-07-05, UI Parity session 1)
 R30S1 E1–E3 shipped green: pricing data hotfix (3-test ch02 lock) · library card
 grid + rail + ⋯ menus (13 legacy specs migrated w/ citations; 2 flake classes
