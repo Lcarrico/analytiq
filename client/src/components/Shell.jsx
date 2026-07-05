@@ -253,6 +253,11 @@ function SideItem({ item, collapsed }) {
 export default function Shell({ children }) {
   const role = useRole();
   const [collapsed, setCollapsed] = useState(false);
+  // R30S2E1: the workbench keeps the icon-only rail (approved deviation,
+  // Reconciliation (e)) and swaps the workspace topbar for its own session
+  // topbar — Shell renders rail-only chrome on /app/create/* routes.
+  const isWorkbench = useLocation().pathname.startsWith('/app/create');
+  const railOnly = collapsed || isWorkbench;
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifs, setNotifs] = useState({ unread: 0, notifications: [] });   // R18S1E1
@@ -276,15 +281,15 @@ export default function Shell({ children }) {
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f7f8fa' }}>
       <aside data-testid="app-sidebar"
-             style={{ width: collapsed ? 64 : 240, flexShrink: 0, background: T.sidebarBg,
+             style={{ width: railOnly ? 64 : 240, flexShrink: 0, background: T.sidebarBg,
                       borderRight: `1px solid ${T.border}`, display: 'flex',
                       flexDirection: 'column', transition: 'width .15s' }}>
-        <LogoRow collapsed={collapsed} />
+        <LogoRow collapsed={railOnly} />
         {/* R21S2E1 — frame group anatomy: labeled navs, spacer, bottom group */}
         <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
           {NAV_GROUPS.map((g, gi) => (
             <div key={g.label || 'top'}>
-              {g.label && !collapsed && (
+              {g.label && !railOnly && (
                 <div data-testid="nav-group-label"
                      style={{ padding: '12px 22px 4px 22px', fontSize: 9.5, fontWeight: 600,
                               fontFamily: MONO, textTransform: 'uppercase',
@@ -292,7 +297,7 @@ export default function Shell({ children }) {
               )}
               <nav style={{ padding: gi === 0 ? '14px 12px 8px 12px' : '4px 12px',
                             display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {g.items.map(item => <SideItem key={item.to} item={item} collapsed={collapsed} />)}
+                {g.items.map(item => <SideItem key={item.to} item={item} collapsed={railOnly} />)}
               </nav>
             </div>
           ))}
@@ -300,7 +305,8 @@ export default function Shell({ children }) {
           <div data-testid="nav-bottom-group"
                style={{ borderTop: '1px solid #eef1f5', padding: '8px 12px 4px',
                         display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {NAV_BOTTOM.map(item => <SideItem key={item.to} item={item} collapsed={collapsed} />)}
+            {NAV_BOTTOM.map(item => <SideItem key={item.to} item={item} collapsed={railOnly} />)}
+            {!isWorkbench && (
             <div data-testid="sidebar-collapse" onClick={() => setCollapsed(!collapsed)}
                  role="button" aria-label="Collapse sidebar"
                  style={{ display: 'flex', alignItems: 'center', gap: 10, height: 32,
@@ -309,13 +315,15 @@ export default function Shell({ children }) {
                           justifyContent: collapsed ? 'center' : 'flex-start' }}>
               <Icon name="Collapse" size={14}
                     style={collapsed ? { transform: 'rotate(180deg)' } : undefined} />
-              {!collapsed && 'Collapse'}
+              {!railOnly && 'Collapse'}
             </div>
+            )}
           </div>
         </div>
       </aside>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        {!isWorkbench && (
         <header data-testid="topbar"
                 style={{ height: 64, flexShrink: 0, background: '#fff',
                          borderBottom: `1px solid ${T.border}`, display: 'flex',
@@ -395,6 +403,7 @@ export default function Shell({ children }) {
             )}
           </div>
         </header>
+        )}
 
         {/* R21S2E3 — crumb belongs to PageHeader now (frame pattern) */}
         <main style={{ flex: 1, overflowY: 'auto', padding: '28px 32px' }}>

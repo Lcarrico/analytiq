@@ -4,8 +4,9 @@
 // fully in E2/E3 (canvas + inspector); this story owns chat + plan + kickoff.
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { api } from '../api';
-import { Btn, StatusBadge } from '../components/ui';
+import { api, auth } from '../api';
+import { Avatar, Btn, StatusBadge } from '../components/ui';
+import { ShareModal } from './Artifacts';   // interim — canonical modal R30S3E4
 import BuildCanvas from '../components/BuildCanvas';
 import Inspector from '../components/Inspector';
 import { FONT, MONO, P } from '../tokens';
@@ -76,6 +77,14 @@ export default function Workbench() {
   const pendingQ = useRef(null);                 // original ambiguous question
   const [params] = useSearchParams();            // R22S1E1-US2 hero seed
   const seeded = useRef(false);
+  // R30S2E1 — session topbar state: last-save stamp ticks; share modal
+  const [lastSaved, setLastSaved] = useState(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [, forceTick] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => forceTick(n => n + 1), 5000);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ block: 'end' }); }, [msgs]);
 
@@ -106,6 +115,7 @@ export default function Workbench() {
     setMsgs(m => [...m, { role: 'user', text: message }]);
     try {
       const p = await api.planSession({ message });
+      setLastSaved(Date.now());                      // R30S2E1 autosave stamp
       if (p.needs_clarification) {
         pendingQ.current = message;
         setMsgs(m => [...m, { role: 'ai', text: p.question || 'Quick check —',
@@ -155,6 +165,7 @@ export default function Workbench() {
       const run = await api.startPipeline({ sessionId: planMsg.sid });
       setRunId(run.runId);
       setRunStatus('running');
+      setLastSaved(Date.now());
       setMsgs(m => [...m, { role: 'ai', text: 'Plan approved — building your dashboard now.' }]);
     } catch (e) {
       let msg = e.message; try { msg = JSON.parse(e.message)?.error || msg; } catch { /* raw */ }
@@ -164,8 +175,60 @@ export default function Workbench() {
 
   const started = msgs.length > 0 || sessionId;
 
+  // R30S2E1 — session topbar derivations
+  const firstQ = msgs.find(m => m.role === 'user')?.text;
+  const wbTitle = firstQ ? (firstQ.length > 52 ? `${firstQ.slice(0, 52)}…` : firstQ) : 'New analysis';
+  const metric = msgs.find(m => m.plan)?.plan?.target_metric;
+  const savedAgo = lastSaved == null ? null
+    : Math.round((Date.now() - lastSaved) / 1000) < 20 ? 'autosaved just now'
+    : `autosaved ${Math.round((Date.now() - lastSaved) / 60000) || 1}m ago`;
+  const user = auth.user();
+
   return (
-    <div style={{ display: 'flex', gap: 18, height: 'calc(100vh - 150px)' }}>
+    <div style={{ margin: '-28px -32px', height: '100vh', display: 'flex',
+                  flexDirection: 'column', minHeight: 0 }}>
+      {/* ── 56px session topbar (Create Workbench frame; Reconciliation (e)) ── */}
+      <div data-testid="session-topbar"
+           style={{ height: 56, flexShrink: 0, background: '#fff',
+                    borderBottom: `1px solid ${P.border}`, display: 'flex',
+                    alignItems: 'center', gap: 12, padding: '0 20px' }}>
+        <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <span data-testid="wb-title"
+                style={{ fontSize: 13.5, fontWeight: 600, color: P.ink, fontFamily: FONT,
+                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                         maxWidth: 420 }}>{wbTitle}</span>
+          <span data-testid="wb-session-meta"
+                style={{ fontFamily: MONO, fontSize: 9.5, color: P.faint }}>
+            session · {sessionId || 'new'}{metric ? ` · ${metric}` : ''}
+          </span>
+        </div>
+        {started && (
+          <span data-testid="wb-governed">
+            <StatusBadge status="green">GOVERNED</StatusBadge>
+          </span>
+        )}
+        <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
+          {savedAgo && (
+            <span data-testid="wb-autosaved"
+                  style={{ fontFamily: MONO, fontSize: 10, color: P.faint }}>{savedAgo}</span>
+          )}
+          <Btn data-testid="wb-versions" variant="outline" size="sm" disabled
+               title="Version history arrives with the workbench versions panel (R30S3E5)">
+            Versions
+          </Btn>
+          <Btn data-testid="wb-share" size="sm" disabled={!artifact}
+               title={artifact ? 'Share this artifact' : 'Share unlocks once the build completes'}
+               onClick={() => artifact && setShareOpen(true)}>
+            Share
+          </Btn>
+          <span data-testid="wb-avatar">
+            <Avatar initials={(user?.email || 'analyst@acme.com').split('@')[0].slice(0, 2).toUpperCase()}
+                    size={30} />
+          </span>
+        </span>
+      </div>
+
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', gap: 18, padding: 18 }}>
       {/* chat column */}
       <div style={{ width: started ? 420 : '100%', display: 'flex', flexDirection: 'column',
                     transition: 'width .15s' }}>
@@ -267,6 +330,10 @@ export default function Workbench() {
         </div>
       )}
       {artifact && <Inspector artifact={artifact} runId={runId} />}
+      </div>
+      {shareOpen && artifact && (
+        <ShareModal artifact={artifact} onClose={() => setShareOpen(false)} />
+      )}
     </div>
   );
 }

@@ -18,8 +18,14 @@ test('sidebar reaches all 13 areas at their mockup routes', async ({ page }) => 
   for (const [label, route] of expected) {
     await page.getByTestId('app-sidebar').getByRole('link', { name: label, exact: true }).click();
     await expect.poll(() => at(page), { timeout: 5000 }).toBe(route);
-    // every area renders inside the shell (topbar persists), never a 404
-    await expect(page.getByTestId('topbar')).toBeVisible();
+    // every area renders inside the shell, never a 404 — the workspace topbar
+    // persists everywhere EXCEPT /app/create/*, which carries the dedicated
+    // session topbar instead (R30S2E1-US1, Reconciliation (e))
+    if (route.startsWith('/app/create')) {
+      await expect(page.getByTestId('session-topbar')).toBeVisible();
+    } else {
+      await expect(page.getByTestId('topbar')).toBeVisible();
+    }
     await expect(page.getByTestId('notfound-page')).toHaveCount(0);
   }
 });
