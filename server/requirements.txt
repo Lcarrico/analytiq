@@ -1,11 +1,23 @@
+# ── Core API ──────────────────────────────────────────────
 flask>=3.0.0
 flask-cors>=4.0.0
 flask-limiter>=3.5.0
-psycopg2-binary>=2.9.0
-cryptography>=42.0.0
-redis>=5.0.0
-resend>=1.0.0
-stripe>=7.0.0
+
+# ── Security / credentials ────────────────────────────────
+cryptography>=42.0.0          # Fernet encryption of warehouse credentials
+
+# ── Integrations (all optional at runtime — the platform
+#    boots zero-key with every service in local mode) ──────
+resend>=1.0.0                 # transactional email (logs to stdout if unset)
+stripe>=7.0.0                 # billing endpoints
+redis>=5.0.0                  # rate-limiter storage (falls back to in-memory)
+croniter>=2.0.0               # artifact schedule cron parsing
+requests>=2.31.0              # outbound webhooks / share delivery
+psycopg2-binary>=2.9.0        # PostgreSQL *source* connector introspection
+google-cloud-bigquery>=3.20.0 # BigQuery source connector
+
+# ── Production serving (Docker image) ─────────────────────
 gunicorn>=22.0.0
-croniter>=2.0.0
-google-cloud-bigquery>=3.20.0
+
+# ── Development & tests ───────────────────────────────────
+pytest>=8.0.0

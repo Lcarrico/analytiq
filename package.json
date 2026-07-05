@@ -7,12 +7,14 @@
   ],
   "scripts": {
     "dev": "concurrently -n server,client -c cyan,magenta \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": ".venv\\Scripts\\python.exe server/app.py",
+    "dev:server": "python server/app.py",
+    "dev:server:win": ".venv\\Scripts\\python.exe server/app.py",
     "dev:client": "npm run dev --workspace=client",
     "build": "npm run build --workspace=client -- --emptyOutDir=false",
+    "test:server": "python -m pytest tests/",
     "test:ui": "bash tests/ui/run_ui.sh",
-    "lint:tokens": "eslint client/src",
-    "test:parity": "bash tests/ui/parity/run_parity.sh"
+    "test:parity": "bash tests/ui/parity/run_parity.sh",
+    "lint:tokens": "eslint client/src"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",

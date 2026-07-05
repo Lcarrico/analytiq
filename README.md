@@ -1,138 +1,196 @@
-# AnalytIQ MVP
+# AnalytIQ
 
 Full-stack agentic analytics platform. Ask a business question in plain English → get a backtested, governed, shareable predictive dashboard.
 
-## Stack
+| Layer     | Tech                                                        |
+|-----------|-------------------------------------------------------------|
+| Frontend  | React 18 + Vite 5 + Recharts + react-router (`client/`)     |
+| Backend   | Python / Flask, single app + ~45 domain modules (`server/`) |
+| Database  | **SQLite** (WAL) — zero setup, auto-created + demo-seeded   |
+| Realtime  | Server-Sent Events for live governance/pipeline progress    |
+| Tests     | pytest (~440 backend) + Playwright (~150 UI)                |
 
-| Layer    | Tech                                                  |
-|----------|-------------------------------------------------------|
-| Frontend | React 18 + Vite 5 + Recharts                          |
-| Backend  | Python / Flask                                        |
-| Database | PostgreSQL via `psycopg2` (connection pool)            |
-| Realtime | Server-Sent Events (SSE) for live progress            |
+Everything runs locally with **no API keys and no external services** — email, auth,
+queue, search, storage, etc. all boot in local mode.
 
-## Prerequisites
+---
 
-- Python ≥ 3.10
-- Node.js ≥ 18 + npm ≥ 9
-- PostgreSQL ≥ 14
+## 1. First-time setup
 
-## Quick start
+Prerequisites: **Python ≥ 3.10**, **Node.js ≥ 18** (npm ≥ 9). No database server needed.
 
 ```bash
-# 0. Create the PostgreSQL database
-createdb analytiq_dev
+git clone <repo-url> analytiq
+cd analytiq
 
-# 1. Python dependencies
+# Python dependencies (a venv is recommended)
+python -m venv .venv
+# Windows:  .venv\Scripts\activate      macOS/Linux:  source .venv/bin/activate
 pip install -r server/requirements.txt
 
-# 2. Node dependencies (React + Vite + Recharts)
-npm install                        # root (installs concurrently)
-npm install --workspace=client     # React + Vite + Recharts
-
-# 3. Start both servers
-npm run dev
+# Node dependencies (root tooling + client workspace)
+npm install
+npm install --workspace=client
 ```
 
-Open **http://localhost:5173**
+That's it. The SQLite database (`analytiq.db`) is created and seeded with demo data
+(a connection, a completed governance run, sample artifacts) the first time the
+server starts — you can click around every screen immediately.
 
-- Python API runs on **:3001**
-- Vite dev server on **:5173** (proxies `/api/*` to Flask automatically)
+## 2. Development — run the two servers independently
 
-## Or run servers individually
+Use **two terminals** so you can restart the Flask server without killing Vite
+(and vice versa). This is the recommended workflow:
 
 ```bash
-# Terminal 1
-python server/app.py
+# Terminal 1 — Flask API on http://localhost:3001
+python server/app.py         # (activate the venv first)
 
-# Terminal 2
-npm run dev --workspace=client
+# Terminal 2 — Vite dev server on http://localhost:5173
+npm run dev:client
 ```
 
-## Demo data
+Open **http://localhost:5173**. Vite proxies `/api/*` to Flask automatically
+(SSE streams included), and hot-reloads the client on every save. Restart
+Terminal 1 whenever you change server code; the client keeps running.
 
-On first launch Flask auto-seeds the database with:
-- 1 Snowflake connection
-- 1 completed governance run (47 tables, 183 definitions)
-- 3 workspace artifacts (the first has full chart data)
-
-Navigate to any screen immediately — no need to run the full flow first.
-
-## Full user flow
-
-```
-Screen 01  Workspace home       → "Start your first analysis"
-Screen 02  Connect data source  → pick Snowflake, enter credentials
-Screen 03  Governance run       → live SSE progress (4 steps)
-Screen 04  Table health         → DQ gate badges, health bars
-Screen 05  Semantic review      → accept / edit / reject definitions
-Screen 06  Conversational       → chat + metric cards + sparklines
-Screen 07  Spec confirmation    → plain-English summary before run
-Screen 08  Pipeline execution   → live SSE log (4 steps + log lines)
-Screen 09  Dashboard artifact ★ → KPI row + CI chart + lineage footer
-Screen 10  Artifact list        → share modal (Viewer / Editor / Owner)
-```
-
-## API reference
-
-| Method | Path                           | Description                    |
-|--------|--------------------------------|--------------------------------|
-| GET    | /api/health                    | Health check                   |
-| GET    | /api/connections               | List connections               |
-| POST   | /api/connections               | Create connection              |
-| POST   | /api/governance/run            | Start governance (→ SSE runId) |
-| GET    | /api/governance/stream/:id     | SSE progress stream            |
-| GET    | /api/governance/:id            | Get run state                  |
-| GET    | /api/tables/:runId             | Cataloged tables               |
-| GET    | /api/semantic/:runId           | Semantic definitions           |
-| PATCH  | /api/semantic/:id              | Accept / edit / reject         |
-| POST   | /api/sessions                  | Create analysis session        |
-| POST   | /api/pipeline/run              | Start pipeline (→ SSE runId)   |
-| GET    | /api/pipeline/stream/:id       | SSE progress + log stream      |
-| GET    | /api/pipeline/:id              | Get run state                  |
-| GET    | /api/artifacts                 | List artifacts                 |
-| POST   | /api/artifacts                 | Save artifact                  |
-| GET    | /api/artifacts/:id/chart       | Chart data + KPIs              |
-| GET    | /api/artifacts/:id/shares      | List shares                    |
-| POST   | /api/artifacts/:id/shares      | Add share                      |
-| DELETE | /api/artifacts/:id/shares/:sid | Remove share                   |
-
-## Database
-
-PostgreSQL database: `analytiq_dev` (default).
-Set `DATABASE_URL` to override (e.g. `postgresql://user:pass@host/db`).
-
-To reset to demo data, drop and recreate the database:
+Convenience alternatives:
 
 ```bash
-dropdb analytiq_dev
-createdb analytiq_dev
-python server/app.py   # re-seeds on next start
+npm run dev             # both servers in one terminal via concurrently
+npm run dev:server      # just Flask, via npm (same as python server/app.py)
+npm run dev:server:win  # Windows: uses .venv\Scripts\python.exe explicitly
+start_dev.bat           # Windows double-click helper (runs npm run dev)
 ```
 
-## Docker deployment
+## 3. Testing
+
+Both suites are kept at 100% green — run them before every push.
+
+### Backend (pytest)
 
 ```bash
-docker compose up --build
+python -m pytest tests/                  # full regression (~440 tests, fast)
+python -m pytest tests/test_sprint3.py   # a single file
+python -m pytest tests/ -k "dq_rules"    # by keyword
 ```
 
-Open **http://localhost** — nginx serves the client and proxies `/api/*` to Flask.
+Each test gets a **fresh temp-file SQLite DB** (never your `analytiq.db`), near-zero
+simulation delays, and mirrors results into `tests/logs/` (gitignored).
 
-To stop and remove containers:
+### UI (Playwright)
+
+The UI suite runs against the **built** client, served together with a fresh API by
+`tests/ui/boot_server.py` on port 3111 — so always build first:
 
 ```bash
-docker compose down
+npx playwright install chromium    # once per machine
+npm run build                      # REQUIRED before UI tests after client changes
+npm run test:ui                    # full suite (~150 tests)
+npx playwright test r32s2_semantic # a single spec file
 ```
 
-To also wipe the database volume:
+Notes:
+- Failure traces/screenshots land in `test-results/` (gitignored).
+- `tests/ui/r30s3_vocab.spec.js` is a **source gate**: it scans `client/src` for
+  banned internal vocabulary (snake_case ids, hashes, § citations, stray emoji) per
+  PRD §5.1. If it fails after your change, fix the copy — don't edit the ledger
+  without an owning story.
+
+### Lint
 
 ```bash
-docker compose down -v
+npm run lint:tokens     # eslint over client/src (design-token discipline)
 ```
 
-## Environment
+## 4. Building for production
 
 ```bash
-PORT=3001                                        # Flask port (default 3001)
-DATABASE_URL=postgresql://localhost/analytiq_dev  # PostgreSQL DSN (default)
+npm run build           # → client/dist/ (self-contained static bundle)
 ```
+
+Flask serves the API only; in production nginx (or any static host) serves
+`client/dist/` and proxies `/api/*` to Flask. A ready-made setup exists:
+
+```bash
+docker compose up --build    # nginx on :80 + gunicorn API, SQLite on a volume
+docker compose down          # stop (add -v to also wipe the database volume)
+```
+
+## 5. Everyday recipes
+
+```bash
+# Reset the database (schema + demo data recreated on next server start)
+rm analytiq.db analytiq.db-shm analytiq.db-wal        # Windows: del analytiq.db*
+
+# Slow down / speed up the simulated governance & pipeline runs
+SIM_DELAY_SCALE=0 python server/app.py                 # instant (like tests)
+
+# Point the server at a different database file
+DATABASE_PATH=/tmp/scratch.db python server/app.py
+```
+
+Environment variables are **all optional** — copy `.env.example` to `.env` if you
+want email (Resend), Stripe, Redis rate-limit storage, or credential encryption
+keys. With nothing set, `/api/platform/status` reports all 8 platform services in
+`local` mode and everything still works.
+
+## 6. Project structure
+
+```
+analytiq/
+├─ client/                 # React app (Vite)
+│  └─ src/
+│     ├─ App.jsx           # all routes (see CLAUDE.md for the route map)
+│     ├─ api.js            # every API call goes through here
+│     ├─ tokens.js         # design tokens (P palette, FONT/MONO)
+│     ├─ components/       # ui.jsx kit, Shell, BuildCanvas, Inspector, …
+│     └─ screens/          # one file per surface (Home, Workbench, Artifacts,
+│                          #   Governance*, Semantic*, …; retired screens are
+│                          #   tombstoned rather than deleted — see PROGRESS.md)
+├─ server/
+│  ├─ app.py               # schema + routes + orchestration (single file)
+│  ├─ *.py                 # ~45 domain modules (dq, manifest, semantic_layer,
+│  │                       #   modeler, training, artifact_gen, …)
+│  └─ requirements.txt
+├─ tests/
+│  ├─ test_*.py            # backend suite (pytest, conftest gives fresh DBs)
+│  └─ ui/*.spec.js         # Playwright suite + boot_server.py
+├─ docs/
+│  ├─ specs/mockups/       # *.dc.html frames — the visual source of truth
+│  └─ archive/             # historical prompts, gap analyses, old spec docs
+├─ specs/prd-package/      # the active PRD + supporting audit documents
+├─ RELEASE_PLAN.md         # program tree: releases → sprints → epics → stories
+├─ PROGRESS.md             # per-story progress, current position, stop notes
+├─ CLAUDE.md / AGENTS.md   # deep architecture guide for humans + coding agents
+└─ playwright.config.mjs
+```
+
+## 7. How this repo is being built (read before contributing)
+
+Development follows a **spec-driven TDD program** ("UI Parity & Build-Out Program",
+R30–R36, 64 stories — R30–R32 complete). The loop for every story:
+
+1. Read the story in `RELEASE_PLAN.md` and its mockup frame in `docs/specs/mockups/`.
+2. Write a failing test first (backend and/or UI spec).
+3. Implement until green, then run **both full suites**.
+4. Tick the story in `RELEASE_PLAN.md` + `PROGRESS.md` (with suite counts) and commit.
+
+`PROGRESS.md` always says where work stopped and what's next — start there when
+picking the project up. Honest-UI rule: features are never faked to pass tests;
+unsupported affordances ship disabled with a tooltip naming the story that owns them.
+
+## 8. Troubleshooting
+
+- **Port already in use** — Flask holds :3001, Vite :5173, the UI-test server :3111.
+  Kill strays (`npx kill-port 3001` or Task Manager) and rerun.
+- **UI tests fail with stale-looking pages** — you changed the client but didn't
+  rebuild. `npm run build`, then `npm run test:ui`.
+- **`ModuleNotFoundError` starting the server** — the venv isn't active or deps
+  are stale: `pip install -r server/requirements.txt`.
+- **Weird `git status` after pulling** (hundreds of phantom changes) — this repo is
+  sometimes driven through a synced mount by coding agents; run `git reset` (no
+  flags) once to rebuild your local index. A few zero-byte scratch files
+  (`t.spec.js`, `pw.config.mjs`, `_sync_probe.txt`) may linger on old checkouts —
+  they're gitignored and safe to delete.
+- **Database acting strange** — delete `analytiq.db*` and restart; it reseeds.

@@ -1,27 +1,14 @@
+# AnalytIQ — production-style compose (optional; two-terminal dev is the
+# primary workflow, see README). SQLite lives on a named volume; nginx (web)
+# serves the built client and proxies /api/* to Flask.
 services:
-  db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: analytiq
-      POSTGRES_USER: analytiq
-      POSTGRES_PASSWORD: analytiq
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U analytiq"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
   api:
     build: server
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://analytiq:analytiq@db:5432/analytiq
-    depends_on:
-      db:
-        condition: service_healthy
+      DATABASE_PATH: /data/analytiq.db
+    volumes:
+      - appdata:/data
 
   web:
     build: client
@@ -32,4 +19,4 @@ services:
       - api
 
 volumes:
-  pgdata:
+  appdata:

@@ -1,13 +1,49 @@
+# ── Python ────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# ── Node / client ─────────────────────────────────────────
 node_modules/
-server/data/*.db
-server/data/*.db-shm
-server/data/*.db-wal
 client/dist/
-.env
-*.log
-.DS_Store
 client/vite.config.js.timestamp-*
 client/src/.lint-probe/
+
+# ── SQLite database (recreated + seeded on first launch) ──
 analytiq.db
 analytiq.db-shm
 analytiq.db-wal
+*.db
+*.db-shm
+*.db-wal
+server/data/
+
+# ── Runtime output (written by the local storage service) ─
+storage/
+
+# ── Test output ───────────────────────────────────────────
+tests/logs/
+test-results/
+playwright-report/
+ui-artifacts/
+
+# ── Environment / secrets ─────────────────────────────────
+.env
+.env.local
+
+# ── Editor & per-user tool state ──────────────────────────
+.claude/settings.local.json
+.vscode/
+.idea/
+.DS_Store
+*.log
+nohup.out
+
+# ── Scratch files stranded by a sync quirk (see PROGRESS.md
+#    adaptation ledger — deletion blocked on the dev mount) ─
+_sync_probe.txt
+t.spec.js
+pw.config.mjs
+tests/test_probe_tmp.py
