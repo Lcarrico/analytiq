@@ -18,7 +18,8 @@ test('artifact list offers table view with working column sort', async ({ page, 
 
   await page.goto('/app/artifacts');
   // deterministic regardless of suite history: narrow the list to the stamp
-  await page.getByPlaceholder('Search by title...').fill(`Sort ${stamp}`);
+  // R30S1E2-US1: the frame's single filter input replaced "Search by title..."
+  await page.getByPlaceholder('Filter by name, tag, owner…').fill(`Sort ${stamp}`);
   await expect(page.getByText(`AAA Sort ${stamp}`)).toBeVisible();   // debounce settled
   await page.getByTestId('view-toggle-table').click();
   const table = page.getByTestId('artifacts-table');

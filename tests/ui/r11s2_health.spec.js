@@ -17,5 +17,8 @@ test('artifact list shows dashboard health chips', async ({ page, request }) => 
   await expect(row).toBeVisible();
   const chip = row.getByTestId('health-chip');
   await expect(chip).toBeVisible();
-  await expect(chip).toContainText(String(expected));   // same truth as the API
+  // R30S1E2-US1: the card pill speaks the frame vocabulary (● HEALTHY /
+  // 1 WARNING / NEEDS REVIEW) derived from the same API truth; the numeric
+  // score pill moves to the table view's DATA HEALTH column (R30S1E3).
+  await expect(chip).toContainText(expected >= 60 ? 'HEALTHY' : 'NEEDS REVIEW');
 });

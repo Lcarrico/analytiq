@@ -24,6 +24,8 @@ test('opportunities panel lists suggestions and accepts one into a session', asy
   await page.getByTestId('app-sidebar').getByRole('link', { name: 'Artifacts', exact: true }).click();
   const row = page.locator(`[data-testid="artifact-row-${art.id}"]`);
   await expect(row).toBeVisible();
+  // R30S1E2-US1: row actions moved into the per-card ⋯ menu
+  await row.getByTestId('card-menu-trigger').click();
   await row.getByTestId('opportunities-btn').click();
 
   const panel = page.getByTestId('opportunities-panel');

@@ -24,5 +24,11 @@ test('low-confidence artifact renders flagged, not failed', async ({ page, reque
   await expect(row).toBeVisible();                                   // rendered
   await expect(row.getByTestId('low-confidence-badge')).toBeVisible(); // flagged
   await expect(row.getByTestId('low-confidence-badge')).toContainText('55%');
-  await expect(row.getByText('DQ pass')).toBeVisible();              // not an error state
+  // R30S1E2-US1: the raw "DQ pass" badge became the frame's health-pill
+  // vocabulary (PRD ch13 §1.4) — a low-confidence artifact is flagged as
+  // NEEDS REVIEW (designed review state, not an error): the card still
+  // renders fully (title + type pill present alongside the flag).
+  await expect(row.getByTestId('health-chip')).toContainText('NEEDS REVIEW');
+  await expect(row.getByTestId('type-pill')).toBeVisible();          // not an error state
+  await expect(row.getByTestId('card-title')).toBeVisible();
 });

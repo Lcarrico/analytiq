@@ -1144,7 +1144,12 @@ Mockup: `Marketing Pricing.dc.html` lines 57–123 · PRD: ch02 "Data/content er
 #### Epic R30S1E2 — Library card view + filter rail (`/app/artifacts`, replaces S10 body)
 Mockup: `Artifacts Library.dc.html` Frame 01 · PRD: ch13 §1 (incl. §1.7 extras ruling (d)) · Current: `S10_Artifacts.jsx` — single-column list, ~14 inline buttons incl. `⊙ ROI report`/`⧉ Sandbox`/`Health dashboard` (S10_Artifacts.jsx:325–331), "Deep search (titles + metric names, FTS)…" input (S10_Artifacts.jsx:347 — §5.1 leak)
 
-- [ ] **R30S1E2-US1** — Frame 01 card grid at parity (carried from R22S2E1-US1 + Reconciliation (d))
+- [x] **R30S1E2-US1** — Frame 01 card grid at parity (carried from R22S2E1-US1 + Reconciliation (d)) ✅ 2026-07-04 (spec r30s1_library ×6 green · UI 91/91 · backend 416/416 · parityShot docs/specs/parity/artifacts-library/library.png)
+  - Agent Notes (R30S1E2-US1, 2026-07-04):
+    - ⋯ placement ruling: api.roiReport()/healthDashboard() are workspace-level and sandbox flips the whole list — ROI kept per-artifact per decision (d) wording; Sandbox view + Health dashboard → header-level ⋯. Asserted by r30s1_library "⋯ menus own…".
+    - Migrated w/ citation: r8s1_uas, r8s2_dag, r9s1_parallel, r9s2_sandbox, r11s1_explain, r11s2_replay, r12s1_opportunity, r12s2_monitor, r12s2_roi (+seed), r15s1_router (marker swap), r15s2_components (placeholder swap), r11s1_confidence + r11s2_health (health-pill vocabulary replaces raw DQ/score chips; numeric pill returns in R30S1E3 table).
+    - Root-caused flakes fixed in-screen: health fetch batched to one commit; duplicate mount fetch removed; full spinner only before first data (refetches keep grid mounted).
+    - Legacy R8–R12 panels (provenance/DAG/replay/explain/monitor/opportunities) render inside the owning card with original testids; ShareModal interim (canonical modal = R30S3E4). "Public links" rail facet matches explicit flags only until share state lands in the list payload (R30S3E4).
   - AC:
     - [ ] 220px filter rail: FILTERS checkboxes Created by me / Shared with me / Predictive / Has warnings / Public links / Needs review; divider; FOLDERS list w/ counts; main p `24 28`
     - [ ] Header: h1 "Artifacts {n}" + SINGLE filter input 260×34 + Cards/Table segmented toggle (active `#0f172a` white) + "+ New dashboard" primary; the "Deep search … FTS" input is REMOVED (leak ledger entry closed)

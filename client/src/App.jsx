@@ -22,7 +22,7 @@ import Screen06 from './screens/S06_Analysis';
 import Screen07 from './screens/S07_Confirm';
 import Screen08 from './screens/S08_Pipeline';
 import Screen09 from './screens/S09_Dashboard';
-import Screen10 from './screens/S10_Artifacts';
+import Artifacts from './screens/Artifacts';   // R30S1E2 (S10 retires in R30S1E4)
 import Screen11 from './screens/S11_Account';
 import Screen12 from './screens/S12_Platform';
 import Screen13 from './screens/S13_GovernanceOps';
@@ -37,7 +37,7 @@ const SCREENS = {
   7:  Screen07,
   8:  Screen08,
   9:  Screen09,
-  10: Screen10,
+  10: Artifacts,   // R30S1E2 — Frame 01 library (cards + rail + ⋯ menus)
   11: Screen11,
   12: Screen12,
   13: Screen13,

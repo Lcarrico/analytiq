@@ -3,14 +3,16 @@ import { test, expect } from '@playwright/test';
 
 test('deep link renders the artifacts screen directly', async ({ page }) => {
   await page.goto('/app/artifacts');
-  await expect(page.getByTestId('roi-report-btn')).toBeVisible();   // S10 body
+  // R30S1E2-US1: ROI button moved into ⋯ menus; the view toggle is the
+  // stable always-visible marker of the artifacts screen now.
+  await expect(page.getByTestId('view-toggle-cards')).toBeVisible();
 });
 
 test('browser back returns to the previous route', async ({ page }) => {
   await page.goto('/app/create');
   await expect(page.locator('input').first()).toBeVisible();        // S06 chat input
   await page.goto('/app/artifacts');
-  await expect(page.getByTestId('roi-report-btn')).toBeVisible();
+  await expect(page.getByTestId('view-toggle-cards')).toBeVisible();  // R30S1E2-US1
   await page.goBack();
   await expect(page.locator('input').first()).toBeVisible();
   // R16S1E1 contract change: /app/create self-redirects to the workbench

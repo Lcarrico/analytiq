@@ -18,12 +18,18 @@ test('sandbox artifact hidden by default, visible via toggle, promotable', async
   const row = page.locator(`[data-testid="artifact-row-${art.id}"]`);
   await expect(row).toHaveCount(0);                    // hidden from production
 
+  // R30S1E2-US1: workspace-level actions moved into the header ⋯ menu
+  await page.getByTestId('workspace-menu-trigger').click();
   await page.getByTestId('sandbox-toggle').click();
   await expect(row).toBeVisible();                     // visible in sandbox view
   await expect(row.getByTestId('sandbox-badge')).toBeVisible();
 
+  // R30S1E2-US1: row actions moved into the per-card ⋯ menu
+  await row.getByTestId('card-menu-trigger').click();
   await row.getByTestId('promote-btn').click();        // full gate re-run
   await expect(page.getByText(/Promoted to production/)).toBeVisible();
+  // R30S1E2-US1: workspace-level actions moved into the header ⋯ menu
+  await page.getByTestId('workspace-menu-trigger').click();
   await page.getByTestId('sandbox-toggle').click();    // back to production view
   await expect(row).toBeVisible();                     // now a production artifact
 });

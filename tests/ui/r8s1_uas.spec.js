@@ -24,6 +24,8 @@ test('artifact provenance panel lists the UAS stage chain', async ({ page, reque
   const row = page.locator(`[data-testid="artifact-row-${art.id}"]`);
   await expect(row).toBeVisible();
 
+  // R30S1E2-US1: row actions moved into the per-card ⋯ menu
+  await row.getByTestId('card-menu-trigger').click();
   await row.getByTestId('provenance-btn').click();
   const panel = page.getByTestId('uas-provenance');
   await expect(panel).toBeVisible();

@@ -17,6 +17,8 @@ test('replay drawer steps through DAG nodes with cache citations', async ({ page
   await page.getByTestId('app-sidebar').getByRole('link', { name: 'Artifacts', exact: true }).click();
   const row = page.locator(`[data-testid="artifact-row-${art.id}"]`);
   await expect(row).toBeVisible();
+  // R30S1E2-US1: row actions moved into the per-card ⋯ menu
+  await row.getByTestId('card-menu-trigger').click();
   await row.getByTestId('replay-btn').click();
 
   const drawer = page.getByTestId('replay-drawer');
