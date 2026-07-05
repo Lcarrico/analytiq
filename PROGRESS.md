@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S3 · Epic E8 (vocabulary gate) · R30S3E8-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · Epic E1 (standalone auth) · R31S1E1-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R30 · Sprint R30S3 · Epic E8 (vocabulary gate) · R30S3E8-US1  ← next story, full ACs + tasks in RELEASE_PLAN
+**Current position:** R31 · Sprint R31S1 · Epic E1 (standalone auth) · R31S1E1-US1  ← next story (task elaboration pending Phase 1a — elaborate on pickup)
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -286,9 +286,9 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R30S3E5-US1 version history (topbar-opened; dependency chips; hash leak gone) [was R23S2E5] ✅ (topbar-opened drawer; real artifact_files timeline; human dep chips, zero hashes; append-only Restore endpoint + ?version html for Compare — UI 116/116 · backend 423/423, 2026-07-05)
 - [x] R30S3E6-US1 comments drawer + pins (R18 APIs; contract-lock) [was R23S2E6] ✅ (400px drawer w/ Open/Resolved counts, §-anchor chips, nested replies, real create/reply/resolve over R18 API, Ask-AI-to-apply seeds refine composer + hands off; numbered pins + reply popover on anchored sections; toolbar keeps selection (bug fixed) — UI 117+1skip · backend 423/423, 2026-07-05)
 - [x] R30S3E7-US1 wizard retirement (S06–S09 deleted; routes redirect) [was R23S2E7] ✅ (S06–S09 tombstoned; quick/confirm/run→workbench start, result→library; four planning surfaces PORTED to the chat — warm-start hints, KG-related, assumptions line, reuse candidates; 5 specs migrated w/ citations; id-mapped msg updates root-caused — UI 120/120 · backend 423/423, 2026-07-05)
-- [ ] R30S3E8-US1 forbidden-vocabulary gate (§5.1 kill-list + allowed-until ledger) [NEW]
-- [ ] R30S3 sprint regression recorded (vocabulary suite gating from here)
-- [ ] R30 release regression + zero-key boot recorded
+- [x] R30S3E8-US1 forbidden-vocabulary gate (§5.1 kill-list + allowed-until ledger) [NEW] ✅ (source-level §5.1 gate w/ comment stripping; EXACT-EQUALITY vs the allowed-until ledger — found+ledgered 3 extra (§ citations in S05/S11/S12; stale entries fail too)
+- [x] R30S3 sprint regression recorded (vocabulary suite gating from here): backend 423/423 · UI 121/121 (2026-07-05) — SPRINT R30S3 CLOSED (8/8)
+- [x] R30 release regression + zero-key boot recorded: backend 423/423 · UI 121/121 · boot check PASSED — 8 services local, client shell 200 (2026-07-05) — RELEASE R30 CLOSED (18/18 stories)
 
 ## Release R31 — PRD Phase 2: First-run journey (pending)
 ### Milestone UP-B — Register → onboard → live home

@@ -1425,17 +1425,17 @@ Current: S06_Analysis/S07_Confirm/S08_Pipeline/S09_Dashboard still routed for le
 #### Epic R30S3E8 — Forbidden-vocabulary enforcement (NEW)
 PRD §5.1 — gating suite over the kill-list
 
-- [ ] **R30S3E8-US1** — `tests/ui/r30s3_vocab.spec.js`: child_process grep + rendered-DOM spot checks over the §5.1 kill-list (snake_case section ids, pipeline step ids, `gate:PASS` dumps, ref hashes, spec citations `§N.N`, "PBKDF2", "Agent memory", "FTS", "CENTERPIECE"); allowed-until ledger maps each remaining leak to its owning story (S11:58/:87→R31S1E1 · Inspector.jsx:69→R30S2E4 · BuildCanvas.jsx:162→R30S2E3 · S09:95→R30S3E7); suite GATES from R30S3 close onward, ledger shrinks to zero by R31S1
+- [x] **R30S3E8-US1** — `tests/ui/r30s3_vocab.spec.js`: child_process grep + rendered-DOM spot checks over the §5.1 kill-list (snake_case section ids, pipeline step ids, `gate:PASS` dumps, ref hashes, spec citations `§N.N`, "PBKDF2", "Agent memory", "FTS", "CENTERPIECE"); allowed-until ledger maps each remaining leak to its owning story (S11:58/:87→R31S1E1 · Inspector.jsx:69→R30S2E4 · BuildCanvas.jsx:162→R30S2E3 · S09:95→R30S3E7); suite GATES from R30S3 close onward, ledger shrinks to zero by R31S1 ✅ 2026-07-05 (spec r30s3_vocab · ledger: S11 ×3 → R31S1E1 · S05 → R32S2E1 · S12 → R36S2E4)
   - Tasks — Backend/API: N/A · UI/E2E: <!-- task elaboration pending Phase 1a -->
   - Touches: `tests/ui/r30s3_vocab.spec.js`
   - Story Dependencies: R30S2E4, R30S3E1–E7 (their de-leaks precede the gate flipping strict)
   - DoD: suite green with ledger empty for all landed stories
 
 #### Sprint R30S3 regression gates
-- [ ] Backend full · UI full green (recorded in PROGRESS) · vocabulary suite gating
+- [x] Backend full · UI full green (recorded in PROGRESS) · vocabulary suite gating ✅ backend 423/423 · UI 121/121 (2026-07-05)
 
 ### Release R30 close-out
-- [ ] All 18 stories ✅ · full backend+UI regression + zero-key boot check recorded · PAR-1 flips: Artifacts Library ×3 · Create Workbench ×5 states · Inspector Panels ×7
+- [x] All 18 stories ✅ · full backend+UI regression + zero-key boot check recorded · PAR-1 flips: Artifacts Library ×3 · Create Workbench ×5 states · Inspector Panels ×7 ✅ 2026-07-05 — backend 423/423 · UI 121/121 · boot 8 services local + shell 200
 
 ## Release R31 — PRD Phase 2: First-Run Journey (ch08 · ch09 · ch10)
 
