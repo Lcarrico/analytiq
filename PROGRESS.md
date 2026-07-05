@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · R32 · Sprint R32S2 · Epic E3 (field picker + joins + derived) · R32S2E3-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R33 · Sprint R33S1 · Epic E1 (models) · R33S1E1-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R31 · Sprint R31S1 · R32 · Sprint R32S2 · Epic E3 (field picker + joins + derived) · R32S2E3-US1  ← next story
+**Current position:** R33 · Sprint R33S1 · Epic E1 (models) · R33S1E1-US1  ← next story
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -312,8 +312,8 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R32S1 sprint regression recorded — full suites green at sprint close: backend 433/433 · UI 145/145 (2026-07-05)
 - [x] R32S2E1-US1 semantic overview + explores + explore detail (replaces S05) [was R25S2E1] — done: Semantic.jsx (overview KPI cards + MANIFEST pill + real Regenerate/generate; explores table w/ health/confidence/used-by; explore detail w/ 6 tabs + "Analyze this explore" ?q= seed); `GET /api/semantic/<ws>/summary` + `/explores`; S05 retired (tombstone) w/ ALL panels rehomed to overview (evolution proposals R10S2E5, evidence triage R10S2E6, schema compare R11S2E4); vocab ledger S05 entry pruned; S03/S04 route to /app/semantic. BE 435/435, UI 147/147.
 - [x] R32S2E2-US1 metrics catalog + metric detail + dimensions [was R25S2E2] — done: SemanticCatalog.jsx — metrics catalog (searchable, ×2 CONFLICT amber rows → review diff deep link, DEPRECATED gray rows from real version diff, "+ Calculated metric" real POST), metric detail (plain-English def, §5.6 ADMIN ONLY dark SQL, lineage chips, live DQ-test chips, versions), dimensions catalog (7-way categorizer, collapsible groups, confidence); `GET /api/semantic/<ws>/conflicts`. BE 436/436, UI 150/150.
-- [ ] R32S2E3-US1 field picker + joins + derived tables (DEP bounded preview) [was R25S2E3]
-- [ ] R32S2 sprint regression recorded
+- [x] R32S2E3-US1 field picker + joins + derived tables (DEP bounded preview) [was R25S2E3] — done: SemanticTools.jsx — field picker (3-panel, chips, live `100-row cap · Nms` preview via new DEP `POST /api/semantic/<ws>/preview` seeded-deterministic + cardinality warning + ?q= handoff), join paths (SAFE/FAN-OUT RISK from real join_type; builder null-note; bridge CTA prefills derived editor; sim fk gains null_pct 4.1 → real left join; manifests now carry null_pct), derived tables (dark SQL, real dry_run on POST pdts, publish, FRESH/STALE). BE 440/440, UI 153/153.
+- [x] R32S2 sprint regression recorded — backend 440/440 · UI 153/153 (2026-07-05)
 - [ ] R32 release regression + zero-key boot recorded
 
 ## Release R33 — PRD Phase 4: Prediction & distribution (pending)

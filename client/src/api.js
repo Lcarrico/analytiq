@@ -159,6 +159,7 @@ export const api = {
   semanticGenerate: (cid) => post('/semantic/default/generate', { connectionId: cid }),  // R32S2E1
   semanticConflicts: ()   => get('/semantic/default/conflicts'),        // R32S2E2
   createCalculatedMetric: (body) => post('/semantic/default/metrics/calculated', body),   // R32S2E2
+  semanticPreview:  (body) => post('/semantic/default/preview', body),   // R32S2E3 (DEP bounded)
   reuseCandidates:  (metric) => get(`/reuse_candidates?metric=${encodeURIComponent(metric)}`),
   explainArtifact:  (id)    => get(`/artifacts/${id}/explain`),
   pipelineReplay:   (runId) => get(`/pipeline/${runId}/replay`),

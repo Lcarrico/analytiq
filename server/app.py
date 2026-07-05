@@ -1630,7 +1630,7 @@ SIM_TABLE_COLUMNS = {
     ],
     'fact_sessions': [
         {'name': 'session_id',   'semantic_type': 'id'},
-        {'name': 'customer_id',  'semantic_type': 'id'},
+        {'name': 'customer_id',  'semantic_type': 'id', 'null_pct': 4.1},
         {'name': 'duration_sec', 'semantic_type': 'measure'},
     ],
     'dim_customer': [
@@ -4164,6 +4164,69 @@ def semantic_summary(ws):
     })
 
 
+# R32S2E3: per-dimension cardinality heuristics for the field picker.
+DIM_CARDINALITY = {'week': 52, 'month': 12, 'quarter': 4, 'date': 365, 'day': 365,
+                   'region': 4, 'state': 50, 'store': 42, 'name': 42, 'city': 60,
+                   'segment': 5, 'tier': 3, 'channel': 4, 'category': 12,
+                   'status': 5, 'id': 1000}
+
+
+def _dim_card(name):
+    for key, n in DIM_CARDINALITY.items():
+        if key in name.lower():
+            return n
+    return 8
+
+
+@app.post('/api/semantic/<ws>/preview')
+def semantic_preview(ws):
+    """R32S2E3 (DEP): bounded, read-only, deterministic field-picker preview.
+    No warehouse round-trip — rows are seeded from the field selection so the
+    same picks always preview identically. 100-row cap enforced."""
+    t0 = time.time()
+    b = request.get_json() or {}
+    dims, measures = b.get('dimensions') or [], b.get('measures') or []
+    if not dims and not measures:
+        return jsonify({'error': 'Pick at least one dimension or measure'}), 400
+    row = _latest_schema_row(ws)
+    if not row:
+        return jsonify({'error': 'No semantic schema found'}), 404
+    cubes = json.loads(row['schema_json']).get('cubes', [])
+    known_d = {d['name'] for c in cubes for d in c.get('dimensions', [])}
+    known_m = {m['name'] for c in cubes for m in c.get('measures', [])}
+    bad = [f for f in dims if f not in known_d] + [f for f in measures if f not in known_m]
+    if bad:
+        return jsonify({'error': f"Unknown fields: {', '.join(bad)}"}), 400
+
+    series = 1
+    for d in dims:
+        series *= _dim_card(d)
+    seed = sum(ord(ch) for ch in ''.join(dims + measures)) or 42
+    rand = seeded_rng(seed)
+    n_rows = min(100, max(4, series))
+    rows = []
+    for i in range(n_rows):
+        r_ = []
+        for d in dims:
+            card = _dim_card(d)
+            if any(k in d.lower() for k in ('week', 'month', 'date', 'day', 'quarter')):
+                r_.append(f'2026-W{26 - (i % card) % 52:02d}')
+            else:
+                r_.append(f'{d.split("_")[0]}-{int(rand() * card) + 1}')
+        for m in measures:
+            base = 1000 + (sum(ord(ch) for ch in m) % 9000)
+            r_.append(round(base * (0.6 + rand() * 0.8), 2))
+        rows.append(r_)
+    warning = None
+    if series > 500:
+        warning = (f'{series:,} series across {len(dims)} dimensions — '
+                   'consider a Top-N before charting this.')
+    return jsonify({'columns': dims + measures, 'rows': rows,
+                    'row_count': len(rows), 'capped': True,
+                    'elapsed_ms': round((time.time() - t0) * 1000, 1),
+                    'series_estimate': series, 'warning': warning})
+
+
 @app.get('/api/semantic/<ws>/conflicts')
 def semantic_conflicts(ws):
     """R32S2E2: conflicted vocabulary — a pending low-confidence definition
@@ -4295,6 +4358,19 @@ def create_pdt(ws):
     sql = _pdt_sql_ok(b.get('sql'))
     if not sql:
         return jsonify({'error': 'sql must be a single SELECT statement'}), 400
+    if b.get('dry_run'):
+        # R32S2E3: validate + count without persisting — temp materialization
+        db = get_db()
+        try:
+            tmp = f'pdt_dryrun_{name}'
+            db.execute(f'DROP TABLE IF EXISTS "{tmp}"')
+            db.execute(f'CREATE TABLE "{tmp}" AS {sql}')
+            n = db.execute(f'SELECT COUNT(*) FROM "{tmp}"').fetchone()[0]
+            db.execute(f'DROP TABLE "{tmp}"')
+            db.commit()
+        except Exception as exc:
+            return jsonify({'error': f'SQL failed: {exc}', 'valid': False}), 400
+        return jsonify({'valid': True, 'row_count': n, 'dry_run': True})
     if one('SELECT id FROM pdts WHERE workspace_id=? AND name=?', (ws, name)):
         return jsonify({'error': f'PDT {name!r} already exists'}), 400
     db = get_db()
