@@ -375,6 +375,18 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - Build: `npm run build` · Lint wall: `npm run lint:tokens` · Parity scoreboard: `npm run test:parity`
 - Zero-key boot: `python3 server/app.py` → `/api/platform/status` all `local`
 
+## Session stop note (2026-07-05, UI Parity session 3)
+R30S2E3 shipped whole (US1 building telemetry · US2 canvas toolbar/filters/
+human formatting · US3 section selection + floating toolbar). Suites at stop:
+backend 419/419 · UI 107/107 · build + lint green. 9 of 64 stories done.
+Next: R30S2E4-US1 (inspector design tab + tab-set ruling + overflow fix +
+§5.3 cite removal) closes Sprint R30S2 → run the sprint gate. Then R30S3
+(7 panel epics + vocab gate) closes Release R30 → release gate + zero-key boot.
+New env note: this sandbox's Chromium mis-maps PW click coordinates when a
+transform:scale ancestor/sibling shares the scroll container — pattern in
+tests/ui/r30s2_canvas.spec.js (assert visible+stable, then domClick dispatch);
+svg <line> needs count/attr assertions (zero-area box).
+
 ## Session stop note (2026-07-05, UI Parity session 2)
 Sprint R30S1 CLOSED (4/4: pricing lock · library cards+rail+⋯ · Frame-02
 table · artifact detail w/ 8 routed tabs + PATCH rename + S10 tombstone;
