@@ -74,7 +74,7 @@ function MenuItem({ children, onClick, testid, danger, mono }) {
   );
 }
 
-function ShareModal({ artifact, onClose }) {
+export function ShareModal({ artifact, onClose }) {   // R30S1E4: shared with ArtifactDetail (canonical modal = R30S3E4)
   const [shares,  setShares]  = useState([]);
   const [email,   setEmail]   = useState('');
   const [role,    setRole]    = useState('Viewer');
@@ -268,7 +268,8 @@ export default function Artifacts() {
   const goPage = (pg) => fetchArtifacts(q, pg, sandboxView);
   const refresh = () => fetchArtifacts(q, page, sandboxView);
 
-  const openArtifact = (a) => { update({ artifactId: a.id }); nav(9); };
+  // R30S1E4: the library opens the dedicated detail surface
+  const openArtifact = (a) => { update({ artifactId: a.id }); navigate(`/app/artifacts/${a.id}`); };
   const loadOpps = async (id) => {
     const r = await api.opportunities(id);
     setOpps(r.opportunities); setOppFor(id);

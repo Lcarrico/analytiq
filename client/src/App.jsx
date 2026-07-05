@@ -22,7 +22,8 @@ import Screen06 from './screens/S06_Analysis';
 import Screen07 from './screens/S07_Confirm';
 import Screen08 from './screens/S08_Pipeline';
 import Screen09 from './screens/S09_Dashboard';
-import Artifacts from './screens/Artifacts';   // R30S1E2 (S10 retires in R30S1E4)
+import Artifacts from './screens/Artifacts';   // R30S1E2
+import ArtifactDetail from './screens/ArtifactDetail';   // R30S1E4
 import Screen11 from './screens/S11_Account';
 import Screen12 from './screens/S12_Platform';
 import Screen13 from './screens/S13_GovernanceOps';
@@ -90,6 +91,7 @@ function Layout() {
         <Route path="/app/team" element={<Team />} />
         <Route path="/app/billing" element={<Billing />} />
         <Route path="/app/create/:sessionId" element={<WorkbenchGuard />} />
+        <Route path="/app/artifacts/:id" element={<ArtifactDetail />} />  {/* R30S1E4 */}
         {Object.entries(PLACEHOLDERS).map(([path, [title, note]]) => (
           <Route key={path} path={path} element={<Placeholder title={title} note={note} />} />
         ))}

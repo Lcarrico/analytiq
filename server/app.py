@@ -5981,6 +5981,28 @@ def create_artifact():
     search_mod.index_artifact(get_db(), art)
     return jsonify(art), 201
 
+@app.patch('/api/artifacts/<int:id>')
+@require_role('admin', 'analyst')
+def rename_artifact(id):
+    """R30S1E4-US1: the detail page's editable title persists renames
+    (audited + search re-indexed). Title is the only mutable field here."""
+    art = one('SELECT * FROM artifacts WHERE id=?', (id,))
+    if not art:
+        return jsonify({'error': 'Not found'}), 404
+    b = request.get_json() or {}
+    title = (b.get('title') or '').strip()
+    if not title:
+        return jsonify({'error': 'title is required'}), 400
+    execute('UPDATE artifacts SET title=? WHERE id=?', (title, id))
+    row = one('SELECT * FROM artifacts WHERE id=?', (id,))
+    import search as search_mod
+    search_mod.index_artifact(get_db(), row)
+    log_action('artifact.renamed', 'artifact', id,
+               {'from': art['title'], 'to': title})
+    row['tags'] = json.loads(row.pop('tags_json', None) or '[]')
+    return jsonify(row)
+
+
 @app.delete('/api/artifacts/<int:id>')
 @require_role('admin', 'analyst')
 def delete_artifact(id):

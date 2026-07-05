@@ -94,6 +94,8 @@ export const api = {
     return get(`/artifacts${qs ? '?' + qs : ''}`);
   },
   getArtifact:      (id)    => get(`/artifacts/${id}`),
+  renameArtifact:    (id, title) => patch(`/artifacts/${id}`, { title }),   // R30S1E4
+  duplicateArtifact: (id)    => post(`/artifacts/${id}/duplicate`, {}),     // R30S1E4
   getWorkspaceStatus: ()    => get('/workspace/status'),
   createArtifact:   (body)  => post('/artifacts', body),
   deleteArtifact:   (id)    => del(`/artifacts/${id}`),

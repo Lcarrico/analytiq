@@ -19,7 +19,6 @@ export default [
       'client/src/screens/S07_Confirm.jsx',
       'client/src/screens/S08_Pipeline.jsx',
       'client/src/screens/S09_Dashboard.jsx',
-      'client/src/screens/S10_Artifacts.jsx',
       'client/src/screens/S11_Account.jsx',
       'client/src/screens/S12_Platform.jsx',
       'client/src/screens/S13_GovernanceOps.jsx',

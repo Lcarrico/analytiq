@@ -1120,7 +1120,7 @@ Decisions of record for this restructure:
 ### Sprint R30S1 — Pricing data hotfix + Artifacts surfaces (PRD ch02 data · ch13)
 **Sprint Goal:** the factually wrong numbers and the most-visited library surfaces are fixed first.
 #### Sprint Completion Checklist
-- [ ] 4 stories complete · full backend+UI regression green (recorded) · demo: /pricing facts → library cards → table → detail
+- [x] 4 stories complete · full backend+UI regression green (backend 419/419 · UI 97/97, 2026-07-05) · demo: /pricing facts → library cards → table → detail
 
 #### Epic R30S1E1 — Pricing data hotfix (pull-forward)
 Mockup: `Marketing Pricing.dc.html` lines 57–123 · PRD: ch02 "Data/content errors" table + Part I §6 Phase-5 note + §7 · Current: `client/src/screens/Marketing.jsx` `PLANS` (Starter "1 seat/Dashboards", Team "5 seats/1M tokens", Business "25 seats/5M tokens/Audit export", Enterprise "SIEM streaming" — all factually wrong)
@@ -1189,7 +1189,8 @@ Mockup: `Artifacts Library.dc.html` Frame 02 · PRD: ch13 §2 · Current: R15S2 
 #### Epic R30S1E4 — Artifact Detail (`/app/artifacts/:id`, new)
 Mockup: `Artifacts Library.dc.html` Frame 03 · PRD: ch13 §3 (tab distribution; CENTERPIECE kill) · Current: S09_Dashboard.jsx wizard result view (`Centerpiece` badge at S09_Dashboard.jsx:95) + S10 detail affordances mixing model/DQ/lineage internals into one surface
 
-- [ ] **R30S1E4-US1** — detail page at parity (carried from R22S2E3-US1 + ch13 de-leak)
+- [x] **R30S1E4-US1** — detail page at parity (carried from R22S2E3-US1 + ch13 de-leak) ✅ 2026-07-05 (specs r30s1_detail ×4 + test_r30s1_detail ×3 green · UI 97/97 · backend 419/419)
+  - Agent Notes (R30S1E4-US1): backend deviation — added `PATCH /api/artifacts/<id>` {title} (audited `artifact.renamed`, search re-indexed) because the editable-title AC needs persistence; RED-first in `tests/test_r30s1_detail.py`. Gap section derives WEEKLY signed deltas from chart_data (no regional dimension in substrate; mockup says "by region" — revisit with gold dimensional queries). Versions tab renders the truthful single-version row until R30S3E5. S10 tombstoned (mount forbids unlink) + no-import grep lock.
   - AC:
     - [ ] Header block: breadcrumb `artifacts / <folder> / <slug>`; h1 editable title (rename-on-hover dashed affordance); pills ● HEALTHY 96 / PREDICTIVE / v14; meta line owner · refreshed · schedule; actions Open in workbench / Duplicate / Export / Share (primary)
     - [ ] 8-tab strip Dashboard·Insights·Pipeline·Lineage·Model·Versions·Sharing·Activity, routed via `?tab=`
