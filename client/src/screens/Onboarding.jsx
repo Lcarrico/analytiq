@@ -239,7 +239,7 @@ export function OnboardingSourceHealth() {
         // reuse the latest governance run when one exists; otherwise run the
         // REAL profiling path against the demo source
         let runId = null;
-        try { runId = (await api.governanceLatest()).id; } catch { /* none yet */ }
+        try { const l = await api.governanceLatest(); runId = l.run_id ?? l.id; } catch { /* none yet */ }
         if (!runId) {
           const conn = await api.createConnection({ type: 'snowflake', account: 'demo',
                                                     username: 'demo', password: 'demo' });
