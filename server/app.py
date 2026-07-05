@@ -6148,11 +6148,41 @@ def render_artifact(id):
 
 @app.get('/api/artifacts/<int:id>/html')
 def get_artifact_html(id):
-    row = one('SELECT * FROM artifact_files WHERE artifact_id=? ORDER BY version DESC LIMIT 1',
-              (id,))
+    # R30S3E5: optional ?version= fetches a specific history entry (Compare)
+    v = request.args.get('version')
+    if v:
+        row = one('SELECT * FROM artifact_files WHERE artifact_id=? AND version=?', (id, v))
+    else:
+        row = one('SELECT * FROM artifact_files WHERE artifact_id=? ORDER BY version DESC LIMIT 1',
+                  (id,))
     if not row:
         return jsonify({'error': 'Artifact not rendered yet'}), 404
     return Response(row['html'], mimetype='text/html')
+
+
+@app.get('/api/artifacts/<int:id>/versions')
+def list_artifact_versions(id):
+    """R30S3E5-US1: version history for the topbar Versions panel."""
+    if not one('SELECT id FROM artifacts WHERE id=?', (id,)):
+        return jsonify({'error': 'Not found'}), 404
+    return jsonify(many('SELECT version, created_at FROM artifact_files '
+                        'WHERE artifact_id=? ORDER BY version DESC', (id,)))
+
+
+@app.post('/api/artifacts/<int:id>/versions/<int:v>/restore')
+@require_role('admin', 'analyst')
+def restore_artifact_version(id, v):
+    """R30S3E5-US1: append-only restore — vN's html is re-stored as a NEW
+    top version (history is never rewritten); audited."""
+    old = one('SELECT * FROM artifact_files WHERE artifact_id=? AND version=?', (id, v))
+    if not old:
+        return jsonify({'error': 'Version not found'}), 404
+    top = one('SELECT MAX(version) AS m FROM artifact_files WHERE artifact_id=?', (id,))['m']
+    _store_artifact_file(id, top + 1, old['html'],
+                         json.loads(old['validator_json'] or '{}'))
+    log_action('artifact.version_restored', 'artifact', id,
+               {'restored_from': v, 'new_version': top + 1})
+    return jsonify({'version': top + 1, 'restored_from': v})
 
 
 @app.put('/api/branding')

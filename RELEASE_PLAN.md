@@ -1388,7 +1388,7 @@ Mockup: `Inspector Panels.dc.html` + `Artifact Sharing.dc.html` share frame · P
 #### Epic R30S3E5 — Version history panel
 Mockup: `Inspector Panels.dc.html` versions frame · PRD: ch12 versions (§5.1 ref-hash kill) · Current: Versions tab w/ UAS refs incl. hashes (`session_spec v1 233df9cf` style)
 
-- [ ] **R30S3E5-US1** — versions timeline (carried from R23S2E5-US1)
+- [x] **R30S3E5-US1** — versions timeline (carried from R23S2E5-US1) ✅ 2026-07-05 (specs r30s3_versions + test_r30s3_versions ×2 · restore mints a NEW top version per the immutable-append design default)
   - AC:
     - [ ] Opens from the session TOPBAR Versions button (R30S2E1), not a tab; timeline rows: avatar + connector line, `v{n} · current` + time, quoted change summary, dependency chips `sem v12 · gov v8 · model rev_loc_v2`, Restore/Compare actions
     - [ ] Ref-hash leak REMOVED: no content-hash strings user-visible (§5.1)

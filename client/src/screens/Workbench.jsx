@@ -7,6 +7,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { api, auth } from '../api';
 import { Avatar, Btn, StatusBadge } from '../components/ui';
 import ShareModal from '../components/ShareModal';   // R30S3E4 canonical
+import VersionsPanel from '../components/VersionsPanel';   // R30S3E5
 import BuildCanvas from '../components/BuildCanvas';
 import { Logo } from '../components/icons';
 import Inspector from '../components/Inspector';
@@ -138,6 +139,7 @@ export default function Workbench() {
   // R30S2E1 — session topbar state: last-save stamp ticks; share modal
   const [lastSaved, setLastSaved] = useState(null);
   const [shareOpen, setShareOpen] = useState(false);
+  const [versionsOpen, setVersionsOpen] = useState(false);   // R30S3E5
   const [, forceTick] = useState(0);
   useEffect(() => {
     const t = setInterval(() => forceTick(n => n + 1), 5000);
@@ -293,8 +295,9 @@ export default function Workbench() {
             <span data-testid="wb-autosaved"
                   style={{ fontFamily: MONO, fontSize: 10, color: P.faint }}>{savedAgo}</span>
           )}
-          <Btn data-testid="wb-versions" variant="outline" size="sm" disabled
-               title="Version history arrives with the workbench versions panel (R30S3E5)">
+          <Btn data-testid="wb-versions" variant="outline" size="sm" disabled={!artifact}
+               title={artifact ? 'Version history' : 'Versions unlock once the build completes'}
+               onClick={() => artifact && setVersionsOpen(true)}>
             Versions
           </Btn>
           <Btn data-testid="wb-share" size="sm" disabled={!artifact}
@@ -490,6 +493,9 @@ export default function Workbench() {
       </div>
       {shareOpen && artifact && (
         <ShareModal artifact={artifact} onClose={() => setShareOpen(false)} />
+      )}
+      {versionsOpen && artifact && (
+        <VersionsPanel artifact={artifact} onClose={() => setVersionsOpen(false)} />
       )}
     </div>
   );
