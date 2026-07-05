@@ -51,3 +51,19 @@ def test_summary_and_explores(client):
 def test_summary_empty_workspace(client):
     s = client.get('/api/semantic/nonexistent-ws/summary').get_json()
     assert s['exists'] is False and s['explores'] == 0
+
+
+def test_conflicts_endpoint(client):
+    """R32S2E2: conflicted vocabulary — pending def sharing a name with an
+    accepted def, with both ids so the UI can deep-link the diff screen."""
+    cid1 = _governed(client)
+    r1 = client.get('/api/governance/latest').get_json()['run_id']
+    items = client.get(f'/api/reviews/{r1}').get_json()
+    target = next(i for i in items if i['name'] == 'Conversion Rate')
+    client.post(f"/api/reviews/items/{target['id']}", json={'action': 'accept'})
+
+    cid2 = _governed(client)   # second run re-proposes the same names
+    conflicts = client.get('/api/semantic/default/conflicts').get_json()['conflicts']
+    row = next(c for c in conflicts if c['name'] == 'Conversion Rate')
+    assert row['pending_id'] and row['accepted_id']
+    assert 0 < row['pending_confidence'] < 1

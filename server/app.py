@@ -4164,6 +4164,20 @@ def semantic_summary(ws):
     })
 
 
+@app.get('/api/semantic/<ws>/conflicts')
+def semantic_conflicts(ws):
+    """R32S2E2: conflicted vocabulary — a pending low-confidence definition
+    sharing a name with an accepted one; ids included for diff deep links."""
+    rows = many(
+        "SELECT p.id AS pending_id, p.name, p.confidence AS pending_confidence, "
+        "p.explore, a.id AS accepted_id FROM semantic_definitions p "
+        "JOIN semantic_definitions a ON a.name = p.name AND a.status='accepted' "
+        "WHERE p.status='pending' AND p.confidence < ? "
+        "GROUP BY p.name HAVING p.id = MAX(p.id)",
+        (REVIEW_CONFIDENCE_THRESHOLD,))
+    return jsonify({'conflicts': rows})
+
+
 @app.get('/api/semantic/<ws>/explores')
 def semantic_explores(ws):
     """R32S2E1: per-explore rows for the explores list + detail."""

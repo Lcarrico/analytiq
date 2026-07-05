@@ -29,6 +29,7 @@ import Screen03 from './screens/S03_Governance';
 import Screen04 from './screens/S04_TableHealth';
 // R32S2E1: S05 retired — /app/semantic belongs to the semantic layer screens
 import { ExploreDetail, SemanticExplores, SemanticOverview } from './screens/Semantic';
+import { DimensionsCatalog, MetricDetail, MetricsCatalog } from './screens/SemanticCatalog';   // R32S2E2
 // R30S3E7: S06–S09 retired — the workbench owns the whole loop
 import Artifacts from './screens/Artifacts';   // R30S1E2
 import ArtifactDetail from './screens/ArtifactDetail';   // R30S1E4
@@ -102,6 +103,9 @@ function Layout() {
         <Route path="/app/semantic" element={<SemanticOverview />} />  {/* R32S2E1 — replaces S05 */}
         <Route path="/app/semantic/explores" element={<SemanticExplores />} />  {/* R32S2E1 */}
         <Route path="/app/semantic/explores/:name" element={<ExploreDetail />} />  {/* R32S2E1 */}
+        <Route path="/app/semantic/metrics" element={<MetricsCatalog />} />  {/* R32S2E2 */}
+        <Route path="/app/semantic/metrics/:name" element={<MetricDetail />} />  {/* R32S2E2 */}
+        <Route path="/app/semantic/dimensions" element={<DimensionsCatalog />} />  {/* R32S2E2 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}
