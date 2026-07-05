@@ -1125,7 +1125,7 @@ Decisions of record for this restructure:
 #### Epic R30S1E1 — Pricing data hotfix (pull-forward)
 Mockup: `Marketing Pricing.dc.html` lines 57–123 · PRD: ch02 "Data/content errors" table + Part I §6 Phase-5 note + §7 · Current: `client/src/screens/Marketing.jsx` `PLANS` (Starter "1 seat/Dashboards", Team "5 seats/1M tokens", Business "25 seats/5M tokens/Audit export", Enterprise "SIEM streaming" — all factually wrong)
 
-- [ ] **R30S1E1-US1** — the four plan cards state the mockup's facts; restyle waits for R34S1E4
+- [x] **R30S1E1-US1** — the four plan cards state the mockup's facts; restyle waits for R34S1E4 ✅ 2026-07-04 (spec r30s1_pricing_data ×3 green · UI 85/85 · backend 416/416)
   - AC:
     - [ ] Plan data exactly matches the ch02 table: **Starter $0** — `3 seats · 1 source` · `100K tokens` · `5 artifacts` · excluded `— Predictive models` · excluded `— Public share links`; **Team $149** — `10 seats · 3 sources` · `500K tokens/mo` · `Unlimited artifacts` · `Predictive models + model cards` · `Public sharing: links only`; **Business $499** — `2M tokens/mo · overage $8/100K` · `SSO · RLS · full audit log` · `Signed embeds + public links` · `Priority support`; **Enterprise Custom** — `Unlimited seats & sources` · `Custom token pools` · `VPC · private link` · `99.9% SLA · DPA · SOC 2 reports` · `Dedicated success engineer`
     - [ ] Excluded rows render visibly distinct from included rows (em-dash grayed prefix acceptable pre-restyle); none of the retired strings remain anywhere on /pricing: "SIEM streaming", "Dashboards", "1M tokens", "5M tokens", "1 seat", "5 seats", "25 seats", "Audit export"

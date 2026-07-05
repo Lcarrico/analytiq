@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S1 · Epic E1 (pricing hotfix) · R30S1E1-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S1 · Epic E2 (library cards) · R30S1E2-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R30 · Sprint R30S1 · Epic E1 (pricing hotfix) · R30S1E1-US1  ← next story, full ACs + tasks in RELEASE_PLAN
+**Current position:** R30 · Sprint R30S1 · Epic E2 (library cards) · R30S1E2-US1  ← next story, full ACs + tasks in RELEASE_PLAN
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -267,7 +267,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 
 ## Release R30 — PRD Phase 1: Core loop credibility (pending)
 ### Milestone UP-A — The product spine is demo-honest
-- [ ] R30S1E1-US1 pricing data hotfix (ch02 table exact; restyle waits for R34)
+- [x] R30S1E1-US1 pricing data hotfix — ch02 facts live on /pricing; 3-test data lock stays green through R34S1E4 (UI 85/85 · backend 416/416, 2026-07-04)
 - [ ] R30S1E2-US1 library card view + rail; ROI/Sandbox/Health → ⋯ menu (decision (d)) [was R22S2E1]
 - [ ] R30S1E3-US1 library table view (exact columns, sort, ?view=table) [was R22S2E2]
 - [ ] R30S1E4-US1 artifact detail (8 tabs; internals off Dashboard; CENTERPIECE gone) [was R22S2E3]

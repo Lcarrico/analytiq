@@ -1,4 +1,4 @@
-// R23: marketing landing + pricing (PRD §3 shell slice, PLAN.md tokens).
+// R30S1E1 (program R30–R36): marketing landing + pricing — plan data per PRD ch02.
 import { Link } from 'react-router-dom';
 import { FONT, MONO, P } from '../tokens';
 
@@ -8,11 +8,24 @@ const VALUE_CARDS = [
   ['Shareable artifacts', 'Self-contained dashboards, signed links.'],
   ['No SQL required', 'Ask in plain language; gates do the rest.'],
 ];
+// Plan facts are the PRD ch02 table — exact strings; r30s1_pricing_data.spec.js
+// is the regression lock (stays green through the R34S1E4 restyle).
 const PLANS = [
-  ['Starter', '$0', ['1 seat', '100K tokens', 'Dashboards']],
-  ['Team', '$149', ['5 seats', '1M tokens', 'Predictive models', 'Public links']],
-  ['Business', '$499', ['25 seats', '5M tokens', 'SSO + RLS', 'Audit export']],
-  ['Enterprise', 'Custom', ['Unlimited', 'SIEM streaming', 'Dedicated support']],
+  ['Starter', '$0',
+   ['3 seats · 1 source', '100K tokens', '5 artifacts'],
+   ['Predictive models', 'Public share links']],
+  ['Team', '$149',
+   ['10 seats · 3 sources', '500K tokens/mo', 'Unlimited artifacts',
+    'Predictive models + model cards', 'Public sharing: links only'],
+   []],
+  ['Business', '$499',
+   ['2M tokens/mo · overage $8/100K', 'SSO · RLS · full audit log',
+    'Signed embeds + public links', 'Priority support'],
+   []],
+  ['Enterprise', 'Custom',
+   ['Unlimited seats & sources', 'Custom token pools', 'VPC · private link',
+    '99.9% SLA · DPA · SOC 2 reports', 'Dedicated success engineer'],
+   []],
 ];
 
 function Nav() {
@@ -89,7 +102,7 @@ export function Pricing() {
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '56px 28px' }}>
         <h1 style={{ fontSize: 30, fontFamily: FONT, color: P.ink }}>Pricing</h1>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
-          {PLANS.map(([name, price, feats], i) => (
+          {PLANS.map(([name, price, feats, excluded], i) => (
             <div key={name} data-testid={`plan-${name.toLowerCase()}`}
                  style={{ border: `1px solid ${i === 2 ? P.accent : P.border}`, borderRadius: 12,
                           padding: 18 }}>
@@ -101,6 +114,10 @@ export function Pricing() {
               {feats.map(f => (
                 <div key={f} style={{ fontSize: 12.5, fontFamily: FONT, color: P.body,
                                       padding: '3px 0' }}>✓ {f}</div>
+              ))}
+              {excluded.map(f => (
+                <div key={f} style={{ fontSize: 12.5, fontFamily: FONT, color: P.faint,
+                                      padding: '3px 0' }}>— {f}</div>
               ))}
             </div>
           ))}
