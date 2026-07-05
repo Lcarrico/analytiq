@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · Epic E3 (onboarding ×4) · R31S1E3-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · Sprint R31S2 · Epic E1 (activity page) · R31S2E1-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R31 · Sprint R31S1 · Epic E3 (onboarding ×4) · R31S1E3-US1  ← next story
+**Current position:** R31 · Sprint R31S1 · Sprint R31S2 · Epic E1 (activity page) · R31S2E1-US1  ← next story (DEP: GET /api/activity)
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -294,8 +294,8 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 ### Milestone UP-B — Register → onboard → live home
 - [x] R31S1E1-US1 standalone auth + register wizard (+PBKDF2-unreachable AC) [was R28S1E1] ✅ (standalone /login + /register: 420px card on #f2f4f8 stage, labeled fields, forgot link, 3 SSO buttons, magic-link box, 4-step wizard w/ strength meter + role cards + invite chips + first-path rows driving the REAL register→login; S11 rewritten (leaks dead, vocab ledger pruned ×3); R10 memory surface kept behind §5.6 admin affordance + payload shape fixed — UI 124/124 · backend 423/423, 2026-07-05)
 - [x] R31S1E2-US1 auth states ×4 (forgot/verify/SSO callback ×2) [was R28S1E2] ✅ (forgot-password form→sent, verify-email, SSO signing-in auto-advance, no-workspace-access red variant — UI 128/128 · backend 423/423, 2026-07-05)
-- [ ] R31S1E3-US1 onboarding ×4 (branding/start-mode/source-health/template picker) [was R28S1E3]
-- [ ] R31S1 sprint regression recorded
+- [x] R31S1E3-US1 onboarding ×4 (branding/start-mode/source-health/template picker) [was R28S1E3] ✅ (branding wizard w/ live-preview swatches persisting through PUT /api/branding; 5 starting-mode cards; source-health preview over the REAL profiling path (connection→governance run→cataloged tables, latest-run reuse); data-aware template picker seeding the workbench; register→onboarding flow wired — UI 132/132 · backend 423/423, 2026-07-05)
+- [x] R31S1 sprint regression recorded: backend 423/423 · UI 132/132 (2026-07-05) — SPRINT R31S1 CLOSED (3/3)
 - [ ] R31S2E1-US1 activity page (DEP /api/activity; +View-all links ×2) [was R22S1E2, full carry]
 - [ ] R31S2E2-US1 home polish deltas (bell-at-zero hidden + r18 contract migrated; ring thresholds; thumbs; usage mini-chart) [NEW, ch10 §2–7]
 - [ ] R31S2 sprint regression recorded

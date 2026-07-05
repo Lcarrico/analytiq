@@ -82,8 +82,10 @@ test('register: 4-step wizard creates a real account', async ({ page, request })
   await page.getByTestId('path-sample').click();
   await page.getByTestId('reg-create').click();
 
-  // real account: lands in the app, and the API accepts those credentials
-  await expect.poll(() => new URL(page.url()).pathname, { timeout: 8000 }).toBe('/app');
+  // real account: register hands off to onboarding (R31S1E3 flow wiring),
+  // and the API accepts those credentials
+  await expect.poll(() => new URL(page.url()).pathname, { timeout: 8000 })
+    .toBe('/onboarding/workspace');
   const login = await request.post('/api/auth/login',
     { data: { email, password: 'Str0ng-pass-12345' } });
   expect(login.status()).toBe(200);

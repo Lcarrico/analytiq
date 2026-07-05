@@ -183,7 +183,7 @@ export function Register() {
       await api.register({ email: form.email, password: form.password, role: apiRole });
       const r = await api.login({ email: form.email, password: form.password });
       auth.save(r.token, r.user);
-      navigate('/app');
+      navigate('/onboarding/workspace');   // R31S1E3 — register → onboarding flow
     } catch (e) {
       let m = e.message; try { m = JSON.parse(e.message)?.error || m; } catch { /* raw */ }
       setErr(m); setBusy(false);

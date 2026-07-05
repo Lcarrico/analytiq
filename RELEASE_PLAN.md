@@ -1457,7 +1457,7 @@ Mockup: `Auth.dc.html` · PRD ch08 · Current: S11_Account renders sign-in/regis
   - Touches: `client/src/screens/Auth.jsx`, `tests/ui/r31s1_auth_states.spec.js` · Deps: R31S1E1-US1 · DoD: +PAR-1 Auth frames 3–8
 
 #### Epic R31S1E3 — Onboarding ×4 (was R28S1E3)
-- [ ] **R31S1E3-US1** — workspace-branding wizard (5-step header, dropzone, accent swatches, live preview wired to GET/PUT `/api/branding`), starting-mode 5 cards (FASTEST pill), source-health preview (green banner, 4 KPIs, profiled table w/ PII pills, sticky footer), template picker (data-aware rationale + match pills); register step 4 → onboarding → home flow wired
+- [x] **R31S1E3-US1** — workspace-branding wizard (5-step header, dropzone, accent swatches, live preview wired to GET/PUT `/api/branding`), starting-mode 5 cards (FASTEST pill), source-health preview (green banner, 4 KPIs, profiled table w/ PII pills, sticky footer), template picker (data-aware rationale + match pills); register step 4 → onboarding → home flow wired ✅ 2026-07-05 (spec r31s1_onboarding ×4 · r31s1_auth landing migrated to the onboarding hand-off)
   - Touches: `client/src/screens/Onboarding.jsx` (new), `client/src/App.jsx`, `client/src/routes.js`, `tests/ui/r31s1_onboarding.spec.js` · Deps: R31S1E1-US1 · DoD: +PAR-1 Onboarding ×4
 
 ### Sprint R31S2 — Home & activity completion (ch10) <!-- task elaboration pending Phase 1a (E2); E1 detail below -->

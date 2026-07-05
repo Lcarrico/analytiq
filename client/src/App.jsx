@@ -13,6 +13,7 @@ import PublicViewer from './screens/PublicViewer';
 import Billing from './screens/Billing';
 import { Landing, Pricing } from './screens/Marketing';
 import { ForgotPassword, Login, Register, SsoCallback, VerifyEmail } from './screens/Auth';   // R31S1E1/E2 — standalone
+import { OnboardingSourceHealth, OnboardingStart, OnboardingTemplates, OnboardingWorkspace } from './screens/Onboarding';   // R31S1E3
 import { Forbidden, useRole } from './components/roles';
 import { ROUTE_SCREENS } from './routes';
 import Screen02 from './screens/S02_Connect';
@@ -124,6 +125,10 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />  {/* R31S1E2 */}
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/sso/callback" element={<SsoCallback />} />
+          <Route path="/onboarding/workspace" element={<OnboardingWorkspace />} />  {/* R31S1E3 */}
+          <Route path="/onboarding/start" element={<OnboardingStart />} />
+          <Route path="/onboarding/source-health" element={<OnboardingSourceHealth />} />
+          <Route path="/onboarding/templates" element={<OnboardingTemplates />} />
           <Route path="/share/:token" element={<PublicViewer />} />
           <Route path="*" element={<Layout />} />
         </Routes>
