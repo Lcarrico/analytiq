@@ -10,6 +10,7 @@
 // citation are gone (PRD §5.1). Data/Pipeline keep their R16/R17 content until
 // R30S3E1/E2 rebuild them.
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import { StatusBadge, Tabs, Toggle } from './ui';
 import { FONT, MONO, P } from '../tokens';
@@ -66,6 +67,7 @@ function TileGlyph({ mark }) {
 
 export default function Inspector({ artifact, runId, selected, layout, setLayout,
                                     vsTarget, setVsTarget, metric, grain }) {
+  const navigate = useNavigate();
   const [tab, setTab] = useState('Design');
   const [explain, setExplain] = useState(null);
   const [steps, setSteps] = useState([]);
@@ -74,6 +76,14 @@ export default function Inspector({ artifact, runId, selected, layout, setLayout
   const [contracts, setContracts] = useState(null);   // R17S1E1
   const [titleDraft, setTitleDraft] = useState('');
   const [openCard, setOpenCard] = useState(0);         // R30S3E1 accordion
+  const [openStage, setOpenStage] = useState(0);        // R30S3E2 accordion
+  const [stageTech, setStageTech] = useState(false);      // admin detail affordance
+  const [sessionId, setSessionId] = useState(null);     // R30S3E2 fork substrate
+
+  useEffect(() => {
+    if (!runId) return;
+    api.getPipelineRun(runId).then(r => setSessionId(r.session_id)).catch(() => {});
+  }, [runId]);
 
   useEffect(() => {
     if (!artifact) return;
@@ -294,20 +304,100 @@ export default function Inspector({ artifact, runId, selected, layout, setLayout
 
         {tab === 'Pipeline' && (
           <div>
-            {steps.map(s => (
-              <div key={s.id} style={{ border: `1px solid ${P.border}`, borderRadius: 8,
-                                       padding: 10, marginBottom: 8 }}>
-                <div style={{ fontSize: 12.5, fontWeight: 600, fontFamily: FONT, color: P.ink }}>
-                  {s.label}
-                </div>
-                <div style={{ fontSize: 11, fontFamily: MONO, color: P.muted, marginTop: 2 }}>
-                  step {s.step} · {s.node_key}
-                </div>
-              </div>
-            ))}
-            <div style={{ fontFamily: MONO, fontSize: 10.5, color: P.muted }}>
-              {gates.join(' ')}
+            {/* R30S3E2 — run header + gates pill; per-stage detail replaces the
+                raw node ids / gate dump (PRD §5.1) */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <span data-testid="pipeline-run-header"
+                    style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: '.05em',
+                             color: P.muted }}>
+                RUN {runId} · {steps.length} STAGES
+              </span>
+              <span data-testid="all-gates-pill" style={{ marginLeft: 'auto' }}>
+                <StatusBadge status={gatesPass ? 'green' : 'amber'}>
+                  {gatesPass ? 'ALL GATES ✓' : 'GATES PENDING'}
+                </StatusBadge>
+              </span>
             </div>
+            {steps.map((s, idx) => {
+              const open = openStage === idx;
+              const repaired = !!s.flagged;
+              const inputs = (s.input_schema || []).map(c => c.name || c).join(', ') || '—';
+              const outputs = (s.output_schema || []).map(c => c.name || c).join(', ') || '—';
+              return (
+                <div key={s.id} data-testid={`stage-card-${s.step}`}
+                     style={{ border: `1px solid ${P.border}`, borderRadius: 8,
+                              marginBottom: 8, overflow: 'hidden' }}>
+                  <div data-testid="stage-card-header"
+                       onClick={() => setOpenStage(open ? -1 : idx)}
+                       style={{ display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer',
+                                padding: '9px 10px', background: P.tableHeadBg }}>
+                    <span data-testid="stage-circle"
+                          style={{ width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                                   display: 'inline-flex', alignItems: 'center',
+                                   justifyContent: 'center',
+                                   background: repaired ? P.amberBg : P.greenBg }}>
+                      {repaired ? (
+                        <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700,
+                                       color: P.amber }}>!</span>
+                      ) : (
+                        <svg width="10" height="10" viewBox="0 0 9 9">
+                          <path d="m1.5 4.5 2 2 4-4.5" fill="none" stroke={P.green}
+                                strokeWidth="1.5" strokeLinecap="round" />
+                        </svg>
+                      )}
+                    </span>
+                    <span style={{ fontSize: 12.5, fontWeight: 600, fontFamily: FONT,
+                                   color: P.ink, minWidth: 0, overflow: 'hidden',
+                                   textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {s.label}
+                    </span>
+                    {repaired && (
+                      <span style={{ fontFamily: MONO, fontSize: 9.5, color: P.amber }}>1 repair</span>
+                    )}
+                    <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10,
+                                   color: P.faint }}>{open ? '−' : '+'}</span>
+                  </div>
+                  {open && (
+                    <div style={{ padding: '6px 10px 10px' }}>
+                      <Row k="Input" v={inputs} />
+                      <Row k="Gate result"
+                           v={repaired ? `repaired · ${s.flag_reason || 'auto-repair'}` : 'passed · 0 repairs'} />
+                      <Row k="Output" v={outputs} />
+                      {/* PRD §5.6 — technical identifiers only behind the
+                          explicit admin affordance */}
+                      <div data-testid="stage-tech-toggle" onClick={() => setStageTech(o => !o)}
+                           style={{ fontFamily: MONO, fontSize: 9, color: P.faint,
+                                    marginTop: 6, cursor: 'pointer' }}>
+                        technical detail · admin only {stageTech ? '−' : '+'}
+                      </div>
+                      {stageTech && (
+                        <div data-testid="stage-tech-block"
+                             style={{ background: P.bg, border: `1px solid ${P.borderRow}`,
+                                      borderRadius: 6, padding: '8px 10px', fontFamily: MONO,
+                                      fontSize: 9.5, lineHeight: 1.6, color: P.muted,
+                                      marginTop: 4, overflowWrap: 'anywhere' }}>
+                          {s.description || `in: ${inputs} → out: ${outputs}`}
+                        </div>
+                      )}
+                      <button data-testid="fork-from-here" disabled={!sessionId}
+                              title="Forks the session from its confirmed spec (per-stage forking arrives with cached DAG replay)"
+                              onClick={async () => {
+                                try {
+                                  const f = await api.forkSession(sessionId, {});
+                                  if (f?.id) navigate(`/app/create/${f.id}`);
+                                } catch { /* noop */ }
+                              }}
+                              style={{ marginTop: 8, height: 24, padding: '0 10px',
+                                       borderRadius: 7, border: `1px solid ${P.borderStrong}`,
+                                       background: '#fff', color: P.body, fontSize: 11,
+                                       fontFamily: FONT, cursor: 'pointer' }}>
+                        Fork from here
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
 

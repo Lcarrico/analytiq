@@ -1342,7 +1342,7 @@ Mockup: `Inspector Panels.dc.html` data frame · PRD: ch12 data tab (+ §5.2 exp
 #### Epic R30S3E2 — Pipeline audit panel
 Mockup: `Inspector Panels.dc.html` pipeline frame · PRD: ch12 pipeline tab (§5.1 human stage names) · Current: raw step list w/ pipeline step ids
 
-- [ ] **R30S3E2-US1** — Pipeline tab at parity (carried from R23S2E2-US1)
+- [x] **R30S3E2-US1** — Pipeline tab at parity (carried from R23S2E2-US1) ✅ 2026-07-05 (spec r30s3_pipeline ×2 · per-stage forking deferred to cached DAG replay — session-level fork today, noted)
   - AC:
     - [ ] Header "RUN nnnn · 9 STAGES · mm:ss" + ALL GATES ✓ pill
     - [ ] Stage cards: ✓ circle, HUMAN stage names (no `gold_build`/`walk_forward`), duration, repair counts (`!` repaired variant); expandable detail Input/Gate/Output; dark mono block ADMIN-ONLY (role-gated now; flips to technical-detail toggle in R36S3E2 — cite); Fork from here action

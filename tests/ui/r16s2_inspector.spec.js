@@ -20,7 +20,9 @@ test('inspector tabs expose design, pipeline, insights, share and versions', asy
 
   await inspector.getByRole('tab', { name: 'Pipeline' }).click();
   await expect(inspector.getByText('Build gold table & features')).toBeVisible();
-  await expect(inspector.getByText(/min_training_rows:PASS/).first()).toBeVisible();
+  // R30S3E2-US1: the loose gate dump became per-stage Gate-result rows + the
+  // run-level ALL GATES pill (raw `gate:PASS` strings are §5.1 leaks).
+  await expect(inspector.getByTestId('all-gates-pill')).toBeVisible();
 
   // R30S2E4-US1 tab-set ruling: Insights left the workbench strip (they live
   // on the artifact detail page + the R30S3E3 panel); Lineage and Model
