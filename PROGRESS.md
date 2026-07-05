@@ -375,6 +375,20 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - Build: `npm run build` · Lint wall: `npm run lint:tokens` · Parity scoreboard: `npm run test:parity`
 - Zero-key boot: `python3 server/app.py` → `/api/platform/status` all `local`
 
+## Session stop note (2026-07-05, UI Parity session 5)
+RELEASE R30 CLOSED — all 18 stories (PRD Phase 1 complete): pricing lock,
+library cards/table/detail, workbench chrome/chat/center-states/inspector,
+trust contracts, pipeline audit, insights, canonical share modal (+revoke
+endpoint), versions panel (+versions/restore endpoints), comments drawer +
+pins, wizard retirement (R10 surfaces ported into the chat), §5.1 vocabulary
+gate (exact-equality ledger). Gates: backend 423/423 · UI 121/121 · zero-key
+boot 8 services local + shell 200. 18/64 stories done.
+Next: RELEASE R31 (PRD Phase 2) — R31S1E1-US1 standalone auth + register
+wizard (kills S11's three ledgered leaks), then auth states, onboarding ×4,
+then R31S2 activity page (DEP /api/activity) + home polish. R31 sprints are
+marked "task elaboration pending Phase 1a" — elaborate the sprint's task
+chains from the epic ACs on pickup, then RED as usual.
+
 ## Session stop note (2026-07-05, UI Parity session 4)
 R30S2 CLOSED (6/6; gate UI 110/110 · backend 419/419). R30S3 E1–E3 shipped:
 trust-contract accordions (raw gate dump dead) · pipeline audit (RUN header,
