@@ -245,6 +245,7 @@ export const api = {
   addAnnotation:    (id, body) => post(`/artifacts/${id}/annotations`, body),
   addSubscription:  (id, body) => post(`/artifacts/${id}/subscriptions`, body),
   createShareLink:  (id, body) => post(`/artifacts/${id}/share_links`, body),
+  revokeShareLinks: (id)    => post(`/artifacts/${id}/share_links/revoke`, {}),   // R30S3E4
   createEmbedToken: (id, body) => post(`/artifacts/${id}/embed_tokens`, body),
   scanInsights:     (id)    => post(`/artifacts/${id}/insights/scan`),
   insights:         (id)    => get(`/artifacts/${id}/insights`),

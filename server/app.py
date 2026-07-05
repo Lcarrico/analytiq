@@ -6569,6 +6569,22 @@ def create_share_link(id):
                     'expires_in_hours': hours}), 201
 
 
+@app.post('/api/artifacts/<int:id>/share_links/revoke')
+@require_role('admin', 'analyst')
+def revoke_share_links(id):
+    """R30S3E4-US1: the share modal's red "Revoke link" — expiry-based
+    revocation (no schema change), audited; the public route 410s instantly."""
+    if not one('SELECT id FROM artifacts WHERE id=?', (id,)):
+        return jsonify({'error': 'Not found'}), 404
+    n = one("SELECT COUNT(*) AS c FROM share_links WHERE artifact_id=? "
+            "AND (expires_at IS NULL OR expires_at > datetime('now'))", (id,))['c']
+    execute("UPDATE share_links SET expires_at = datetime('now', '-1 hour') "
+            "WHERE artifact_id=? AND (expires_at IS NULL OR expires_at > datetime('now'))",
+            (id,))
+    log_action('share_link.revoked', 'artifact', id, {'revoked': n})
+    return jsonify({'revoked': n})
+
+
 @app.get('/embed/<token>')
 def embed_render(token):
     """R19S1E1: embed render route with server-side allowed_origins

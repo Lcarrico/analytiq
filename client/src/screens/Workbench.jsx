@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { api, auth } from '../api';
 import { Avatar, Btn, StatusBadge } from '../components/ui';
-import { ShareModal } from './Artifacts';   // interim — canonical modal R30S3E4
+import ShareModal from '../components/ShareModal';   // R30S3E4 canonical
 import BuildCanvas from '../components/BuildCanvas';
 import { Logo } from '../components/icons';
 import Inspector from '../components/Inspector';

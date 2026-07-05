@@ -18,7 +18,7 @@ import {
   ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
 import { Avatar, Badge, Btn, Card, KpiCard, Spinner, StatusBadge, Tabs } from '../components/ui';
-import { ShareModal } from './Artifacts';
+import ShareModal from '../components/ShareModal';   // R30S3E4 canonical
 import { FONT, MONO, P } from '../tokens';
 import { api } from '../api';
 

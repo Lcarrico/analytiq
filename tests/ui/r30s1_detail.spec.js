@@ -106,9 +106,9 @@ test('share stub, workbench resume, duplicate, library entry', async ({ page, re
   await page.locator(`[data-testid="artifact-row-${art.id}"]`).getByTestId('card-title').click();
   await expect(page).toHaveURL(new RegExp(`/app/artifacts/${art.id}$`));
 
-  // share trigger opens the interim modal (canonical modal = R30S3E4)
+  // R30S3E4-US1: the canonical share modal replaced the interim one
   await page.getByTestId('detail-share').click();
-  await expect(page.getByText('Share artifact')).toBeVisible();
+  await expect(page.getByTestId('share-modal')).toBeVisible();
   await page.getByRole('button', { name: 'Close' }).click();
 
   // duplicate → navigates to the copy's detail page

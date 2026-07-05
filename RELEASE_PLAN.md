@@ -1371,7 +1371,7 @@ Mockup: `Inspector Panels.dc.html` insights frame · PRD: ch12 insights tab · C
 #### Epic R30S3E4 — Share modal (canonical)
 Mockup: `Inspector Panels.dc.html` + `Artifact Sharing.dc.html` share frame · PRD: ch12 share modal · Current: link-only Share tab (R16)
 
-- [ ] **R30S3E4-US1** — 520px share modal (carried from R23S2E4-US1)
+- [x] **R30S3E4-US1** — 520px share modal (carried from R23S2E4-US1) ✅ 2026-07-05 (specs r30s3_share + test_r30s3_share ×2 · PDF/PNG/Slack/Email tiles honestly disabled until R33S2; allow-checkboxes local until viewer scopes land)
   - AC:
     - [ ] VISIBILITY radio-cards Private / Workspace view / Workspace edit / Public signed link (selected style per frame); token URL bar + Copy
     - [ ] DISTRIBUTE 7-tile grid: Embed → embed preview (R33S2E2; until then routes to existing embed settings), HTML, PDF, PNG, Slack, Email, Link

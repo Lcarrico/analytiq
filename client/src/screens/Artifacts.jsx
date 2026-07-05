@@ -16,6 +16,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useApp } from '../context';
 import { Avatar, Badge, Btn, Checkbox, DataTable, PageHeader, Spinner,
          StatusBadge, ViewToggle } from '../components/ui';
+import ShareModalV2 from '../components/ShareModal';   // R30S3E4 canonical
 import { FONT, MONO, P } from '../tokens';
 import { api, auth } from '../api';
 
@@ -74,99 +75,7 @@ function MenuItem({ children, onClick, testid, danger, mono }) {
   );
 }
 
-export function ShareModal({ artifact, onClose }) {   // R30S1E4: shared with ArtifactDetail (canonical modal = R30S3E4)
-  const [shares,  setShares]  = useState([]);
-  const [email,   setEmail]   = useState('');
-  const [role,    setRole]    = useState('Viewer');
-  const [loading, setLoading] = useState(true);
-  const [saving,  setSaving]  = useState(false);
-
-  useEffect(() => {
-    api.getShares(artifact.id).then(setShares).catch(() => {}).finally(() => setLoading(false));
-  }, [artifact.id]);
-
-  const handleAdd = async () => {
-    if (!email.trim()) return;
-    setSaving(true);
-    try {
-      const s = await api.addShare(artifact.id, { email, role });
-      setShares(prev => [...prev, s]);
-      setEmail('');
-    } catch { /* noop */ } finally { setSaving(false); }
-  };
-  const handleRemove = async (shareId) => {
-    try {
-      await api.removeShare(artifact.id, shareId);
-      setShares(prev => prev.filter(s => s.id !== shareId));
-    } catch { /* noop */ }
-  };
-
-  return (
-    <div onClick={onClose}
-         style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,.35)', zIndex: 1000,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div onClick={e => e.stopPropagation()}
-           style={{ background: '#fff', borderRadius: 12, padding: 26, width: 480,
-                    maxWidth: '90vw', border: `1px solid ${P.border}`,
-                    boxShadow: '0 24px 64px rgba(15,23,42,.25)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: P.ink, fontFamily: FONT }}>Share artifact</h2>
-          <button onClick={onClose} aria-label="Close"
-                  style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer',
-                           color: P.muted, lineHeight: 1 }}>×</button>
-        </div>
-        <div style={{ marginBottom: 16, fontSize: 13, color: P.muted, fontFamily: FONT }}>"{artifact.title}"</div>
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: P.body, marginBottom: 8, fontFamily: FONT }}>
-            Add workspace member
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input placeholder="colleague@acme.com" value={email}
-                   onChange={e => setEmail(e.target.value)}
-                   onKeyDown={e => e.key === 'Enter' && handleAdd()}
-                   style={{ flex: 1, height: 36, padding: '0 12px', border: `1px solid ${P.borderStrong}`,
-                            borderRadius: 8, fontSize: 13, outline: 'none', fontFamily: FONT,
-                            boxSizing: 'border-box' }} />
-            <select value={role} onChange={e => setRole(e.target.value)}
-                    style={{ height: 36, padding: '0 10px', border: `1px solid ${P.borderStrong}`,
-                             borderRadius: 8, fontSize: 13, cursor: 'pointer', outline: 'none', fontFamily: FONT }}>
-              <option>Viewer</option><option>Editor</option><option>Owner</option>
-            </select>
-            <Btn size="sm" disabled={saving || !email.trim()} onClick={handleAdd}>
-              {saving ? '…' : 'Add'}
-            </Btn>
-          </div>
-        </div>
-        {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: 16 }}><Spinner /></div>
-        ) : shares.length > 0 && (
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: P.body, marginBottom: 8, fontFamily: FONT }}>Shared with</div>
-            {shares.map(s => (
-              <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                                       padding: '8px 0', borderBottom: `1px solid ${P.borderRow}` }}>
-                <span style={{ fontSize: 13, color: P.body, fontFamily: FONT }}>{s.email}</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Badge xs>{s.role}</Badge>
-                  <button onClick={() => handleRemove(s.id)} aria-label="Remove share"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer',
-                                   color: P.faint, fontSize: 14 }}>×</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        <div style={{ padding: '10px 12px', background: P.bg, borderRadius: 8, fontSize: 12,
-                      color: P.muted, fontFamily: FONT }}>
-          The full share modal (visibility, signed links, distribute) lands with R30S3E4.
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
-          <Btn onClick={onClose}>Done</Btn>
-        </div>
-      </div>
-    </div>
-  );
-}
+// (interim ShareModal removed — canonical modal lives in components/ShareModal.jsx, R30S3E4)
 
 const pillStyle = (bg, fg) => ({
   display: 'inline-flex', alignItems: 'center', height: 17, padding: '0 8px',
@@ -879,7 +788,7 @@ export default function Artifacts() {
         )}
       </div>
 
-      {shareFor && <ShareModal artifact={shareFor} onClose={() => setShareFor(null)} />}
+      {shareFor && <ShareModalV2 artifact={shareFor} onClose={() => setShareFor(null)} />}
     </div>
   );
 }
