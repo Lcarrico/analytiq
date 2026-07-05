@@ -9,6 +9,7 @@ import GoldCatalog from './screens/GoldCatalog';
 import KitGallery from './screens/KitGallery';  // R21S1E2
 import Home from './screens/Home';               // R22S1E1
 import Activity from './screens/Activity';       // R31S2E1
+import Governance from './screens/Governance';   // R32S1E1
 import Team from './screens/Team';
 import PublicViewer from './screens/PublicViewer';
 import Billing from './screens/Billing';
@@ -87,6 +88,7 @@ function Layout() {
       <Routes>
         <Route path="/app" element={<Home />} />  {/* R22S1E1 — replaces S01 */}
         <Route path="/app/activity" element={<Activity />} />  {/* R31S2E1 */}
+        <Route path="/app/governance" element={<Governance />} />  {/* R32S1E1 — admin-gated in-component */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}

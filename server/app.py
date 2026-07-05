@@ -4233,6 +4233,46 @@ def edit_explore(ws, name):
 REVIEW_CONFIDENCE_THRESHOLD = 0.70
 
 
+@app.get('/api/governance/summary')
+def governance_summary():
+    """R32S1E1-US1: the governance overview's KPI aggregate (ch15 §1) —
+    composed from the real substrate; each metric degrades to 0/None rather
+    than failing the card grid."""
+    def safe(fn, default=0):
+        try:
+            return fn()
+        except Exception:
+            return default
+    pend = "SELECT COUNT(*) AS n FROM semantic_definitions WHERE status='pending'"
+    d = {
+        'awaiting_review': safe(lambda: one(pend)['n']),
+        'review_high': safe(lambda: one(
+            "SELECT COUNT(*) AS n FROM semantic_definitions "
+            "WHERE status='pending' AND COALESCE(confidence,1) < 0.7")['n']),
+        'pii_flags': safe(lambda: one(
+            "SELECT COUNT(*) AS n FROM semantic_definitions "
+            "WHERE status='pending' AND LOWER(COALESCE(type,'')) = 'pii'")['n']),
+        'tables_blocked': safe(lambda: one(
+            "SELECT COUNT(DISTINCT subject) AS n FROM alerts "
+            "WHERE LOWER(type) LIKE '%contract%' OR LOWER(type) LIKE '%block%'")['n']),
+        'freshness_breaches': safe(lambda: one(
+            "SELECT COUNT(*) AS n FROM alerts WHERE LOWER(type) LIKE '%fresh%' "
+            "OR LOWER(type) LIKE '%sla%'")['n']),
+        'schema_drift': safe(lambda: one(
+            "SELECT COUNT(*) AS n FROM alerts WHERE LOWER(type) LIKE '%drift%'")['n']),
+        'contract_failures_7d': safe(lambda: one(
+            "SELECT COUNT(*) AS n FROM dq_gate_results WHERE LOWER(status) NOT IN "
+            "('pass','passed') AND created_at >= datetime('now','-7 days')")['n']),
+        'health_score': safe(lambda: (lambda r: int(r['s']) if r and r['s'] is not None else None)(
+            one("SELECT AVG(health_score) AS s FROM health_history "
+                "WHERE run_id = (SELECT MAX(run_id) FROM health_history)")), None),
+        'health_trend': safe(lambda: [int(r['s']) for r in many(
+            "SELECT AVG(health_score) AS s FROM health_history "
+            "GROUP BY run_id ORDER BY run_id DESC LIMIT 12")][::-1], []),
+    }
+    return jsonify(d)
+
+
 @app.get('/api/governance/latest')
 def latest_governance_run():
     """R10S2E6: newest governance run — lets review surfaces deep-link."""

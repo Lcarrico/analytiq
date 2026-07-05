@@ -1486,7 +1486,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [ ] Governance ops page split into 4 designed routes + lineage/manifests/pre-agg; semantic layer's 9 screens live; S13/S05 retired
 
 ### Sprint R32S1 — Governance (ch15 + ch16) <!-- task elaboration pending Phase 1a -->
-- [ ] **R32S1E1-US1** — governance overview KPI cards (clickable, colored counts, health-trend span-2 sparkline). `DEP:` counts aggregate endpoint if absent · Touches: `client/src/screens/Governance.jsx` (new), `server/app.py` · [was R25S1E1]
+- [x] **R32S1E1-US1** — governance overview KPI cards (clickable, colored counts, health-trend span-2 sparkline). `DEP:` counts aggregate endpoint if absent · Touches: `client/src/screens/Governance.jsx` (new), `server/app.py` · [was R25S1E1] ✅ 2026-07-05 (specs r32s1_overview + test_r32s1_governance)
 - [ ] **R32S1E2-US1** — human review queue (tab counts, bulk approve/assign, typed pills CONFLICT/PII/BRIDGE/DRIFT, confidence colors, Accept/Edit/Reject) over R10 triage APIs · [was R25S1E2]
 - [ ] **R32S1E3-US1** — definition-review diff (side-by-side highlights, dark SQL diff w/ green tokens, evidence + affected chips, editable final, "Approve — re-validate N dashboards" + audit-log line) over semantic proposals APIs (:2463–2493) · [was R25S1E3]
 - [ ] **R32S1E4-US1** — DQ rules master-detail replacing S13 raw config 1:1 (rules table w/ toggles + edit panel w/ type dropdown, target/threshold, admin-only custom SQL, block-on-failure) over thresholds/dq-tests APIs · [was R25S1E4]
