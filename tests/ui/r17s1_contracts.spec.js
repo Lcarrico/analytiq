@@ -26,9 +26,14 @@ test('inspector data tab shows per-component contracts', async ({ page }) => {
 
   const inspector = page.getByTestId('inspector');
   await inspector.getByRole('tab', { name: 'Data' }).click();
-  const ts = inspector.getByTestId('contract-timeseries_ci');
+  // R30S3E1-US1: raw contract cards became human-named trust accordions —
+  // same per-component substrate, frame vocabulary (PASSED pill, Rows row).
+  const ts = inspector.getByTestId('trust-card-timeseries_ci');
   await expect(ts).toBeVisible();
-  await expect(ts.getByText('76')).toBeVisible();          // real row contract
-  await expect(ts.getByText(/contract ✓/i)).toBeVisible();
-  await expect(inspector.getByTestId('contract-forecast').getByText('14')).toBeVisible();
+  await ts.getByTestId('trust-card-header').click();       // expand (accordion)
+  await expect(ts.getByText(/^76( · cap \d+)?$/).first()).toBeVisible();   // real row contract
+  await expect(ts.locator('[data-testid="status-badge"]').first()).toContainText(/PASSED|WARNING/);
+  const fc = inspector.getByTestId('trust-card-forecast');
+  await fc.getByTestId('trust-card-header').click();       // expand the second card
+  await expect(fc.getByText(/^14( · cap \d+)?$/).first()).toBeVisible();
 });

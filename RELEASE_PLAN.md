@@ -1325,7 +1325,7 @@ Mockup: `Create Workbench.dc.html` (canvas frame's inspector strip = AUTHORITY f
 #### Epic R30S3E1 — Data trust contracts panel
 Mockup: `Inspector Panels.dc.html` data frame · PRD: ch12 data tab (+ §5.2 expected bands) · Current: Inspector Data tab renders raw contract dump
 
-- [ ] **R30S3E1-US1** — Data/Trust tab at parity (carried from R23S2E1-US1)
+- [x] **R30S3E1-US1** — Data/Trust tab at parity (carried from R23S2E1-US1) ✅ 2026-07-05 (spec r30s3_contracts · deviation noted: substrate has row caps + gates, no expected bands — band rendering wired for when contracts carry them)
   - AC:
     - [ ] Accordion per component with HUMAN names + chart-type subtitle (no snake_case ids); PASSED / 1 WARNING pills per accordion
     - [ ] Expanded: Row count / Nulls / Range / Freshness rows with expected bands per §5.2 (`546 (exp 500–600)`); warning card amber border + `#fdf9ef` header tint

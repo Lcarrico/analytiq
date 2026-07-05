@@ -16,7 +16,9 @@ import { FONT, MONO, P } from '../tokens';
 
 const TABS = ['Design', 'Data', 'Pipeline', 'Lineage', 'Model', 'Comments', 'Share'];
 
+// R30S3E1 — component ids → human names (per-frame vocabulary)
 const HUMAN_TITLES = {
+  kpi_row: 'KPI summary row',
   timeseries_ci: 'Revenue vs forecast · daily',
   forecast: 'Forecast horizon',
   dimension_breakdown: 'Breakdown by location',
@@ -71,6 +73,7 @@ export default function Inspector({ artifact, runId, selected, layout, setLayout
   const [shareUrl, setShareUrl] = useState(null);
   const [contracts, setContracts] = useState(null);   // R17S1E1
   const [titleDraft, setTitleDraft] = useState('');
+  const [openCard, setOpenCard] = useState(0);         // R30S3E1 accordion
 
   useEffect(() => {
     if (!artifact) return;
@@ -228,31 +231,64 @@ export default function Inspector({ artifact, runId, selected, layout, setLayout
 
         {tab === 'Data' && (
           <div>
-            {(contracts?.data_contracts || []).map(dc => (
-              <div key={dc.component_id} data-testid={`contract-${dc.component_id}`}
-                   style={{ border: `1px solid ${P.border}`, borderRadius: 8, padding: 10,
-                            marginBottom: 8 }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: P.ink }}>
-                    {dc.component_id}
-                  </span>
-                  <StatusBadge status={dc.empty_result ? 'amber' : 'green'}>
-                    {dc.empty_result ? 'empty' : 'contract ✓'}
-                  </StatusBadge>
+            <div style={{ fontSize: 11.5, fontFamily: FONT, color: P.muted, marginBottom: 10 }}>
+              Per-component trust contracts — what the data promised, and whether it delivered.
+            </div>
+            {(contracts?.data_contracts || []).map((dc, idx) => {
+              const qc = (contracts?.query_contracts || [])
+                .find(q => q.component_id === dc.component_id);
+              const warn = !!dc.empty_result;
+              const open = openCard === idx;
+              const human = HUMAN_TITLES[dc.component_id]
+                || dc.component_id.replace(/_/g, ' ');
+              const mark = (layout?.sections || []).find(s => s.id === dc.component_id)?.mark || 'line';
+              const range = Object.entries(dc.numeric_ranges)[0];
+              const passCount = gates.filter(g => g.endsWith('PASS')).length;
+              return (
+                <div key={dc.component_id} data-testid={`trust-card-${dc.component_id}`}
+                     style={{ border: `1px solid ${warn ? P.amberBorder : P.border}`,
+                              borderRadius: 8, marginBottom: 8, overflow: 'hidden' }}>
+                  <div data-testid="trust-card-header"
+                       onClick={() => setOpenCard(open ? -1 : idx)}
+                       style={{ display: 'flex', gap: 8, alignItems: 'center', cursor: 'pointer',
+                                padding: '9px 10px',
+                                background: warn ? '#fdf9ef' : P.tableHeadBg }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, fontFamily: FONT, color: P.ink,
+                                   minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis',
+                                   whiteSpace: 'nowrap' }}>
+                      {human} · {['bar', 'area'].includes(mark) ? mark : 'line'}
+                    </span>
+                    <span style={{ marginLeft: 'auto', flexShrink: 0 }}>
+                      <StatusBadge status={warn ? 'amber' : 'green'}>
+                        {warn ? '1 WARNING' : 'PASSED'}
+                      </StatusBadge>
+                    </span>
+                  </div>
+                  {open && (
+                    <div style={{ padding: '6px 10px 10px' }}>
+                      <Row k="Rows" v={`${dc.row_count}${qc?.row_limit ? ` · cap ${qc.row_limit}` : ''}`} />
+                      {range && (
+                        <Row k="Range" v={`${range[1].min} – ${range[1].max} (μ ${range[1].mean})`} />
+                      )}
+                      {qc?.execution_time_ms != null && (
+                        <Row k="Query" v={`${qc.execution_time_ms}ms · validated`} />
+                      )}
+                      <Row k="Freshness" v="this run · SLA 24h" />
+                      <div data-testid="gates-row"
+                           style={{ display: 'flex', gap: 8, padding: '4px 0', fontSize: 12.5,
+                                    fontFamily: FONT }}>
+                        <span style={{ width: 90, flexShrink: 0, fontFamily: MONO, fontSize: 10.5,
+                                       textTransform: 'uppercase', color: P.muted }}>Gates</span>
+                        <span style={{ fontFamily: MONO, fontSize: 11.5,
+                                       color: passCount === gates.length ? P.green : P.amber }}>
+                          {passCount}/{gates.length} passed
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <Row k="Rows" v={String(dc.row_count)} />
-                <Row k="Columns" v={dc.actual_columns.map(c => c.name).join(', ')} />
-                {Object.entries(dc.numeric_ranges).slice(0, 2).map(([col, r]) => (
-                  <Row key={col} k={col} v={`${r.min} – ${r.max} (μ ${r.mean})`} />
-                ))}
-              </div>
-            ))}
-            <div style={{ fontSize: 11, fontFamily: MONO, textTransform: 'uppercase',
-                          color: P.muted, margin: '10px 0 4px' }}>Gate results</div>
-            {gates.map(g => (
-              <div key={g} style={{ fontFamily: MONO, fontSize: 11.5, padding: '2px 0',
-                                    color: g.endsWith('PASS') ? P.green : P.red }}>{g}</div>
-            ))}
+              );
+            })}
           </div>
         )}
 
