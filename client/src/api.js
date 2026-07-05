@@ -76,6 +76,14 @@ export const api = {
   notifications:    ()      => get('/notifications'),
   readAllNotifications: ()  => post('/notifications/read_all', {}),
   postComment:      (id, body) => post(`/artifacts/${id}/comments`, body),
+  getComments:      (id)    => get(`/artifacts/${id}/comments`).then(r => {
+    // R30S3E6 — normalize the nested {comments:[{replies:[]}]} shape to a
+    // flat list (drawer + pins share it)
+    const roots = r.comments || [];
+    return [...roots.map(({ replies, ...c }) => c),
+            ...roots.flatMap(c => c.replies || [])];
+  }),
+  resolveComment:   (cid)   => post(`/comments/${cid}/resolve`, {}),    // R30S3E6
   teamRoster:       ()      => get('/team/roster'),
   createInvites:    (body)  => post('/team/invites', body),
   billingUsage:     ()      => get('/billing/usage'),

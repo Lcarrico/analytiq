@@ -1405,7 +1405,7 @@ Mockup: `Inspector Panels.dc.html` versions frame · PRD: ch12 versions (§5.1 r
 #### Epic R30S3E6 — Comments drawer + inline pins
 Mockup: `Inspector Panels.dc.html` comments frames · PRD: ch12 §6–7 · Current: none (R18 comments APIs exist: inbox :7722, resolve :7714)
 
-- [ ] **R30S3E6-US1** — 400px drawer (Open/Resolved pill counts, section-anchor chips `§ <section>`, nested replies, "Ask AI to apply" + "Convert to request", composer) + numbered inline pins with popover (comment row + resolve + reply)
+- [x] **R30S3E6-US1** — 400px drawer (Open/Resolved pill counts, section-anchor chips `§ <section>`, nested replies, "Ask AI to apply" + "Convert to request", composer) + numbered inline pins with popover (comment row + resolve + reply) ✅ 2026-07-05 (spec r30s3_comments ×2 · Convert-to-request disabled until the opportunities write API; comments payload normalized client-side)
   - AC: drawer opens from canvas toolbar comment icon; threads anchored to sections; resolve round-trips the R18 API; pins render on anchored sections with popover reply; §5.1-clean copy
   - Tasks — Backend/API: N/A — R18 comments contract locked (contract-lock test cites this story)
   - Tasks — UI/E2E: <!-- task elaboration pending Phase 1a --> RED `tests/ui/r30s3_comments.spec.js` → implement drawer + pins → gate

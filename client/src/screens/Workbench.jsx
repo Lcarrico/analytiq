@@ -8,6 +8,7 @@ import { api, auth } from '../api';
 import { Avatar, Btn, StatusBadge } from '../components/ui';
 import ShareModal from '../components/ShareModal';   // R30S3E4 canonical
 import VersionsPanel from '../components/VersionsPanel';   // R30S3E5
+import CommentsDrawer from '../components/CommentsDrawer';   // R30S3E6
 import BuildCanvas from '../components/BuildCanvas';
 import { Logo } from '../components/icons';
 import Inspector from '../components/Inspector';
@@ -140,6 +141,12 @@ export default function Workbench() {
   const [lastSaved, setLastSaved] = useState(null);
   const [shareOpen, setShareOpen] = useState(false);
   const [versionsOpen, setVersionsOpen] = useState(false);   // R30S3E5
+  const [commentsOpen, setCommentsOpen] = useState(false);    // R30S3E6
+  const [comments, setComments] = useState([]);
+  useEffect(() => {
+    if (!artifact) return;
+    api.getComments(artifact.id).then(setComments).catch(() => {});
+  }, [artifact?.id]);
   const [, forceTick] = useState(0);
   useEffect(() => {
     const t = setInterval(() => forceTick(n => n + 1), 5000);
@@ -473,7 +480,9 @@ export default function Workbench() {
                          onArtifact={setArtifact}
                          selected={selectedSection} setSelected={setSelectedSection}
                          vsTarget={vsTarget} setVsTarget={setVsTarget}
-                         layout={layout} setLayout={setLayout} />
+                         layout={layout} setLayout={setLayout}
+                         comments={comments} setComments={setComments}
+                         onOpenComments={() => setCommentsOpen(true)} />
           ) : (
             <div style={{ flex: 1, border: `1px dashed ${P.borderStrong}`, borderRadius: 12,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -496,6 +505,13 @@ export default function Workbench() {
       )}
       {versionsOpen && artifact && (
         <VersionsPanel artifact={artifact} onClose={() => setVersionsOpen(false)} />
+      )}
+      {commentsOpen && artifact && (
+        <CommentsDrawer artifact={artifact} selectedSection={selectedSection}
+                        onChanged={setComments}
+                        onAskAI={(t) => { setCommentsOpen(false);
+                                          setInput(`Apply this feedback: ${t}`); }}
+                        onClose={() => setCommentsOpen(false)} />
       )}
     </div>
   );

@@ -90,7 +90,8 @@ const uglyDefault = (s) =>
 
 export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                                       selected, setSelected, vsTarget, setVsTarget,
-                                      layout, setLayout }) {
+                                      layout, setLayout, comments = [],
+                                      setComments, onOpenComments }) {
   const [dag, setDag] = useState(null);
   const [status, setStatus] = useState('running');
   const [artifact, setArtifact] = useState(null);
@@ -108,6 +109,8 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
   const [device, setDevice] = useState('desktop');
   const [hideForecast, setHideForecast] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
+  const [popFor, setPopFor] = useState(null);        // R30S3E6 pin popover
+  const [popDraft, setPopDraft] = useState('');
 
   useEffect(() => {
     // PII banner tracks the review queue's truth (same substrate as Home)
@@ -322,7 +325,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
         <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12 }}
              onClick={() => setSelected(null)}>
           {/* ── 44px canvas toolbar (frame) ── */}
-          <div data-testid="canvas-toolbar"
+          <div data-testid="canvas-toolbar" onClick={e => e.stopPropagation()}
                style={{ height: 44, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8,
                         border: `1px solid ${P.border}`, borderRadius: 10, background: '#fff',
                         padding: '0 12px', boxSizing: 'border-box', overflowX: 'auto',
@@ -361,6 +364,13 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
             </button>
             {artifact && (
               <>
+                <button data-testid="open-comments" onClick={onOpenComments}
+                        title="Comments"
+                        style={{ border: 'none', background: 'none', cursor: 'pointer',
+                                 color: P.muted, fontSize: 11, fontFamily: FONT }}>
+                  Comments{comments.filter(c => !c.parent_id && !c.resolved).length
+                    ? ` · ${comments.filter(c => !c.parent_id && !c.resolved).length}` : ''}
+                </button>
                 <button onClick={() => window.open(`/api/artifacts/${artifact.id}/export?format=html`, '_blank')}
                         title="Export"
                         style={{ border: 'none', background: 'none', cursor: 'pointer', color: P.muted,
@@ -453,6 +463,70 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                           position: 'relative',
                           boxShadow: selected === s.id ? '0 8px 24px rgba(37,99,235,.13)' : 'none',
                           marginTop: selected === s.id ? 34 : 0, transition: 'margin .1s' }}>
+              {(() => {
+                const anchored = comments.filter(c => !c.parent_id && !c.resolved
+                                                      && c.section_id === s.id);
+                if (!anchored.length) return null;
+                const thread = anchored[0];
+                const threadReplies = comments.filter(c => c.parent_id === thread.id);
+                const pinNo = comments.filter(c => !c.parent_id && !c.resolved)
+                  .findIndex(c => c.id === thread.id) + 1;
+                return (
+                  <span data-menu-root onClick={e => e.stopPropagation()}
+                        style={{ position: 'absolute', top: -10, right: -8, zIndex: 45 }}>
+                    <span data-testid="comment-pin"
+                          onClick={() => setPopFor(popFor === s.id ? null : s.id)}
+                          style={{ width: 26, height: 26, borderRadius: '50% 50% 50% 4px',
+                                   background: P.accent, border: '2.5px solid #fff',
+                                   boxShadow: '0 4px 12px rgba(37,99,235,.4)', color: '#fff',
+                                   fontSize: 10, fontWeight: 700, display: 'inline-flex',
+                                   alignItems: 'center', justifyContent: 'center',
+                                   cursor: 'pointer', fontFamily: FONT }}>
+                      {pinNo}
+                    </span>
+                    {popFor === s.id && (
+                      <div data-testid="comment-popover"
+                           style={{ position: 'absolute', top: 30, right: 0, width: 290,
+                                    background: '#fff', border: `1px solid ${P.border}`,
+                                    borderRadius: 10, padding: 12, zIndex: 60,
+                                    boxShadow: '0 20px 48px rgba(15,23,42,.18)' }}>
+                        <div style={{ fontSize: 12, fontFamily: FONT, color: P.body }}>
+                          <strong style={{ color: P.ink }}>{(thread.author || '?').split('@')[0]}</strong>{' '}
+                          {thread.body}
+                        </div>
+                        {threadReplies.map(r => (
+                          <div key={r.id} style={{ fontSize: 11.5, fontFamily: FONT,
+                                                   color: P.body, marginTop: 6, paddingLeft: 12,
+                                                   borderLeft: `2px solid ${P.borderRow}` }}>
+                            {r.body}
+                          </div>
+                        ))}
+                        <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
+                          <input data-testid="popover-reply-input" value={popDraft}
+                                 onChange={e => setPopDraft(e.target.value)}
+                                 placeholder="Reply…"
+                                 style={{ flex: 1, height: 26, borderRadius: 7, padding: '0 8px',
+                                          border: `1px solid ${P.borderStrong}`, fontSize: 11.5,
+                                          fontFamily: FONT, outline: 'none' }} />
+                          <button data-testid="popover-reply-send" aria-label="Send reply"
+                                  onClick={async () => {
+                                    const t = popDraft.trim();
+                                    if (!t) return;
+                                    setPopDraft('');
+                                    await api.postComment(artifact.id,
+                                      { body: t, parent_id: thread.id, section_id: s.id });
+                                    const list = await api.getComments(artifact.id);
+                                    setComments?.(list);
+                                  }}
+                                  style={{ width: 26, height: 26, borderRadius: 7, border: 'none',
+                                           background: P.accent, color: '#fff',
+                                           cursor: 'pointer', fontSize: 11 }}>»</button>
+                        </div>
+                      </div>
+                    )}
+                  </span>
+                );
+              })()}
               {selected === s.id && (
                 <div data-testid="section-toolbar" onClick={e => e.stopPropagation()}
                      style={{ position: 'absolute', top: -34, left: 8, zIndex: 40, display: 'flex',

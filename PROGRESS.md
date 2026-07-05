@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S3 · Epic E6 (comments drawer + pins) · R30S3E6-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S3 · Epic E7 (wizard retirement) · R30S3E7-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R30 · Sprint R30S3 · Epic E6 (comments drawer + pins) · R30S3E6-US1  ← next story, full ACs + tasks in RELEASE_PLAN
+**Current position:** R30 · Sprint R30S3 · Epic E7 (wizard retirement) · R30S3E7-US1  ← next story, full ACs + tasks in RELEASE_PLAN
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -284,7 +284,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R30S3E3-US1 insights panel (tinted tiles, CONF pills, Investigate→chat) [was R23S2E3] ✅ (auto-detected mono header, tinted tiles, colored mono categories — no snake_case, Investigate seeds a workbench planning turn from drill_question — UI 114/114 · backend 419/419, 2026-07-05)
 - [x] R30S3E4-US1 share modal 520 (visibility cards, 7-tile distribute, advanced) [was R23S2E4] ✅ (canonical 520px modal: 4 visibility cards, real signed-link minting + Copy, 7-tile distribute (Embed/HTML/Link live), advanced expires/password/checkboxes + real Revoke via new expiry-based endpoint; canonical from detail/workbench/library triggers; interim modal removed — backend 421/421, 2026-07-05)
 - [x] R30S3E5-US1 version history (topbar-opened; dependency chips; hash leak gone) [was R23S2E5] ✅ (topbar-opened drawer; real artifact_files timeline; human dep chips, zero hashes; append-only Restore endpoint + ?version html for Compare — UI 116/116 · backend 423/423, 2026-07-05)
-- [ ] R30S3E6-US1 comments drawer + pins (R18 APIs; contract-lock) [was R23S2E6]
+- [x] R30S3E6-US1 comments drawer + pins (R18 APIs; contract-lock) [was R23S2E6] ✅ (400px drawer w/ Open/Resolved counts, §-anchor chips, nested replies, real create/reply/resolve over R18 API, Ask-AI-to-apply seeds refine composer + hands off; numbered pins + reply popover on anchored sections; toolbar keeps selection (bug fixed) — UI 117+1skip · backend 423/423, 2026-07-05)
 - [ ] R30S3E7-US1 wizard retirement (S06–S09 deleted; routes redirect) [was R23S2E7]
 - [ ] R30S3E8-US1 forbidden-vocabulary gate (§5.1 kill-list + allowed-until ledger) [NEW]
 - [ ] R30S3 sprint regression recorded (vocabulary suite gating from here)
