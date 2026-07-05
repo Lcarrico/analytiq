@@ -7706,6 +7706,20 @@ def home_summary():
                     'recently_viewed': viewed, 'usage': usage})
 
 
+@app.get('/api/activity')
+def activity_feed():
+    """R31S2E1-US1: typed activity projection over audit_logs (kind buckets,
+    cursor pagination) for /app/activity."""
+    import activity as act
+    kind = request.args.get('kind') or None
+    cursor = request.args.get('cursor') or None
+    try:
+        limit = max(1, min(100, int(request.args.get('limit', 20))))
+    except ValueError:
+        return jsonify({'error': 'limit must be an integer'}), 400
+    return jsonify(act.project(get_db(), kind=kind, cursor=cursor, limit=limit))
+
+
 @app.get('/api/notifications')
 def list_notifications():
     """R18S1E1: in-app inbox with unread count."""

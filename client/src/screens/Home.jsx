@@ -46,9 +46,16 @@ export default function Home() {
     <div>
       <PageHeader crumb="acme-retail / home" title={d?.greeting || 'Good morning,'}
                   actions={
-                    <span data-testid="home-date"
-                          style={{ fontFamily: MONO, fontSize: 12, color: P.muted }}>
-                      {d?.date_line || ''}
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <a data-testid="home-activity-link" href="/app/activity"
+                         style={{ fontSize: 12, fontWeight: 600, color: P.accentHover,
+                                  fontFamily: FONT }}>
+                        View all activity →
+                      </a>
+                      <span data-testid="home-date"
+                            style={{ fontFamily: MONO, fontSize: 12, color: P.muted }}>
+                        {d?.date_line || ''}
+                      </span>
                     </span>} />
 
       {/* hero prompt bar — the signature element */}

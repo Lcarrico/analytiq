@@ -224,6 +224,12 @@ function NotificationsDrawer({ notifs, onClose, onReadAll }) {
             </div>
           ))}
         </div>
+        <div style={{ padding: '11px 18px', borderTop: '1px solid #eef1f5' }}>
+          <a data-testid="drawer-activity-link" href="/app/activity"
+             style={{ fontSize: 12, fontWeight: 600, color: '#1d4ed8', fontFamily: FONT }}>
+            View all activity →
+          </a>
+        </div>
       </div>
     </div>
   );
