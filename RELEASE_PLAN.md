@@ -1300,7 +1300,7 @@ Mockup: `Create Workbench.dc.html` center frames · PRD: ch11 states + §5.1/§5
 #### Epic R30S2E4 — Inspector Design tab + tab strip (tab-set ruling)
 Mockup: `Create Workbench.dc.html` (canvas frame's inspector strip = AUTHORITY for the in-workbench tab set) + `Inspector Panels.dc.html` (each panel's contents) · PRD: ch11 lists Design·Data·Pipeline·Lineage·Model·Comments·Share; ch12 lists Design·Data·Filters·Pipeline·Lineage·Model — the chapters CONFLICT · Current: `Inspector.jsx` 6 tabs w/ strip overflow bug; "(§5.3)" spec citation at Inspector.jsx:69 (§5.1 leak)
 
-- [ ] **R30S2E4-US1** — Design tab + strip (carried from R23S1E4-US1, **AMENDED: ruling first**)
+- [x] **R30S2E4-US1** — Design tab + strip (carried from R23S1E4-US1, **AMENDED: ruling first**) ✅ 2026-07-05 (spec r30s2_inspector ×3 · UI 110/110 · backend 419/419) — Agent Notes: tab-set ruling recorded — canvas frame authority = Design·Data·Pipeline·Lineage·Model·Comments·Share (ch11 wins, no Filters tab); Versions stays a topbar button; Insights live on the detail page; metric/dimension/grain selects render current values disabled (semantic changes re-plan via chat — sections API only mutates title/position/chart_type/top_n)
   - AC:
     - [ ] **Amendment (tab-set ruling):** FIRST task — open both mockup files; the `Create Workbench.dc.html` canvas frame's inspector strip is the authority for the in-workbench tab set; `Inspector Panels.dc.html` frames define each panel's contents; record the ruled tab set + order in this story's Agent Notes BEFORE writing the RED test; the RED test asserts the ruled set
     - [ ] Tab-strip overflow bug fixed (all tabs visible/reachable at 330px inspector width); Versions is NOT a tab — it moved to the session topbar (R30S2E1)

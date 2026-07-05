@@ -265,14 +265,18 @@ export function StatusBadge({ status = 'gray', children, ...rest }) {
 
 // ── Tabs — underline 12.5px, active 600 #1d4ed8 + 2px #2563eb
 //    (Artifacts Library #artifact-detail 8-tab strip) ──────
-export function Tabs({ tabs, active, onChange }) {
+export function Tabs({ tabs, active, onChange, dense = false }) {
+  // dense (R30S2E4): the workbench inspector fits 7 tabs in a 340px strip —
+  // frame spec padding 7/8, 11px; overflow stays clipped, never past the edge
   return (
-    <div role="tablist" style={{ display: 'flex', gap: 2, borderBottom: `1px solid ${P.border}` }}>
+    <div role="tablist" style={{ display: 'flex', gap: 2, borderBottom: `1px solid ${P.border}`,
+                                 overflow: 'hidden' }}>
       {tabs.map(t => (
         <button key={t} role="tab" aria-selected={active === t} onClick={() => onChange(t)}
                 style={{ border: 'none', borderBottom: `2px solid ${active === t ? P.accent : 'transparent'}`,
-                         background: 'none', cursor: 'pointer', padding: '9px 13px',
-                         fontSize: 12.5, fontFamily: FONT,
+                         background: 'none', cursor: 'pointer',
+                         padding: dense ? '7px 5px' : '9px 13px',   // frame: 10px/5px
+                         fontSize: dense ? 10 : 12.5, fontFamily: FONT, whiteSpace: 'nowrap',
                          fontWeight: active === t ? 600 : 500,
                          color: active === t ? P.accentHover : P.muted, marginBottom: -1 }}>
           {t}

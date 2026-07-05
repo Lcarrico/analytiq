@@ -88,13 +88,14 @@ const HUMAN_TITLES = {
 const uglyDefault = (s) =>
   (s.title || '').toLowerCase().replace(/ /g, '_') === s.id;
 
-export default function BuildCanvas({ runId, sessionMetric, onArtifact }) {
+export default function BuildCanvas({ runId, sessionMetric, onArtifact,
+                                      selected, setSelected, vsTarget, setVsTarget,
+                                      layout, setLayout }) {
   const [dag, setDag] = useState(null);
   const [status, setStatus] = useState('running');
   const [artifact, setArtifact] = useState(null);
   const [rows, setRows] = useState([]);
   const [savedAt, setSavedAt] = useState(null);
-  const [layout, setLayout] = useState(null);        // R16S2E4
   const [renaming, setRenaming] = useState(null);
   const [nameDraft, setNameDraft] = useState('');
   // R30S2E3-US1 — building-state telemetry
@@ -107,8 +108,6 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact }) {
   const [device, setDevice] = useState('desktop');
   const [hideForecast, setHideForecast] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
-  const [vsTarget, setVsTarget] = useState({});
 
   useEffect(() => {
     // PII banner tracks the review queue's truth (same substrate as Home)
@@ -142,7 +141,17 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact }) {
         const sessId = dag?.nodes?.[0]?.run_id ? undefined : undefined;
         const art = await api.saveArtifactFromRun(runId, `${sessionMetric || 'Metric'} Forecast`);
         setArtifact(art);
-        try { setLayout(JSON.parse(art.layout_json || 'null')); } catch { setLayout(null); }
+        // R30S2E4: the lifted layout is the single source of truth — when the
+        // artifact carries none, seed the default two sections here so the
+        // canvas AND the inspector edit the same objects.
+        let parsed = null;
+        try { parsed = JSON.parse(art.layout_json || 'null'); } catch { parsed = null; }
+        setLayout(parsed && parsed.sections ? parsed : {
+          sections: [
+            { id: 'timeseries_ci', title: 'Timeseries Ci', position: 0, mark: 'line' },
+            { id: 'forecast', title: 'Forecast', position: 1, mark: 'line' },
+          ],
+        });
         setSavedAt(new Date());
         onArtifact?.(art);
         const chart = await api.artifactChart(art.id);
@@ -432,8 +441,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact }) {
               </div>
             ))}
           </div>
-          {(layout?.sections || [{ id: 'timeseries_ci', title: 'Timeseries Ci', position: 0 },
-                                  { id: 'forecast', title: 'Forecast', position: 1 }])
+          {(layout?.sections || [])
             .filter(s => ['timeseries_ci', 'forecast', 'dimension_breakdown', 'feature_importance']
               .includes(s.id))
             .sort((a, b) => a.position - b.position)

@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S2 · Epic E4 (inspector design tab) · R30S2E4-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S3 · Epic E1 (data trust contracts) · R30S3E1-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R30 · Sprint R30S2 · Epic E4 (inspector design tab) · R30S2E4-US1  ← next story, full ACs + tasks in RELEASE_PLAN
+**Current position:** R30 · Sprint R30S3 · Epic E1 (data trust contracts) · R30S3E1-US1  ← next story, full ACs + tasks in RELEASE_PLAN
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -277,8 +277,8 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R30S2E3-US1 center states start/empty/building (9 stage chips, PII banner, event log) [was R23S1E3 pt1] ✅ (9 display stages ×3 states, run meta, SKIP pill, PII banner, live event log + admin detail; r16s1_canvas migrated)
 - [x] R30S2E3-US2 canvas state (toolbar h44, filters h40, human titles, chart anatomy) [was R23S1E3 pt2] ✅ (44px toolbar: zoom/device/present/export/lineage/audit + v·saved; 40px filters bar w/ working Hide-forecast chip; human titles + $ KPIs + legend + today divider)
 - [x] R30S2E3-US3 section select (2px blue border + floating dark toolbar) [was R23S1E3-US2] ✅ (selected 2px blue + floating dark toolbar: Rename/chart-type(persisted)/vs-target/Move/⠿) — UI 107/107 · backend 419/419, 2026-07-05
-- [ ] R30S2E4-US1 inspector Design tab + tab-set ruling; overflow fixed; §5.3 cite gone [was R23S1E4]
-- [ ] R30S2 sprint regression recorded
+- [x] R30S2E4-US1 inspector Design tab + tab-set ruling; overflow fixed; §5.3 cite gone [was R23S1E4] ✅ (ruled strip Design·Data·Pipeline·Lineage·Model·Comments·Share; dense tabs fit 340px; Design = live editing panel (rename/6-tile picker/vs-target toggle/validation pills/REPLACE-WITH); §5.3 dead; r16s2_inspector migrated — UI 110/110 · backend 419/419, 2026-07-05)
+- [x] R30S2 sprint regression recorded: backend 419/419 · UI 110/110 (2026-07-05) — SPRINT R30S2 CLOSED (6/6 stories)
 - [ ] R30S3E1-US1 data trust contracts panel (expected bands; gate dump gone) [was R23S2E1]
 - [ ] R30S3E2-US1 pipeline audit panel (human stage names; admin block) [was R23S2E2]
 - [ ] R30S3E3-US1 insights panel (tinted tiles, CONF pills, Investigate→chat) [was R23S2E3]

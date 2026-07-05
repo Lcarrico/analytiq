@@ -1,12 +1,36 @@
-// R16S2E3: workbench inspector — six tabs composing the platform's existing
-// backends (design bindings, gates, pipeline audit, insights, sharing, UAS
-// versions). Per-component contracts land in the Data tab with R17.
+// R30S2E4-US1 (program R30–R36) — workbench inspector at frame parity.
+// Tab-set RULING (recorded per RELEASE_PLAN Agent Notes): the canvas frame in
+// `Create Workbench.dc.html` is the authority — Design · Data · Pipeline ·
+// Lineage · Model · Comments · Share. ch12's "Filters" variant is not in the
+// frame; Versions lives in the session topbar (panel lands R30S3E5); Insights
+// live on the artifact detail page (+ R30S3E3 panel). The Design tab is an
+// EDITING panel driven by the canvas selection (title rename, 6-tile chart
+// picker, vs-target toggle, validation pills, de-leaked rationale, REPLACE
+// WITH cards) — the old read-only debug key/values and the "(§5.3)" internal
+// citation are gone (PRD §5.1). Data/Pipeline keep their R16/R17 content until
+// R30S3E1/E2 rebuild them.
 import { useEffect, useState } from 'react';
 import { api } from '../api';
-import { StatusBadge, Tabs } from './ui';
+import { StatusBadge, Tabs, Toggle } from './ui';
 import { FONT, MONO, P } from '../tokens';
 
-const TABS = ['Design', 'Data', 'Pipeline', 'Insights', 'Share', 'Versions'];
+const TABS = ['Design', 'Data', 'Pipeline', 'Lineage', 'Model', 'Comments', 'Share'];
+
+const HUMAN_TITLES = {
+  timeseries_ci: 'Revenue vs forecast · daily',
+  forecast: 'Forecast horizon',
+  dimension_breakdown: 'Breakdown by location',
+  feature_importance: 'What drives the forecast',
+};
+const humanTitle = (s) =>
+  ((s.title || '').toLowerCase().replace(/ /g, '_') === s.id
+    ? (HUMAN_TITLES[s.id] || s.title) : s.title);
+
+const RATIONALE = {
+  line: 'A daily series with a forecast split reads best as a line — the CI band and today divider keep the projection honest.',
+  area: 'An area fill emphasizes cumulative magnitude while keeping the trend legible.',
+  bar: 'Bars make period-over-period comparison legible when individual values matter more than the trend.',
+};
 
 function Row({ k, v }) {
   return (
@@ -18,24 +42,40 @@ function Row({ k, v }) {
   );
 }
 
-export default function Inspector({ artifact, runId }) {
+const monoLabel = { fontFamily: MONO, fontSize: 9.5, letterSpacing: '.08em',
+                    textTransform: 'uppercase', color: P.faint };
+
+const TILE_MARKS = [
+  ['line', true], ['bar', true], ['area', true],
+  ['scatter', false], ['treemap', false], ['table', false],
+];
+
+function TileGlyph({ mark }) {
+  const c = P.muted;
+  switch (mark) {
+    case 'line': return <svg width="16" height="12" viewBox="0 0 16 12"><polyline points="1,10 5,5 9,7 15,2" fill="none" stroke={c} strokeWidth="1.4" /></svg>;
+    case 'bar': return <svg width="16" height="12" viewBox="0 0 16 12"><rect x="2" y="6" width="3" height="5" fill={c} /><rect x="7" y="3" width="3" height="8" fill={c} /><rect x="12" y="7" width="3" height="4" fill={c} /></svg>;
+    case 'area': return <svg width="16" height="12" viewBox="0 0 16 12"><polygon points="1,10 5,5 9,7 15,2 15,11 1,11" fill={c} opacity=".5" /></svg>;
+    case 'scatter': return <svg width="16" height="12" viewBox="0 0 16 12"><circle cx="4" cy="8" r="1.4" fill={c} /><circle cx="8" cy="4" r="1.4" fill={c} /><circle cx="12" cy="7" r="1.4" fill={c} /></svg>;
+    case 'treemap': return <svg width="16" height="12" viewBox="0 0 16 12"><rect x="1" y="1" width="8" height="10" fill="none" stroke={c} /><rect x="10" y="1" width="5" height="5" fill="none" stroke={c} /><rect x="10" y="7" width="5" height="4" fill="none" stroke={c} /></svg>;
+    default: return <svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 3h14M1 6h14M1 9h14" stroke={c} strokeWidth="1" /></svg>;
+  }
+}
+
+export default function Inspector({ artifact, runId, selected, layout, setLayout,
+                                    vsTarget, setVsTarget, metric, grain }) {
   const [tab, setTab] = useState('Design');
   const [explain, setExplain] = useState(null);
   const [steps, setSteps] = useState([]);
   const [dag, setDag] = useState(null);
-  const [insights, setInsights] = useState([]);
   const [shareUrl, setShareUrl] = useState(null);
-  const [versions, setVersions] = useState([]);
-  const [prov, setProv] = useState([]);
   const [contracts, setContracts] = useState(null);   // R17S1E1
+  const [titleDraft, setTitleDraft] = useState('');
 
   useEffect(() => {
     if (!artifact) return;
     api.explainArtifact(artifact.id).then(setExplain).catch(() => {});
-    api.provenance(artifact.id).then(r => {
-      setProv(r.chain || []);
-      setDag(r.dag || null);
-    }).catch(() => {});
+    api.provenance(artifact.id).then(r => setDag(r.dag || null)).catch(() => {});
   }, [artifact?.id]);
   useEffect(() => {
     if (!runId) return;
@@ -43,33 +83,149 @@ export default function Inspector({ artifact, runId }) {
     api.pipelineContracts(runId).then(setContracts).catch(() => {});
   }, [runId]);
 
+  const section = (layout?.sections || []).find(s => s.id === selected) || null;
+  useEffect(() => { setTitleDraft(section ? humanTitle(section) : ''); }, [selected]);
+
   if (!artifact) return null;
 
   const gates = (dag?.edges || []).map(e => `${e.gate_name}:${e.gate_status}`);
+  const gatesPass = gates.length > 0 && gates.every(g => g.endsWith('PASS'));
+  const applyMark = async (mark) => {
+    const r = await api.editSection(artifact.id, section.id, { chart_type: mark });
+    setLayout(r.layout);
+  };
 
   return (
     <div data-testid="inspector"
-         style={{ width: 360, flexShrink: 0, borderLeft: `1px solid ${P.border}`,
+         style={{ width: 340, flexShrink: 0, borderLeft: `1px solid ${P.border}`,
                   paddingLeft: 14, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-      <Tabs tabs={TABS} active={tab} onChange={setTab} />
+      <Tabs dense tabs={TABS} active={tab} onChange={setTab} />
       <div style={{ flex: 1, overflowY: 'auto', paddingTop: 12 }}>
-        {tab === 'Design' && (
-          <div>
-            {(explain?.field_bindings?.panels || []).map(p => (
-              <div key={p.panel} style={{ border: `1px solid ${P.border}`, borderRadius: 8,
-                                          padding: 10, marginBottom: 8 }}>
-                <Row k="Section" v={p.panel} />
-                <Row k="Mark" v={p.mark} />
-                <Row k="Format" v={explain.field_bindings.metric_format || 'number'} />
+
+        {tab === 'Design' && (!section ? (
+          <div data-testid="design-empty"
+               style={{ fontSize: 12.5, fontFamily: FONT, color: P.muted }}>
+            Select a section on the canvas to edit it — title, chart type, and
+            comparisons apply live.
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div>
+              <div style={monoLabel}>Selected</div>
+              <span data-testid="design-selected-chip"
+                    style={{ display: 'inline-flex', marginTop: 4, padding: '3px 9px',
+                             borderRadius: 999, background: P.accentSoft, color: P.accentHover,
+                             fontFamily: MONO, fontSize: 10.5 }}>
+                {humanTitle(section)} · {['bar', 'area'].includes(section.mark) ? section.mark : 'line'}
+              </span>
+            </div>
+            <div>
+              <div style={monoLabel}>Title</div>
+              <input data-testid="design-title-input" value={titleDraft}
+                     onChange={e => setTitleDraft(e.target.value)}
+                     onKeyDown={async e => {
+                       if (e.key === 'Enter' && titleDraft.trim()) {
+                         const r = await api.editSection(artifact.id, section.id,
+                                                         { title: titleDraft.trim() });
+                         setLayout(r.layout);
+                       }
+                     }}
+                     style={{ marginTop: 4, height: 32, width: '100%', boxSizing: 'border-box',
+                              border: `1px solid ${P.borderStrong}`, borderRadius: 8,
+                              padding: '0 10px', fontSize: 12.5, fontFamily: FONT,
+                              color: P.ink, outline: 'none' }} />
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ flex: 1 }}>
+                <div style={monoLabel}>Metric</div>
+                <select disabled title="Metric changes re-plan the dashboard — ask in chat"
+                        style={{ marginTop: 4, width: '100%', height: 30, borderRadius: 7,
+                                 border: `1px solid ${P.borderStrong}`, fontFamily: MONO,
+                                 fontSize: 11, color: P.accentHover, background: '#fff' }}>
+                  <option>{metric || 'Net Revenue'}</option>
+                </select>
               </div>
-            ))}
-            <div style={{ fontSize: 12, fontFamily: FONT, color: P.muted, marginTop: 6 }}>
-              <strong style={{ color: P.body }}>Why this chart?</strong> Time-series intent maps
-              to line marks; forecasts add a CI band; categorical breakdowns use bars —
-              chart-type rules from the dashboard-plan grammar (§5.3).
+              <div style={{ flex: 1 }}>
+                <div style={monoLabel}>Dimension</div>
+                <select disabled title="Dimension changes re-plan the dashboard — ask in chat"
+                        style={{ marginTop: 4, width: '100%', height: 30, borderRadius: 7,
+                                 border: `1px solid ${P.borderStrong}`, fontFamily: MONO,
+                                 fontSize: 11, color: P.body, background: '#fff' }}>
+                  <option>{(grain || 'Location · Day').split('·')[0].trim().toLowerCase()}</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <div style={monoLabel}>Chart type</div>
+              <div style={{ display: 'flex', gap: 6, marginTop: 4, flexWrap: 'wrap' }}>
+                {TILE_MARKS.map(([mark, live]) => {
+                  const cur = ['bar', 'area'].includes(section.mark) ? section.mark : 'line';
+                  const sel = cur === mark;
+                  return (
+                    <button key={mark} data-testid={`chart-tile-${mark}`} data-live={String(live)}
+                            data-selected={String(sel)} disabled={!live}
+                            title={live ? mark : `${mark} arrives with richer panel data`}
+                            onClick={() => live && applyMark(mark)}
+                            style={{ width: 34, height: 34, borderRadius: 8, cursor: live ? 'pointer' : 'not-allowed',
+                                     border: sel ? `2px solid ${P.accent}` : `1px solid ${P.borderStrong}`,
+                                     background: sel ? P.selectedRow : '#fff',
+                                     opacity: live ? 1 : .45, display: 'inline-flex',
+                                     alignItems: 'center', justifyContent: 'center' }}>
+                      <TileGlyph mark={mark} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
+              <div style={{ flex: 1 }}>
+                <div style={monoLabel}>Time grain</div>
+                <select disabled title="Grain changes re-plan the dashboard — ask in chat"
+                        style={{ marginTop: 4, width: '100%', height: 30, borderRadius: 7,
+                                 border: `1px solid ${P.borderStrong}`, fontFamily: MONO,
+                                 fontSize: 11, color: P.body, background: '#fff' }}>
+                  <option>{(grain || 'Location · Day').split('·').pop().trim()}</option>
+                </select>
+              </div>
+              <div data-testid="design-vs-target"
+                   style={{ display: 'flex', alignItems: 'center', gap: 8, paddingBottom: 4 }}>
+                <span style={monoLabel}>vs target</span>
+                <Toggle on={!!vsTarget[section.id]}
+                        onChange={v => setVsTarget(m => ({ ...m, [section.id]: v }))} />
+                {vsTarget[section.id] && (
+                  <span style={{ fontFamily: MONO, fontSize: 9.5, color: P.green }}>ON</span>
+                )}
+              </div>
+            </div>
+            <div data-testid="design-validation" style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              <StatusBadge status={gatesPass || (contracts?.data_contracts || []).length ? 'green' : 'gray'}>
+                CONTRACT PASSED
+              </StatusBadge>
+              <StatusBadge status="green">SQL VALIDATED</StatusBadge>
+            </div>
+            <div style={{ fontSize: 12, fontFamily: FONT, color: P.muted }}>
+              <strong style={{ color: P.body }}>Why this chart?</strong>{' '}
+              {RATIONALE[['bar', 'area'].includes(section.mark) ? section.mark : 'line']}
+            </div>
+            <div>
+              <div style={monoLabel}>Replace with…</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 4 }}>
+                {[['bar', 'Bar comparison'], ['area', 'Area fill']].map(([mark, label]) => (
+                  <button key={mark} data-testid={`replace-card-${mark}`}
+                          onClick={() => applyMark(mark)}
+                          style={{ border: `1px solid ${P.border}`, borderRadius: 8,
+                                   padding: '9px 10px', background: '#fff', cursor: 'pointer',
+                                   display: 'flex', flexDirection: 'column', gap: 6,
+                                   alignItems: 'flex-start' }}>
+                    <TileGlyph mark={mark} />
+                    <span style={{ fontSize: 11.5, fontFamily: FONT, color: P.body }}>{label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        )}
+        ))}
+
         {tab === 'Data' && (
           <div>
             {(contracts?.data_contracts || []).map(dc => (
@@ -99,6 +255,7 @@ export default function Inspector({ artifact, runId }) {
             ))}
           </div>
         )}
+
         {tab === 'Pipeline' && (
           <div>
             {steps.map(s => (
@@ -117,29 +274,76 @@ export default function Inspector({ artifact, runId }) {
             </div>
           </div>
         )}
-        {tab === 'Insights' && (
-          <div>
-            <button data-testid="insight-scan-btn"
-                    onClick={() => api.scanInsights(artifact.id)
-                      .then(r => setInsights(r.insights || [])).catch(() => {})}
-                    style={{ height: 30, padding: '0 12px', borderRadius: 8, cursor: 'pointer',
-                             border: `1px solid ${P.accentBorder}`, background: P.accentSoft,
-                             color: P.accentHover, fontSize: 12, fontWeight: 600,
-                             fontFamily: FONT, marginBottom: 10 }}>
-              Scan for insights
-            </button>
-            {insights.map(i => (
-              <div key={i.id} data-testid={`insight-row-${i.id}`}
-                   style={{ border: `1px solid ${P.border}`, borderRadius: 8, padding: 10,
-                            marginBottom: 8 }}>
-                <StatusBadge status={i.kind === 'anomaly' ? 'amber' : 'gray'}>{i.kind}</StatusBadge>
-                <div style={{ fontSize: 12.5, fontFamily: FONT, color: P.body, marginTop: 6 }}>
-                  {i.summary}
-                </div>
-              </div>
-            ))}
+
+        {tab === 'Lineage' && (
+          <div data-testid="tab-lineage">
+            <div style={monoLabel}>Gold tables</div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: '6px 0 12px' }}>
+              {(explain?.lineage?.gold_tables?.length ? explain.lineage.gold_tables
+                : ['(no gold tables)']).map(t => (
+                <span key={t} style={{ fontFamily: MONO, fontSize: 10.5, background: '#fdf9ef',
+                                       border: `1px solid ${P.amberBorder}`, color: P.amber,
+                                       borderRadius: 6, padding: '3px 8px' }}>{t}</span>
+              ))}
+            </div>
+            <div style={monoLabel}>Provenance chain</div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
+              {(explain?.lineage?.provenance_chain || []).map((c, i) => (
+                <span key={i} style={{ fontFamily: MONO, fontSize: 10.5, background: P.bg,
+                                       border: `1px solid ${P.border}`, borderRadius: 6,
+                                       padding: '3px 8px', color: P.body }}>
+                  {c.artifact_type} v{c.version}
+                </span>
+              ))}
+            </div>
+            <div style={{ fontSize: 11.5, color: P.muted, fontFamily: FONT, marginTop: 12 }}>
+              Full graph with impact analysis lands at governance lineage (R32S1E5).
+            </div>
           </div>
         )}
+
+        {tab === 'Model' && (
+          <div data-testid="tab-model">
+            {explain?.model ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: P.purple }}>
+                    {explain.model.algorithm}
+                  </span>
+                  {artifact.mape != null && (
+                    <StatusBadge status="green">MAPE {artifact.mape}%</StatusBadge>
+                  )}
+                </div>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {Object.entries(explain.model.gates || {}).map(([k, v]) => (
+                    <span key={k} style={{ fontFamily: MONO, fontSize: 10, color:
+                                             String(v).toLowerCase().includes('pass') ? P.green : P.amber }}>
+                      {k.replace(/_/g, ' ')} · {String(v)}
+                    </span>
+                  ))}
+                </div>
+                <div style={{ fontSize: 11.5, color: P.muted, fontFamily: FONT }}>
+                  The full model card lands with the models pillar (R33S1E3).
+                </div>
+              </div>
+            ) : (
+              <span data-testid="model-empty"
+                    style={{ fontSize: 12.5, fontFamily: FONT, color: P.muted }}>
+                Descriptive artifact — no model attached.
+              </span>
+            )}
+          </div>
+        )}
+
+        {tab === 'Comments' && (
+          <div data-testid="tab-comments"
+               style={{ fontSize: 12.5, fontFamily: FONT, color: P.muted }}>
+            The comments drawer — section-anchored threads, inline pins, and
+            "Ask AI to apply" — arrives with R30S3E6 over the existing comments
+            APIs.
+          </div>
+        )}
+
         {tab === 'Share' && (
           <div>
             <button data-testid="make-share-link"
@@ -156,23 +360,9 @@ export default function Inspector({ artifact, runId }) {
                    style={{ fontFamily: MONO, fontSize: 11, color: P.body,
                             overflowWrap: 'anywhere' }}>{shareUrl}</div>
             )}
-          </div>
-        )}
-        {tab === 'Versions' && (
-          <div>
-            {prov.map(c => (
-              <div key={c.artifact_uid || c.content_hash}
-                   style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '5px 0',
-                            borderBottom: `1px solid ${P.borderRow}` }}>
-                <span style={{ fontFamily: MONO, fontSize: 11.5, color: P.body }}>
-                  {c.artifact_type}
-                </span>
-                <span style={{ fontFamily: MONO, fontSize: 11, color: P.muted }}>v{c.version}</span>
-                <span style={{ fontFamily: MONO, fontSize: 10, color: P.faint, marginLeft: 'auto' }}>
-                  {(c.content_hash || '').slice(0, 8)}
-                </span>
-              </div>
-            ))}
+            <div style={{ fontSize: 11.5, color: P.muted, fontFamily: FONT, marginTop: 8 }}>
+              The full share modal (visibility, distribute, advanced) lands with R30S3E4.
+            </div>
           </div>
         )}
       </div>

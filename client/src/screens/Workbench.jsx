@@ -125,6 +125,10 @@ export default function Workbench() {
   const [runId, setRunId] = useState(null);
   const [runStatus, setRunStatus] = useState(null);
   const [artifact, setArtifact] = useState(null);   // R16S2E3
+  // R30S2E4 — canvas selection state lifted so the inspector edits it too
+  const [selectedSection, setSelectedSection] = useState(null);
+  const [vsTarget, setVsTarget] = useState({});
+  const [layout, setLayout] = useState(null);
   const bottomRef = useRef(null);
   const pendingQ = useRef(null);                 // original ambiguous question
   const doneNotified = useRef(false);            // R30S2E2 done-state once
@@ -463,7 +467,10 @@ export default function Workbench() {
           {runId ? (
             <BuildCanvas runId={runId}
                          sessionMetric={msgs.find(m => m.plan)?.plan?.target_metric}
-                         onArtifact={setArtifact} />
+                         onArtifact={setArtifact}
+                         selected={selectedSection} setSelected={setSelectedSection}
+                         vsTarget={vsTarget} setVsTarget={setVsTarget}
+                         layout={layout} setLayout={setLayout} />
           ) : (
             <div style={{ flex: 1, border: `1px dashed ${P.borderStrong}`, borderRadius: 12,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -473,7 +480,13 @@ export default function Workbench() {
           )}
         </div>
       )}
-      {artifact && <Inspector artifact={artifact} runId={runId} />}
+      {artifact && (
+        <Inspector artifact={artifact} runId={runId}
+                   selected={selectedSection} layout={layout} setLayout={setLayout}
+                   vsTarget={vsTarget} setVsTarget={setVsTarget}
+                   metric={msgs.find(m => m.plan)?.plan?.target_metric}
+                   grain={msgs.find(m => m.plan)?.plan?.grain} />
+      )}
       </div>
       {shareOpen && artifact && (
         <ShareModal artifact={artifact} onClose={() => setShareOpen(false)} />
