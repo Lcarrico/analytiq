@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S2 · Epic E3 (center states) · R30S2E3-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R30 · Sprint R30S2 · Epic E4 (inspector design tab) · R30S2E4-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R30 · Sprint R30S2 · Epic E3 (center states) · R30S2E3-US1  ← next story, full ACs + tasks in RELEASE_PLAN
+**Current position:** R30 · Sprint R30S2 · Epic E4 (inspector design tab) · R30S2E4-US1  ← next story, full ACs + tasks in RELEASE_PLAN
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -274,9 +274,9 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R30S1 sprint regression: backend 419/419 · UI 97/97 (2026-07-05) — SPRINT R30S1 CLOSED (4/4 stories)
 - [x] R30S2E1-US1 workbench chrome — 56px session topbar (title/meta/GOVERNED/autosaved/Versions/Share/avatar) replaces workspace topbar on /app/create/*; rail forced 64px (e); flows migrated w/ citation (UI 100/100 · backend 419/419, 2026-07-05)
 - [x] R30S2E2-US1 chat parity — status lines, Review-your-plan card (Dimensions/Forecast/Sources, metric chip, row-edit pencils, Edit/Cancel, APPROVED pill), clarify Not-sure/Use-recommended chips, agent tiles, done follow-ups + refine composer (UI 103/103 · backend 419/419, 2026-07-05)
-- [ ] R30S2E3-US1 center states start/empty/building (9 stage chips, PII banner, event log) [was R23S1E3 pt1]
-- [ ] R30S2E3-US2 canvas state (toolbar h44, filters h40, human titles, chart anatomy) [was R23S1E3 pt2]
-- [ ] R30S2E3-US3 section select (2px blue border + floating dark toolbar) [was R23S1E3-US2]
+- [x] R30S2E3-US1 center states start/empty/building (9 stage chips, PII banner, event log) [was R23S1E3 pt1] ✅ (9 display stages ×3 states, run meta, SKIP pill, PII banner, live event log + admin detail; r16s1_canvas migrated)
+- [x] R30S2E3-US2 canvas state (toolbar h44, filters h40, human titles, chart anatomy) [was R23S1E3 pt2] ✅ (44px toolbar: zoom/device/present/export/lineage/audit + v·saved; 40px filters bar w/ working Hide-forecast chip; human titles + $ KPIs + legend + today divider)
+- [x] R30S2E3-US3 section select (2px blue border + floating dark toolbar) [was R23S1E3-US2] ✅ (selected 2px blue + floating dark toolbar: Rename/chart-type(persisted)/vs-target/Move/⠿) — UI 107/107 · backend 419/419, 2026-07-05
 - [ ] R30S2E4-US1 inspector Design tab + tab-set ruling; overflow fixed; §5.3 cite gone [was R23S1E4]
 - [ ] R30S2 sprint regression recorded
 - [ ] R30S3E1-US1 data trust contracts panel (expected bands; gate dump gone) [was R23S2E1]

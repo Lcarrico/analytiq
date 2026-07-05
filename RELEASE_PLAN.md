@@ -1253,7 +1253,7 @@ Mockup: `Create Workbench.dc.html` chat frames · PRD: ch11 chat (Clarify "missi
 #### Epic R30S2E3 — Center states (start/empty/building · canvas · section-select)
 Mockup: `Create Workbench.dc.html` center frames · PRD: ch11 states + §5.1/§5.2 formatting · Current: R16 build view; snake_case section titles (`Timeseries Ci` fallback at BuildCanvas.jsx:162 — §5.1 leak)
 
-- [ ] **R30S2E3-US1** — pre-canvas states: Start, Empty, Building (carried from R23S1E3-US1, split)
+- [x] **R30S2E3-US1** — pre-canvas states: Start, Empty, Building (carried from R23S1E3-US1, split) ✅ 2026-07-05 (spec r30s2_building ×2)
   - AC:
     - [ ] Start (640px): icon, h1 24, 2×2 template cards FORECAST/PREDICTIVE/VARIANCE/ANOMALY, source picker + sample-data + field-picker link, RECENT PROMPTS
     - [ ] Empty: ghost 3×64 grid + caption
@@ -1268,7 +1268,7 @@ Mockup: `Create Workbench.dc.html` center frames · PRD: ch11 states + §5.1/§5
   - Touches: `client/src/screens/Workbench.jsx`, `client/src/components/BuildCanvas.jsx`, `tests/ui/r30s2_states.spec.js`
   - Story Dependencies: R30S2E1-US1, R30S2E2-US1 (chat reveals)
   - DoD: story spec + full regression green · PAR-1: start/empty/building frames flip ✅
-- [ ] **R30S2E3-US2** — canvas state (carried from R23S1E3-US1, split)
+- [x] **R30S2E3-US2** — canvas state (carried from R23S1E3-US1, split) ✅ 2026-07-05 (spec r30s2_canvas; PW coord bug w/ scale ancestors documented in-spec — domClick dispatch)
   - AC:
     - [ ] Toolbar h44: zoom/fit/present/device-view/refresh/export/download/share/comment/lineage/audit icons + mono `v{n} · saved` + stacked presence avatars
     - [ ] Filters bar h40: FILTERS label, removable filter chips, `+ Add`
@@ -1284,7 +1284,7 @@ Mockup: `Create Workbench.dc.html` center frames · PRD: ch11 states + §5.1/§5
   - Touches: `client/src/components/BuildCanvas.jsx`, `client/src/screens/Workbench.jsx`, `tests/ui/r30s2_canvas.spec.js`
   - Story Dependencies: R30S2E3-US1
   - DoD: story spec + full regression green · PAR-1: canvas frame flips ✅ · leak ledger: BuildCanvas.jsx:162 entry closed
-- [ ] **R30S2E3-US3** — canvas section select (carried from R23S1E3-US2)
+- [x] **R30S2E3-US3** — canvas section select (carried from R23S1E3-US2) ✅ 2026-07-05 (chart_type/top_n persisted via sections API; demo target = +5% trailing avg, noted)
   - AC:
     - [ ] Click a section → 2px accent outline + blue shadow; floating dark context toolbar (Rename · Bar ▾ · Top 8 · −/+ vs target · Week ▾ · ⠿ drag handle)
     - [ ] Selection binds the Inspector Design tab (SELECTED chip updates — contract with R30S2E4)

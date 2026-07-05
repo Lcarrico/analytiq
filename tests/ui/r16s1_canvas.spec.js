@@ -11,14 +11,16 @@ test('build shows stage chips then renders the dashboard canvas', async ({ page 
 
   const chips = page.getByTestId('stage-chips');
   await expect(chips).toBeVisible();
-  for (const stage of ['Understanding request', 'Building gold data',
-                       'Training models', 'Assembling dashboard']) {
+  // R30S2E3-US1: stage vocabulary aligned to the mockup's nine display
+  // stages (was the 7 raw DAG labels)
+  for (const stage of ['Understanding request', 'Building data',
+                       'Training model', 'Assembling dashboard']) {
     await expect(chips.getByText(stage)).toBeVisible();
   }
   // all chips reach done (SIM_DELAY_SCALE=0 → fast)
   await expect.poll(async () =>
     await chips.locator('[data-stage-state="done"]').count(),
-    { timeout: 20_000 }).toBe(7);
+    { timeout: 20_000 }).toBe(9);   // R30S2E3-US1: nine display stages
 
   const canvas = page.getByTestId('workbench-canvas');
   await expect(canvas.getByTestId('kpi-strip')).toBeVisible();

@@ -307,7 +307,7 @@ export default function Workbench() {
 
       <div style={{ flex: 1, minHeight: 0, display: 'flex', gap: 18, padding: 18 }}>
       {/* chat column */}
-      <div style={{ width: started ? 420 : '100%', display: 'flex', flexDirection: 'column',
+      <div style={{ width: started ? 340 : '100%', display: 'flex', flexDirection: 'column',
                     transition: 'width .15s' }}>
         {!started && (
           <div data-testid="workbench-start" style={{ maxWidth: 720, margin: '48px auto 0', width: '100%' }}>
