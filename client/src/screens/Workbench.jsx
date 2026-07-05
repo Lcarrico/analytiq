@@ -8,6 +8,7 @@ import { api, auth } from '../api';
 import { Avatar, Btn, StatusBadge } from '../components/ui';
 import { ShareModal } from './Artifacts';   // interim — canonical modal R30S3E4
 import BuildCanvas from '../components/BuildCanvas';
+import { Logo } from '../components/icons';
 import Inspector from '../components/Inspector';
 import { FONT, MONO, P } from '../tokens';
 
@@ -21,7 +22,16 @@ const EXAMPLES = [
 function Bubble({ role, children }) {
   const user = role === 'user';
   return (
-    <div style={{ display: 'flex', justifyContent: user ? 'flex-end' : 'flex-start', marginBottom: 10 }}>
+    <div style={{ display: 'flex', justifyContent: user ? 'flex-end' : 'flex-start',
+                  gap: 8, marginBottom: 10 }}>
+      {!user && (
+        <span data-testid="agent-tile"
+              style={{ width: 24, height: 24, borderRadius: '4px 8px 8px 8px', background: P.ink,
+                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                       flexShrink: 0, marginTop: 2 }}>
+          <Logo size={13} withWordmark={false} dark />
+        </span>
+      )}
       <div style={{ maxWidth: '86%', padding: '10px 14px', fontSize: 13.5, fontFamily: FONT,
                     lineHeight: 1.5, borderRadius: user ? '14px 14px 4px 14px' : '4px 14px 14px 14px',
                     background: user ? P.accent : '#fff', color: user ? '#fff' : P.body,
@@ -32,33 +42,75 @@ function Bubble({ role, children }) {
   );
 }
 
-function PlanCard({ plan, onApprove, busy }) {
+function PencilGlyph() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 12 12">
+      <path d="M8.6 1.6 10.4 3.4 4 9.8 1.8 10.2 2.2 8 8.6 1.6Z" fill="none"
+            stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function PlanCard({ plan, onApprove, onEdit, onCancel, busy, approved }) {
+  // R30S2E2 — frame rows: Dimensions from the grain, Forecast when predictive,
+  // Sources from explores_used over the demo source.
+  const dims = (plan.grain || 'Location · Day').split('·').map(s => s.trim().toLowerCase()).join(', ');
   const rows = [
     ['Goal', plan.analytic_goal || `${plan.intent} analysis of ${plan.target_metric}`],
-    ['Metric', plan.target_metric],
+    ['Metric', plan.target_metric, 'chip'],
+    ['Dimensions', dims],
     ['Grain', plan.grain],
     ['Time range', plan.date_range ? `${plan.date_range.start || 'rolling'} → ${plan.date_range.end || 'now'}` : 'trailing 12 months'],
+    ['Forecast', plan.prediction_horizon ? `${plan.prediction_horizon}-day horizon · backtested` : 'not requested'],
+    ['Sources', ['sample_retail', ...(plan.explores_used || [])].join(' · ')],
     ['Output', plan.output_type || 'forecast_dashboard'],
-    ['Horizon', plan.prediction_horizon ? `${plan.prediction_horizon} days` : '—'],
     ['Access', plan.access_limitations ? plan.access_limitations.note : 'No PII restrictions apply to this plan'],
   ];
   return (
     <div data-testid="plan-card" style={{ border: `1px solid ${P.accentBorder}`, borderRadius: 10,
                                           background: P.accentSoft, padding: 14, marginBottom: 10 }}>
-      <div style={{ fontSize: 10, fontFamily: MONO, textTransform: 'uppercase', letterSpacing: '.05em',
-                    color: P.accentHover, marginBottom: 8 }}>Proposed plan</div>
-      {rows.map(([k, v]) => (
-        <div key={k} style={{ display: 'flex', gap: 10, padding: '4px 0', fontSize: 13, fontFamily: FONT }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+        <span style={{ fontSize: 13.5, fontWeight: 600, color: P.ink, fontFamily: FONT }}>
+          Review your plan
+        </span>
+        {approved && (
+          <span data-testid="plan-approved">
+            <StatusBadge status="green">APPROVED</StatusBadge>
+          </span>
+        )}
+      </div>
+      {rows.map(([k, v, kind]) => (
+        <div key={k} style={{ display: 'flex', gap: 10, padding: '4px 0', fontSize: 13,
+                              fontFamily: FONT, alignItems: 'baseline' }}>
           <span style={{ width: 92, flexShrink: 0, color: P.muted, fontFamily: MONO, fontSize: 11,
                          textTransform: 'uppercase', paddingTop: 1 }}>{k}</span>
-          <span style={{ color: P.ink }}>{String(v)}</span>
+          {kind === 'chip' ? (
+            <span data-testid="plan-metric-chip"
+                  style={{ fontFamily: MONO, fontSize: 11, color: P.accentHover }}>{String(v)}</span>
+          ) : (
+            <span style={{ color: P.ink, minWidth: 0 }}>{String(v)}</span>
+          )}
+          <span data-testid="plan-row-edit" title={`Edit ${k.toLowerCase()}`}
+                onClick={() => onEdit && onEdit(k)}
+                style={{ marginLeft: 'auto', color: P.faint, cursor: 'pointer',
+                         display: 'inline-flex', flexShrink: 0 }}>
+            <PencilGlyph />
+          </span>
         </div>
       ))}
-      <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-        <Btn size="sm" data-testid="approve-build" disabled={busy} onClick={onApprove}>
-          {busy ? 'Starting…' : 'Approve & Build'}
-        </Btn>
-      </div>
+      {!approved && (
+        <div style={{ display: 'flex', gap: 8, marginTop: 10, alignItems: 'center' }}>
+          <Btn size="sm" data-testid="approve-build" disabled={busy} onClick={onApprove}>
+            {busy ? 'Starting…' : 'Approve & Build'}
+          </Btn>
+          <Btn size="sm" variant="outline" data-testid="plan-edit" onClick={() => onEdit && onEdit()}>
+            Edit plan
+          </Btn>
+          <span data-testid="plan-cancel" onClick={onCancel}
+                style={{ marginLeft: 'auto', fontSize: 12.5, fontFamily: FONT, color: P.muted,
+                         cursor: 'pointer' }}>Cancel</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -75,6 +127,8 @@ export default function Workbench() {
   const [artifact, setArtifact] = useState(null);   // R16S2E3
   const bottomRef = useRef(null);
   const pendingQ = useRef(null);                 // original ambiguous question
+  const doneNotified = useRef(false);            // R30S2E2 done-state once
+  const msgsRef = useRef([]);
   const [params] = useSearchParams();            // R22S1E1-US2 hero seed
   const seeded = useRef(false);
   // R30S2E1 — session topbar state: last-save stamp ticks; share modal
@@ -86,7 +140,7 @@ export default function Workbench() {
     return () => clearInterval(t);
   }, []);
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ block: 'end' }); }, [msgs]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ block: 'end' }); msgsRef.current = msgs; }, [msgs]);
 
   // R22S1E1-US2 — a home-hero question arrives as ?q=…; feed it into the
   // planning turn exactly once, as if the user had typed it here.
@@ -104,7 +158,20 @@ export default function Workbench() {
       try {
         const r = await api.getPipelineRun(runId);
         setRunStatus(r.status);
-        if (r.status === 'done' || r.status === 'failed') clearInterval(t);
+        if (r.status === 'done' || r.status === 'failed') {
+          clearInterval(t);
+          if (r.status === 'done' && !doneNotified.current) {
+            doneNotified.current = true;
+            setLastSaved(Date.now());
+            const metric = msgsRef.current.find(m => m.plan)?.plan?.target_metric || 'your metric';
+            setMsgs(m => [...m, {
+              role: 'ai',
+              summary: metric,
+              followups: [`Why is ${metric} below target?`, 'Add a promo overlay',
+                          'Which locations drive the gap?'],
+            }]);
+          }
+        }
       } catch { /* keep polling */ }
     }, 300);
     return () => clearInterval(t);
@@ -128,7 +195,16 @@ export default function Workbench() {
           sid = sess.id;
           navigate(`/app/create/${sid}`, { replace: true });
         }
-        setMsgs(m => [...m, { role: 'ai', plan: p, sid }]);
+        // R30S2E2 — mono status lines under the ask (frame): sources matched,
+        // metric resolved against the governed layer.
+        const nSrc = 1 + (p.explores_used?.length || 0);
+        setMsgs(m => [...m, {
+          role: 'ai', plan: p, sid,
+          status: [
+            `matched ${nSrc} source${nSrc === 1 ? '' : 's'} · sample_retail${(p.explores_used || []).map(e => `, ${e}`).join('')}`,
+            `resolved metric · ${p.target_metric} (governed)`,
+          ],
+        }]);
       }
     } catch {
       setMsgs(m => [...m, { role: 'ai', text: 'Planning failed — try rephrasing the question.' }]);
@@ -166,7 +242,8 @@ export default function Workbench() {
       setRunId(run.runId);
       setRunStatus('running');
       setLastSaved(Date.now());
-      setMsgs(m => [...m, { role: 'ai', text: 'Plan approved — building your dashboard now.' }]);
+      setMsgs(m => m.map(x => x === planMsg ? { ...x, approved: true } : x)
+                    .concat({ role: 'ai', text: 'Plan approved — building your dashboard now.' }));
     } catch (e) {
       let msg = e.message; try { msg = JSON.parse(e.message)?.error || msg; } catch { /* raw */ }
       setMsgs(m => [...m, { role: 'ai', text: `Build blocked: ${msg}` }]);
@@ -259,6 +336,41 @@ export default function Workbench() {
             {msgs.map((m, i) => (
               <div key={i}>
                 {m.text && <Bubble role={m.role}>{m.text}</Bubble>}
+                {m.summary && (
+                  <Bubble role="ai">
+                    Build complete — the <strong>{m.summary}</strong> dashboard is assembled,
+                    gated, and saved. Refine it below or jump into a follow-up.
+                  </Bubble>
+                )}
+                {m.status && (
+                  <div data-testid="chat-status-lines"
+                       style={{ fontFamily: MONO, fontSize: 10.5, color: P.muted,
+                                margin: '0 0 10px 32px', display: 'flex',
+                                flexDirection: 'column', gap: 3 }}>
+                    {m.status.map(s => (
+                      <span key={s} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <svg width="9" height="9" viewBox="0 0 9 9">
+                          <path d="m1.5 4.5 2 2 4-4.5" fill="none" stroke={P.green}
+                                strokeWidth="1.5" strokeLinecap="round" />
+                        </svg>
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {m.followups && (
+                  <div data-testid="followup-chips"
+                       style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: '2px 0 10px 32px' }}>
+                    {m.followups.map(f => (
+                      <button key={f} onClick={() => plan(f)}
+                              style={{ border: `1px solid ${P.accentBorder}`, background: '#fff',
+                                       color: P.accentHover, borderRadius: 14, padding: '5px 12px',
+                                       fontSize: 12.5, fontFamily: FONT, cursor: 'pointer' }}>
+                        {f}
+                      </button>
+                    ))}
+                  </div>
+                )}
                 {m.chips && (
                   <div data-testid="clarify-chips" style={{ display: 'flex', gap: 6, flexWrap: 'wrap',
                                                             margin: '2px 0 10px' }}>
@@ -270,16 +382,47 @@ export default function Workbench() {
                         {opt}
                       </button>
                     ))}
+                    <button data-testid="chip-not-sure" onClick={() => pickChip(m.chips[0])}
+                            style={{ border: `1px dashed ${P.borderStrong}`, background: '#fff',
+                                     color: P.muted, borderRadius: 14, padding: '5px 12px',
+                                     fontSize: 12.5, fontFamily: FONT, cursor: 'pointer' }}>
+                      Not sure
+                    </button>
+                    <button data-testid="chip-recommended" onClick={() => pickChip(m.chips[0])}
+                            style={{ border: 'none', background: P.accent, color: '#fff',
+                                     borderRadius: 14, padding: '5px 12px', fontSize: 12.5,
+                                     fontWeight: 600, fontFamily: FONT, cursor: 'pointer' }}>
+                      Use recommended
+                    </button>
                     {m.conf != null && (
                       <span data-testid="confidence-chip"
-                            style={{ fontSize: 11, fontFamily: MONO, color: P.muted,
-                                     alignSelf: 'center' }}>
-                        confidence {m.conf}
+                            style={{ fontSize: 10.5, fontFamily: MONO, color: P.muted,
+                                     alignSelf: 'center', display: 'inline-flex',
+                                     alignItems: 'center', gap: 5 }}>
+                        <span style={{ width: 5, height: 5, borderRadius: 3, background: P.amber }} />
+                        confidence {m.conf} — worth confirming
                       </span>
                     )}
                   </div>
                 )}
-                {m.plan && <PlanCard plan={m.plan} busy={busy} onApprove={() => approve(m)} />}
+                {m.plan && (
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                    <span data-testid="agent-tile"
+                          style={{ width: 24, height: 24, borderRadius: '4px 8px 8px 8px',
+                                   background: P.ink, display: 'inline-flex', alignItems: 'center',
+                                   justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+                      <Logo size={13} withWordmark={false} dark />
+                    </span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <PlanCard plan={m.plan} busy={busy} approved={m.approved}
+                                onApprove={() => approve(m)}
+                                onEdit={(row) => setInput(row
+                                  ? `Change the ${row.toLowerCase()} — `
+                                  : (msgs.find(x => x.role === 'user')?.text || ''))}
+                                onCancel={() => setMsgs(list => list.filter(x => x !== m))} />
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
             {runStatus && (
@@ -306,7 +449,8 @@ export default function Workbench() {
           <input data-testid="workbench-input" value={input}
                  onChange={e => setInput(e.target.value)}
                  onKeyDown={e => e.key === 'Enter' && send()}
-                 placeholder="Ask a business question…"
+                 placeholder={doneNotified.current || artifact
+                   ? 'Ask a follow-up or refine…' : 'Ask a business question…'}
                  style={{ flex: 1, height: 40, borderRadius: 10, border: `1px solid ${P.borderStrong}`,
                           padding: '0 14px', fontSize: 13.5, fontFamily: FONT, outline: 'none' }} />
           <Btn data-testid="workbench-send" onClick={send} disabled={busy}>⏎ Build</Btn>

@@ -1233,7 +1233,7 @@ Mockup: `Create Workbench.dc.html` session chrome · PRD: ch11 chrome + Part I �
 #### Epic R30S2E2 — Chat column: clarify → plan → build → done
 Mockup: `Create Workbench.dc.html` chat frames · PRD: ch11 chat (Clarify "missing" claim is STALE — diff vs code (c)) · Current: R16 chat — clarify chips exist; plan card lacks frame anatomy; no status lines/attachments row
 
-- [ ] **R30S2E2-US1** — chat parity (carried from R23S1E2-US1)
+- [x] **R30S2E2-US1** — chat parity (carried from R23S1E2-US1) ✅ 2026-07-05 (spec r30s2_chat ×3 · UI 103/103 · backend 419/419)
   - AC:
     - [ ] User bubble `#2563eb`/`#eef4ff` r`13 13 4 13` with mono verification/status lines beneath; agent messages open with a 24px agent logo tile + `#f7f8fa` r`4 13 13 13` bubble; SUGGESTED chips row
     - [ ] Clarify frame styling per frame (chips already exist — style/confidence treatment is the delta; diff against CODE not PRD)
