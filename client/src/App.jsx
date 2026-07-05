@@ -12,7 +12,7 @@ import Team from './screens/Team';
 import PublicViewer from './screens/PublicViewer';
 import Billing from './screens/Billing';
 import { Landing, Pricing } from './screens/Marketing';
-import { Login, Register } from './screens/Auth';   // R31S1E1 — standalone
+import { ForgotPassword, Login, Register, SsoCallback, VerifyEmail } from './screens/Auth';   // R31S1E1/E2 — standalone
 import { Forbidden, useRole } from './components/roles';
 import { ROUTE_SCREENS } from './routes';
 import Screen02 from './screens/S02_Connect';
@@ -121,6 +121,9 @@ export default function App() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/login" element={<Login />} />       {/* R31S1E1 */}
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />  {/* R31S1E2 */}
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/sso/callback" element={<SsoCallback />} />
           <Route path="/share/:token" element={<PublicViewer />} />
           <Route path="*" element={<Layout />} />
         </Routes>

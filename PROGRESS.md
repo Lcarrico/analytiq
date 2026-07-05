@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · Epic E2 (auth states) · R31S1E2-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R31 · Sprint R31S1 · Epic E3 (onboarding ×4) · R31S1E3-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R31 · Sprint R31S1 · Epic E2 (auth states) · R31S1E2-US1  ← next story
+**Current position:** R31 · Sprint R31S1 · Epic E3 (onboarding ×4) · R31S1E3-US1  ← next story
 **Spec (canonical):** `specs/prd-package/AnalytIQ Mock Up Comparison Analysis/PRD - AnalytIQ UI Parity & Build-Out.md` (checklist demoted to supporting doc)
 **Suite:** 416 backend green · 82 UI green (75 + 7 gating flows) · build + lint green (2026-07-04 20:00Z) · plan: RELEASE_PLAN.md → "UI Parity & Build-Out Program"
 **Sprint R21S1 regression:** backend 412/412 · UI 67/67 (2026-07-04 19:05Z)
@@ -293,7 +293,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 ## Release R31 — PRD Phase 2: First-run journey (pending)
 ### Milestone UP-B — Register → onboard → live home
 - [x] R31S1E1-US1 standalone auth + register wizard (+PBKDF2-unreachable AC) [was R28S1E1] ✅ (standalone /login + /register: 420px card on #f2f4f8 stage, labeled fields, forgot link, 3 SSO buttons, magic-link box, 4-step wizard w/ strength meter + role cards + invite chips + first-path rows driving the REAL register→login; S11 rewritten (leaks dead, vocab ledger pruned ×3); R10 memory surface kept behind §5.6 admin affordance + payload shape fixed — UI 124/124 · backend 423/423, 2026-07-05)
-- [ ] R31S1E2-US1 auth states ×4 (forgot/verify/SSO callback ×2) [was R28S1E2]
+- [x] R31S1E2-US1 auth states ×4 (forgot/verify/SSO callback ×2) [was R28S1E2] ✅ (forgot-password form→sent, verify-email, SSO signing-in auto-advance, no-workspace-access red variant — UI 128/128 · backend 423/423, 2026-07-05)
 - [ ] R31S1E3-US1 onboarding ×4 (branding/start-mode/source-health/template picker) [was R28S1E3]
 - [ ] R31S1 sprint regression recorded
 - [ ] R31S2E1-US1 activity page (DEP /api/activity; +View-all links ×2) [was R22S1E2, full carry]
@@ -374,6 +374,18 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - UI: `npm run test:ui` (native) / chunked: `bash /tmp/ui_chunks.sh reset` then repeat
 - Build: `npm run build` · Lint wall: `npm run lint:tokens` · Parity scoreboard: `npm run test:parity`
 - Zero-key boot: `python3 server/app.py` → `/api/platform/status` all `local`
+
+## Session stop note (2026-07-05, UI Parity session 6)
+R31S1 E1+E2 shipped: standalone /login + /register 4-step wizard over the
+real auth APIs (S11 stripped — PBKDF2/Agent-memory/§ citations dead, vocab
+ledger pruned to S05+S12; R10 memory surface preserved behind the §5.6 admin
+affordance w/ payload-shape fix) · forgot-password/verify-email/SSO callback
+×2. Suites at stop: backend 423/423 · UI 128/128 · build + lint green.
+20/64 stories done. Next: R31S1E3-US1 onboarding ×4 (branding wizard wired to
+GET/PUT /api/branding, starting-mode cards, source-health preview over the
+profiling substrate, template picker) closes Sprint R31S1 → sprint gate.
+Then R31S2 (activity page DEP /api/activity + home polish) closes R31 →
+release gate + boot check.
 
 ## Session stop note (2026-07-05, UI Parity session 5)
 RELEASE R30 CLOSED — all 18 stories (PRD Phase 1 complete): pricing lock,

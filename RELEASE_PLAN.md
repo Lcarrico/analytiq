@@ -1453,7 +1453,7 @@ Mockup: `Auth.dc.html` · PRD ch08 · Current: S11_Account renders sign-in/regis
   - Touches: `client/src/screens/Auth.jsx` (new), `client/src/App.jsx`, `client/src/routes.js`, retire `S11_Account.jsx` auth surfaces, `tests/ui/r31s1_auth.spec.js` · Deps: none · DoD: +PAR-1 Auth frames 1–2
 
 #### Epic R31S1E2 — Auth secondary states (was R28S1E2)
-- [ ] **R31S1E2-US1** — forgot-password (form + sent states), verify-email, SSO callback signing-in + no-workspace-access (red glow variant)
+- [x] **R31S1E2-US1** — forgot-password (form + sent states), verify-email, SSO callback signing-in + no-workspace-access (red glow variant) ✅ 2026-07-05 (spec r31s1_auth_states ×4)
   - Touches: `client/src/screens/Auth.jsx`, `tests/ui/r31s1_auth_states.spec.js` · Deps: R31S1E1-US1 · DoD: +PAR-1 Auth frames 3–8
 
 #### Epic R31S1E3 — Onboarding ×4 (was R28S1E3)

@@ -402,3 +402,173 @@ export function Register() {
     </AuthStage>
   );
 }
+
+// ── R31S1E2-US1 — secondary states ──────────────────────────────────────────
+
+export function ForgotPassword() {
+  const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
+  return (
+    <AuthStage>
+      <AuthCard width={340}>
+        {!sent ? (
+          <>
+            <div>
+              <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: P.ink, fontFamily: FONT }}>
+                Reset password
+              </h2>
+              <p style={{ margin: '4px 0 0', fontSize: 12.5, color: P.muted, fontFamily: FONT }}>
+                We&rsquo;ll email you a reset link.
+              </p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={label}>Email</label>
+              <input data-testid="forgot-email" value={email}
+                     onChange={e => setEmail(e.target.value)} style={field} />
+            </div>
+            <button data-testid="forgot-send" onClick={() => email.trim() && setSent(true)}
+                    style={{ height: 38, borderRadius: 9, border: 'none', background: P.accent,
+                             color: '#fff', fontSize: 13.5, fontWeight: 600, fontFamily: FONT,
+                             cursor: 'pointer' }}>
+              Send reset link
+            </button>
+            <Link to="/login" style={{ fontSize: 12.5, color: P.muted, fontFamily: FONT }}>
+              ← Back to log in
+            </Link>
+          </>
+        ) : (
+          <>
+            <span style={{ width: 46, height: 46, borderRadius: '50%', background: P.greenBg,
+                           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                           alignSelf: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 18 18">
+                <path d="m4 9.5 3.5 3.5L14 5.5" fill="none" stroke={P.green}
+                      strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </span>
+            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: P.ink,
+                         fontFamily: FONT, textAlign: 'center' }}>
+              Check your email
+            </h2>
+            <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.6, color: P.muted,
+                        fontFamily: FONT, textAlign: 'center' }}>
+              If <span style={{ fontFamily: MONO }}>{email}</span> has an account, a reset
+              link is on its way. It expires in 30 minutes.
+            </p>
+            <span data-testid="forgot-resend"
+                  style={{ fontSize: 12.5, fontWeight: 600, color: P.accentHover,
+                           fontFamily: FONT, textAlign: 'center', cursor: 'pointer' }}>
+              Resend email
+            </span>
+          </>
+        )}
+      </AuthCard>
+    </AuthStage>
+  );
+}
+
+export function VerifyEmail() {
+  return (
+    <AuthStage>
+      <AuthCard width={400}>
+        <span data-testid="verify-tile"
+              style={{ position: 'relative', width: 64, height: 64, borderRadius: 18,
+                       background: P.accentSoft, display: 'inline-flex', alignItems: 'center',
+                       justifyContent: 'center', alignSelf: 'center' }}>
+          <svg width="26" height="22" viewBox="0 0 26 22">
+            <rect x="1.5" y="1.5" width="23" height="19" rx="3" fill="none"
+                  stroke={P.accent} strokeWidth="1.6" />
+            <path d="m2 3 11 9L24 3" fill="none" stroke={P.accent} strokeWidth="1.6" />
+          </svg>
+          <span style={{ position: 'absolute', bottom: -4, right: -4, width: 20, height: 20,
+                         borderRadius: '50%', background: P.greenBg, border: '2px solid #fff',
+                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="9" height="9" viewBox="0 0 9 9">
+              <path d="m1.5 4.5 2 2 4-4.5" fill="none" stroke={P.green}
+                    strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </span>
+        </span>
+        <h1 style={{ margin: 0, fontSize: 19, fontWeight: 600, color: P.ink,
+                     fontFamily: FONT, textAlign: 'center' }}>
+          Verify your email
+        </h1>
+        <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.6, color: P.muted,
+                    fontFamily: FONT, textAlign: 'center' }}>
+          We sent a verification link to{' '}
+          <span style={{ fontFamily: MONO }}>dana@acmeretail.com</span>
+        </p>
+        <p style={{ margin: 0, fontSize: 12.5, color: P.muted, fontFamily: FONT,
+                    textAlign: 'center' }}>
+          Didn&rsquo;t get it? Check spam, or{' '}
+          <span data-testid="verify-resend"
+                style={{ fontWeight: 600, color: P.accentHover, cursor: 'pointer' }}>
+            Resend email
+          </span>
+        </p>
+      </AuthCard>
+    </AuthStage>
+  );
+}
+
+export function SsoCallback() {
+  const navigate = useNavigate();
+  const error = new URLSearchParams(window.location.search).get('error');
+  useState(() => {
+    // demo: the happy path signs straight in after a beat
+    if (!error) setTimeout(() => navigate('/app'), 1400);
+    return null;
+  });
+  if (error) {
+    return (
+      <AuthStage glow="rgba(220,38,38,.05)">
+        <AuthCard width={360}>
+          <span style={{ width: 56, height: 56, borderRadius: 16, background: P.redBg,
+                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                         alignSelf: 'center' }}>
+            <svg width="20" height="18" viewBox="0 0 20 18">
+              <path d="M10 1.5 19 16.5H1L10 1.5Z" fill="none" stroke={P.red}
+                    strokeWidth="1.6" strokeLinejoin="round" />
+              <path d="M10 7v4M10 13.6v.4" stroke={P.red} strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </span>
+          <h1 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: P.ink,
+                       fontFamily: FONT, textAlign: 'center' }}>
+            No workspace access
+          </h1>
+          <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.6, color: P.muted,
+                      fontFamily: FONT, textAlign: 'center' }}>
+            Your identity was verified, but{' '}
+            <span style={{ fontFamily: MONO }}>jon@acmeretail.com</span> hasn&rsquo;t been
+            added to any AnalytIQ workspace yet.
+          </p>
+          <button data-testid="contact-admin"
+                  style={{ height: 38, borderRadius: 9, border: 'none', background: P.accent,
+                           color: '#fff', fontSize: 13.5, fontWeight: 600, fontFamily: FONT,
+                           cursor: 'pointer' }}>
+            Contact your admin
+          </button>
+          <span style={{ fontFamily: MONO, fontSize: 9.5, color: P.faint, textAlign: 'center' }}>
+            Other states: organization not enabled · session expired
+          </span>
+        </AuthCard>
+      </AuthStage>
+    );
+  }
+  return (
+    <AuthStage>
+      <AuthCard width={360}>
+        <span style={{ alignSelf: 'center', width: 44, height: 44, borderRadius: '50%',
+                       border: `4px solid ${P.borderRow}`, borderTopColor: P.accent,
+                       animation: 'spin 1s linear infinite' }} />
+        <h1 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: P.ink,
+                     fontFamily: FONT, textAlign: 'center' }}>
+          Signing you in…
+        </h1>
+        <span style={{ fontFamily: MONO, fontSize: 10.5, color: P.faint, textAlign: 'center' }}>
+          okta · acme-retail.okta.com
+        </span>
+      </AuthCard>
+    </AuthStage>
+  );
+}
