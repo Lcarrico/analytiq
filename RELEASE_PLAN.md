@@ -1495,7 +1495,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] R32S1 sprint regression recorded — full suites green at sprint close: backend 433/433 · UI 145/145 (2026-07-05)
 
 ### Sprint R32S2 — Semantic layer (ch17, 9 screens) <!-- task elaboration pending Phase 1a -->
-- [ ] **R32S2E1-US1** — semantic overview cards + MANIFEST pill + Regenerate; explores list (avatars, scored pills, confidence); explore detail (tabs, "Analyze this explore" → workbench); replaces S05 · [was R25S2E1]
+- [x] **R32S2E1-US1** — semantic overview cards + MANIFEST pill + Regenerate; explores list (avatars, scored pills, confidence); explore detail (tabs, "Analyze this explore" → workbench); replaces S05 · [was R25S2E1]
 - [ ] **R32S2E2-US1** — metrics catalog (conflict `×2 CONFLICT` tinted rows, deprecated gray rows) + metric detail (plain-English def, ADMIN ONLY dark SQL, lineage chips, tests, versions) + dimensions catalog (collapsible categories w/ confidence) · [was R25S2E2]
 - [ ] **R32S2E3-US1** — field picker (3-panel, cardinality warning banner, live preview `100-row cap · Nms` — `DEP:` bounded read-only preview endpoint, seeded deterministic) + join paths (SAFE/BLOCKED/FAN-OUT pills, bridge-table rec CTA) + derived-tables editor (dark SQL validate, schedule, tags, dry run, FRESH/STALE list) · [was R25S2E3]
 - [ ] R32S2 sprint regression recorded

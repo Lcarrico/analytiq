@@ -154,6 +154,9 @@ export const api = {
   getReviewItem:    (id)  => get(`/reviews/items/${id}`),               // R32S1E3
   getDqRules:       (cid) => get(`/dq/rules?connection_id=${cid}`),     // R32S1E4
   putDqRule:        (id, body) => put(`/dq/rules/${id}`, body),          // R32S1E4
+  semanticSummary:  ()    => get('/semantic/default/summary'),          // R32S2E1
+  semanticExplores: ()    => get('/semantic/default/explores'),         // R32S2E1
+  semanticGenerate: (cid) => post('/semantic/default/generate', { connectionId: cid }),  // R32S2E1
   reuseCandidates:  (metric) => get(`/reuse_candidates?metric=${encodeURIComponent(metric)}`),
   explainArtifact:  (id)    => get(`/artifacts/${id}/explain`),
   pipelineReplay:   (runId) => get(`/pipeline/${runId}/replay`),

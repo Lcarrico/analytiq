@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context';
 import { Btn, Card, PageHeader, GateDot, HealthBar, Badge, Spinner } from '../components/ui';
 import { C, FONT, MONO } from '../tokens';
 import { api } from '../api';
 
 export default function Screen04() {
+  const navigate = useNavigate();
   const { runId, nav } = useApp();
   const [tables,  setTables]  = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +55,7 @@ export default function Screen04() {
         sub={tables.length > 0
           ? `${tables.length} tables cataloged - ${healthy} healthy - ${flagged} flagged - ${blocked} blocked from ML`
           : 'Table health overview'}
-        action={<Btn onClick={() => nav(5)} disabled={tables.length === 0}>Review semantic layer</Btn>}
+        action={<Btn onClick={() => navigate('/app/semantic')} disabled={tables.length === 0}>Review semantic layer</Btn>}
       />
 
       {loading ? (

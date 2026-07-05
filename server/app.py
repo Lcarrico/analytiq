@@ -4109,6 +4109,90 @@ def semantic_generate(ws):
     return jsonify({'version': version, 'schema': schema}), 201
 
 
+CONF_NUM = {'high': 0.9, 'medium': 0.75, 'low': 0.55}
+
+
+def _latest_manifest_health():
+    row = one('SELECT manifest_json FROM governance_manifests ORDER BY id DESC LIMIT 1')
+    if not row:
+        return {}
+    return {t['name']: t.get('health_score')
+            for t in json.loads(row['manifest_json']).get('tables', [])}
+
+
+@app.get('/api/semantic/<ws>/summary')
+def semantic_summary(ws):
+    """R32S2E1: overview KPIs for the semantic layer screens."""
+    row = _latest_schema_row(ws)
+    manifest = one('SELECT id, version, run_id FROM governance_manifests '
+                   'ORDER BY id DESC LIMIT 1')
+    m_status = None
+    if manifest:
+        pending = one('SELECT COUNT(*) AS n FROM semantic_definitions '
+                      "WHERE run_id=? AND status='pending' AND confidence < ?",
+                      (manifest['run_id'], REVIEW_CONFIDENCE_THRESHOLD))['n']
+        m_status = 'REVIEW REQUIRED' if pending else 'ACTIVE'
+    if not row:
+        return jsonify({'exists': False, 'version': None, 'explores': 0,
+                        'metrics': {'total': 0, 'governed': 0, 'draft': 0},
+                        'dimensions': 0, 'join_paths': 0, 'conflicts': 0,
+                        'pending_reviews': 0,
+                        'manifest': ({'version': manifest['version'],
+                                      'status': m_status} if manifest
+                                     else {'version': None, 'status': None})})
+    cubes = json.loads(row['schema_json']).get('cubes', [])
+    measures = [ms for c in cubes for ms in c.get('measures', [])]
+    governed = sum(1 for ms in measures if ms.get('confidence') == 'high')
+    conflicts = one(
+        'SELECT COUNT(DISTINCT p.name) AS n FROM semantic_definitions p '
+        "WHERE p.status='pending' AND p.confidence < ? AND EXISTS ("
+        "  SELECT 1 FROM semantic_definitions a WHERE a.name=p.name "
+        "  AND a.status='accepted')", (REVIEW_CONFIDENCE_THRESHOLD,))['n']
+    pending_total = one('SELECT COUNT(*) AS n FROM semantic_definitions '
+                        "WHERE status='pending' AND confidence < ?",
+                        (REVIEW_CONFIDENCE_THRESHOLD,))['n']
+    return jsonify({
+        'exists': True, 'version': row['version'],
+        'explores': len(cubes),
+        'metrics': {'total': len(measures), 'governed': governed,
+                    'draft': len(measures) - governed},
+        'dimensions': sum(len(c.get('dimensions', [])) for c in cubes),
+        'join_paths': sum(len(c.get('joins', [])) for c in cubes),
+        'conflicts': conflicts, 'pending_reviews': pending_total,
+        'manifest': ({'version': manifest['version'], 'status': m_status}
+                     if manifest else {'version': None, 'status': None}),
+    })
+
+
+@app.get('/api/semantic/<ws>/explores')
+def semantic_explores(ws):
+    """R32S2E1: per-explore rows for the explores list + detail."""
+    row = _latest_schema_row(ws)
+    if not row:
+        return jsonify({'explores': []})
+    cubes = json.loads(row['schema_json']).get('cubes', [])
+    health = _latest_manifest_health()
+    out = []
+    for c in cubes:
+        own = (c.get('sql_table') or c['name']).split('.')[-1]
+        tables = [own] + sorted({j.get('to') for j in c.get('joins', []) if j.get('to')})
+        confs = [CONF_NUM.get(ms.get('confidence'), 0.75) for ms in c.get('measures', [])]
+        confs += [CONF_NUM.get(d.get('confidence'), 0.75) for d in c.get('dimensions', [])]
+        arts = _artifacts_using_explores([c['name']])
+        out.append({
+            'name': c['name'], 'tables': tables,
+            'metrics': len(c.get('measures', [])),
+            'dimensions': len(c.get('dimensions', [])),
+            'joins': len(c.get('joins', [])),
+            'health': health.get(own),
+            'confidence': round(sum(confs) / len(confs), 2) if confs else 0.75,
+            'dq_gate_status': c.get('dq_gate_status'),
+            'used_by': len(arts),
+            'used_by_artifacts': arts[:10],
+        })
+    return jsonify({'explores': out, 'version': row['version']})
+
+
 @app.get('/api/semantic/<ws>/schema')
 def semantic_schema(ws):
     row = _latest_schema_row(ws, request.args.get('version'))

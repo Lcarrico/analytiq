@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context';
 import { Btn, Card, PageHeader, Steps } from '../components/ui';
 import { C, FONT, MONO } from '../tokens';
@@ -12,6 +13,7 @@ const GOV_STEPS = [
 ];
 
 export default function Screen03() {
+  const navigate = useNavigate();
   const { runId, nav } = useApp();
   const [step,    setStep]    = useState(0);
   const [status,  setStatus]  = useState('running');
@@ -117,7 +119,7 @@ export default function Screen03() {
             </div>
             <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
               <Btn onClick={() => nav(4)}>View table health →</Btn>
-              <Btn variant="secondary" onClick={() => nav(5)}>Skip to semantic review</Btn>
+              <Btn variant="secondary" onClick={() => navigate('/app/semantic')}>Skip to semantic layer</Btn>
             </div>
           </>
         )}

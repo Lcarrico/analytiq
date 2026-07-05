@@ -5,7 +5,6 @@ export const SCREEN_ROUTES = {
   2: '/app/data/sources',
   3: '/app/data/run',
   4: '/app/data/health',
-  5: '/app/semantic',
   6: '/app/create/quick',   // R16S1E1: workbench owns /app/create
   7: '/app/create/confirm',
   8: '/app/create/run',
