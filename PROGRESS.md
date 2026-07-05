@@ -332,7 +332,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R32S2E2-US1 metrics catalog + metric detail + dimensions [was R25S2E2] — done: SemanticCatalog.jsx — metrics catalog (searchable, ×2 CONFLICT amber rows → review diff deep link, DEPRECATED gray rows from real version diff, "+ Calculated metric" real POST), metric detail (plain-English def, §5.6 ADMIN ONLY dark SQL, lineage chips, live DQ-test chips, versions), dimensions catalog (7-way categorizer, collapsible groups, confidence); `GET /api/semantic/<ws>/conflicts`. BE 436/436, UI 150/150.
 - [x] R32S2E3-US1 field picker + joins + derived tables (DEP bounded preview) [was R25S2E3] — done: SemanticTools.jsx — field picker (3-panel, chips, live `100-row cap · Nms` preview via new DEP `POST /api/semantic/<ws>/preview` seeded-deterministic + cardinality warning + ?q= handoff), join paths (SAFE/FAN-OUT RISK from real join_type; builder null-note; bridge CTA prefills derived editor; sim fk gains null_pct 4.1 → real left join; manifests now carry null_pct), derived tables (dark SQL, real dry_run on POST pdts, publish, FRESH/STALE). BE 440/440, UI 153/153.
 - [x] R32S2 sprint regression recorded — backend 440/440 · UI 153/153 (2026-07-05)
-- [ ] R32 release regression + zero-key boot recorded
+- [x] R32 release regression + zero-key boot recorded: backend 440/440 · UI 153/153 · boot check PASSED — 8 services local, client shell 200 (2026-07-05) — RELEASE R32 CLOSED (9/9 stories)
 
 ## Release R33 — PRD Phase 4: Prediction & distribution (pending)
 ### Milestone UP-D — Models trusted, artifacts delivered
