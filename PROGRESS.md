@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · PROGRAM COMPLETE (R30–R36) — 52/52 lead-owned stories; R34 (12 marketing stories) on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R37 · Sprint R37S1 · Epic E1 (evidence-bound trust) · R37S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -551,3 +551,69 @@ CENTERPIECE kill, S10 tombstone) closes Sprint R30S1 → run the sprint gate.
 Truncation incident (see ledger) repaired: both tracking files reconstructed
 and re-verified (check_tree green) — trust bash-side reads of these files, and
 re-verify tails after any host-side write.
+
+# Agentic Dashboard Program (Deep-Dive v1.0) — R37–R43
+
+**Current position:** R37 · Sprint R37S1 · Epic E1 (evidence-bound trust surfaces) · R37S1E1-US1  ← next story
+**Spec:** `AnalytIQ Workspace Agentic Dashboard Deep Dive` (2026-07-06) — findings F-01…F-15 spot-verified in code before planning (seeded chart generator, scalar target_metric, un-gated section PATCH, format=html export all confirmed). Suite at planning time: backend 469/469 · UI 186/186 (R30–R36 close, 9b02c62).
+**Standing:** no multi-agents (lead executes inline) · R34 marketing surfaces locked to the junior · legacy workbench specs migrate only with an owning story ID.
+
+## Release R37 — Workbench Truth (correctness stopgap) (pending)
+- [ ] R37S1E1-US1 evidence-bound trust chips (GOVERNED/CONTRACT/SQL VALIDATED from real rows; UNGOVERNED state) [F-10]
+- [ ] R37S1E2-US1 save_artifact returns post-layout row; canvas renders all persisted sections [F-06]
+- [ ] R37S1E2-US2 Export offers supported formats only (html deferred to R39S1E3, stated) [F-07]
+- [ ] R37S1E2-US3 state & safety sweep: run-change reset, Skip relabel, Move normalization, real version chip, section-PATCH role gate, surfaced errors [F-09/F-14]
+- [ ] R37S1 sprint regression recorded
+
+## Release R38 — DashboardSpec & source-bound data (pending)
+- [ ] R38S1E1-US1 versioned DashboardSpec model + validator (immutable-append, §5A shape, stable hash)
+- [ ] R38S1E1-US2 plan approval emits spec v1; pipeline + canvas read spec head; legacy shim
+- [ ] R38S1E2-US1 multi-metric planner: inventory w/ roles, derived deps, unresolved checklist [F-02]
+- [ ] R38S1E2-US2 plan card shows metric checklist + component plan before Approve & Build
+- [ ] R38S1 sprint regression recorded
+- [ ] R38S2E1-US1 per-component query plan: dialect SQL via warehouse.py, read-only preview (shape/hash/cost)
+- [ ] R38S2E1-US2 chart data from component queries; fixed seed retired from run path; two-source fidelity fixture [F-01]
+- [ ] R38S2E2-US1 intent-shaped composition; fixed template + forced horizon retired [F-03]
+- [ ] R38S2 sprint regression recorded
+- [ ] R38 release regression + two-source fidelity pinned
+
+## Release R39 — Component engine (pending)
+- [ ] R39S1E1-US1 registry + POST/DELETE/duplicate component APIs w/ auto contracts, role-gated [F-05 server]
+- [ ] R39S1E2-US1 Add Component palette + builder w/ live preview + encoding recommendation
+- [ ] R39S1E2-US2 delete/duplicate w/ downstream impact + reversible versions
+- [ ] R39S1E3-US1 renderer unification: every surface renders from DashboardSpec; html export restored [F-08]
+- [ ] R39S1 sprint regression recorded
+
+## Release R40 — Grid editor (pending)
+- [ ] R40S1E1-US1 per-breakpoint geometry + layout-patch endpoint (normalize, collisions, optimistic concurrency) [F-04 server]
+- [ ] R40S1E2-US1 real drag + resize w/ placement preview; flex column retired [F-04 client]
+- [ ] R40S1E3-US1 undo/redo over patch history, keyboard ops, multi-select/duplicate/lock/grouping
+- [ ] R40S1E4-US1 tablet/mobile reflow + geometry parity across reload/artifact/share/export/present
+- [ ] R40S1 sprint regression recorded
+
+## Release R41 — Agentic refinement loop (pending)
+- [ ] R41S1E1-US1 patch engine: validated ops, layout-instant vs semantic-stale classification, versioned + audited
+- [ ] R41S1E2-US1 chat patch intent post-build: proposed-patch card, preview, confirm; chips real; runId bug retired [F-09]
+- [ ] R41S1E3-US1 selective recompute: semantic patches rerun only dependents, visible refresh states
+- [ ] R41S1E4-US1 resumable sessions: /app/create/:sessionId hydrates messages/spec/runs/artifact/grid [F-12]
+- [ ] R41S1 sprint regression recorded
+
+## Release R42 — Trust & breadth (pending)
+- [ ] R42S1E1-US1 per-component evidence block (contracts, rows, freshness, lineage, DQ, access); failure states never claim GOVERNED [F-10/F-11]
+- [ ] R42S1E2-US1 governed targets w/ provenance; synthetic +5% retired
+- [ ] R42S1E2-US2 global + component filters w/ cross-filter; flow into queries/artifact/share [F-13]
+- [ ] R42S1E3-US1 scatter/table/heatmap/treemap live; empty/error states [F-13]
+- [ ] R42S1E4-US1 mutation ACL matrix + query cost preview [F-14 residue]
+- [ ] R42S1 sprint regression recorded
+
+## Release R43 — Hardening & acceptance (pending)
+- [ ] R43S1E1-US1 doc §8 acceptance matrix (14 rows) as gating suite [F-15]
+- [ ] R43S1E2-US1 control + failure audit: every enabled control asserted, §4 table re-scored all-working
+- [ ] R43S1E3-US1 a11y + performance + release close
+- [ ] R43S1 sprint regression recorded
+- [ ] R43 release regression + zero-key boot + acceptance 14/14 — PROGRAM CLOSE (R37–R43)
+
+## Adaptation ledger (program-specific, grows during execution)
+- "Source-bound" on the zero-key stack = bound to per-connection seeded fixture tables through warehouse.py dialect SQL; two-source fidelity is proven with two fixture connections (R38S2E1-US2).
+- Planner remains deterministic (catalog resolution, no LLM) per doc sequencing note: canonical IDs/expressions/joins/access are server-verified.
+- Doc reviewer's env lacked Chromium/pytest; ours runs both — no action, but F-15's substance (parity-slice tests) is owned by R43S1E1-US1.

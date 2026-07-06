@@ -1607,3 +1607,186 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
   - `/security`, `/templates` + all Marketing partials — R34-owned (junior's release; hard lock + brief in place).
   - Remaining partials are fuzzy text-inventory gaps (copy phrasing, truncated matcher strings), not missing capability: the **gating** parity contract is `tests/ui/flows.spec.js` (PAR-2) + per-story specs — 100% green. Scoreboard is non-gating by charter (:854).
   - PRD §8 screenshots folder: superseded by the parity evidence system, signed off at :1051.
+
+---
+
+# Agentic Dashboard Program (Deep-Dive v1.0) — R37–R43
+
+**Spec:** `AnalytIQ Workspace Agentic Dashboard Deep Dive` (uploaded 2026-07-06; extracted findings F-01…F-15, workspace-control audit, target design §5–6, delivery plan §7, acceptance matrix §8). Program planned 2026-07-06 immediately after the R30–R36 close (9b02c62).
+
+**Recon verdict (spot-verified in code 2026-07-06):** the doc's core claims hold — `generate_chart_data` (server/app.py:1337) is `seeded_rng(42)` over a fixed Jan-2024 window and never reads session/metric/source; `server/planner.py:143` emits a scalar `target_metric`; the section mutation surface is PATCH-only for known IDs with **no role decorator** (server/app.py:9744); BuildCanvas Export opens `format=html` against a csv/json-only route. The platform around the workbench (semantic layer, manifests, DQ gates, lineage, model cards, contracts, audit, sharing) is real and is the substrate this program binds to.
+
+**Program thesis (doc §9):** build the *missing middle* — one durable, versioned **DashboardSpec** connecting business questions to source-bound components on a real grid, authored identically by chat and by hand, rendered identically on every surface. Release order follows the doc's §7 phases (0→6) because each phase is the durable target for the next; the doc's sequencing notes are binding (no drag/drop library before spec + mutation semantics; no new fixed panels in artifact_gen; deterministic server-verified semantic resolution; layout patches instant, semantic patches selectively rerun).
+
+**Environment adaptations (standing):** zero-key local stack — "source-bound" means bound to the connected demo warehouse via `warehouse.py` dialect SQL over per-connection fixture tables; "two different sources produce different data" is proven with two seeded fixture connections. Planner stays deterministic (catalog resolution, no LLM), matching the doc's requirement that canonical IDs/expressions/joins/access be server-verified. The doc reviewer's tooling failures (their missing Chromium/pytest) do not apply here — our gates run 469 backend / 186 UI green; the F-15 critique (parity-slice tests, not end-to-end generation tests) is addressed by per-story RED specs + the R43 acceptance-matrix suite.
+
+**Hard locks:** R34 (junior's marketing release) untouched — none of R37–R43 may edit marketing surfaces or `r30s1_pricing_data.spec.js`. Legacy workbench specs (`r16s1_*`, `r16s2_edit`, `r30s2_canvas`, `r30s2_inspector`) may only be migrated with an owning story ID, never deleted.
+
+## Release R37 — Workbench Truth (correctness stopgap) [doc §7 Phase 0]
+**Goal:** the existing demo behaves honestly — every control does what its label promises, trust language renders only from evidence, and no persisted state is silently dropped. Exit: doc Phase-0 criteria + all touched legacy specs green.
+
+### Sprint R37S1
+#### Epic E1 — Evidence-bound trust surfaces (F-10)
+- [ ] **R37S1E1-US1** — GOVERNED / CONTRACT / SQL VALIDATED render from evidence only.
+  - AC: canvas/inspector trust chips appear only when the backing rows exist (governance manifest for the connection; persisted component contract; recorded validation verdict); planning without a semantic schema or manifest shows an explicit UNGOVERNED state chip with plain-language copy; no hard-coded green badge remains.
+  - Tasks — Backend/API: extend run/artifact payloads with `trust: {governed: bool, manifest_version, contracts: n, sql_validated: bool}` derived from real rows (no new state). UI/E2E: chip rendering conditional on `trust`; UNGOVERNED chip + copy; RED spec asserting chips absent on an ungoverned fixture and present on a governed one.
+  - Test — BE: payload trust block truth table (manifest present/absent × contracts present/absent). UI: `r37s1_trust.spec.js` both states.
+  - Touches: server/app.py (run/artifact payload), client/src/components/BuildCanvas.jsx, Inspector.jsx, tests. Deps: none. DoD: standard 9 + no unconditional trust string survives `grep -n "GOVERNED"` outside evidence-gated paths.
+
+#### Epic E2 — Control correctness (F-06 · F-07 · F-09-state · F-14)
+- [ ] **R37S1E2-US1** — persisted layout is never dropped: `save_artifact` returns the post-layout row; BuildCanvas renders **all** persisted sections (dimension breakdown + feature importance included) instead of the two-section fallback.
+  - Tasks — BE: reorder read-after-write in save_artifact (server/app.py:6989–7018); regression test asserting the response carries 4-section layout_json. UI: canvas seeds from layout_json when present (BuildCanvas.jsx:142–166); spec asserts 4 rendered sections on a fresh build.
+  - Touches: server/app.py, BuildCanvas.jsx. Deps: none. DoD: standard 9; r16s1_canvas migrated if section-count assertions change (cite this ID).
+- [ ] **R37S1E2-US2** — Export offers only supported formats (csv/json) with working downloads; html option returns at R39S1E3 (renderer unification) and is cited as such in the UI title.
+  - Tasks — BE: none (route already correct). UI: replace the format=html call (BuildCanvas.jsx:378) with a small format menu (csv · json), disabled "html — arrives with component renderers (R39)" affordance per §5.6 honesty style; spec: both downloads 200, no 400 path reachable.
+  - Touches: BuildCanvas.jsx. Deps: none. DoD: standard 9.
+- [ ] **R37S1E2-US3** — state & safety sweep: run-change resets canvas build state (F-09 groundwork); "Skip to result" relabeled/rewired to its true behavior ("Hide build telemetry"); Move normalizes ordinals (no gaps/out-of-range, last-item safe); version chip shows the real layout/spec version; section PATCH gains the same role gating as other artifact mutations (analyst+; viewer 403); swallowed errors surface as visible toasts.
+  - Tasks — BE: `@require_role('analyst')`-equivalent on the section PATCH (server/app.py:9744) + negative test (viewer → 403); ordinal normalization on write + property test. UI: artifact/run change → state reset effect in BuildCanvas; Skip relabel; real version text from layout version; error toast on failed PATCH; specs for each.
+  - Touches: server/app.py, BuildCanvas.jsx, Workbench.jsx. Deps: none. DoD: standard 9 + control-audit rows for every touched control flip to Working in the R43 matrix seed.
+
+**R37S1 sprint gate:** full backend + UI regression recorded (both files) — target: zero legacy-spec breakage without an owned migration.
+
+## Release R38 — DashboardSpec & source-bound data [doc §7 Phase 1 · §5A–C]
+**Goal:** one canonical, versioned DashboardSpec shared by planning → execution → canvas; component data provably bound to metric + source. Exit: two different metrics/sources produce provably different, correct datasets (doc Phase-1 criterion, fixture-pinned).
+
+### Sprint R38S1 — the spec and the plan
+#### Epic E1 — DashboardSpec substrate (doc §5A)
+- [ ] **R38S1E1-US1** — versioned DashboardSpec model + validator.
+  - AC: `dashboard_specs` table (immutable-append: spec_version, parent_version, patch_history JSON, author agent|user, validation_status, artifact/render version refs) with storage-layer bump enforcement (trigger, mirroring feature_manifests); `server/dashboard_spec.py` builds/validates the §5A shape — metrics[] (canonical id/version, label, role primary|supporting|derived|target, expression/dependencies, format, aggregation, owner, confidence, access), analysis (intent, questions, time range, grain, comparisons, forecast settings), dimensions[]/globalFilters[]/componentFilters[], components[] (id, type, title, metric refs, dimension refs, query spec, transform, encoding, interaction, empty/error state, contract id), grid (per-breakpoint x/y/w/h/min/max/lock/z), trust (lineage, semantic versions, query hash, row count, freshness, DQ gates, access, generated-at), lifecycle.
+  - Tasks — BE: schema + trigger; builder/validator module (structured errors, stable hash); GET/POST spec endpoints (versions list, head). UI: N/A (surfaces in US2/E2). Test — BE: validator truth table incl. derived-metric dependency closure + zero-denominator rule flag; immutability trigger negative test.
+  - Touches: server/app.py (schema+routes), server/dashboard_spec.py (new), tests. Deps: none. DoD: standard 9 (UI: N/A — no user-facing surface).
+- [ ] **R38S1E1-US2** — plan approval emits DashboardSpec v1 (session bridge).
+  - AC: approving a plan writes spec v1 derived from the (new multi-metric) plan; pipeline + canvas read the spec head; session_specs remains for session lifecycle but layout/content truth moves to DashboardSpec; existing artifacts keep working via a compat shim that synthesizes a spec view from layout_json (adaptation ledger).
+  - Touches: server/app.py (approve path, pipeline read), planner.py, BuildCanvas.jsx (read path). Deps: R38S1E1-US1. DoD: standard 9 + legacy canvas specs green via shim.
+#### Epic E2 — Multi-metric planning (F-02 · doc §5B–C)
+- [ ] **R38S1E2-US1** — metric-inventory decomposition in the planner.
+  - AC: planner resolves every named and implied metric against the semantic catalog into metrics[] with roles; derived metrics expand into dependencies (e.g. target gap % → net revenue, revenue target, zero-denominator rule); targets/comparisons identified; unresolved/ambiguous items returned as a visible checklist, never silently dropped; validation accepts the collection (scalar target_metric retired with a compat read).
+  - Tasks — BE: planner v2 (`plan_session` emits metrics[]/components-intent; deterministic catalog matching incl. synonyms table); validate_session_spec v2; the doc §5C example checklist (net revenue, revenue target, target gap %, order count, AOV, conversion, promo lift, forecast+CI) as the RED fixture. UI: N/A here.
+  - Touches: server/planner.py, server/app.py (validation), tests. Deps: R38S1E1-US1. DoD: standard 9; acceptance-matrix row "Metric decomposition" (ask 5 incl. 1 derived → all 5 + deps + formats + unresolved + component mapping) green.
+- [ ] **R38S1E2-US2** — plan card shows the metric checklist + component plan.
+  - AC: plan card lists resolved metrics with role pills + format, unresolved items as amber chips with "resolve in chat" affordance, and the proposed component plan (type + metrics + dims per component) before Approve & Build; plan-row edit remains.
+  - Touches: Workbench.jsx, api.js. Deps: R38S1E2-US1. DoD: standard 9.
+
+### Sprint R38S2 — real data, shaped by intent
+#### Epic E3 — Source-bound component queries (F-01 · F-11 groundwork)
+- [ ] **R38S2E1-US1** — per-component query plan: generation + read-only validated execution.
+  - AC: every planned component gets a query spec (metrics, dims, grain, filters, comparison) compiled to dialect SQL via warehouse.py against the session's connection; a read-only preview endpoint returns row shape, row count, query hash, cost estimate; validation failures are structured and visible; nothing executes unvalidated.
+  - Touches: server/query_plan.py (new), warehouse.py (read-only compile hooks), server/app.py (preview endpoint), tests. Deps: R38S1E1-US1. DoD: standard 9.
+- [ ] **R38S2E1-US2** — chart data comes from the component's query, not the global seed.
+  - AC: pipeline executes each component's validated query against the connected source and persists per-component result rows keyed by component id + query hash; `generate_chart_data`'s fixed series is retired from the run path (kept only as fixture seeding for demo source tables); **two seeded fixture connections with different data produce different, fixture-predicted values** (doc acceptance "Source fidelity"); date range/grain from the plan actually bounds the query.
+  - Touches: server/app.py (pipeline stage + chart storage), server/query_plan.py, fixtures, BuildCanvas.jsx (per-component data read), tests. Deps: R38S2E1-US1. DoD: standard 9 + adaptation-ledger entry for the fixture-source definition.
+#### Epic E4 — Intent-shaped composition (F-03)
+- [ ] **R38S2E2-US1** — components proposed by analytical role; fixed template retired.
+  - AC: descriptive asks produce no model/forecast components (and the pipeline skips training); diagnostic asks produce driver/breakdown components; predictive asks produce forecast+CI; prescriptive add recommendation/narrative; the hard-coded `dashboard_plan`/`viz_specs` panel arrays are replaced by spec-driven composition; the forced `prediction_horizon || 14` is removed for non-predictive plans.
+  - Touches: server/app.py (:2055 / :2127 regions), planner.py, Workbench.jsx (:207/:258), tests. Deps: R38S1E2-US1, R38S2E1-US2. DoD: standard 9; acceptance-matrix row "Intent fidelity" green.
+
+**R38S1 + R38S2 sprint gates:** full regression each; release gate additionally pins the two-source fidelity fixture.
+
+## Release R39 — Component engine [doc §7 Phase 2 · §6 workbench authoring]
+**Goal:** agent and UI can create/delete/duplicate KPI, chart, and table components with real contracts. Exit: doc Phase-2 criterion.
+
+### Sprint R39S1
+#### Epic E1 — Registry + component CRUD (F-05 server half)
+- [ ] **R39S1E1-US1** — component registry + POST/DELETE/duplicate endpoints writing versioned spec patches.
+  - AC: registry declares types (kpi, line, bar, area, scatter, table, heatmap, treemap, narrative, filter, spacer) with schema per type; POST /components validates the definition (metric refs resolve, query plan validates) then appends a spec version; DELETE/duplicate likewise; every mutation creates the component's query + data contract rows (F-11) and an audit entry; role-gated analyst+.
+  - Touches: server/component_registry.py (new), server/dashboard_spec.py, server/app.py (routes), tests. Deps: R38 complete. DoD: standard 9.
+#### Epic E2 — Builder UI (doc §6 workbench authoring)
+- [ ] **R39S1E2-US1** — Add Component palette + builder with live preview.
+  - AC: palette lists registry types (none silently disabled — unavailable types state why); builder picks metrics/dimensions/aggregation/filters/comparison/sort/top-N/format from the semantic catalog; live data preview via the R38 preview endpoint with query/contract status; encoding recommendation shown without hiding alternatives; Add creates the same component schema chat will use.
+  - Touches: client/src/components/ComponentBuilder.jsx (new), Inspector.jsx (enable metric/dimension/grain controls), BuildCanvas.jsx, api.js. Deps: R39S1E1-US1. DoD: standard 9; acceptance row "Create via workbench" green.
+- [ ] **R39S1E2-US2** — delete/duplicate with downstream impact + reversible versions.
+  - AC: deleting shows affected contracts/filters/dependents; operation creates a reversible spec version (restore verified); duplicate places a valid copy with fresh id/contracts.
+  - Touches: ComponentBuilder.jsx, BuildCanvas.jsx, server routes. Deps: R39S1E1-US1. DoD: standard 9; acceptance row "Delete/undo" (version-restore half) green.
+#### Epic E3 — Renderer unification (F-08 · closes the R37 html-export deferral)
+- [ ] **R39S1E3-US1** — every surface renders from DashboardSpec.
+  - AC: artifact_gen gains per-type component renderers driven by the spec (no fixed panel markup); canvas, saved artifact HTML, public viewer, present mode, and a restored html export render the same components with the same data; rename/type edits re-render the artifact; layout-only edits re-render without query rerun.
+  - Touches: server/artifact_gen.py (rewrite core), server/app.py (export html), BuildCanvas.jsx, PublicViewer.jsx (read path), tests. Deps: R39S1E1-US1, R38S2E1-US2. DoD: standard 9; acceptance row "Edit parity" (canvas↔export) green; R37's export menu gains html (cite this ID).
+
+**R39S1 sprint gate:** full regression recorded.
+
+## Release R40 — Grid editor [doc §7 Phase 3 · §6 grid behavior]
+**Goal:** components live on a persisted, responsive 12-column grid the user can really manipulate. Exit: grid persists and is identical after reload/export/share (doc Phase-3 criterion). Sequencing note honored: this release starts only after R38's spec + R39's mutation semantics exist — geometry always has a durable target.
+
+### Sprint R40S1
+#### Epic E1 — Grid model + patch semantics (F-04 server half)
+- [ ] **R40S1E1-US1** — per-breakpoint geometry in the spec + layout-patch endpoint.
+  - AC: grid section stores x/y/w/h/min/max/lock/z per component per breakpoint (desktop 12-col; tablet/mobile stored or deterministically derived with overrides); layout-patch endpoint validates geometry, resolves collisions, **normalizes after every mutation**, enforces optimistic concurrency (spec-version precondition, 409 + rollback on conflict), versions each patch; layout patches never trigger query reruns.
+  - Touches: server/dashboard_spec.py, server/app.py (patch route), tests (property tests: no overlap, no gaps, bounds). Deps: R39 complete. DoD: standard 9.
+#### Epic E2 — Pointer interactions (F-04 client half)
+- [ ] **R40S1E2-US1** — real drag + resize with placement preview.
+  - AC: drag by the (now functional) handle; resize from visible edges/corners; live collision/placement preview; snap to grid; drop persists via the patch endpoint; canvas renders from grid geometry (flex column retired); zero-draggable-elements check inverted (spec asserts draggables present).
+  - Touches: BuildCanvas.jsx (grid render + DnD, no external DnD lib unless already vendored — inline pointer handlers), client/src/components/GridLayer.jsx (new), api.js. Deps: R40S1E1-US1. DoD: standard 9.
+#### Epic E3 — Keyboard, undo/redo, multi-select (doc §6)
+- [ ] **R40S1E3-US1** — authoring ergonomics + accessible alternatives.
+  - AC: undo/redo over the patch history (server-versioned, not local-only); keyboard move/resize with visible focus + screen-reader announcements; multi-select, duplicate, delete, lock, grouping; every operation lands as a versioned patch.
+  - Touches: BuildCanvas.jsx, GridLayer.jsx, server patch route (batch ops). Deps: R40S1E2-US1. DoD: standard 9; acceptance rows "Delete/undo" (undo/redo half) + "Responsive/a11y" (keyboard half) green.
+#### Epic E4 — Responsive truth + surface parity
+- [ ] **R40S1E4-US1** — tablet/mobile reflow + geometry parity everywhere.
+  - AC: device toggles apply the breakpoint layout (KPI strip reflows — fixed 4-col retired); overrides per breakpoint persist; **drag → resize → reload → open artifact → share → export → present all preserve geometry per breakpoint** (acceptance row "Grid persistence"); renderer (R39E3) consumes grid geometry on every surface.
+  - Touches: BuildCanvas.jsx, artifact_gen.py, PublicViewer.jsx, tests. Deps: R40S1E2-US1, R39S1E3-US1. DoD: standard 9.
+
+**R40S1 sprint gate:** full regression recorded.
+
+## Release R41 — Agentic refinement loop [doc §7 Phase 4 · §6 chat authoring]
+**Goal:** after first build, chat produces validated dashboard patches — not new detached plans. Exit: natural-language add/change/move/delete updates the current version (doc Phase-4 criterion).
+
+### Sprint R41S1
+#### Epic E1 — Patch engine (F-05 chat half groundwork)
+- [ ] **R41S1E1-US1** — dashboard patch operations, classified and versioned.
+  - AC: patch ops (add/modify/remove component, layout ops, semantic ops: metric/dimension/grain/filter changes) validate against the registry + query planner before apply; **layout-only patches apply instantly; semantic patches mark affected components stale** (rerun in E3); every patch appends a spec version with author + explanation; audited.
+  - Touches: server/dashboard_patch.py (new), dashboard_spec.py, app.py (routes), tests. Deps: R40 complete. DoD: standard 9.
+#### Epic E2 — Chat patch planner (F-09)
+- [ ] **R41S1E2-US1** — post-build chat switches to patch intent with preview + confirm.
+  - AC: after the first build, chat requests classify as dashboard-patch intent (deterministic: catalog + registry matching over the doc §6 table — "Add AOV and order count as KPIs" → resolve 2 metrics + 2 KPI components + contracts + repack; "make it wider / move below KPIs" → layout-only; "weekly instead of daily" → semantic); the agent replies with a proposed patch card (affected metrics/queries/layout explained), preview renders, material changes apply only after confirm; follow-up chips generate patches; runId-replacement bug retired — the current artifact version advances instead (F-09).
+  - Touches: Workbench.jsx, server/dashboard_patch.py (intent planner), BuildCanvas.jsx (preview overlay), api.js. Deps: R41S1E1-US1. DoD: standard 9; acceptance rows "Create via chat" + "Refinement lifecycle" (two consecutive edits → ordered patches, no lost state) green.
+#### Epic E3 — Selective recompute
+- [ ] **R41S1E3-US1** — semantic patches rerun only affected components.
+  - AC: a grain/metric/filter change reruns exactly the dependent components' queries (+ model retrain only when a predictive component depends on it), revalidates their contracts, leaves untouched components' data + geometry intact; visible per-component refresh states.
+  - Touches: server/dashboard_patch.py, query_plan.py, pipeline stage, BuildCanvas.jsx (stale/refreshing chips). Deps: R41S1E1-US1, R38S2E1-US2. DoD: standard 9.
+#### Epic E4 — Resumable sessions (F-12)
+- [ ] **R41S1E4-US1** — /app/create/:sessionId hydrates the full workbench.
+  - AC: reload/deep-link restores messages, confirmed spec + metric checklist, run history, current artifact + spec version, and grid state; no empty-approval placeholder for a session with history.
+  - Touches: server/app.py (session hydration endpoint), Workbench.jsx, BuildCanvas.jsx, context.jsx. Deps: R38S1E1-US2. DoD: standard 9.
+
+**R41S1 sprint gate:** full regression recorded.
+
+## Release R42 — Trust & breadth [doc §7 Phase 5]
+**Goal:** every component carries lineage/query/DQ/access evidence; the editor expresses common analysis patterns. Exit: doc Phase-5 criterion.
+
+### Sprint R42S1
+#### Epic E1 — Contracts + evidence everywhere (F-11 complete · F-10 finish)
+- [ ] **R42S1E1-US1** — per-component trust block: query contract, data contract, row count, freshness, lineage ref, DQ verdicts, access decision; inspector Data tab shows the evidence; failed validation renders failure state and never GOVERNED/CONTRACT PASSED (acceptance row "Failure recovery": visible, retryable).
+  - Touches: server (contract emission in registry + patch paths), Inspector.jsx, BuildCanvas.jsx. Deps: R39/R41 complete. DoD: standard 9; acceptance row "Per-component contracts" green.
+#### Epic E2 — Real targets + filters (F-13 part)
+- [ ] **R42S1E2-US1** — governed targets: target metrics bind to a target source (metric/table), time-aligned, missing-target behavior defined, persisted in spec; synthetic +5% overlay retired; "vs target" renders governed values with provenance.
+  - Touches: planner.py (target role), query_plan.py, BuildCanvas.jsx, Inspector.jsx. Deps: R38S1E2-US1. DoD: standard 9.
+- [ ] **R42S1E2-US2** — global + per-component filters: allowed values from the catalog, defaults, cross-filter behavior per spec §5A; filters persist, flow into queries + artifact + share; "Add filter" becomes real (Hide-forecast local toggle migrates in).
+  - Touches: dashboard_spec.py, query_plan.py, BuildCanvas.jsx (filter bar), PublicViewer.jsx. Deps: R41S1E3-US1. DoD: standard 9.
+#### Epic E3 — Chart-type breadth (F-13 part)
+- [ ] **R42S1E3-US1** — scatter, table, heatmap, treemap live with data-shaped encodings (type/cardinality drive defaults; alternatives never silently disabled); per-component empty + error states per spec.
+  - Touches: artifact_gen.py renderers, BuildCanvas.jsx, ComponentBuilder.jsx, Inspector.jsx (:51/:174 unlocks). Deps: R39S1E3-US1. DoD: standard 9.
+#### Epic E4 — Permissions + cost
+- [ ] **R42S1E4-US1** — mutation ACL matrix (viewer read-only on layout/components → 403 UI-stated; analyst mutates; admin technical detail stays toggle-gated per R36S3E2) + query cost preview in builder + patch confirmations.
+  - Touches: server routes (role decorators), ComponentBuilder.jsx, roles.jsx. Deps: R39S1E2-US1. DoD: standard 9; acceptance row "Permissions" green.
+
+**R42S1 sprint gate:** full regression recorded.
+
+## Release R43 — Hardening & acceptance [doc §7 Phase 6 · §8]
+**Goal:** no dead controls; the doc's acceptance matrix is a green, gating suite. Exit: doc Phase-6 criteria; program close.
+
+### Sprint R43S1
+#### Epic E1 — Acceptance matrix as a gating suite (F-15)
+- [ ] **R43S1E1-US1** — all 14 §8 rows implemented as `tests/ui/r43_acceptance_*.spec.js` + backend fixtures (metric decomposition · source fidelity · intent fidelity · per-component contracts · create via chat · create via workbench · grid persistence · edit parity · delete/undo · refinement lifecycle · control audit · permissions · failure recovery · responsive/a11y); rows already landed by R38–R42 stories are consolidated here and become release-gating.
+  - Touches: tests only + fixture seeds. Deps: R37–R42 complete. DoD: standard 9 (suite green = the DoD).
+#### Epic E2 — Control + failure audit
+- [ ] **R43S1E2-US1** — every enabled control in Workbench/BuildCanvas/Inspector has an asserted success **and** error state; no enabled control can reach an unsupported route/format; concurrency conflicts (409) surface with retry; broad error-swallowing retired; the doc §4 audit table re-scored to all Working/intentional.
+  - Touches: Workbench.jsx, BuildCanvas.jsx, Inspector.jsx, specs. Deps: R43S1E1-US1 seeds. DoD: standard 9.
+#### Epic E3 — A11y, performance, program close
+- [ ] **R43S1E3-US1** — keyboard/focus/labels/screen-reader/mobile-reflow pass on the workbench + canvas; render performance budget for a 12-component dashboard; then release regression + zero-key boot + **program close** (scoreboard note: workbench honestly describable as an agentic dashboard generator — doc §9 criterion inverted to green).
+  - Touches: BuildCanvas.jsx, GridLayer.jsx polish, tests. Deps: all prior. DoD: standard 9 + release close-out below.
+
+### Release R43 close-out
+- [ ] Release regression + zero-key boot recorded · acceptance matrix 14/14 gating-green
+
+## Program close (R37–R43)
+- [ ] All 31 stories ✅ · every sprint + release regression line green · zero-key boot green · acceptance matrix 14/14 · doc §4 control audit re-scored all-working · adaptation ledger current
