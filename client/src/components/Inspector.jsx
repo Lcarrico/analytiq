@@ -211,10 +211,14 @@ export default function Inspector({ artifact, runId, selected, layout, setLayout
               </div>
             </div>
             <div data-testid="design-validation" style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              <StatusBadge status={gatesPass || (contracts?.data_contracts || []).length ? 'green' : 'gray'}>
-                CONTRACT PASSED
+              <StatusBadge status={(contracts?.trust?.contracts || 0) > 0
+                  && (gatesPass || (contracts?.data_contracts || []).length)
+                  ? 'green' : 'gray'}>
+                {(contracts?.trust?.contracts || 0) > 0 ? 'CONTRACT PASSED' : 'NO CONTRACT YET'}
               </StatusBadge>
-              <StatusBadge status="green">SQL VALIDATED</StatusBadge>
+              <StatusBadge status={contracts?.trust?.sql_validated ? 'green' : 'gray'}>
+                {contracts?.trust?.sql_validated ? 'SQL VALIDATED' : 'SQL NOT VALIDATED'}
+              </StatusBadge>
             </div>
             <div style={{ fontSize: 12, fontFamily: FONT, color: P.muted }}>
               <strong style={{ color: P.body }}>Why this chart?</strong>{' '}

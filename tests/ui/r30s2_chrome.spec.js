@@ -37,7 +37,9 @@ test('after planning: title, mono session meta, GOVERNED pill, autosaved stamp',
   const meta = bar.getByTestId('wb-session-meta');
   await expect(meta).toContainText(/session · \d+/);
   expect(await css(meta, 'fontFamily')).toContain('Mono');
-  await expect(bar.getByTestId('wb-governed')).toContainText('GOVERNED');
+  // R37S1E1: trust is evidence-bound — a fresh workspace has no semantic
+  // schema, so the honest chip here is UNGOVERNED (r37s1_trust covers both).
+  await expect(bar.getByTestId('wb-ungoverned')).toContainText('UNGOVERNED');
   const saved = bar.getByTestId('wb-autosaved');
   await expect(saved).toContainText(/autosaved/);
   expect(await css(saved, 'fontFamily')).toContain('Mono');

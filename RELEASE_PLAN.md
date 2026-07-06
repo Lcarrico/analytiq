@@ -1627,7 +1627,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ### Sprint R37S1
 #### Epic E1 — Evidence-bound trust surfaces (F-10)
-- [ ] **R37S1E1-US1** — GOVERNED / CONTRACT / SQL VALIDATED render from evidence only.
+- [x] **R37S1E1-US1** — GOVERNED / CONTRACT / SQL VALIDATED render from evidence only. ✅ 2026-07-06 (derived trust blocks + evidence-bound chips; spec r37s1_trust; r30s2_chrome migrated)
   - AC: canvas/inspector trust chips appear only when the backing rows exist (governance manifest for the connection; persisted component contract; recorded validation verdict); planning without a semantic schema or manifest shows an explicit UNGOVERNED state chip with plain-language copy; no hard-coded green badge remains.
   - Tasks — Backend/API: extend run/artifact payloads with `trust: {governed: bool, manifest_version, contracts: n, sql_validated: bool}` derived from real rows (no new state). UI/E2E: chip rendering conditional on `trust`; UNGOVERNED chip + copy; RED spec asserting chips absent on an ungoverned fixture and present on a governed one.
   - Test — BE: payload trust block truth table (manifest present/absent × contracts present/absent). UI: `r37s1_trust.spec.js` both states.

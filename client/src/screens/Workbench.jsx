@@ -124,6 +124,7 @@ export default function Workbench() {
   const [msgs, setMsgs] = useState([]);          // {role, text?, plan?, chips?, conf?}
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
+  const [trust, setTrust] = useState(null);   // R37S1E1: evidence-derived
   const [runId, setRunId] = useState(null);
   const [runStatus, setRunStatus] = useState(null);
   const [artifact, setArtifact] = useState(null);   // R16S2E3
@@ -197,6 +198,7 @@ export default function Workbench() {
     setMsgs(m => [...m, { role: 'user', text: message }]);
     try {
       const p = await api.planSession({ message });
+      if (p.trust) setTrust(p.trust);   // R37S1E1
       setLastSaved(Date.now());                      // R30S2E1 autosave stamp
       if (p.needs_clarification) {
         pendingQ.current = message;
@@ -307,9 +309,16 @@ export default function Workbench() {
             session · {sessionId || 'new'}{metric ? ` · ${metric}` : ''}
           </span>
         </div>
-        {started && (
-          <span data-testid="wb-governed">
+        {started && trust?.governed && (
+          <span data-testid="wb-governed"
+                title={`Bound to semantic schema v${trust.schema_version} · manifest ${trust.manifest_version}`}>
             <StatusBadge status="green">GOVERNED</StatusBadge>
+          </span>
+        )}
+        {started && trust && !trust.governed && (
+          <span data-testid="wb-ungoverned"
+                title="No governed semantic schema yet — run governance on a data source to bind plans to catalog definitions.">
+            <StatusBadge status="amber">UNGOVERNED</StatusBadge>
           </span>
         )}
         <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>

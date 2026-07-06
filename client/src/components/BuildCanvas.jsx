@@ -119,6 +119,16 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
         .filter(i => i.chip === 'PII').length)).catch(() => {});
   }, []);
 
+  const [contractIds, setContractIds] = useState(null);   // R37S1E1 (F-10)
+  useEffect(() => {
+    if (!runId) { setContractIds(null); return; }
+    // contracts persist while the run executes — refetch once the artifact
+    // lands so the evidence chips reflect the finished run (R37S1E1)
+    api.pipelineContracts(runId)
+      .then(d => setContractIds(new Set((d.query_contracts || []).map(c => c.component_id))))
+      .catch(() => setContractIds(new Set()));
+  }, [runId, artifact]);
+
   useEffect(() => {
     if (!runId) return;
     let stop = false;
@@ -588,7 +598,13 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                     {uglyDefault(s) ? (HUMAN_TITLES[s.id] || s.title) : s.title}
                   </span>
                 )}
-                <span style={{ fontFamily: MONO, fontSize: 10, color: P.green }}>CONTRACT ✓</span>
+                {contractIds?.has(s.id) ? (
+                  <span style={{ fontFamily: MONO, fontSize: 10, color: P.green }}>CONTRACT ✓</span>
+                ) : (
+                  <span data-testid="section-no-contract"
+                        title="No per-component contract recorded for this section yet — full evidence blocks arrive with R42."
+                        style={{ fontFamily: MONO, fontSize: 10, color: P.faint }}>NO CONTRACT</span>
+                )}
                 <span style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
                   <button data-testid="section-rename-btn" title="rename"
                           onClick={() => { setRenaming(s.id); setNameDraft(s.title); }}

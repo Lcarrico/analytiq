@@ -5829,6 +5829,11 @@ def plan_session_route():
             return jsonify({'error': 'Planner produced an invalid spec', 'errors': errs}), 500
         log_action('session.planned', 'session_spec', None,
                    {'intent': result['intent'], 'target_metric': result['target_metric']})
+    # R37S1E1 (deep-dive F-10): trust is derived from evidence, never assumed.
+    mrow = one('SELECT version FROM governance_manifests ORDER BY id DESC LIMIT 1')
+    result['trust'] = {'governed': bool(schema_row),
+                       'schema_version': schema_version,
+                       'manifest_version': (mrow or {}).get('version')}
     return jsonify(result)
 
 
@@ -9353,9 +9358,26 @@ def team_roster():
                     'seats': {'used': used, 'total': SEAT_TOTAL}})
 
 
+_SQL_BANNED = ('insert', 'update', 'delete', 'drop', 'alter', 'create',
+               'attach', 'pragma', 'replace', 'vacuum')
+
+
+def _sql_is_safe(sql):
+    """R37S1E1: single read-only statement — the check behind SQL VALIDATED."""
+    s = (sql or '').strip().lower()
+    if not s or ';' in s.rstrip(';'):
+        return False
+    if not (s.startswith('select') or s.startswith('with')):
+        return False
+    import re as _re
+    tokens = set(_re.split(r'[^a-z_]+', s))
+    return not (tokens & set(_SQL_BANNED))
+
+
 @app.get('/api/pipeline/<int:run_id>/contracts')
 def pipeline_contracts(run_id):
-    """R17S1E1: the run's per-component query + data contracts."""
+    """R17S1E1: the run's per-component query + data contracts.
+    R37S1E1: + derived trust (per-contract SQL safety, never hard-coded)."""
     if not one('SELECT id FROM pipeline_runs WHERE id=?', (run_id,)):
         return jsonify({'error': 'Run not found'}), 404
     qcs = many('SELECT * FROM query_contracts WHERE run_id=? ORDER BY id', (run_id,))
@@ -9365,7 +9387,11 @@ def pipeline_contracts(run_id):
         r['numeric_ranges'] = json.loads(r.pop('numeric_ranges_json'))
     for r in qcs:
         r['expected_columns'] = json.loads(r.pop('expected_columns_json'))
-    return jsonify({'query_contracts': qcs, 'data_contracts': dcs})
+        r['sql_safe'] = _sql_is_safe(r.get('sql'))
+    return jsonify({'query_contracts': qcs, 'data_contracts': dcs,
+                    'trust': {'contracts': len(qcs) + len(dcs),
+                              'sql_validated': bool(qcs)
+                                and all(r['sql_safe'] for r in qcs)}})
 
 
 def _gold_gate_list(g_row):
