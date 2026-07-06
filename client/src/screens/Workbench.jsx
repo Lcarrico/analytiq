@@ -253,7 +253,8 @@ export default function Workbench() {
         pendingQ.current = null;
         let sid = sessionId;
         if (!sid) {
-          const sess = await api.createSession({ metric: p.target_metric, horizon: p.prediction_horizon || 14 });
+          // R38S2E2 (F-03): no forced horizon — descriptive plans carry none
+          const sess = await api.createSession({ metric: p.target_metric, horizon: p.prediction_horizon ?? null });
           sid = sess.id;
           navigate(`/app/create/${sid}`, { replace: true });
         }
@@ -309,7 +310,8 @@ export default function Workbench() {
         target_metric: p.target_metric, feature_candidates: p.feature_candidates || [],
         date_range: p.date_range || { start: '2023-01-01', end: '2023-12-31' },
         grain: p.grain || 'Location · Day', output_type: p.output_type || 'forecast_dashboard',
-        prediction_horizon: p.prediction_horizon || 14, explores_used: p.explores_used || [],
+        prediction_horizon: p.prediction_horizon ?? null,   /* R38S2E2: never forced */
+        explores_used: p.explores_used || [],
         semantic_layer_version: p.semantic_layer_version || '1.0.0',
         governance_manifest_version: p.governance_manifest_version || '1.0.0',
       });

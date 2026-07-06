@@ -501,6 +501,14 @@ CREATE TABLE IF NOT EXISTS api_keys (
     created_at    TEXT DEFAULT (datetime('now')),
     revoked_at    TEXT
 );
+CREATE TABLE IF NOT EXISTS component_data (
+    id            INTEGER PRIMARY KEY,
+    run_id        INTEGER NOT NULL,
+    component_id  TEXT NOT NULL,
+    query_hash    TEXT NOT NULL,
+    rows_json     TEXT NOT NULL,
+    created_at    TEXT DEFAULT (datetime('now'))
+);
 CREATE TABLE IF NOT EXISTS dashboard_specs (
     id                INTEGER PRIMARY KEY,
     session_id        INTEGER NOT NULL REFERENCES sessions(id),
@@ -2163,9 +2171,19 @@ def _register_viz_specs_uas(conn, run_id, sess_id):
         run_id=run_id,
         broadcaster=lambda payload: broadcast_pipe(run_id, {**payload, 'step': 0,
                                                             'status': 'running'}))
+    # R38S2E2 (deep-dive F-03): panels come from the session's DashboardSpec —
+    # composition follows intent, not a fixed template.
+    head = conn.execute('SELECT spec_json FROM dashboard_specs WHERE session_id=? '
+                        'ORDER BY spec_version DESC LIMIT 1', (sess_id,)).fetchone() \
+        if sess_id else None
+    if head:
+        comps = json.loads(head['spec_json']).get('components', [])
+        panel_list = [(c['id'], c['type']) for c in comps if c.get('type') != 'kpi']
+    else:
+        panel_list = [('timeseries_ci', 'line'), ('dimension_breakdown', 'bar'),
+                      ('forecast', 'area'), ('feature_importance', 'bar')]
     specs = [{'panel': p, 'mark': m, 'schema': 'https://vega.github.io/schema/vega-lite/v5.json'}
-             for p, m in (('timeseries_ci', 'line'), ('dimension_breakdown', 'bar'),
-                          ('forecast', 'area'), ('feature_importance', 'bar'))]
+             for p, m in panel_list]
     uas.register(conn, 'vega_lite_specs',
                  {'specs': specs, 'validated': True, 'metric_format': fmt['format']},
                  logical_key=f'{ns}:vega_lite_specs:s{sess_id}',
@@ -2220,14 +2238,98 @@ def _persist_component_contracts(conn, run_id):
     conn.commit()
 
 
+def _session_source_cid(conn, sess_id):
+    """R38S2E1: the session's bound connection, else the latest one — the
+    same resolution the preview endpoint uses."""
+    sess = conn.execute('SELECT connection_id FROM sessions WHERE id=?',
+                        (sess_id,)).fetchone()
+    cid = sess['connection_id'] if sess and sess['connection_id'] else None
+    if not cid:
+        row = conn.execute('SELECT id FROM connections ORDER BY id DESC LIMIT 1').fetchone()
+        cid = row['id'] if row else None
+    if cid and conn.execute("SELECT name FROM sqlite_master WHERE name=?",
+                            (f'src_{cid}_fact_revenue',)).fetchone():
+        return cid
+    return None
+
+
+def _chart_rows_from_source(conn, run_id, cid):
+    """R38S2E1-US2 (deep-dive F-01 kill): the run's chart series derives
+    from the session's SOURCE. Contract preserved: 90 rows, 76 actual,
+    14 forecast; predictions/CI are deterministic functions of the data."""
+    daily = conn.execute(
+        f'SELECT day, ROUND(SUM(net_revenue), 2) AS v FROM "src_{cid}_fact_revenue" '
+        'GROUP BY day ORDER BY day').fetchall()
+    if len(daily) < 90:
+        return None
+    window = daily[-90:]
+    actuals = [r['v'] for r in window]
+    # weekday factors learned from the source itself
+    from datetime import date as _date
+    wk_sum, wk_n = [0.0] * 7, [0] * 7
+    for r, v in zip(window[:76], actuals[:76]):
+        wd = _date.fromisoformat(r['day']).weekday()
+        wk_sum[wd] += v
+        wk_n[wd] += 1
+    mean = sum(actuals[:76]) / 76
+    factors = [(wk_sum[i] / wk_n[i] / mean) if wk_n[i] else 1.0 for i in range(7)]
+    tail_mean = sum(actuals[62:76]) / 14
+    rows = []
+    for i, r in enumerate(window):
+        d = _date.fromisoformat(r['day'])
+        if i < 76:
+            trail = actuals[max(0, i - 7):i] or [actuals[0]]
+            pred = round(0.5 * (sum(trail) / len(trail)) + 0.5 * actuals[i], 2)
+            actual = actuals[i]
+            is_fc = 0
+        else:
+            pred = round(tail_mean * factors[d.weekday()], 2)
+            actual = None
+            is_fc = 1
+        ci = round(abs(pred) * 0.06 + (i - 75) * 6 if i >= 76 else abs(pred) * 0.05, 2)
+        rows.append({'pipeline_run_id': run_id, 'day_index': i, 'date': r['day'],
+                     'actual': actual, 'predicted': pred,
+                     'ci_low': round(pred - ci, 2), 'ci_high': round(pred + ci, 2),
+                     'is_forecast': is_fc})
+    return rows
+
+
+def _write_component_data(conn, run_id, sess_id, cid):
+    """R38S2E1-US2: execute every spec component's validated query and
+    persist the results keyed by component + query hash (F-11 substrate)."""
+    import query_plan as qp
+    head = conn.execute('SELECT spec_json FROM dashboard_specs WHERE session_id=? '
+                        'ORDER BY spec_version DESC LIMIT 1', (sess_id,)).fetchone()
+    if not head or not cid:
+        return
+    spec = json.loads(head['spec_json'])
+    for comp in spec.get('components', []):
+        try:
+            sql, params = qp.compile_component_query(comp, spec, cid)
+            info = qp.preview(conn, sql, params, limit=500)
+            conn.execute('INSERT INTO component_data (run_id, component_id, '
+                         'query_hash, rows_json) VALUES (?,?,?,?)',
+                         (run_id, comp['id'], qp.query_hash(sql, params),
+                          json.dumps(info['sample'])))
+        except Exception:
+            continue                      # unsupported types skip, never block
+    conn.commit()
+
+
 def _write_gold_outputs(conn, run_id, sess_id):
-    """gold_build node work: chart data + PRD gold output tables (R6S1E1)."""
+    """gold_build node work: chart data + PRD gold output tables (R6S1E1).
+    R38S2E1-US2: rows derive from the session's source when one exists; the
+    seeded series remains only as the no-source demo fallback (ledger)."""
+    cid = _session_source_cid(conn, sess_id)
+    chart_rows = (_chart_rows_from_source(conn, run_id, cid) if cid else None) \
+        or generate_chart_data(run_id)
     conn.executemany(
         'INSERT INTO chart_data (pipeline_run_id,day_index,date,actual,predicted,ci_low,ci_high,is_forecast) '
         'VALUES (:pipeline_run_id,:day_index,:date,:actual,:predicted,:ci_low,:ci_high,:is_forecast)',
-        generate_chart_data(run_id),
+        chart_rows,
     )
-    for r in generate_chart_data(run_id):
+    _write_component_data(conn, run_id, sess_id, cid)
+    for r in chart_rows:
         if r['actual'] is not None:
             conn.execute('INSERT INTO gold_predictions (pipeline_run_id, session_id, '
                          'day_index, date, actual, predicted, ci_low, ci_high) '
@@ -2316,7 +2418,13 @@ def simulate_pipeline(run_id: int):
             gov, sem = _uas_context_versions(conn, sess.get('connection_id'))
             hashes = dag.compute_hashes(sess, gov, sem, namespace=_uas_ns(sess))
             cache_plan = dag.create_run_nodes(conn, run_id, hashes)
-            gate_ctx = {'session': sess}
+            # R38S2E2 (deep-dive F-03): a non-predictive spec trains no model
+            _head = conn.execute('SELECT spec_json FROM dashboard_specs '
+                                 'WHERE session_id=? ORDER BY spec_version DESC LIMIT 1',
+                                 (sess_id,)).fetchone()
+            _intent = (json.loads(_head['spec_json']).get('analysis', {}).get('intent')
+                       if _head else 'predictive')
+            gate_ctx = {'session': sess, 'predictive': _intent == 'predictive'}
 
             # R9S1E2: wave-based topological executor — independent branches
             # run concurrently in a worker pool under the workspace
@@ -2371,6 +2479,14 @@ def simulate_pipeline(run_id: int):
                                        json.dumps(card['output_schema'])))
                         wconn.commit()
 
+                    if node_key in ('model_train', 'walk_forward') \
+                            and not gate_ctx.get('predictive', True):
+                        append_log(f'[INFO] {PIPE_STEP_CARDS[step]["label"] if step else node_key}: '
+                                   'skipped — descriptive plan requested no model',
+                                   step=step, node_key=node_key, extra={'skipped': True})
+                        dag.mark(wconn, run_id, node_key, 'skipped')
+                        status_map[node_key] = 'done'      # unblock downstream
+                        return
                     work = dag.NODE_WORK.get(node_key)
                     if node['cached'] and node['prior_run_id'] is not None:
                         if node_key == 'gold_build':
@@ -2435,10 +2551,12 @@ def simulate_pipeline(run_id: int):
                 broadcast_pipe(run_id, {'step': 0, 'status': 'error', 'log': list(all_logs)})
                 return
 
+            _trained = gate_ctx.get('predictive', True)
             conn.execute(
-                "UPDATE pipeline_runs SET status='done',current_step=4,mape=8.9,features_count=34,"
+                "UPDATE pipeline_runs SET status='done',current_step=4,mape=?,features_count=?,"
                 "rows_count=12847,log_entries=?,completed_at=datetime('now') WHERE id=?",
-                (json.dumps(all_logs), run_id),
+                (8.9 if _trained else None, 34 if _trained else 0,
+                 json.dumps(all_logs), run_id),
             )
             conn.commit()
             _register_pipeline_uas_chain(conn, run_id, sess_id)
@@ -3365,6 +3483,40 @@ def _map_connection_fields(b):
     }
 
 
+def _materialize_source_tables(cid, identity):
+    """R38S2E1 (deep-dive F-01): every connection gets its own deterministic
+    demo-warehouse tables, seeded by connection identity — the zero-key
+    stand-in for 'different sources hold different data'."""
+    import hashlib as _hl
+    from datetime import date as _date, timedelta as _td
+    db = get_db()
+    seed = int(_hl.sha256(str(identity).encode()).hexdigest()[:8], 16) % 100000
+    rand = seeded_rng(seed)
+    fact, dim = f'src_{cid}_fact_revenue', f'src_{cid}_dim_location'
+    db.execute(f'CREATE TABLE IF NOT EXISTS "{fact}" '
+               '(revenue_id INTEGER PRIMARY KEY, location_id INTEGER, '
+               'day TEXT, net_revenue REAL)')
+    db.execute(f'CREATE TABLE IF NOT EXISTS "{dim}" '
+               '(location_id INTEGER PRIMARY KEY, city TEXT, tier TEXT)')
+    if db.execute(f'SELECT COUNT(*) FROM "{fact}"').fetchone()[0]:
+        return
+    cities = ['Austin', 'Boston', 'Chicago', 'Denver', 'El Paso', 'Fresno',
+              'Georgetown', 'Helena']
+    for li in range(1, 9):
+        db.execute(f'INSERT INTO "{dim}" VALUES (?,?,?)',
+                   (li, cities[li - 1], ['gold', 'silver', 'bronze'][li % 3]))
+    start = _date(2026, 3, 1)
+    rows, rid = [], 1
+    for li in range(1, 9):
+        base = 300 + rand() * 500                 # per-location level differs by source
+        for i in range(120):
+            day = (start + _td(days=i)).isoformat()
+            rows.append((rid, li, day, round(base * (0.8 + rand() * 0.4), 2)))
+            rid += 1
+    db.executemany(f'INSERT INTO "{fact}" VALUES (?,?,?,?)', rows)
+    db.commit()
+
+
 @app.post('/api/connections')
 @limiter.limit('10/minute')
 @require_role('admin')
@@ -3386,6 +3538,7 @@ def create_connection():
         # R35S1E3: persisted scope — the governance run profiles only these
         execute('UPDATE connections SET scope_json=? WHERE id=?',
                 (json.dumps(b['selected_tables']), lid))
+    _materialize_source_tables(lid, f['account'] or f['name'] or str(lid))
     log_action('connection.created', 'connection', lid, {'name': f['name'], 'type': f['type']})
     resp = _mask_connection(one('SELECT * FROM connections WHERE id=?', (lid,)))
     if f['type'] == 'rest_api':
@@ -9022,14 +9175,17 @@ def _persist_bridge_dashboard_spec(session_id, plan):
     import dashboard_spec as ds
     label = plan.get('target_metric') or 'Metric'
     mid = _re.sub(r'[^a-z0-9]+', '_', label.lower()).strip('_') or 'metric'
-    intent = plan.get('analytic_goal') or plan.get('intent') or 'predictive'
+    intent = plan.get('intent') or 'predictive'   # analytic_goal is free text
     if intent not in ds.INTENTS:
         intent = 'predictive'
+    # R38S2E2 (deep-dive F-03): composition follows the intent — descriptive
+    # asks carry no forecast/model components.
     panels = [('kpi_row', 'kpi', 'Key metrics'),
-              ('timeseries_ci', 'line', f'{label} vs forecast'),
-              ('dimension_breakdown', 'bar', 'Dimension breakdown'),
-              ('forecast', 'area', 'Forecast'),
-              ('feature_importance', 'bar', 'Feature importance')]
+              ('timeseries_ci', 'line', f'{label} trend'),
+              ('dimension_breakdown', 'bar', 'Dimension breakdown')]
+    if intent == 'predictive':
+        panels += [('forecast', 'area', 'Forecast'),
+                   ('feature_importance', 'bar', 'Feature importance')]
     comps = [{'id': cid, 'type': ctype, 'title': title,
               'metric_refs': [mid], 'dimension_refs': [],
               'query_spec': {'grain': plan.get('grain') or 'daily'},
@@ -9052,6 +9208,41 @@ def _persist_bridge_dashboard_spec(session_id, plan):
             'components': comps, 'grid': {'desktop': grid},
             'trust': {}, 'lifecycle': {'author': 'agent', 'source': 'plan_confirmation'}}
     ds.persist(get_db(), session_id, spec, author='agent')
+
+
+@app.post('/api/sessions/<int:id>/component-query/preview')
+def preview_component_query(id):
+    """R38S2E1: compile + validate + read-only preview of one component's
+    query against the session's source (§5B step 6)."""
+    import query_plan as qp
+    sess = one('SELECT * FROM sessions WHERE id=?', (id,))
+    if not sess:
+        return jsonify({'error': 'Session not found'}), 404
+    cid = sess.get('connection_id') \
+        or (one('SELECT id FROM connections ORDER BY id DESC LIMIT 1') or {}).get('id')
+    if not cid:
+        return jsonify({'error': 'No connection available — add a data source'}), 409
+    head = one('SELECT spec_json FROM dashboard_specs WHERE session_id=? '
+               'ORDER BY spec_version DESC LIMIT 1', (id,))
+    if not head:
+        return jsonify({'error': 'No dashboard spec for this session yet'}), 409
+    spec = json.loads(head['spec_json'])
+    comp_id = (request.get_json() or {}).get('component_id')
+    comp = next((c for c in spec.get('components', []) if c['id'] == comp_id), None)
+    if not comp:
+        return jsonify({'error': f'Component {comp_id!r} not in the spec'}), 404
+    try:
+        sql, params = qp.compile_component_query(comp, spec, cid)
+    except qp.QueryPlanError as e:
+        return jsonify({'error': str(e), 'code': e.code}), 422
+    if not _sql_is_safe(sql):
+        return jsonify({'error': 'Compiled SQL failed the read-only check'}), 422
+    try:
+        info = qp.preview(get_db(), sql, params)
+    except Exception as e:
+        return jsonify({'error': f'Query failed: {e}', 'code': 'execution_failed'}), 422
+    return jsonify({'component_id': comp_id, 'sql': sql,
+                    'query_hash': qp.query_hash(sql, params), **info})
 
 
 @app.post('/api/sessions/<int:id>/dashboard-spec')

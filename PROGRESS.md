@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R38 · Sprint R38S2 · Epic E1 (source-bound queries) · R38S2E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
+**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R39 · Sprint R39S1 · Epic E1 (component registry + CRUD) · R39S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -554,7 +554,7 @@ re-verify tails after any host-side write.
 
 # Agentic Dashboard Program (Deep-Dive v1.0) — R37–R43
 
-**Current position:** R38 · Sprint R38S2 · Epic E1 (source-bound queries) · R38S2E1-US1  ← next story
+**Current position:** R39 · Sprint R39S1 · Epic E1 (component registry + CRUD) · R39S1E1-US1  ← next story
 **Spec:** `AnalytIQ Workspace Agentic Dashboard Deep Dive` (2026-07-06) — findings F-01…F-15 spot-verified in code before planning (seeded chart generator, scalar target_metric, un-gated section PATCH, format=html export all confirmed). Suite at planning time: backend 469/469 · UI 186/186 (R30–R36 close, 9b02c62).
 **Standing:** no multi-agents (lead executes inline) · R34 marketing surfaces locked to the junior · legacy workbench specs migrate only with an owning story ID.
 
@@ -565,17 +565,17 @@ re-verify tails after any host-side write.
 - [x] R37S1E2-US3 state & safety sweep [F-09/F-14] — done: run-change resets canvas build state (F-09 groundwork; full refinement loop lands R41); telemetry pill relabeled HIDE BUILD TELEMETRY (r30s2_building contract intact); Move clamps + renormalizes to contiguous 0..n-1 (property-tested); section PATCH role-gated admin/analyst (viewer 403 tested); PATCH returns real `layout_version` (UAS node version) → live version chip (v2 after 2nd edit, spec-pinned); rename errors surface via canvas-error strip (full control audit owed to R43S1E2). BE 475/475, UI 192/192.
 - [x] R37S1 sprint regression recorded — backend 475/475 · UI 192/192 (0 failed, 2026-07-06) · zero-key boot: shell 200 + 8/8 local — **RELEASE R37 CLOSED**
 
-## Release R38 — DashboardSpec & source-bound data (pending)
+## Release R38 — DashboardSpec & source-bound data ✅ CLOSED 2026-07-06
 - [x] R38S1E1-US1 versioned DashboardSpec model + validator — done: `dashboard_specs` table (UNIQUE(session,version), immutability trigger — UPDATE aborts, tested) + `server/dashboard_spec.py` (§5A shape: metric roles incl. derived dependency closure + zero-denominator rule, intent whitelist, component→metric/dimension ref checks, 12-col grid bounds per breakpoint; structured error codes; key-order-independent sha256) + POST/GET head/versions endpoints (422 w/ errors, nothing stored on invalid — tested). BE 479/479, UI 192/192.
 - [x] R38S1E1-US2 plan approval emits spec v1 — done: `POST /api/sessions/<id>/spec` (plan confirmation) derives + appends a validated DashboardSpec (bridge: primary metric from the scalar plan, intent-mapped analysis, today's 5 components, full-width stacked grid — every component placed, spec-pinned); derivation is non-blocking (confirmation never fails on bridge errors); head endpoint is the canvas/pipeline read path (renderer switch lands R39S1E3; multi-metric derivation replaces the bridge in E2/S2). BE 479/479, UI 192/192.
 - [x] R38S1E2-US1 multi-metric planner [F-02] — done: `build_metric_inventory` (deterministic phrase split + governed-catalog resolution + server-defined DERIVED_PATTERNS registry [target gap % / AOV / conversion rate] w/ dependency expansion, canonical target reuse, zero-denominator rules) + `propose_components` (role-driven kpi/trend/forecast/driver proposals); unresolved items carry reasons + catalog suggestions, never dropped; scalar target_metric kept as compat. Doc §8 'Metric decomposition' row: 5-metric ask incl. derived → all 5 w/ deps/formats/unresolved/component mapping (test-pinned). BE 481/481, UI 193/193.
 - [x] R38S1E2-US2 plan card metric checklist — done: plan card renders the inventory (role pills, formats, dependency arrows, ✓/UNRESOLVED amber chips w/ reason titles) + proposed-component line before Approve & Build (§5B step 8). r16s1_workbench locator migrated (exact-match, cited). BE 481/481, UI 193/193.
 - [x] R38S1 sprint regression recorded — backend 481/481 · UI 193/193 (0 failed, 2026-07-06)
-- [ ] R38S2E1-US1 per-component query plan: dialect SQL via warehouse.py, read-only preview (shape/hash/cost)
-- [ ] R38S2E1-US2 chart data from component queries; fixed seed retired from run path; two-source fidelity fixture [F-01]
-- [ ] R38S2E2-US1 intent-shaped composition; fixed template + forced horizon retired [F-03]
-- [ ] R38S2 sprint regression recorded
-- [ ] R38 release regression + two-source fidelity pinned
+- [x] R38S2E1-US1 per-component query plans — done: per-connection demo-warehouse tables (`src_{cid}_fact_revenue`/`dim_location`, seeded by connection identity — deterministic, distinct per source, re-creation-stable [tested]) + `server/query_plan.py` (type-templated SELECT-only compilation via the sqlite dialect, grain bucketing, sha256 query hash) + `POST /api/sessions/<id>/component-query/preview` (validated read-only execution → row shape/count/sample/rows-scanned cost; 404 unknown component, 422 on unsafe/failed). BE 487/487, UI 194/194.
+- [x] R38S2E1-US2 source-bound chart data [F-01 KILLED] — done: `_write_gold_outputs` derives the run's 90-row series from the session's SOURCE (last-90-day daily sums; predictions/CI/weekday factors are deterministic functions of the data; 76/14 contract preserved); `component_data` table persists every spec component's query results keyed by query hash; **binding proof test**: chart actuals equal the source's daily sums, two sources differ; seeded generator remains only as the no-source demo fallback (ledger). BE 487/487, UI 194/194.
+- [x] R38S2E2-US1 intent-shaped composition [F-03] — done: bridge spec + viz_specs derive components from the session's DashboardSpec (descriptive: kpi/trend/breakdown only; predictive adds forecast + feature importance); pipeline honestly SKIPS model_train/walk_forward for non-predictive specs (dag_nodes status 'skipped', logged; mape/features NULL/0 — no fake 8.9); plan_validation gate requires horizon only for predictive; both forced `|| 14` horizons removed from Workbench. BE 487/487, UI 194/194.
+- [x] R38S2 sprint regression recorded — backend 487/487 · UI 194/194 (0 failed, 2026-07-06)
+- [x] R38 release regression recorded — backend 487/487 · UI 194/194 · zero-key boot green (shell 200, 8/8 local) · two-source fidelity fixture pinned in test_r38s2_queries — **RELEASE R38 CLOSED** (doc Phase-1 exit: two different metrics/sources produce provably different, correct datasets)
 
 ## Release R39 — Component engine (pending)
 - [ ] R39S1E1-US1 registry + POST/DELETE/duplicate component APIs w/ auto contracts, role-gated [F-05 server]
@@ -615,5 +615,7 @@ re-verify tails after any host-side write.
 
 ## Adaptation ledger (program-specific, grows during execution)
 - "Source-bound" on the zero-key stack = bound to per-connection seeded fixture tables through warehouse.py dialect SQL; two-source fidelity is proven with two fixture connections (R38S2E1-US2).
+- Sessions with NO connection at all keep the legacy seeded series (the no-source demo case); every connection-bound session gets source-derived data (R38S2E1-US2).
+- Descriptive runs keep the 90-row chart series (with its inert projection tail) for KPI/store contracts; the composition layer (sections/model/card) is what intent shapes — full per-intent series shaping arrives with R39's renderers (R38S2E2-US1).
 - Planner remains deterministic (catalog resolution, no LLM) per doc sequencing note: canonical IDs/expressions/joins/access are server-verified.
 - Doc reviewer's env lacked Chromium/pytest; ours runs both — no action, but F-15's substance (parity-slice tests) is owned by R43S1E1-US1.

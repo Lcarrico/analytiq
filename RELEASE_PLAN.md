@@ -1669,18 +1669,18 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ### Sprint R38S2 — real data, shaped by intent
 #### Epic E3 — Source-bound component queries (F-01 · F-11 groundwork)
-- [ ] **R38S2E1-US1** — per-component query plan: generation + read-only validated execution.
+- [x] **R38S2E1-US1** ✅ 2026-07-06 — per-component query plan: generation + read-only validated execution.
   - AC: every planned component gets a query spec (metrics, dims, grain, filters, comparison) compiled to dialect SQL via warehouse.py against the session's connection; a read-only preview endpoint returns row shape, row count, query hash, cost estimate; validation failures are structured and visible; nothing executes unvalidated.
   - Touches: server/query_plan.py (new), warehouse.py (read-only compile hooks), server/app.py (preview endpoint), tests. Deps: R38S1E1-US1. DoD: standard 9.
-- [ ] **R38S2E1-US2** — chart data comes from the component's query, not the global seed.
+- [x] **R38S2E1-US2** ✅ 2026-07-06 — chart data comes from the component's query, not the global seed. (F-01 killed; binding-proof + two-source tests)
   - AC: pipeline executes each component's validated query against the connected source and persists per-component result rows keyed by component id + query hash; `generate_chart_data`'s fixed series is retired from the run path (kept only as fixture seeding for demo source tables); **two seeded fixture connections with different data produce different, fixture-predicted values** (doc acceptance "Source fidelity"); date range/grain from the plan actually bounds the query.
   - Touches: server/app.py (pipeline stage + chart storage), server/query_plan.py, fixtures, BuildCanvas.jsx (per-component data read), tests. Deps: R38S2E1-US1. DoD: standard 9 + adaptation-ledger entry for the fixture-source definition.
 #### Epic E4 — Intent-shaped composition (F-03)
-- [ ] **R38S2E2-US1** — components proposed by analytical role; fixed template retired.
+- [x] **R38S2E2-US1** ✅ 2026-07-06 — components proposed by analytical role; fixed template retired. (model nodes skip honestly; horizons never forced)
   - AC: descriptive asks produce no model/forecast components (and the pipeline skips training); diagnostic asks produce driver/breakdown components; predictive asks produce forecast+CI; prescriptive add recommendation/narrative; the hard-coded `dashboard_plan`/`viz_specs` panel arrays are replaced by spec-driven composition; the forced `prediction_horizon || 14` is removed for non-predictive plans.
   - Touches: server/app.py (:2055 / :2127 regions), planner.py, Workbench.jsx (:207/:258), tests. Deps: R38S1E2-US1, R38S2E1-US2. DoD: standard 9; acceptance-matrix row "Intent fidelity" green.
 
-**R38S1 + R38S2 sprint gates:** full regression each; release gate additionally pins the two-source fidelity fixture.
+**R38S1 + R38S2 sprint gates:** ✅ 2026-07-06 — S1: 481/193 · S2 + release: 487/487 backend · 194/194 UI · zero-key boot green · two-source fidelity pinned. **RELEASE R38 CLOSED** — doc Phase-1 exit criteria met.
 
 ## Release R39 — Component engine [doc §7 Phase 2 · §6 workbench authoring]
 **Goal:** agent and UI can create/delete/duplicate KPI, chart, and table components with real contracts. Exit: doc Phase-2 criterion.

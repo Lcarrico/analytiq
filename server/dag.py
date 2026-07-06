@@ -144,7 +144,11 @@ def _gate_data_contract(conn, run_id, ctx):
 
 def _gate_plan_validation(conn, run_id, ctx):
     s = ctx['session']
-    missing = [f for f in ('metric', 'grain', 'horizon') if not s.get(f)]
+    # R38S2E2 (deep-dive F-03): a horizon is only required when the plan is
+    # predictive — descriptive/diagnostic runs legitimately have none.
+    required = ('metric', 'grain', 'horizon') if ctx.get('predictive', True) \
+        else ('metric', 'grain')
+    missing = [f for f in required if not s.get(f)]
     return ('BLOCK', {'missing': missing}) if missing else ('PASS', {})
 
 
