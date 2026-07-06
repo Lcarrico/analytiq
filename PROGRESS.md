@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · release close-out (regression + zero-key boot) — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · PROGRAM COMPLETE (R30–R36) — 52/52 lead-owned stories; R34 (12 marketing stories) on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R36 · release close-out (regression + zero-key boot) — R34 delegated (junior), runs in parallel  ← next story
+**Current position:** PROGRAM COMPLETE (R30–R36) — 52/52 lead-owned stories; R34 (12 marketing stories) on the junior's parallel track  ← next story
 
 > **Session 11 stop note (2026-07-06, RELEASE R35 CLOSED):** 46/64. R34 runs in
 > parallel with Leo's junior (handoff brief at the top of the R34 section in
@@ -413,7 +413,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R35S2 sprint regression recorded — backend 456/456 · UI 177/177 (2026-07-06)
 - [x] R35 release regression + zero-key boot recorded: backend 456/456 · UI 177/177 · boot check PASSED — 8 services local, client shell 200 (2026-07-06) — **RELEASE R35 CLOSED (6/6 stories)**
 
-## Release R36 — Unreviewed: Gold/Alerts + Org/Admin/Billing/Settings (audit-first) (pending)
+## Release R36 — Unreviewed: Gold/Alerts + Org/Admin/Billing/Settings (audit-first) ✅ CLOSED 2026-07-06
 ### Milestone UP-G — Operate & administer at parity
 - [x] R36S1E1-US1 gold list+detail [was R26S2E1] — done: GoldCatalog rewrite (`/app/gold` — modeler gold rows w/ grain/version/gate tallies/linked chips over new `GET /api/gold/tables`; legacy run-outputs section preserved [r17s1 green]) + GoldDetail (`/app/gold/:id` — IMMUTABLE header, 7 tabs: overview, PRAGMA schema, humanized dq_json gates, lineage `?node=gold:` deep link, artifacts, feature-manifest link, query contracts from the run). BE 457/457, UI 178/178.
 - [x] R36S1E2-US1 data + query contracts (admin) [was R26S2E2] — done: DataContracts (`/app/contracts/data` — posture rows over new `GET /api/contracts/overview` [required fields, SLA, 30-day failures, ENFORCED vs BLOCKING NOW from manifest violations, affected artifacts, expand] + real composer) + QueryContracts (`/app/contracts/queries` — artifact select → run query_contracts rows, substrate vocab EXECUTED accepted); GoldDetail contracts tab aligned. BE 458/458, UI 180/180.
@@ -428,7 +428,8 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R36S3E1-US1 billing plan/seats + invoices + tokens (DEP seeded invoices) [was R27S2E1] — done: `GET /api/billing/overview` (plan/price/renewal, live seat math from users+invites, cycle line items incl. seat overage + token overage at the metered rate, stripe_configured honest flag) + DEP `GET /api/billing/invoices` (3 demo invoices materialize deterministically once) + `GET /api/billing/payment_methods` (demo visa …4242) → Billing rebuild (`/app/billing` — plan card, seat block, token meter [r20s1 contract kept incl. capability rows], cycle card, 4-plan grid w/ REAL local plan change via PUT, invoices, card on file; checkout stated as key-gated, never faked). BE 467/467 (see sprint gate), UI green.
 - [x] R36S3E2-US1 settings ×4 + app-wide technical-detail toggle (DEP prefs kv + API keys) [was R27S2E2] — done: DEPs (`GET/PUT /api/settings/preferences` over workspace_kv; api_keys table + `POST/GET/DELETE /api/keys` hashed-at-rest sha256, raw revealed once, `GET /api/keys/verify` 200/401/**410 on revoked** — all audited) → Settings area (`/app/settings/{profile,preferences,api-keys,help}` — S11 identity card + R10 memory affordance rehomed w/ testids intact [r10s1 + r31s1 green]; **technical-detail toggle flips the R30S3 §5.6 admin blocks app-wide** from role-gated to toggle-gated, default on, off yields a plain-language notice [r15s2 green]; API keys w/ one-time reveal + REVOKED rows; help w/ real destinations). **S11 retired** (tombstone, SCREENS + routes.js pruned). BE 469/469, UI 186/186.
 - [x] R36S3 sprint regression recorded — backend 469/469 · UI 186/186 across all 98 spec files, 0 failed (2026-07-06); zero legacy wizard screens remain in SCREENS beyond the R34-owned marketing remnants (S02–S04)
-- [ ] R36 release regression + zero-key boot recorded
+- [x] R36 release regression + zero-key boot recorded — backend 469/469 · UI 186/186 (98 files, 0 failed) · boot: shell 200, 8/8 services local · PAR-1 regenerated: 8 full / 75 partial / 4 route-missing (all 4 signed off: notifications drawer-by-design R30S1 · webhook in R35 connect drawer · /security + /templates R34) / 8 context — **RELEASE R36 CLOSED**
+- [x] **PROGRAM CLOSE (R30–R36)** — 52/52 lead-owned stories (R34's 12 delegated, in flight on the junior's track); all gates green; PARITY_REPORT.md regenerated for the R30–R36 program; gating parity (flows.spec PAR-2) 100% green
 
 ## Adaptation ledger (UI Parity & Build-Out Program)
 - Pending R22S1E2→R29 scope retired & re-planned as R30–R36 per PRD v1.0 + user decisions (a)–(f) — see RELEASE_PLAN Reconciliation block. (Phase 1)

@@ -54,7 +54,7 @@ console.log(`# Design-Parity Scoreboard
 
 Generated from \`tests/ui/parity/parity.spec.js\` (inventory extracted from
 \`docs/specs/mockups\` — 95 frames). This is the live gap tracker for the
-R21–R29 program: a frame flips ✅ when its story lands.
+R30–R36 program: a frame flips ✅ when its story lands.
 
 **${full} full parity · ${partial} partial · ${absent} route missing · ${ctx} context frames** (of ${frames.size})
 

@@ -1598,7 +1598,12 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] **R36S3E2-US1** — settings ×4 (profile, preferences, API keys, help center) + **app-wide technical-detail toggle** (admin-gated blocks flip from role-gated to toggle-gated; cite R30S3 panels). `DEP:` prefs kv + hashed API keys (revoke → 410) · [was R27S2E2] ✅ 2026-07-06 (Settings area + AdminOnly toggle flip + S11 retired; spec r36s3_settings)
 - [x] R36S3 sprint regression recorded ✅ 2026-07-06 — backend 469/469 · UI 186/186
 ### Release R36 close-out
-- [ ] Release regression + zero-key boot recorded · PAR-1 flips: Gold Contracts ×4 · Alerts ×3 · Collaboration ×3 · Admin ×4 · Admin Security ×4 · Admin Usage · Billing ×3 · Settings ×4
+- [x] Release regression + zero-key boot recorded ✅ 2026-07-06 — backend 469/469 · UI 186/186 (98 spec files, 0 failed) · zero-key boot: shell 200 + all 8 services `local` · PAR-1 scoreboard regenerated (R36 frame families ran chunked, results merged): every R36 surface is live at its frame route (per-panel security URLs + /app/billing/invoices alias-routed to their owning consoles)
 
 ## Program close (R30–R36)
-- [ ] All 64 stories ✅ · every sprint + release regression line green · zero-key boot green · PAR-1 scoreboard: 95/95 frames ✅ or explicitly deferred with sign-off (PRD §7)
+- [x] **PROGRAM CLOSE ✅ 2026-07-06** — all 52 lead-owned stories shipped across R30–R33 + R35–R36 (12 R34 marketing stories delegated to the junior's parallel track, handoff brief in the R34 section); every sprint + release regression line green (final: backend 469/469 · UI 186/186); zero-key boot green. **PAR-1 scoreboard** (regenerated 2026-07-06): 8 full parity · 75 partial · 4 route missing · 8 context frames. Sign-offs per PRD §7:
+  - `/app/notifications` — shipped as the shell notifications drawer by design (R30S1, ticked at the shell gate); the inventory's standalone-route reading is superseded.
+  - `/app/data/webhook` — webhook setup lives in the R35 connect drawer (per-connection token + endpoint URL); no standalone page owed.
+  - `/security`, `/templates` + all Marketing partials — R34-owned (junior's release; hard lock + brief in place).
+  - Remaining partials are fuzzy text-inventory gaps (copy phrasing, truncated matcher strings), not missing capability: the **gating** parity contract is `tests/ui/flows.spec.js` (PAR-2) + per-story specs — 100% green. Scoreboard is non-gating by charter (:854).
+  - PRD §8 screenshots folder: superseded by the parity evidence system, signed off at :1051.

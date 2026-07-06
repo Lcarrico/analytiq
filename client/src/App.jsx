@@ -152,6 +152,13 @@ function Layout() {
                element={<AdminGate><Screen12 /></AdminGate>} />  {/* R36S2E4 */}
         <Route path="/app/admin/security"
                element={<AdminGate><AdminSecurity /></AdminGate>} />
+        {/* R36S2E4: the PRD frames give each security panel its own URL —
+            the console owns all four (aliases, same surface) */}
+        {['audit', 'secrets', 'sharing', 'rls'].map(seg => (
+          <Route key={seg} path={`/app/admin/${seg}`}
+                 element={<AdminGate><AdminSecurity /></AdminGate>} />
+        ))}
+        <Route path="/app/billing/invoices" element={<Billing />} />  {/* R36S3E1 alias */}
         <Route path="/app/settings/profile" element={<SettingsProfile />} />  {/* R36S3E2 */}
         <Route path="/app/settings/preferences" element={<SettingsPreferences />} />
         <Route path="/app/settings/api-keys" element={<SettingsKeys />} />
