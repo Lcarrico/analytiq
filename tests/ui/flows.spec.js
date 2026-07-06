@@ -12,7 +12,7 @@ test('sidebar reaches all 13 areas at their mockup routes', async ({ page }) => 
     ['Home', '/app'], ['Create', '/app/create/new'], ['Artifacts', '/app/artifacts'],
     ['Data', '/app/data/sources'], ['Semantic Layer', '/app/semantic'],
     ['Gold Tables', '/app/gold'], ['Models', '/app/models'], ['Alerts', '/app/alerts'],
-    ['Governance', '/app/governance'], ['Team', '/app/team'], ['Admin', '/app/admin/platform'],
+    ['Governance', '/app/governance'], ['Team', '/app/team'], ['Admin', '/app/admin'],   // R36S2E4: Admin nav lands on the workspace overview
     ['Billing', '/app/billing'], ['Settings', '/app/settings/profile'],
   ];
   for (const [label, route] of expected) {

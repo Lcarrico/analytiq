@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · Sprint R36S1 · Sprint R36S2 · Epic E2 (admin overview + roles) · R36S2E2-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · Sprint R36S2 · Epic E5 (usage & cost dashboard) · R36S2E5-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R36 · Sprint R36S1 · Sprint R36S2 · Epic E2 (admin overview + roles) · R36S2E2-US1 — R34 delegated (junior), runs in parallel  ← next story
+**Current position:** R36 · Sprint R36S2 · Epic E5 (usage & cost dashboard) · R36S2E5-US1 — R34 delegated (junior), runs in parallel  ← next story
 
 > **Session 11 stop note (2026-07-06, RELEASE R35 CLOSED):** 46/64. R34 runs in
 > parallel with Leo's junior (handoff brief at the top of the R34 section in
@@ -420,9 +420,9 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R36S1E3-US1 alerts center / create / detail (DEP alerts CRUD) [was R26S2E3] — done: Alerts DEP (`server/alert_rules.py` — deterministic per-kind evaluation vs real substrate [threshold vs series, freshness vs SLA, schema/model drift, artifact health, 3σ anomaly]; alert_rules + alert_triggers tables; CRUD + mute + check-now, all audited; create seeds a real first verdict) + AlertsCenter/AlertDetail (`/app/alerts`, `/app/alerts/:id` — typed pills, live FIRING/OK/MUTED, create drawer, grounded trigger history w/ delivery marks, trigger logic, Mute 24h/Check now/Delete). Last placeholder retired (r15s1_shell migrated: placeholder era over). BE 460/460, UI 181/181 (+1 documented conditional skip). 
 - [x] R36S1 sprint regression recorded — backend 460/460 · UI 181/181 (2026-07-06); zero placeholders remain
 - [x] R36S2E1-US1 comments inbox + team + invites [was R27S1E1] — done: CommentsInbox (`/app/comments` — Open/Resolved/Mentioned pills w/ counts, rich rows [author avatar, section chip, artifact link, inline resolve] over the real inbox endpoint) + Team rebuild (`/app/team` — seat header [seat-usage contract kept], role/status pills incl INVITED, invite MODAL w/ email chips + live seat math + real send; r18 spec migrated to the modal). BE 460/460, UI 184/184. 
-- [ ] R36S2E2-US1 admin overview + roles matrix (DEP roles kv) [was R27S1E2]
-- [ ] R36S2E3-US1 SSO settings + branding admin (DEP settings kv) [was R27S1E3]
-- [ ] R36S2E4-US1 admin security ×4 (secrets, audit, sharing gov, RLS simulator) [was R27S1E4]
+- [x] R36S2E2-US1 admin overview + roles matrix (DEP roles kv) [was R27S1E2] — done: workspace_kv DEP (`_kv_get`/`_kv_put`) + `GET /api/admin/overview` (9 live KPI groups: users/invites, roles, integrations, governance backlog by type, audit 24h, token usage vs cap, security warnings from expiring links, share links, SSO status) + `GET/PATCH /api/admin/roles` (permissions matrix over kv, owner locked, sensitive perms flagged, audited) → AdminOverview (`/app/admin` — 9 navigating cards) + RolesMatrix (`/app/admin/roles` — per-cell toggles, owner column disabled). BE 464/464, UI 181/181.
+- [x] R36S2E3-US1 SSO settings + branding admin (DEP settings kv) [was R27S1E3] — done: `GET/PUT /api/admin/sso` + `POST /api/admin/sso/test` (kv-backed SAML settings, https validation, domain verify [instant on the local stack, stated], audited) → AdminSso (`/app/admin/sso` — provider/URL/entity/enforce, domain chips w/ ✓ VERIFIED, test-connection result pill) + AdminBranding (`/app/admin/branding` — name/color over the existing branding API w/ live preview mark). BE 464/464, UI 181/181.
+- [x] R36S2E4-US1 admin security ×4 (secrets, audit, sharing gov, RLS simulator) [was R27S1E4] — done: `GET /api/admin/secrets` (masked tails only — raw values never leave the server) + audited `POST .../rotate` (Fernet re-issue), `GET /api/admin/rls` list, `GET/PUT /api/admin/sharing` (rules kv + live link counts) → AdminSecurity (`/app/admin/security` — audit table w/ CSV/JSON export, masked credentials w/ rotate, sharing rules, RLS composer + "test as user" simulator). **S12 retired as a legacy remnant**: § citations stripped (vocab ledger pruned to zero), screen-table mapping removed, `/app/admin/platform` re-routed as a first-class admin-gated console (r13s1 + r15s2 contracts intact); sidebar Admin → `/app/admin` (flows migrated). BE 464/464, UI 181/181.
 - [ ] R36S2E5-US1 usage & cost dashboard [was R27S1E5]
 - [ ] R36S2 sprint regression recorded
 - [ ] R36S3E1-US1 billing plan/seats + invoices + tokens (DEP seeded invoices) [was R27S2E1]

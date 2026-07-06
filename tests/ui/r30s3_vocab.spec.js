@@ -20,7 +20,6 @@ const KILL = ['PBKDF2', 'Agent memory', 'CENTERPIECE', 'gate:PASS', '(§', 'Deep
 const ALLOWED_UNTIL = {
   // S11 pruned 2026-07-05 — R31S1E1 shipped the standalone auth and stripped
   // the settings screen
-  'screens/S12_Platform.jsx': [['(§', 'R36S2E4']],   // retires with admin security screens
 };
 
 const stripComments = (src) => src

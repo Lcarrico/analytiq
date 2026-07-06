@@ -124,7 +124,7 @@ export default function Screen12() {
       <Card style={{ marginTop: 16 }} data-testid="cache-panel">
         <H>Caching hierarchy</H>
         <div style={{ fontSize: 11, color: C.textTer, fontFamily: FONT, marginBottom: 8 }}>
-          Independent layers keyed by governance + semantic versions — a version bump invalidates only its dependents. (§17.7.3)
+          Independent layers keyed by governance + semantic versions — a version bump invalidates only its dependents.
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
           {cache && Object.entries(cache.layers).map(([layer, s]) => (
@@ -143,7 +143,7 @@ export default function Screen12() {
       <Card style={{ marginTop: 16 }} data-testid="dispatch-panel">
         <H>Cost-aware dispatches</H>
         <div style={{ fontSize: 11, color: C.textTer, fontFamily: FONT, marginBottom: 8 }}>
-          Ladder: cache → template → small model → frontier model. Only novel work reaches the frontier. (§17.2.2)
+          Ladder: cache → template → small model → frontier model. Only novel work reaches the frontier.
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
           {['cache', 'template', 'small_model', 'frontier_model'].map(tier => (
@@ -163,7 +163,7 @@ export default function Screen12() {
       <Card style={{ marginTop: 16 }} data-testid="events-panel">
         <H>Platform events</H>
         <div style={{ fontSize: 11, color: C.textTer, fontFamily: FONT, marginBottom: 8 }}>
-          Data, schema, drift, and business events trigger targeted recompute without a user turn. (§17.2.4)
+          Data, schema, drift, and business events trigger targeted recompute without a user turn.
         </div>
         {events.length === 0 && <span style={{ fontSize: 12, color: C.textTer, fontFamily: FONT }}>No events yet</span>}
         {events.slice(0, 8).map(ev => (
@@ -178,7 +178,7 @@ export default function Screen12() {
       <Card style={{ marginTop: 16 }} data-testid="meta-panel">
         <H>Meta-orchestrator</H>
         <div style={{ fontSize: 11, color: C.textTer, fontFamily: FONT, marginBottom: 8 }}>
-          Deterministic arbitration, systemic-failure triage, queue reprioritization. Human checkpoints are never skippable. (§17.2.7)
+          Deterministic arbitration, systemic-failure triage, queue reprioritization. Human checkpoints are never skippable.
         </div>
         <div style={{ marginBottom: 8 }}>
           <Btn size="sm" variant="outline" data-testid="reprioritize-btn" onClick={async () => {
@@ -206,7 +206,7 @@ export default function Screen12() {
       <Card style={{ marginTop: 16 }} data-testid="consultations-panel">
         <H>Agent consultations</H>
         <div style={{ fontSize: 11, color: C.textTer, fontFamily: FONT, marginBottom: 8 }}>
-          Agents consult each other mid-task instead of failing into repair cycles — never a hidden side channel. (§17.2.3)
+          Agents consult each other mid-task instead of failing into repair cycles — never a hidden side channel.
         </div>
         {consults.length === 0 && <span style={{ fontSize: 12, color: C.textTer, fontFamily: FONT }}>No consultations yet</span>}
         {consults.slice(0, 6).map(cn => (
@@ -225,7 +225,7 @@ export default function Screen12() {
       <Card style={{ marginTop: 16 }} data-testid="optimizations-panel">
         <H>Optimization proposals</H>
         <div style={{ fontSize: 11, color: C.textTer, fontFamily: FONT, marginBottom: 8 }}>
-          Autonomous analysis of query telemetry and cache stats — proposals only, never auto-applied. (§17.2.9)
+          Autonomous analysis of query telemetry and cache stats — proposals only, never auto-applied.
         </div>
         <div style={{ marginBottom: 8 }}>
           <Btn size="sm" variant="outline" data-testid="optimize-scan-btn" onClick={async () => {
@@ -258,7 +258,7 @@ export default function Screen12() {
       <Card style={{ marginTop: 16 }} data-testid="feedback-panel">
         <H>Recommendation feedback</H>
         <div style={{ fontSize: 11, color: C.textTer, fontFamily: FONT, marginBottom: 8 }}>
-          Which suggestion types are earning trust — dismissal is a first-class signal. (§17.4.3)
+          Which suggestion types are earning trust — dismissal is a first-class signal.
         </div>
         {feedback.length === 0 && <span style={{ fontSize: 12, color: C.textTer, fontFamily: FONT }}>No decisions recorded yet</span>}
         {feedback.map(t => (
@@ -283,7 +283,7 @@ export default function Screen12() {
           }}>Generate observability artifact</Btn>
         </div>
         <div style={{ fontSize: 11, color: C.textTer, fontFamily: FONT, marginBottom: 8 }}>
-          Mined from usage telemetry, routed to their consumers with an audited delivery trail. (§17.4.2)
+          Mined from usage telemetry, routed to their consumers with an audited delivery trail.
         </div>
         <div style={{ marginBottom: 8 }}>
           <Btn size="sm" variant="outline" data-testid="mine-signals-btn" onClick={async () => {

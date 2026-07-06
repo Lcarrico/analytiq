@@ -47,6 +47,9 @@ import GoldDetail from './screens/GoldDetail';   // R36S1E1
 import { DataContracts, QueryContracts } from './screens/Contracts';   // R36S1E2
 import { AlertDetail, AlertsCenter } from './screens/Alerts';   // R36S1E3
 import CommentsInbox from './screens/CommentsInbox';   // R36S2E1
+import { AdminOverview, RolesMatrix } from './screens/AdminOverview';   // R36S2E2
+import { AdminBranding, AdminSso } from './screens/AdminSso';   // R36S2E3
+import AdminSecurity from './screens/AdminSecurity';   // R36S2E4
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
@@ -54,7 +57,6 @@ const SCREENS = {
   // R35 close-out: S02–S04 wizard remnants fully retired — data surfaces own /app/data/*
   10: Artifacts,   // R30S1E2 — Frame 01 library (cards + rail + ⋯ menus)
   11: Screen11,
-  12: Screen12,
 };
 
 // R16S1E1: numeric session ids get the workbench; named legacy child routes
@@ -74,7 +76,14 @@ function WorkbenchGuard() {
   return <ScreenAt />;
 }
 
-const ADMIN_ROUTES = ['/app/admin/platform', '/app/governance', '/app/billing'];
+const ADMIN_ROUTES = ['/app/governance', '/app/billing'];
+
+// R36S2E4: admin surfaces are direct routes; the gate lives here so the
+// viewer-403 contract (r15s2) holds without the legacy screen table.
+function AdminGate({ children }) {
+  const role = useRole();
+  return role !== 'admin' ? <Forbidden /> : children;
+}
 
 function ScreenAt() {
   const role = useRole();
@@ -137,6 +146,14 @@ function Layout() {
         <Route path="/app/alerts" element={<AlertsCenter />} />  {/* R36S1E3 — retires the last placeholder */}
         <Route path="/app/alerts/:id" element={<AlertDetail />} />  {/* R36S1E3 */}
         <Route path="/app/comments" element={<CommentsInbox />} />  {/* R36S2E1 */}
+        <Route path="/app/admin" element={<AdminOverview />} />  {/* R36S2E2 */}
+        <Route path="/app/admin/platform"
+               element={<AdminGate><Screen12 /></AdminGate>} />  {/* R36S2E4 */}
+        <Route path="/app/admin/security"
+               element={<AdminGate><AdminSecurity /></AdminGate>} />
+        <Route path="/app/admin/roles" element={<RolesMatrix />} />  {/* R36S2E2 */}
+        <Route path="/app/admin/sso" element={<AdminSso />} />  {/* R36S2E3 */}
+        <Route path="/app/admin/branding" element={<AdminBranding />} />  {/* R36S2E3 */}
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}
         <Route path="/app/__errors" element={<ErrorGallery />} />  {/* R33S2E4 board */}
         <Route path="/app/team" element={<Team />} />

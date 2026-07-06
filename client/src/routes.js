@@ -8,7 +8,6 @@ export const SCREEN_ROUTES = {
   9: '/app/create/result',
   10: '/app/artifacts',
   11: '/app/settings/profile',
-  12: '/app/admin/platform',
   13: '/app/governance',
 };
 

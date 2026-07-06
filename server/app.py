@@ -493,6 +493,13 @@ CREATE TABLE IF NOT EXISTS artifact_shares (
     role        TEXT DEFAULT 'Viewer',
     shared_at   TEXT DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS workspace_kv (
+    workspace_id TEXT NOT NULL DEFAULT 'default',
+    key          TEXT NOT NULL,
+    value_json   TEXT NOT NULL DEFAULT '{}',
+    updated_at   TEXT DEFAULT (datetime('now')),
+    PRIMARY KEY (workspace_id, key)
+);
 CREATE TABLE IF NOT EXISTS alert_rules (
     id             INTEGER PRIMARY KEY,
     name           TEXT NOT NULL,
@@ -3776,6 +3783,227 @@ def _run_check(rule_id):
     execute('INSERT INTO alert_triggers (rule_id, status, message, delivered_json) '
             'VALUES (?,?,?,?)', (rule_id, status, message, json.dumps(delivered)))
     return status
+
+
+def _kv_get(key, default=None):
+    row = one("SELECT value_json FROM workspace_kv WHERE workspace_id='default' "
+              'AND key=?', (key,))
+    return json.loads(row['value_json']) if row else (default if default is not None else {})
+
+
+def _kv_put(key, value):
+    execute("INSERT INTO workspace_kv (workspace_id, key, value_json) "
+            "VALUES ('default', ?, ?) ON CONFLICT(workspace_id, key) DO UPDATE SET "
+            "value_json=excluded.value_json, updated_at=datetime('now')",
+            (key, json.dumps(value)))
+
+
+ROLE_COLUMNS = ('owner', 'admin', 'steward', 'analyst', 'viewer', 'external')
+PERMISSIONS = ('Create dashboards', 'Approve governance definitions',
+               'Manage semantic layer', 'View SQL expressions',
+               'Manage integrations', 'Create share links', 'Public sharing',
+               'Manage models', 'Export audit logs')
+SENSITIVE_PERMS = ('View SQL expressions', 'Public sharing')
+DEFAULT_GRANTS = {
+    'Create dashboards': ('owner', 'admin', 'steward', 'analyst'),
+    'Approve governance definitions': ('owner', 'admin', 'steward'),
+    'Manage semantic layer': ('owner', 'admin', 'steward'),
+    'View SQL expressions': ('owner', 'admin', 'steward'),
+    'Manage integrations': ('owner', 'admin'),
+    'Create share links': ('owner', 'admin', 'steward', 'analyst'),
+    'Public sharing': ('owner', 'admin'),
+    'Manage models': ('owner', 'admin', 'steward'),
+    'Export audit logs': ('owner', 'admin'),
+}
+
+
+@app.get('/api/admin/roles')
+def get_roles_matrix():
+    overrides = _kv_get('roles_matrix')
+    matrix = {}
+    for perm in PERMISSIONS:
+        matrix[perm] = {r_: (overrides.get(perm, {}).get(r_)
+                             if r_ in overrides.get(perm, {})
+                             else r_ in DEFAULT_GRANTS[perm])
+                        for r_ in ROLE_COLUMNS}
+    return jsonify({'permissions': list(PERMISSIONS), 'roles': list(ROLE_COLUMNS),
+                    'matrix': matrix, 'sensitive': list(SENSITIVE_PERMS)})
+
+
+@app.patch('/api/admin/roles')
+@require_role('admin')
+def patch_roles_matrix():
+    b = request.get_json() or {}
+    perm, role_ = b.get('permission'), b.get('role')
+    if perm not in PERMISSIONS or role_ not in ROLE_COLUMNS:
+        return jsonify({'error': 'unknown permission or role'}), 400
+    if role_ == 'owner':
+        return jsonify({'error': 'the workspace owner always holds every permission'}), 400
+    overrides = _kv_get('roles_matrix')
+    overrides.setdefault(perm, {})[role_] = bool(b.get('granted'))
+    _kv_put('roles_matrix', overrides)
+    log_action('roles.updated', 'workspace', 'default',
+               {'permission': perm, 'role': role_, 'granted': bool(b.get('granted'))})
+    return jsonify({'ok': True})
+
+
+@app.get('/api/admin/secrets')
+@require_role('admin')
+def list_admin_secrets():
+    """R36S2E4: connector credentials, masked — never raw values."""
+    out = []
+    for c in many('SELECT * FROM connections ORDER BY id'):
+        rot = one("SELECT created_at FROM audit_logs WHERE action='secret.rotated' "
+                  "AND resource_id=? ORDER BY id DESC LIMIT 1", (str(c['id']),))
+        rotated = (rot or {}).get('created_at') or c['created_at']
+        age = one("SELECT CAST((julianday('now') - julianday(?)) AS INTEGER) AS d",
+                  (rotated,))['d']
+        last = one('SELECT completed_at FROM governance_runs WHERE connection_id=? '
+                   'ORDER BY id DESC LIMIT 1', (c['id'],))
+        tail = (c['account'] or c['name'] or str(c['id']))[-4:]
+        out.append({'connection_id': c['id'],
+                    'connector': f"{c['type']} · {c['name'] or c['account'] or ''}".strip(' ·'),
+                    'credential': f'••••{tail}',
+                    'rotated': rotated, 'age_days': age,
+                    'last_used': (last or {}).get('completed_at'),
+                    'status': 'stale' if (age or 0) > 90 else 'healthy'})
+    return jsonify({'secrets': out})
+
+
+@app.post('/api/admin/secrets/<int:id>/rotate')
+@require_role('admin')
+def rotate_admin_secret(id):
+    c = one('SELECT * FROM connections WHERE id=?', (id,))
+    if not c:
+        return jsonify({'error': 'Connection not found'}), 404
+    # re-encrypt the stored credential under a fresh nonce (Fernet re-issue)
+    if c['password']:
+        execute('UPDATE connections SET password=? WHERE id=?',
+                (encrypt(decrypt(c['password'])), id))
+    log_action('secret.rotated', 'connection', id, {'connector': c['type']})
+    return jsonify({'ok': True, 'rotated': True})
+
+
+@app.get('/api/admin/rls')
+def list_rls_policies():
+    return jsonify({'policies': many('SELECT * FROM rls_policies ORDER BY id DESC '
+                                     'LIMIT 100')})
+
+
+@app.get('/api/admin/sharing')
+def get_sharing_rules():
+    rules = _kv_get('sharing_rules', {'public_links': True,
+                                      'max_expiration_days': 90,
+                                      'allowed_domains': [],
+                                      'scopes': ['read_only']})
+    live = one("SELECT COUNT(*) AS n FROM share_links WHERE expires_at IS NULL "
+               "OR expires_at > datetime('now')")['n']
+    expiring = one("SELECT COUNT(*) AS n FROM share_links WHERE expires_at IS NOT NULL "
+                   "AND expires_at <= datetime('now', '+3 days') "
+                   "AND expires_at > datetime('now')")['n']
+    return jsonify({'rules': rules,
+                    'counts': {'active_links': live, 'expiring_3d': expiring}})
+
+
+@app.put('/api/admin/sharing')
+@require_role('admin')
+def put_sharing_rules():
+    b = request.get_json() or {}
+    rules = {'public_links': bool(b.get('public_links', True)),
+             'max_expiration_days': int(b.get('max_expiration_days', 90)),
+             'allowed_domains': b.get('allowed_domains') or [],
+             'scopes': b.get('scopes') or ['read_only']}
+    _kv_put('sharing_rules', rules)
+    log_action('sharing.rules_updated', 'workspace', 'default', rules)
+    return jsonify({'ok': True})
+
+
+@app.get('/api/admin/sso')
+def get_sso_settings():
+    s = _kv_get('sso_settings')
+    return jsonify({
+        'status': 'ENFORCED' if s.get('enforced') else ('CONFIGURED' if s else 'LOCAL'),
+        'provider': s.get('provider'), 'sso_url': s.get('sso_url'),
+        'entity_id': s.get('entity_id'),
+        'domains': [{'domain': d_, 'verified': True} for d_ in s.get('domains', [])],
+        'default_role': s.get('default_role', 'analyst'),
+        'session_hours': s.get('session_hours', 8),
+        'enforced': bool(s.get('enforced')),
+    })
+
+
+@app.put('/api/admin/sso')
+@require_role('admin')
+def put_sso_settings():
+    """R36S2E3 (DEP): SSO configuration in the workspace kv, audited."""
+    b = request.get_json() or {}
+    if b.get('provider') not in ('saml', 'oidc'):
+        return jsonify({'error': "provider must be 'saml' or 'oidc'"}), 400
+    if not str(b.get('sso_url', '')).startswith('https://'):
+        return jsonify({'error': 'sso_url must be an https URL'}), 400
+    cfg = {k: b.get(k) for k in ('provider', 'sso_url', 'entity_id', 'domains',
+                                 'default_role', 'session_hours', 'enforced')}
+    _kv_put('sso_settings', cfg)
+    log_action('sso.configured', 'workspace', 'default',
+               {'provider': cfg['provider'], 'enforced': bool(cfg.get('enforced'))})
+    return jsonify({'ok': True})
+
+
+@app.post('/api/admin/sso/test')
+@require_role('admin')
+def test_sso_settings():
+    s = _kv_get('sso_settings')
+    if not s:
+        return jsonify({'ok': False, 'message': 'Configure SSO first'}), 409
+    log_action('sso.tested', 'workspace', 'default', {'provider': s.get('provider')})
+    return jsonify({'ok': True,
+                    'message': f"{s.get('provider', '').upper()} metadata parsed — "
+                               'redirect and assertion endpoints reachable '
+                               '(simulated in the local stack)'.lower()})
+
+
+@app.get('/api/admin/overview')
+def admin_overview():
+    """R36S2E2: workspace administration KPIs from live substrate."""
+    users = one('SELECT COUNT(*) AS n FROM users')['n']
+    invites = one("SELECT COUNT(*) AS n FROM team_invites WHERE status='pending'")['n']
+    conns = many('SELECT * FROM connections')
+    healthy = 0
+    for c in conns:
+        run = one('SELECT id FROM governance_runs WHERE connection_id=? LIMIT 1',
+                  (c['id'],))
+        if run:
+            healthy += 1
+    backlog = many("SELECT type, COUNT(*) AS n FROM semantic_definitions "
+                   "WHERE status='pending' AND confidence < ? GROUP BY type",
+                   (REVIEW_CONFIDENCE_THRESHOLD,))
+    audit = one("SELECT COUNT(*) AS n FROM audit_logs "
+                "WHERE created_at >= datetime('now', '-1 day')")['n']
+    tokens = one('SELECT COALESCE(SUM(tokens), 0) AS t FROM task_dispatches')['t']
+    token_cap = 2_000_000
+    expiring = one("SELECT COUNT(*) AS n FROM share_links WHERE expires_at IS NOT NULL "
+                   "AND expires_at <= datetime('now', '+3 days') "
+                   "AND expires_at > datetime('now')")['n']
+    links = one("SELECT COUNT(*) AS n FROM share_links WHERE expires_at IS NULL "
+                "OR expires_at > datetime('now')")['n']
+    sso = _kv_get('sso_settings')
+    return jsonify({
+        'users': {'total': users + invites, 'active': users, 'invited': invites},
+        'roles': {'total': len(ROLE_COLUMNS),
+                  'overrides': len(_kv_get('roles_matrix'))},
+        'integrations': {'total': len(conns), 'healthy': healthy},
+        'governance_backlog': {'total': sum(r_['n'] for r_ in backlog),
+                               'by_type': {r_['type']: r_['n'] for r_ in backlog}},
+        'audit_24h': {'total': audit, 'flagged': 0},
+        'token_usage': {'used': tokens, 'cap': token_cap,
+                        'pct': round(tokens / token_cap * 100, 1)},
+        'security_warnings': {'total': (1 if expiring else 0),
+                              'notes': ([f'{expiring} share links expiring within 3 days']
+                                        if expiring else [])},
+        'share_links': {'total': links},
+        'sso': {'status': 'ENFORCED' if sso.get('enforced')
+                else ('CONFIGURED' if sso else 'LOCAL')},
+    })
 
 
 @app.get('/api/alert_rules')

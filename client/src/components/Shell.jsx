@@ -35,7 +35,7 @@ export const NAV_GROUPS = [
 ];
 export const NAV_BOTTOM = [
   { label: 'Team', icon: 'Team', to: '/app/team' },
-  { label: 'Admin', icon: 'Admin', to: '/app/admin/platform' },
+  { label: 'Admin', icon: 'Admin', to: '/app/admin' },   // R36S2E4: overview first
   { label: 'Billing', icon: 'Billing', to: '/app/billing' },
   { label: 'Settings', icon: 'Settings', to: '/app/settings/profile' },
 ];

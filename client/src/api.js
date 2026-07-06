@@ -83,6 +83,20 @@ export const api = {
   deleteAlertRule:  (id)   => del(`/alert_rules/${id}`),                 // R36S1E3
   checkAlertRule:   (id)   => post(`/alert_rules/${id}/check`, {}),      // R36S1E3
   commentsInbox:    (tab)  => get(`/comments/inbox?tab=${tab}`),         // R36S2E1
+  adminOverview:    ()     => get('/admin/overview'),                    // R36S2E2
+  rolesMatrix:      ()     => get('/admin/roles'),                       // R36S2E2
+  patchRolesMatrix: (body) => patch('/admin/roles', body),               // R36S2E2
+  adminSecrets: () => req('/admin/secrets'),
+  rotateSecret: (id) => req(`/admin/secrets/${id}/rotate`, { method: 'POST' }),
+  auditLogs: (limit = 40) => req(`/audit-logs?limit=${limit}`),
+  rlsPolicies: () => req('/admin/rls'),
+  createRls: (body) => req('/admin/rls', { method: 'POST', body: JSON.stringify(body) }),
+  simulateRls: (body) => req('/admin/rls/simulate', { method: 'POST', body: JSON.stringify(body) }),
+  getSharing: () => req('/admin/sharing'),
+  putSharing: (body) => req('/admin/sharing', { method: 'PUT', body: JSON.stringify(body) }),
+  getSso:           ()     => get('/admin/sso'),                         // R36S2E3
+  putSso:           (body) => put('/admin/sso', body),                   // R36S2E3
+  testSso:          ()     => post('/admin/sso/test', {}),               // R36S2E3
   notifications:    ()      => get('/notifications'),
   readAllNotifications: ()  => post('/notifications/read_all', {}),
   postComment:      (id, body) => post(`/artifacts/${id}/comments`, body),
