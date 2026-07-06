@@ -7003,6 +7003,9 @@ def save_artifact_from_session(id):
                             'mark': p.get('mark', 'line'), 'top_n': None, 'position': i}
                            for i, p in enumerate(panels)]}
     execute('UPDATE artifacts SET layout_json=? WHERE id=?', (json.dumps(layout), aid))
+    # R37S1E2 (deep-dive F-06): re-read AFTER the layout write — the response
+    # must carry the four-section layout it just persisted, never a stale row.
+    art = one('SELECT * FROM artifacts WHERE id=?', (aid,))
     _register_artifact_html_uas(get_db(), aid, run['id'], title, file_info)
     import search as search_mod
     if not sess.get('is_sandbox'):      # R9S2E6: sandbox stays out of prod search
@@ -9768,6 +9771,7 @@ SEMANTIC_FIELDS = {'chart_type', 'top_n'}
 
 
 @app.patch('/api/artifacts/<int:id>/sections/<sid>')
+@require_role('admin', 'analyst')
 def edit_artifact_section(id, sid):
     """R16S2E4 / Evolution #32: conversational-canvas edits. Layout-only
     changes apply deterministically; semantic changes re-render through the
@@ -9788,11 +9792,15 @@ def edit_artifact_section(id, sid):
     if 'title' in b:
         section['title'] = str(b['title'])[:120]
     if 'position' in b:
-        new_pos = int(b['position'])
+        # R37S1E2 (deep-dive F-14): clamp the target and renormalize —
+        # ordinal moves must never leave gapped or duplicated positions.
+        new_pos = max(0, min(int(b['position']), len(layout['sections']) - 1))
         for s in layout['sections']:
             if s['position'] == new_pos:
                 s['position'] = section['position']
         section['position'] = new_pos
+        for i, s in enumerate(sorted(layout['sections'], key=lambda x: x['position'])):
+            s['position'] = i
     if 'chart_type' in b:
         section['mark'] = str(b['chart_type'])
     if 'top_n' in b:
@@ -9803,7 +9811,7 @@ def edit_artifact_section(id, sid):
     # versioned in the store — history stays replayable/diffable
     import uas
     ns = 'sandbox:default' if art.get('is_sandbox') else 'default'
-    uas.register(get_db(), 'artifact_layout', layout,
+    _layout_node = uas.register(get_db(), 'artifact_layout', layout,
                  logical_key=f'{ns}:artifact_layout:a{id}', workspace_id=ns,
                  agent='canvas_editor', run_id=art.get('pipeline_run_id'))
 
@@ -9826,7 +9834,8 @@ def edit_artifact_section(id, sid):
     log_action('artifact.edited', 'artifact', id,
                {'section': sid, 'fields': sorted(fields), 'class': edit_class})
     return jsonify({'artifact_id': id, 'section': sid, 'edit_class': edit_class,
-                    'layout': layout, 'rendered_version': rendered_version})
+                    'layout': layout, 'rendered_version': rendered_version,
+                    'layout_version': (_layout_node or {}).get('version', 1)})
 
 
 @app.get('/api/artifacts/<int:id>/explain')

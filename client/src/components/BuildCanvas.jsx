@@ -1,7 +1,7 @@
 // R16S1E2: live build view + dashboard canvas for the Create Workbench.
 // Stage chips are driven by the run's DAG nodes (lineage = execution);
 // on completion the canvas renders real chart data from the saved artifact.
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api } from '../api';
 import { Spinner, StatusBadge } from './ui';
 import { FONT, MONO, P } from '../tokens';
@@ -104,6 +104,8 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
   const [piiCount, setPiiCount] = useState(0);
   const [techOpen, setTechOpen] = useState(false);
   const [skipped, setSkipped] = useState(false);
+  const [layoutVersion, setLayoutVersion] = useState(1);   // R37S1E2 (F-14)
+  const [patchError, setPatchError] = useState('');
   // R30S2E3-US2/US3 — canvas chrome + section selection
   const [zoom, setZoom] = useState(1);
   const [device, setDevice] = useState('desktop');
@@ -118,6 +120,18 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
       .then(d => setPiiCount((d.review?.items || [])
         .filter(i => i.chip === 'PII').length)).catch(() => {});
   }, []);
+
+  // R37S1E2 (deep-dive F-09 groundwork): a run change resets build state so
+  // a later run can assemble into the canvas instead of being ignored.
+  const prevRun = useRef(null);
+  useEffect(() => {
+    if (prevRun.current && runId && prevRun.current !== runId) {
+      setArtifact(null);
+      setLayoutVersion(1);
+      setPatchError('');
+    }
+    prevRun.current = runId;
+  }, [runId]);
 
   const [contractIds, setContractIds] = useState(null);   // R37S1E1 (F-10)
   useEffect(() => {
@@ -228,7 +242,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
             <svg width="8" height="9" viewBox="0 0 8 9">
               <path d="M1 1.2v6.6L7 4.5 1 1.2Z" fill={P.accentHover} />
             </svg>
-            SKIP TO RESULT
+            HIDE BUILD TELEMETRY
           </button>
         )}
       </div>
@@ -385,19 +399,40 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                   Comments{comments.filter(c => !c.parent_id && !c.resolved).length
                     ? ` · ${comments.filter(c => !c.parent_id && !c.resolved).length}` : ''}
                 </button>
-                <button onClick={() => window.open(`/api/artifacts/${artifact.id}/export?format=html`, '_blank')}
-                        title="Export"
-                        style={{ border: 'none', background: 'none', cursor: 'pointer', color: P.muted,
-                                 fontSize: 11, fontFamily: FONT }}>Export</button>
+                <span data-testid="export-menu" style={{ display: 'inline-flex', gap: 6 }}>
+                  {['csv', 'json'].map(f => (
+                    <a key={f} data-testid={`export-${f}`}
+                       href={artifact ? `/api/artifacts/${artifact.id}/export?format=${f}` : undefined}
+                       target="_blank" rel="noreferrer"
+                       style={{ border: 'none', background: 'none',
+                                cursor: artifact ? 'pointer' : 'default', textDecoration: 'none',
+                                color: artifact ? P.body : P.faint, fontSize: 10.5, fontFamily: FONT,
+                                padding: '3px 4px' }}>
+                      Export {f.toUpperCase()}
+                    </a>
+                  ))}
+                  <button data-testid="export-html" disabled
+                          title="HTML export arrives with the spec-driven component renderers (R39)"
+                          style={{ border: 'none', background: 'none', cursor: 'default',
+                                   color: P.faint, fontSize: 10.5, fontFamily: FONT, padding: '3px 4px' }}>
+                    HTML
+                  </button>
+                </span>
                 <a href={`/app/artifacts/${artifact.id}?tab=lineage`} title="Lineage"
                    style={{ fontSize: 11, fontFamily: FONT, color: P.muted, textDecoration: 'none' }}>Lineage</a>
                 <a href={`/app/artifacts/${artifact.id}?tab=activity`} title="Audit trail"
                    style={{ fontSize: 11, fontFamily: FONT, color: P.muted, textDecoration: 'none' }}>Audit</a>
               </>
             )}
+            {patchError && (
+              <span data-testid="canvas-error"
+                    style={{ fontFamily: FONT, fontSize: 11, color: P.red }}>
+                {patchError}
+              </span>
+            )}
             <span data-testid="canvas-version"
                   style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: P.faint }}>
-              v1 · saved
+              v{layoutVersion} · saved
             </span>
             <span style={{ display: 'inline-flex' }}>
               <span style={{ width: 22, height: 22, borderRadius: '50%', background: P.cyan,
@@ -554,6 +589,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                           value={['bar', 'area'].includes(s.mark) ? s.mark : 'line'}
                           onChange={async e => {
                             const r = await api.editSection(artifact.id, s.id, { chart_type: e.target.value });
+                            if (r?.layout_version) setLayoutVersion(r.layout_version);
                             setLayout(r.layout);
                           }}
                           style={{ background: 'rgba(255,255,255,.1)', color: '#fff', border: 'none',
@@ -571,6 +607,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                   <button data-testid="toolbar-move" title="Move down"
                           onClick={async () => {
                             const r = await api.editSection(artifact.id, s.id, { position: s.position + 1 });
+                            if (r?.layout_version) setLayoutVersion(r.layout_version);
                             setLayout(r.layout);
                           }}
                           style={{ border: 'none', background: 'none', cursor: 'pointer',
@@ -585,8 +622,14 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                          onChange={e => setNameDraft(e.target.value)}
                          onKeyDown={async e => {
                            if (e.key === 'Enter') {
-                             const r = await api.editSection(artifact.id, s.id, { title: nameDraft });
-                             setLayout(r.layout); setRenaming(null);
+                             try {
+                               const r = await api.editSection(artifact.id, s.id, { title: nameDraft });
+                               if (r?.layout_version) setLayoutVersion(r.layout_version);
+                               setLayout(r.layout); setRenaming(null);
+                             } catch (err) {
+                               setPatchError(err?.message || 'Edit failed — nothing was saved.');
+                               setTimeout(() => setPatchError(''), 4500);
+                             }
                            }
                            if (e.key === 'Escape') setRenaming(null);
                          }}
@@ -614,6 +657,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                           onClick={async () => {
                             const r = await api.editSection(artifact.id, s.id,
                                                             { position: s.position + 1 });
+                            if (r?.layout_version) setLayoutVersion(r.layout_version);
                             setLayout(r.layout);
                           }}
                           style={{ border: 'none', background: 'none', cursor: 'pointer',

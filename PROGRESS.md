@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R37 · Sprint R37S1 · Epic E2 (control correctness) · R37S1E2-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
+**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R38 · Sprint R38S1 · Epic E1 (DashboardSpec substrate) · R38S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -554,16 +554,16 @@ re-verify tails after any host-side write.
 
 # Agentic Dashboard Program (Deep-Dive v1.0) — R37–R43
 
-**Current position:** R37 · Sprint R37S1 · Epic E2 (control correctness) · R37S1E2-US1  ← next story
+**Current position:** R38 · Sprint R38S1 · Epic E1 (DashboardSpec substrate) · R38S1E1-US1  ← next story
 **Spec:** `AnalytIQ Workspace Agentic Dashboard Deep Dive` (2026-07-06) — findings F-01…F-15 spot-verified in code before planning (seeded chart generator, scalar target_metric, un-gated section PATCH, format=html export all confirmed). Suite at planning time: backend 469/469 · UI 186/186 (R30–R36 close, 9b02c62).
 **Standing:** no multi-agents (lead executes inline) · R34 marketing surfaces locked to the junior · legacy workbench specs migrate only with an owning story ID.
 
-## Release R37 — Workbench Truth (correctness stopgap) (pending)
+## Release R37 — Workbench Truth (correctness stopgap) ✅ CLOSED 2026-07-06
 - [x] R37S1E1-US1 evidence-bound trust chips [F-10] — done: plan payload carries derived `trust` (governed = semantic schema exists; schema/manifest versions); contracts payload derives per-contract `sql_safe` (single read-only statement check) + `trust.sql_validated` (tamper test proves it flips); Workbench chip GOVERNED/UNGOVERNED from evidence w/ explanatory titles; canvas CONTRACT ✓ only for contract-backed sections (NO CONTRACT otherwise, R42 cited); Inspector pills evidence-bound (NO CONTRACT YET / SQL NOT VALIDATED states). r30s2_chrome migrated (fresh workspace honestly UNGOVERNED, cited). BE 471/471, UI 188/188.
-- [ ] R37S1E2-US1 save_artifact returns post-layout row; canvas renders all persisted sections [F-06]
-- [ ] R37S1E2-US2 Export offers supported formats only (html deferred to R39S1E3, stated) [F-07]
-- [ ] R37S1E2-US3 state & safety sweep: run-change reset, Skip relabel, Move normalization, real version chip, section-PATCH role gate, surfaced errors [F-09/F-14]
-- [ ] R37S1 sprint regression recorded
+- [x] R37S1E2-US1 save_artifact returns post-layout row; canvas renders all persisted sections [F-06] — done: re-read after the layout write (response now carries the 4-section layout it persisted); canvas renders timeseries/forecast/dimension_breakdown/feature_importance on a fresh build, w/ honest NO CONTRACT chips on the two uncontracted sections (E1's deferred negative). BE 475/475, UI 192/192.
+- [x] R37S1E2-US2 Export offers supported formats only [F-07] — done: export menu = CSV + JSON live anchors (200 verified in-spec) + disabled HTML citing R39's renderers; the format=html 400 path is unreachable. BE 475/475, UI 192/192.
+- [x] R37S1E2-US3 state & safety sweep [F-09/F-14] — done: run-change resets canvas build state (F-09 groundwork; full refinement loop lands R41); telemetry pill relabeled HIDE BUILD TELEMETRY (r30s2_building contract intact); Move clamps + renormalizes to contiguous 0..n-1 (property-tested); section PATCH role-gated admin/analyst (viewer 403 tested); PATCH returns real `layout_version` (UAS node version) → live version chip (v2 after 2nd edit, spec-pinned); rename errors surface via canvas-error strip (full control audit owed to R43S1E2). BE 475/475, UI 192/192.
+- [x] R37S1 sprint regression recorded — backend 475/475 · UI 192/192 (0 failed, 2026-07-06) · zero-key boot: shell 200 + 8/8 local — **RELEASE R37 CLOSED**
 
 ## Release R38 — DashboardSpec & source-bound data (pending)
 - [ ] R38S1E1-US1 versioned DashboardSpec model + validator (immutable-append, §5A shape, stable hash)

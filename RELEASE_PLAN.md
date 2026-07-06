@@ -1634,17 +1634,17 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
   - Touches: server/app.py (run/artifact payload), client/src/components/BuildCanvas.jsx, Inspector.jsx, tests. Deps: none. DoD: standard 9 + no unconditional trust string survives `grep -n "GOVERNED"` outside evidence-gated paths.
 
 #### Epic E2 — Control correctness (F-06 · F-07 · F-09-state · F-14)
-- [ ] **R37S1E2-US1** — persisted layout is never dropped: `save_artifact` returns the post-layout row; BuildCanvas renders **all** persisted sections (dimension breakdown + feature importance included) instead of the two-section fallback.
+- [x] **R37S1E2-US1** ✅ 2026-07-06 — persisted layout is never dropped: `save_artifact` returns the post-layout row; BuildCanvas renders **all** persisted sections (dimension breakdown + feature importance included) instead of the two-section fallback.
   - Tasks — BE: reorder read-after-write in save_artifact (server/app.py:6989–7018); regression test asserting the response carries 4-section layout_json. UI: canvas seeds from layout_json when present (BuildCanvas.jsx:142–166); spec asserts 4 rendered sections on a fresh build.
   - Touches: server/app.py, BuildCanvas.jsx. Deps: none. DoD: standard 9; r16s1_canvas migrated if section-count assertions change (cite this ID).
-- [ ] **R37S1E2-US2** — Export offers only supported formats (csv/json) with working downloads; html option returns at R39S1E3 (renderer unification) and is cited as such in the UI title.
+- [x] **R37S1E2-US2** ✅ 2026-07-06 — Export offers only supported formats (csv/json) with working downloads; html option returns at R39S1E3 (renderer unification) and is cited as such in the UI title.
   - Tasks — BE: none (route already correct). UI: replace the format=html call (BuildCanvas.jsx:378) with a small format menu (csv · json), disabled "html — arrives with component renderers (R39)" affordance per §5.6 honesty style; spec: both downloads 200, no 400 path reachable.
   - Touches: BuildCanvas.jsx. Deps: none. DoD: standard 9.
-- [ ] **R37S1E2-US3** — state & safety sweep: run-change resets canvas build state (F-09 groundwork); "Skip to result" relabeled/rewired to its true behavior ("Hide build telemetry"); Move normalizes ordinals (no gaps/out-of-range, last-item safe); version chip shows the real layout/spec version; section PATCH gains the same role gating as other artifact mutations (analyst+; viewer 403); swallowed errors surface as visible toasts.
+- [x] **R37S1E2-US3** ✅ 2026-07-06 — state & safety sweep: run-change resets canvas build state (F-09 groundwork); "Skip to result" relabeled/rewired to its true behavior ("Hide build telemetry"); Move normalizes ordinals (no gaps/out-of-range, last-item safe); version chip shows the real layout/spec version; section PATCH gains the same role gating as other artifact mutations (analyst+; viewer 403); swallowed errors surface as visible toasts.
   - Tasks — BE: `@require_role('analyst')`-equivalent on the section PATCH (server/app.py:9744) + negative test (viewer → 403); ordinal normalization on write + property test. UI: artifact/run change → state reset effect in BuildCanvas; Skip relabel; real version text from layout version; error toast on failed PATCH; specs for each.
   - Touches: server/app.py, BuildCanvas.jsx, Workbench.jsx. Deps: none. DoD: standard 9 + control-audit rows for every touched control flip to Working in the R43 matrix seed.
 
-**R37S1 sprint gate:** full backend + UI regression recorded (both files) — target: zero legacy-spec breakage without an owned migration.
+**R37S1 sprint gate:** ✅ 2026-07-06 — backend 475/475 · UI 192/192 · zero-key boot green · owned migrations: r30s2_chrome (UNGOVERNED). **RELEASE R37 CLOSED** — doc Phase-0 exit criteria met (demo behaves honestly; controls do what labels promise).
 
 ## Release R38 — DashboardSpec & source-bound data [doc §7 Phase 1 · §5A–C]
 **Goal:** one canonical, versioned DashboardSpec shared by planning → execution → canvas; component data provably bound to metric + source. Exit: two different metrics/sources produce provably different, correct datasets (doc Phase-1 criterion, fixture-pinned).
