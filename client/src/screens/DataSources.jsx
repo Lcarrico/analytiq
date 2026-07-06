@@ -92,8 +92,10 @@ export default function DataSources() {
                  style={{ ...grid, padding: '10px 16px',
                           borderBottom: `1px solid ${P.borderRow}` }}>
               <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 12.5, fontWeight: 600, color: P.ink,
-                              fontFamily: FONT, overflow: 'hidden',
+                <div data-testid="src-name"
+                     onClick={() => navigate(`/app/data/sources/${s.id}`)}
+                     style={{ fontSize: 12.5, fontWeight: 600, color: P.ink,
+                              fontFamily: FONT, overflow: 'hidden', cursor: 'pointer',
                               textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {s.name}
                   <span style={{ color: P.faint, fontWeight: 400 }}>

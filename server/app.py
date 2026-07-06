@@ -1325,6 +1325,7 @@ def init_db():
                     'ALTER TABLE audit_logs ADD COLUMN severity TEXT DEFAULT \'info\'',
                     'ALTER TABLE dq_custom_tests ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1',
                     'ALTER TABLE connections ADD COLUMN scope_json TEXT',
+                    'ALTER TABLE cataloged_tables ADD COLUMN description TEXT',
                     'ALTER TABLE artifacts ADD COLUMN layout_json TEXT',
                     'ALTER TABLE artifacts ADD COLUMN confidence REAL',
                     'ALTER TABLE artifacts ADD COLUMN confidence_json TEXT',
@@ -2982,6 +2983,151 @@ def data_sources():
                     'sla': sla, 'tables': len(tables), 'issues': issues,
                     'owner': c['owner_email']})
     return jsonify({'sources': out, 'total': len(out)})
+
+
+def _resolve_table(run_id, name):
+    if run_id == 'latest':
+        row = one('SELECT id FROM governance_runs ORDER BY id DESC LIMIT 1')
+        if not row:
+            return None, None
+        run_id = row['id']
+    t = one('SELECT * FROM cataloged_tables WHERE run_id=? AND name=?', (run_id, name))
+    return (int(run_id), t)
+
+
+@app.get('/api/data/tables/<run_id>/<name>')
+def table_detail(run_id, name):
+    """R35S2E2: table detail aggregate — profile facts, manifest columns,
+    gates, SLA posture, downstream surfaces, editable description."""
+    import dq as dq_mod
+    rid, t = _resolve_table(run_id, name)
+    if not t:
+        return jsonify({'error': 'Table not found in this run'}), 404
+    run = one('SELECT * FROM governance_runs WHERE id=?', (rid,))
+    m_row = _manifest_row(run['connection_id']) if run else None
+    columns = []
+    if m_row:
+        m = json.loads(m_row['manifest_json'])
+        mt = next((x for x in m.get('tables', []) if x['name'] == name), None)
+        columns = (mt or {}).get('columns') or []
+    sla = one('SELECT * FROM freshness_slas WHERE connection_id=? AND table_name=?',
+              (run['connection_id'], name)) if run else None
+    age = dq_mod.parse_freshness_age(t.get('freshness') or '')
+    sla_state = 'none'
+    if sla and age is not None:
+        sla_state = 'breached' if age > sla['max_age_hours'] \
+            else 'at risk' if age > sla['max_age_hours'] * 0.75 else 'on time'
+    trend = many('SELECT * FROM health_history WHERE connection_id=? AND table_name=? '
+                 'ORDER BY id', (run['connection_id'], name)) if run else []
+    downstream = []
+    for a_ in many('SELECT a.id, a.title FROM artifacts a '
+                   'JOIN pipeline_runs pr ON a.pipeline_run_id = pr.id '
+                   'JOIN sessions s ON pr.session_id = s.id WHERE s.connection_id=? '
+                   'ORDER BY a.id DESC LIMIT 6', (run['connection_id'],) if run else (0,)):
+        downstream.append({'kind': 'artifact', **a_})
+    return jsonify({
+        'name': t['name'], 'run_id': rid, 'connection_id': (run or {}).get('connection_id'),
+        'schema': t.get('schema_name'), 'health_score': t['health_score'],
+        'row_count': t['row_count'], 'freshness': t['freshness'],
+        'description': t.get('description'),
+        'gates': {g: t.get(g) for g in ('pk_gate', 'null_gate', 'freshness_gate',
+                                        'pii_gate', 'row_min_gate')},
+        'ml_ready': bool(t.get('ml_ready')),
+        'sla': ({'max_age_hours': sla['max_age_hours'], 'state': sla_state}
+                if sla else None),
+        'columns': columns, 'trend': trend, 'downstream': downstream,
+    })
+
+
+@app.patch('/api/data/tables/<run_id>/<name>')
+@require_role('admin', 'analyst')
+def patch_table_detail(run_id, name):
+    rid, t = _resolve_table(run_id, name)
+    if not t:
+        return jsonify({'error': 'Table not found in this run'}), 404
+    b = request.get_json() or {}
+    if 'description' not in b:
+        return jsonify({'error': 'description is the only editable field'}), 400
+    execute('UPDATE cataloged_tables SET description=? WHERE id=?',
+            (b['description'], t['id']))
+    log_action('table.described', 'cataloged_table', t['id'],
+               {'table': name, 'run_id': rid})
+    return jsonify({'name': name, 'description': b['description']})
+
+
+@app.get('/api/data/sources/<int:id>')
+def data_source_detail(id):
+    """R35S2E1: source detail aggregate — header facts, health KPIs,
+    open issues, health trend."""
+    import dq as dq_mod
+    c = one('SELECT * FROM connections WHERE id=?', (id,))
+    if not c:
+        return jsonify({'error': 'Source not found'}), 404
+    run = one('SELECT * FROM governance_runs WHERE connection_id=? '
+              'ORDER BY id DESC LIMIT 1', (id,))
+    tables = many('SELECT * FROM cataloged_tables WHERE run_id=?',
+                  (run['id'],)) if run else []
+    issues = many('SELECT * FROM alerts WHERE connection_id=? ORDER BY id DESC LIMIT 20',
+                  (id,))
+    for i_ in issues:
+        i_['detail'] = json.loads(i_.pop('detail_json') or '{}')
+    trend = many('SELECT * FROM health_history WHERE connection_id=? ORDER BY id', (id,))
+    health = (round(sum(t['health_score'] or 0 for t in tables) / len(tables))
+              if tables else None)
+    delta = None
+    if len(trend) >= 2:
+        delta = round((trend[-1]['health_score'] or 0) - (trend[0]['health_score'] or 0))
+    warn = sum(1 for t in tables
+               if 'warn' in (t['pk_gate'], t['null_gate'], t['freshness_gate'],
+                             t['row_min_gate']))
+    fails = sum(1 for t in tables
+                if 'fail' in (t['pk_gate'], t['null_gate'], t['freshness_gate'],
+                              t['row_min_gate']) or t['pii_gate'] in ('fail', 'block'))
+    slas = many('SELECT * FROM freshness_slas WHERE connection_id=?', (id,))
+    fresh_state, fresh_label, sla_label = 'none', None, None
+    if slas:
+        tightest = min(s['max_age_hours'] for s in slas)
+        sla_label = f'{int(tightest)}h' if tightest >= 1 else f'{int(tightest * 60)}m'
+        fresh = {t['name']: t.get('freshness') for t in tables}
+        fresh_state = 'met'
+        for s in slas:
+            age = dq_mod.parse_freshness_age(fresh.get(s['table_name']) or '')
+            if age is None:
+                continue
+            fresh_label = fresh.get(s['table_name'])
+            if age > s['max_age_hours']:
+                fresh_state = 'breached'
+                break
+            if age > s['max_age_hours'] * 0.75:
+                fresh_state = 'at risk'
+    gate_rows = many("SELECT rules_json FROM dq_gate_results WHERE connection_id=? "
+                     "AND evaluated_at >= datetime('now', '-7 days')", (id,))
+    g_total = g_pass = 0
+    for r_ in gate_rows:
+        for rule in json.loads(r_['rules_json'] or '[]'):
+            if rule.get('outcome') == 'SKIPPED':
+                continue
+            g_total += 1
+            if rule.get('outcome') == 'PASS':
+                g_pass += 1
+    return jsonify({
+        'header': {'name': c['name'] or c['account'] or c['type'], 'type': c['type'],
+                   'kind': KIND_OF_TYPE.get(c['type'], 'warehouse'),
+                   'status': 'connected' if run else (c['status'] or 'active'),
+                   'issues': len(issues), 'tables_in_scope': len(tables),
+                   'owner': c['owner_email'], 'role': 'read-only',
+                   'run_id': (run or {}).get('id'),
+                   'scope': json.loads(c['scope_json']) if c.get('scope_json') else None},
+        'kpis': {'health': {'score': health, 'delta': delta},
+                 'tables_healthy': {'ok': len(tables) - warn - fails,
+                                    'total': len(tables), 'warnings': warn,
+                                    'failing': fails},
+                 'freshness': {'label': fresh_label, 'sla': sla_label,
+                               'state': fresh_state},
+                 'gates_7d': {'passed': g_pass, 'total': g_total,
+                              'failed': g_total - g_pass}},
+        'issues': issues, 'trend': trend,
+    })
 
 
 @app.get('/api/connections')

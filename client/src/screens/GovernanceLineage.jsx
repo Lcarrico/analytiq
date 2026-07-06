@@ -4,7 +4,7 @@
 // select with downstream highlighting, a details panel with IMPACT IF BROKEN,
 // and ?node= deep links — all over the live /api/lineage graph.
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Btn, PageHeader, Spinner } from '../components/ui';
 import { Forbidden, useRole } from '../components/roles';
 import { FONT, MONO, P } from '../tokens';
@@ -21,6 +21,7 @@ const NODE_W = 172, NODE_H = 52, COL_W = 214, ROW_H = 74, PAD = 24;
 
 export default function GovernanceLineage() {
   const role = useRole();
+  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const [graph, setGraph] = useState(null);
   const [sel, setSel] = useState(params.get('node') || null);
@@ -258,8 +259,13 @@ export default function GovernanceLineage() {
                 })}
               </div>
             )}
-            <Btn size="sm" variant="outline" disabled style={{ marginTop: 14 }}
-                 title="Table health detail ships with the data-layer release (R35S1)">
+            <Btn data-testid="lin-open-table" size="sm" variant="outline"
+                 style={{ marginTop: 14 }}
+                 disabled={KIND_OF(selNode.kind) !== 'table'}
+                 title={KIND_OF(selNode.kind) === 'table'
+                   ? 'Profile, columns, PII and gates for this table'
+                   : 'Only table nodes have a table detail'}
+                 onClick={() => navigate(`/app/data/tables/latest/${selNode.id}`)}>
               Open table detail &rarr;
             </Btn>
           </div>

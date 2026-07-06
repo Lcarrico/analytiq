@@ -25,8 +25,6 @@ import { OnboardingSourceHealth, OnboardingStart, OnboardingTemplates, Onboardin
 import { Forbidden, useRole } from './components/roles';
 import { ROUTE_SCREENS } from './routes';
 // R35S1E2: S02 retired — the connector grid + wizard + import flows own /app/data/*
-import Screen03 from './screens/S03_Governance';
-import Screen04 from './screens/S04_TableHealth';
 // R32S2E1: S05 retired — /app/semantic belongs to the semantic layer screens
 import { ExploreDetail, SemanticExplores, SemanticOverview } from './screens/Semantic';
 import { DimensionsCatalog, MetricDetail, MetricsCatalog } from './screens/SemanticCatalog';   // R32S2E2
@@ -43,12 +41,13 @@ import DataSources from './screens/DataSources';   // R35S1E1
 import ConnectGrid from './screens/ConnectGrid';   // R35S1E2
 import ConnectorWizard from './screens/ConnectorWizard';   // R35S1E3
 import ImportFlows from './screens/ImportFlows';   // R35S1E4
+import SourceDetail from './screens/SourceDetail';   // R35S2E1
+import TableDetail from './screens/TableDetail';   // R35S2E2
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
 const SCREENS = {
-  3:  Screen03,
-  4:  Screen04,
+  // R35 close-out: S02–S04 wizard remnants fully retired — data surfaces own /app/data/*
   10: Artifacts,   // R30S1E2 — Frame 01 library (cards + rail + ⋯ menus)
   11: Screen11,
   12: Screen12,
@@ -125,6 +124,8 @@ function Layout() {
         <Route path="/app/data/connect" element={<ConnectGrid />} />  {/* R35S1E2 — replaces S02 */}
         <Route path="/app/data/connect/snowflake" element={<ConnectorWizard />} />  {/* R35S1E3 */}
         <Route path="/app/data/import/:kind" element={<ImportFlows />} />  {/* R35S1E4 */}
+        <Route path="/app/data/sources/:id" element={<SourceDetail />} />  {/* R35S2E1 */}
+        <Route path="/app/data/tables/:runId/:name" element={<TableDetail />} />  {/* R35S2E2 */}
         <Route path="/app/models/:cardId" element={<ModelCard />} />  {/* R33S1E3 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />

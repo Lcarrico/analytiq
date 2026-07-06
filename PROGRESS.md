@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R35 · Sprint R35S1 · Sprint R35S2 · Epic E1 (source detail) · R35S2E1-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · Sprint R36S1 · Epic E1 (gold list + detail) · R36S1E1-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,26 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R35 · Sprint R35S1 · Sprint R35S2 · Epic E1 (source detail) · R35S2E1-US1 — R34 delegated (junior), runs in parallel  ← next story
+**Current position:** R36 · Sprint R36S1 · Epic E1 (gold list + detail) · R36S1E1-US1 — R34 delegated (junior), runs in parallel  ← next story
+
+> **Session 11 stop note (2026-07-06, RELEASE R35 CLOSED):** 46/64. R34 runs in
+> parallel with Leo's junior (handoff brief at the top of the R34 section in
+> RELEASE_PLAN — pricing-data lock + vocab gate called out). R35 shipped all 6
+> data-layer stories: sources list over a new aggregate; connector grid (S02
+> retired, credential drawer rehomes its form map; kit spec now points at a
+> permanent legacy-Badge exhibit on /app/__kit); snowflake wizard with REAL
+> enforced table scope (connections.scope_json filters the governance catalog)
+> + per-table SLAs + live health check; import flows ×4 (upload profiles now
+> run the real PII scan; webhook token shown once; dbt manifest → semantic
+> schema version); source detail (8 tabs incl 7-day gate tally) and table
+> detail (editable audited business definition; lineage "Open table detail"
+> flipped live). S03/S04 tombstoned at close-out — the wizard is fully gone.
+> Gates: backend 456/456 · UI 177/177 · zero-key boot 8/8 local + shell 200.
+> Recurring testid-prefix-collision gotcha (child testids sharing a row's
+> prefix) hit twice more — prefer distinct child prefixes. Next: R36S1E1
+> gold tables list + detail (frames in `Gold Contracts.dc.html`? check
+> mockup ls), then contracts, alerts CRUD DEP, collaboration, admin, billing
+> + settings — the final release.
 
 > **Session 10 stop note (2026-07-06, RELEASE R33 CLOSED — one release per the
 > user's working rhythm):** 40/64 stories. This session shipped all 8 R33
@@ -389,10 +408,10 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R35S1E3-US1 snowflake connector wizard [was R24S1E3] — done: ConnectorWizard (`/app/data/connect/snowflake` — 4-step stepper; real Test connection w/ latency chip [test endpoint now returns latency_ms]; scope picker over new deterministic `POST /api/connections/preview_scope` [schema groups, row counts, PII LIKELY pills, N-of-M counter, filter]; scope REALLY enforced — connections.scope_json + governance sim filters the catalog to selection; per-table SLAs persist; step 4 = the live governance run, polled to done → View source). BE 453/453, UI 170/170.
 - [x] R35S1E4-US1 import flows ×4 (upload, REST, webhook, dbt) [was R24S1E4] — done: ImportFlows (`/app/data/import/:kind` ×4 — upload: multipart POST w/ live profiler schema preview [types, null rates, masked samples, PII pills — upload profile now runs the real pii.scan_column], REST: real create + poll ingest w/ record counts, webhook: capability token shown once + real test events → recent-events table [payload-schema validation owned by R36S1, noted], dbt: demo manifest → model mapping w/ INHERITED test counts → real import bumping the semantic schema version). BE 454/454, UI 174/174.
 - [x] R35S1 sprint regression recorded — backend 454/454 · UI 174/174 (2026-07-06); S02 retired, wizard scope enforced end-to-end
-- [ ] R35S2E1-US1 source detail tabs [was R24S2E1]
-- [ ] R35S2E2-US1 table detail (profile, columns, PII flags) [was R24S2E2]
-- [ ] R35S2 sprint regression recorded
-- [ ] R35 release regression + zero-key boot recorded
+- [x] R35S2E1-US1 source detail tabs [was R24S2E1] — done: SourceDetail (`/app/data/sources/:id` — status/issues pills, scope·role·owner facts, real Sync now = fresh governance run, 8 tabs: Health [aggregate KPIs incl 7-day gate tally from dq_gate_results + trend + issues], Tables→table detail, Drift, PII [manifest scan, masked], Freshness vs SLA, Lineage→graph, Sync Logs, Settings [scope + disconnect]); `GET /api/data/sources/:id`; sources list name cell deep-links. BE 455, UI 175.
+- [x] R35S2E2-US1 table detail (profile, columns, PII flags) [was R24S2E2] — done: TableDetail (`/app/data/tables/:runId/:name` — health pill + profile facts, EDITABLE business definition via audited PATCH DEP [cataloged_tables.description], trend spark, manifest columns w/ null rates/semantic types/masked PII, freshness vs SLA, downstream chips, quality-gate row); `latest` run resolver; lineage "Open table detail" flipped live (owned). S03/S04 wizard remnants tombstoned at close-out (no callers; features live on the new surfaces). BE 456/456, UI 177/177.
+- [x] R35S2 sprint regression recorded — backend 456/456 · UI 177/177 (2026-07-06)
+- [x] R35 release regression + zero-key boot recorded: backend 456/456 · UI 177/177 · boot check PASSED — 8 services local, client shell 200 (2026-07-06) — **RELEASE R35 CLOSED (6/6 stories)**
 
 ## Release R36 — Unreviewed: Gold/Alerts + Org/Admin/Billing/Settings (audit-first) (pending)
 ### Milestone UP-G — Operate & administer at parity
