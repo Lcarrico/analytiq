@@ -46,6 +46,7 @@ import TableDetail from './screens/TableDetail';   // R35S2E2
 import GoldDetail from './screens/GoldDetail';   // R36S1E1
 import { DataContracts, QueryContracts } from './screens/Contracts';   // R36S1E2
 import { AlertDetail, AlertsCenter } from './screens/Alerts';   // R36S1E3
+import CommentsInbox from './screens/CommentsInbox';   // R36S2E1
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
@@ -135,6 +136,7 @@ function Layout() {
         <Route path="/app/contracts/queries" element={<QueryContracts />} />  {/* R36S1E2 */}
         <Route path="/app/alerts" element={<AlertsCenter />} />  {/* R36S1E3 — retires the last placeholder */}
         <Route path="/app/alerts/:id" element={<AlertDetail />} />  {/* R36S1E3 */}
+        <Route path="/app/comments" element={<CommentsInbox />} />  {/* R36S2E1 */}
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}
         <Route path="/app/__errors" element={<ErrorGallery />} />  {/* R33S2E4 board */}
         <Route path="/app/team" element={<Team />} />

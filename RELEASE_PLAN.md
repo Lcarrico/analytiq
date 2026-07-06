@@ -1587,7 +1587,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] **R36S1E3-US1** — alerts center / create alert / alert detail. `DEP:` alerts CRUD (`server/alerts.py` + SQLite tables + seeded trigger history; only GET :3437 exists) · [was R26S2E3]
 - [x] R36S1 sprint regression recorded — backend 460/460 · UI 181/181 (2026-07-06); zero placeholders remain
 ### Sprint R36S2 — Collaboration + Admin control plane <!-- task elaboration pending Phase 1a -->
-- [ ] **R36S2E1-US1** — comments inbox + team members + invite members · [was R27S1E1]
+- [x] **R36S2E1-US1** — comments inbox + team members + invite members · [was R27S1E1]
 - [ ] **R36S2E2-US1** — admin overview + roles & permissions matrix. `DEP:` roles kv + audit row · [was R27S1E2]
 - [ ] **R36S2E3-US1** — SSO settings + workspace branding admin. `DEP:` workspace settings kv (branding API exists) · [was R27S1E3]
 - [ ] **R36S2E4-US1** — admin security ×4 (secrets, audit log, sharing governance, RLS w/ simulator) over :6885/:7518/:7488/:7504 · [was R27S1E4]

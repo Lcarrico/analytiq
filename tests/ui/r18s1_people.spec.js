@@ -23,6 +23,8 @@ test('mention raises the bell badge; drawer lists it; mark-all clears', async ({
 
 test('team page invites members and shows seat usage', async ({ page }) => {
   await page.goto('/app/team');
+  // R36S2E1: invites moved into the frame's modal
+  await page.getByTestId('team-invite-open').click();
   await expect(page.getByTestId('seat-usage')).toContainText(/of 25 seats/);
   const email = `invitee${Date.now() % 1e6}@acme.com`;
   await page.getByTestId('invite-emails').fill(email);

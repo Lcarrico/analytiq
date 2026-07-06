@@ -82,6 +82,7 @@ export const api = {
   patchAlertRule:   (id, body) => patch(`/alert_rules/${id}`, body),     // R36S1E3
   deleteAlertRule:  (id)   => del(`/alert_rules/${id}`),                 // R36S1E3
   checkAlertRule:   (id)   => post(`/alert_rules/${id}/check`, {}),      // R36S1E3
+  commentsInbox:    (tab)  => get(`/comments/inbox?tab=${tab}`),         // R36S2E1
   notifications:    ()      => get('/notifications'),
   readAllNotifications: ()  => post('/notifications/read_all', {}),
   postComment:      (id, body) => post(`/artifacts/${id}/comments`, body),
