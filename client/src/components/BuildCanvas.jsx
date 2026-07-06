@@ -356,10 +356,14 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                 </button>
               ))}
             </span>
-            <button data-testid="present-btn" disabled
-                    title="Present mode arrives with the sharing surfaces (R33S2E3)"
+            <button data-testid="present-btn" disabled={!artifact}
+                    title={artifact ? 'Open the full-screen presentation stage'
+                      : 'Save the artifact first — Present runs on the saved dashboard'}
+                    onClick={() => artifact
+                      && window.location.assign(`/app/artifacts/${artifact.id}/present`)}
                     style={{ border: `1px solid ${P.borderStrong}`, background: '#fff', borderRadius: 6,
-                             color: P.faint, fontSize: 10.5, fontFamily: FONT, padding: '3px 9px' }}>
+                             color: artifact ? P.body : P.faint, fontSize: 10.5, fontFamily: FONT,
+                             padding: '3px 9px', cursor: artifact ? 'pointer' : 'default' }}>
               Present
             </button>
             {artifact && (

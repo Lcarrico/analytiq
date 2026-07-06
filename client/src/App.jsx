@@ -39,6 +39,7 @@ import Screen12 from './screens/S12_Platform';
 // R33S1E1: S14 retired — /app/models belongs to the models pillar screens
 import ModelsOverview, { FeatureManifestViewer, Leaderboard, ModelCard, RetrainCenter, RunDetail } from './screens/Models';
 import EmbedPreview from './screens/EmbedPreview';   // R33S2E2
+import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 
 const SCREENS = {
   2:  Screen02,
@@ -162,6 +163,7 @@ export default function App() {
           <Route path="/onboarding/start" element={<OnboardingStart />} />
           <Route path="/onboarding/source-health" element={<OnboardingSourceHealth />} />
           <Route path="/onboarding/templates" element={<OnboardingTemplates />} />
+          <Route path="/app/artifacts/:id/present" element={<PresentMode />} />  {/* R33S2E3 — full-screen, no shell */}
           <Route path="/share/:token" element={<PublicViewer />} />
           <Route path="*" element={<Layout />} />
         </Routes>

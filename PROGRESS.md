@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R33 · Sprint R33S2 · Epic E3 (present mode) · R33S2E3-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R33 · Sprint R33S2 · Epic E4 (error template ×8) · R33S2E4-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R33 · Sprint R33S2 · Epic E3 (present mode) · R33S2E3-US1  ← next story
+**Current position:** R33 · Sprint R33S2 · Epic E4 (error template ×8) · R33S2E4-US1  ← next story
 
 > **Session 9 stop note (2026-07-05, paused green for GitHub push):** RELEASE R32
 > CLOSED — 32/64 stories, program halfway. This session shipped 7 stories:
@@ -343,7 +343,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R33S1 sprint regression recorded — backend 445/445 · UI 159/159 (2026-07-06); S14 fully retired, all ops rehomed
 - [x] R33S2E1-US1 public viewer parity + expired card (diff vs CODE, Reconciliation (c)) [was R28S2E2] — done: PublicViewer parity rewrite (brand bar from workspace branding, expiry note + owner mailto, filter bar w/ REAL range slicing over new token-gated `GET /api/public/<token>/chart` [same 404/410/401 checks], region select owned by R35, KPI grid + recent-actuals bars above the frame, footer, designed expired card w/ Request-a-new-link mailto); meta gains owner_email; R19 testids preserved (spec untouched, green). BE 447/447, UI 161/161.
 - [x] R33S2E2-US1 embed preview + settings (DEP embed settings kv) [was R28S2E3a] — done: EmbedPreview (`/app/artifacts/:id/embed` — fake-browser live preview over real signed tokens [preview token allows workspace origin, noted in-UI], dark snippet + Copy, scope checkboxes [read-only locked by design; Viewer filters = real interactive scope; drill/export owned later], expiry select, allowed-domain chips w/ server-side origin enforcement, Save persists + re-mints); DEP `GET/PUT /api/artifacts/:id/embed_settings` (embed_settings table, audited). BE 448/448, UI 162/162.
-- [ ] R33S2E3-US1 present mode (dark stage + notes drawer) [was R28S2E3b]
+- [x] R33S2E3-US1 present mode (dark stage + notes drawer) [was R28S2E3b] — done: PresentMode (`/app/artifacts/:id/present`, top-level chrome-free dark stage — 4 data-driven slides [KPIs/trend/forecast±CI/recent bars], `section n / m` header, floating control pill + arrow keys, presenter-notes drawer fed by the real narrative engine, ✕/Esc exit); canvas ▶ Present button live (enabled once the artifact autosaves; r30s2 spec asserted visibility only). Solutions-page wiring lands with R34 marketing. BE 448/448, UI 164/164.
 - [ ] R33S2E4-US1 error template ×8 [was R28S2E1]
 - [ ] R33S2 sprint regression recorded
 - [ ] R33 release regression + zero-key boot recorded
