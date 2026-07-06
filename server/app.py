@@ -9210,6 +9210,59 @@ def _persist_bridge_dashboard_spec(session_id, plan):
     ds.persist(get_db(), session_id, spec, author='agent')
 
 
+@app.post('/api/sessions/<int:id>/components')
+@require_role('admin', 'analyst')
+def create_component(id):
+    """R39S1E1: add a component — validated, contracted, versioned."""
+    import component_registry as cr
+    if not one('SELECT id FROM sessions WHERE id=?', (id,)):
+        return jsonify({'error': 'Session not found'}), 404
+    try:
+        comp, row = cr.add_component(get_db(), id, request.get_json() or {},
+                                     author=getattr(g, 'user_email', None) or 'user')
+    except cr.RegistryError as e:
+        return jsonify({'error': 'Component rejected', 'errors': e.errors}), e.status
+    log_action('component.created', 'dashboard_spec', row['id'],
+               {'session_id': id, 'component_id': comp['id'], 'type': comp['type']})
+    return jsonify({'component': comp, 'spec_version': row['spec_version'],
+                    'spec_hash': row['spec_hash']}), 201
+
+
+@app.delete('/api/sessions/<int:id>/components/<comp_id>')
+@require_role('admin', 'analyst')
+def remove_component(id, comp_id):
+    import component_registry as cr
+    try:
+        row = cr.delete_component(get_db(), id, comp_id,
+                                  author=getattr(g, 'user_email', None) or 'user')
+    except cr.RegistryError as e:
+        return jsonify({'error': 'Delete rejected', 'errors': e.errors}), e.status
+    log_action('component.deleted', 'dashboard_spec', row['id'],
+               {'session_id': id, 'component_id': comp_id})
+    return jsonify({'ok': True, 'spec_version': row['spec_version']})
+
+
+@app.post('/api/sessions/<int:id>/components/<comp_id>/duplicate')
+@require_role('admin', 'analyst')
+def duplicate_component_route(id, comp_id):
+    import component_registry as cr
+    try:
+        comp, row = cr.duplicate_component(get_db(), id, comp_id,
+                                           author=getattr(g, 'user_email', None) or 'user')
+    except cr.RegistryError as e:
+        return jsonify({'error': 'Duplicate rejected', 'errors': e.errors}), e.status
+    log_action('component.duplicated', 'dashboard_spec', row['id'],
+               {'session_id': id, 'from': comp_id, 'component_id': comp['id']})
+    return jsonify({'component': comp, 'spec_version': row['spec_version']}), 201
+
+
+@app.get('/api/component-registry')
+def component_registry_types():
+    """R39S1E2 read path: the palette — every type with authoring defaults."""
+    import component_registry as cr
+    return jsonify({'types': [{'type': t, **d} for t, d in cr.TYPE_DEFAULTS.items()]})
+
+
 @app.post('/api/sessions/<int:id>/component-query/preview')
 def preview_component_query(id):
     """R38S2E1: compile + validate + read-only preview of one component's

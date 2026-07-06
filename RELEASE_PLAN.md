@@ -1687,7 +1687,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ### Sprint R39S1
 #### Epic E1 — Registry + component CRUD (F-05 server half)
-- [ ] **R39S1E1-US1** — component registry + POST/DELETE/duplicate endpoints writing versioned spec patches.
+- [x] **R39S1E1-US1** ✅ 2026-07-06 — component registry + POST/DELETE/duplicate endpoints writing versioned spec patches.
   - AC: registry declares types (kpi, line, bar, area, scatter, table, heatmap, treemap, narrative, filter, spacer) with schema per type; POST /components validates the definition (metric refs resolve, query plan validates) then appends a spec version; DELETE/duplicate likewise; every mutation creates the component's query + data contract rows (F-11) and an audit entry; role-gated analyst+.
   - Touches: server/component_registry.py (new), server/dashboard_spec.py, server/app.py (routes), tests. Deps: R38 complete. DoD: standard 9.
 #### Epic E2 — Builder UI (doc §6 workbench authoring)
