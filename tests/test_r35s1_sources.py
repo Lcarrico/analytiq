@@ -34,3 +34,19 @@ def test_sources_aggregate(client):
 def test_sources_empty(client):
     d = client.get('/api/data/sources').get_json()
     assert d['sources'] == [] and d['total'] == 0
+
+
+def test_upload_profile_flags_pii(client):
+    """R35S1E4: the upload profile runs the real PII scan per column so the
+    schema-preview step can mask and count flags."""
+    import io as _io
+    csv = ('visit_date,store_id,manager_email\n'
+           '2026-06-28,ST-0042,jane.doe@acme.com\n'
+           '2026-06-29,ST-0043,mark.p@acme.com\n')
+    r = client.post('/api/uploads', data={
+        'file': (_io.BytesIO(csv.encode()), 'traffic.csv')},
+        content_type='multipart/form-data')
+    assert r.status_code == 201, r.get_json()
+    cols = {c['name']: c for c in r.get_json()['profile']['columns']}
+    assert cols['manager_email'].get('pii_flags')
+    assert not cols['visit_date'].get('pii_flags')

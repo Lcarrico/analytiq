@@ -1567,8 +1567,8 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] **R35S1E1-US1** — sources list (audit-first task line) · [was R24S1E1]
 - [x] **R35S1E2-US1** — add-source connector grid · [was R24S1E2]
 - [x] **R35S1E3-US1** — snowflake connector wizard · [was R24S1E3]
-- [ ] **R35S1E4-US1** — import flows ×4 (file upload, REST API, webhook, dbt) over R2 connectors · [was R24S1E4]
-- [ ] R35S1 sprint regression recorded
+- [x] **R35S1E4-US1** — import flows ×4 (file upload, REST API, webhook, dbt) over R2 connectors · [was R24S1E4]
+- [x] R35S1 sprint regression recorded — backend 454/454 · UI 174/174 (2026-07-06); S02 retired, wizard scope enforced end-to-end
 ### Sprint R35S2 — Source & table detail <!-- task elaboration pending Phase 1a -->
 - [ ] **R35S2E1-US1** — source detail tabs · [was R24S2E1]
 - [ ] **R35S2E2-US1** — table detail (profile, columns, PII flags) · [was R24S2E2]

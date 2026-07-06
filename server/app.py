@@ -3360,6 +3360,12 @@ def upload_file():
     db.commit()
 
     prof = profiler.profile_table(db, table)
+    # R35S1E4: run the real PII scan per column so the schema preview can
+    # mask samples and count flags (same scanner the manifest builder uses)
+    import pii as pii_mod
+    for col in prof['columns']:
+        samples = [t['value'] for t in (col.get('top_5_values') or [])]
+        col['pii_flags'] = pii_mod.scan_column(col['name'], samples)
     cid = execute('INSERT INTO connections (name, type, database_name, owner_email) '
                   "VALUES (?, 'file', ?, ?)",
                   (f.filename, table, request.headers.get('X-User-Email')))

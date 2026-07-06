@@ -163,6 +163,8 @@ export const api = {
   modelsOverview:   ()     => get('/models/overview'),                   // R33S1E1
   dataSources:      ()     => get('/data/sources'),                      // R35S1E1
   previewScope:     (body) => post('/connections/preview_scope', body),  // R35S1E3
+  pollConnection:   (id)   => post(`/connections/${id}/poll`, {}),       // R35S1E4
+  webhookEvents:    (id)   => get(`/connections/${id}/events`),           // R35S1E4
   trainingJob:      (id)   => get(`/training/jobs/${id}`),               // R33S1E2
   featureManifests: (sid)  => get(`/feature_manifests?session_id=${sid}`), // R33S1E2
   featureManifest:  (id)   => get(`/feature_manifests/${id}`),           // R33S1E4
