@@ -60,8 +60,8 @@ test('models overview: KPIs, champion row, real retrain, card deep link', async 
     await expect(page.getByTestId(tid).getByTestId('models-kpi-value'))
       .toHaveText(String(val));
   }
-  // retrain center link is owned by R33S1E4 until it ships
-  await expect(page.getByTestId('retrain-center-link')).toBeDisabled();
+  // retrain center link went live with R33S1E4
+  await expect(page.getByTestId('retrain-center-link')).toBeEnabled();
 
   // champion row: pill, purpose, mono accuracy, actions
   const row = page.getByTestId(`model-row-${champ.registry_id}`);

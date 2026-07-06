@@ -1512,8 +1512,8 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] **R33S1E1-US1** — models overview (6 KPI cards + table w/ CHAMPION/DRIFT/RUN FAILED pills, per-state actions Retrain/Card/Retrain-now/View-logs) over model_cards/trials APIs; replaces S14 · [was R26S1E1]
 - [x] **R33S1E2-US1** — training run detail (tabs Summary/Backtest/Candidates/Features/Leakage/Logs; 3 stat cards; backtest bar chart; dark mono log) · [was R26S1E2]
 - [x] **R33S1E3-US1** — model card (purpose/target/algo/data/features, MAPE/MAE/RMSE tiles, purple importance bars, SHAP dot plot, linked artifacts) — deep-linked from inspector/detail/driver card · [was R26S1E3]
-- [ ] **R33S1E4-US1** — leaderboard (ranked table ±bands, trade-off scatter, WHY panel, promotion-gate footnote, Promote/Override) + feature manifest (encoding/imputation/leakage/importance/status, dropped strike-through row) + retrain center (filter pills w/ counts, reason rows + actions) · [was R26S1E4]
-- [ ] R33S1 sprint regression recorded
+- [x] **R33S1E4-US1** — leaderboard (ranked table ±bands, trade-off scatter, WHY panel, promotion-gate footnote, Promote/Override) + feature manifest (encoding/imputation/leakage/importance/status, dropped strike-through row) + retrain center (filter pills w/ counts, reason rows + actions) · [was R26S1E4]
+- [x] R33S1 sprint regression recorded — backend 445/445 · UI 159/159 (2026-07-06); S14 fully retired, all ops rehomed
 
 ### Sprint R33S2 — Sharing surfaces + errors (ch14) <!-- task elaboration pending Phase 1a -->
 > Reconciliation (c): PublicViewer exists (R19) — stories diff against CODE.

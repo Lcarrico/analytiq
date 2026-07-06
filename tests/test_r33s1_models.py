@@ -110,3 +110,17 @@ def test_model_card_enriched_payload(client):
     assert card['registry']['status'] in ('active', 'challenger', 'archived')
     titles = [a['title'] for a in card['linked_artifacts']]
     assert 'Card Link Probe' in titles
+
+
+def test_retrain_queue(client):
+    """R33S1E4: retrain center rows — live drift checks per champion,
+    failed jobs, and healthy rows with real reasons + counts."""
+    sid, job_id = _champion(client)
+    d = client.get('/api/models/retrain_queue').get_json()
+    for k in ('all', 'drift', 'failed', 'scheduled', 'healthy'):
+        assert k in d['counts'], k
+    assert d['counts']['all'] >= 1
+    row = next(r for r in d['rows'] if r['session_id'] == sid)
+    assert row['kind'] in ('drift', 'healthy')
+    assert row['reason'] and row['model_id']
+    assert row['action'] in ('retrain', 'logs', 'none')

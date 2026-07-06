@@ -6085,6 +6085,50 @@ def models_overview():
     return jsonify({'kpis': kpis, 'models': rows})
 
 
+@app.get('/api/models/retrain_queue')
+def models_retrain_queue():
+    """R33S1E4: retrain center — live drift check per champion (real
+    model_monitor run), failed training jobs, and healthy rows."""
+    import model_monitor as mm
+    rows = []
+    for r_ in many("SELECT * FROM model_registry WHERE status='active' "
+                   'ORDER BY id DESC LIMIT 50'):
+        sid = r_['session_id']
+        check = mm.check(get_db(), sid) if sid else None
+        triggers = (check or {}).get('triggers') or []
+        if triggers:
+            det = []
+            imp = (check or {}).get('importance_drift') or {}
+            inp = (check or {}).get('input_drift') or {}
+            if imp.get('drifted'):
+                det.append(f"importance drift · tau {imp.get('kendall_tau')}")
+            if inp.get('drifted'):
+                det.append(f"input drift · PSI {inp.get('psi')}")
+            rows.append({'kind': 'drift', 'model_id': r_['model_id'],
+                         'session_id': sid,
+                         'reason': 'drift-triggered · ' + ' · '.join(det),
+                         'action': 'retrain'})
+        else:
+            rows.append({'kind': 'healthy', 'model_id': r_['model_id'],
+                         'session_id': sid,
+                         'reason': 'monitored · no drift on the latest check',
+                         'action': 'retrain'})
+    for j in many("SELECT * FROM training_jobs WHERE status='failed' "
+                  'ORDER BY id DESC LIMIT 50'):
+        sess = one('SELECT * FROM sessions WHERE id=?', (j['session_id'],)) \
+            if j['session_id'] else None
+        rows.append({'kind': 'failed', 'model_id': f"job_{j['id']}",
+                     'session_id': j['session_id'], 'job_id': j['id'],
+                     'reason': f"failed · {j['error'] or 'training error'}",
+                     'action': 'logs'})
+    counts = {'all': len(rows),
+              'drift': sum(1 for r_ in rows if r_['kind'] == 'drift'),
+              'failed': sum(1 for r_ in rows if r_['kind'] == 'failed'),
+              'scheduled': 0,   # model-level schedules ship with R36S1
+              'healthy': sum(1 for r_ in rows if r_['kind'] == 'healthy')}
+    return jsonify({'rows': rows, 'counts': counts})
+
+
 @app.get('/api/registry/models')
 def list_registry_models():
     sid = request.args.get('session_id')

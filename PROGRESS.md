@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R33 · Sprint R33S1 · Epic E4 (leaderboard + manifest + retrain center) · R33S1E4-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R33 · Sprint R33S2 · Epic E1 (viewer parity) · R33S2E1-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R33 · Sprint R33S1 · Epic E4 (leaderboard + manifest + retrain center) · R33S1E4-US1  ← next story
+**Current position:** R33 · Sprint R33S2 · Epic E1 (viewer parity) · R33S2E1-US1  ← next story
 
 > **Session 9 stop note (2026-07-05, paused green for GitHub push):** RELEASE R32
 > CLOSED — 32/64 stories, program halfway. This session shipped 7 stories:
@@ -339,8 +339,8 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R33S1E1-US1 models overview (KPIs + status pills + per-state actions) [was R26S1E1] — done: Models.jsx (`/app/models` — 6 live KPI cards, typed rows CHAMPION/CHALLENGER/TRAINING/RUN FAILED/ARCHIVED, real Retrain/Evaluate/Archive actions, Card→E3 + View-logs→E2 deep links, retrain-center link owned by E4); `GET /api/models/overview` (KPIs + typed rows, MAPE from val/test metrics); S14 retired (tombstone; deep ops rehome E2/E4). BE 442/442, UI 154/154.
 - [x] R33S1E2-US1 training run detail (tabs, stat cards, backtest chart, log) [was R26S1E2] — done: RunDetail (`/app/models/runs/:id` — status pill + duration, 3 stat cards, tabs: backtest fold bars, candidate trials w/ WINNER, immutable feature manifest, leakage scan w/ struck DROPPED rows, dark log from run truth); substrate fix: physical gold tables session-scoped + delete-then-insert (identical specs used to collide → grain block; RED repro in test_r33s1_models). BE 443/443, UI 155/155.
 - [x] R33S1E3-US1 model card (metrics tiles, importance bars, SHAP, linked artifacts) [was R26S1E3] — done: ModelCard (`/app/models/:cardId` — registry identity + PROMOTED·CHAMPION + overfit pills, real Retrain, fact rows, MAPE/RMSE/dir-acc tiles [MAE absent in substrate — Agent Note], purple importance bars, SHAP dot plot from stored shap_mean, linked artifacts both ways); model_cards GET enriched w/ registry + linked_artifacts; ArtifactDetail Model tab deep-links. BE 444/444, UI 156/156.
-- [ ] R33S1E4-US1 leaderboard + feature manifest + retrain center [was R26S1E4]
-- [ ] R33S1 sprint regression recorded
+- [x] R33S1E4-US1 leaderboard + feature manifest + retrain center [was R26S1E4] — done: Leaderboard (`/runs/:id/leaderboard` — ranked ±band rows, WINNER pill, error-vs-RMSE scatter [MAE/cost absent — Agent Note], WHY prose + mono gate note from card gates, real Promote + Override→challenger), FeatureManifestViewer (`/features/:id` — derived encoding/imputation, real leakage risk, DROPPED strike-through, S14 composer rehomed w/ real add+review+apply+HOLD-confirm), RetrainCenter (`/retrain` — live pills, drift checks run real model_monitor, failed rows→logs, real Retrain now; Scheduled·0 owned R36S1); `GET /api/models/retrain_queue`; overview link enabled (E1 spec flipped). BE 445/445, UI 159/159.
+- [x] R33S1 sprint regression recorded — backend 445/445 · UI 159/159 (2026-07-06); S14 fully retired, all ops rehomed
 - [ ] R33S2E1-US1 public viewer parity + expired card (diff vs CODE, Reconciliation (c)) [was R28S2E2]
 - [ ] R33S2E2-US1 embed preview + settings (DEP embed settings kv) [was R28S2E3a]
 - [ ] R33S2E3-US1 present mode (dark stage + notes drawer) [was R28S2E3b]

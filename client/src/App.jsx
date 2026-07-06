@@ -37,7 +37,7 @@ import ArtifactDetail from './screens/ArtifactDetail';   // R30S1E4
 import Screen11 from './screens/S11_Account';
 import Screen12 from './screens/S12_Platform';
 // R33S1E1: S14 retired — /app/models belongs to the models pillar screens
-import ModelsOverview, { ModelCard, RunDetail } from './screens/Models';
+import ModelsOverview, { FeatureManifestViewer, Leaderboard, ModelCard, RetrainCenter, RunDetail } from './screens/Models';
 
 const SCREENS = {
   2:  Screen02,
@@ -112,6 +112,9 @@ function Layout() {
         <Route path="/app/semantic/derived-tables" element={<DerivedTables />} />  {/* R32S2E3 */}
         <Route path="/app/models" element={<ModelsOverview />} />  {/* R33S1E1 — replaces S14 */}
         <Route path="/app/models/runs/:id" element={<RunDetail />} />  {/* R33S1E2 */}
+        <Route path="/app/models/runs/:id/leaderboard" element={<Leaderboard />} />  {/* R33S1E4 */}
+        <Route path="/app/models/features/:id" element={<FeatureManifestViewer />} />  {/* R33S1E4 */}
+        <Route path="/app/models/retrain" element={<RetrainCenter />} />  {/* R33S1E4 */}
         <Route path="/app/models/:cardId" element={<ModelCard />} />  {/* R33S1E3 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />

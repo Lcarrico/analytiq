@@ -65,8 +65,8 @@ export default function ModelsOverview() {
                      fontFamily: FONT, letterSpacing: '-0.01em' }}>
           Predictive models
         </h1>
-        <Btn data-testid="retrain-center-link" size="sm" variant="outline" disabled
-             title="The retrain center ships with R33S1E4"
+        <Btn data-testid="retrain-center-link" size="sm" variant="outline"
+             onClick={() => navigate('/app/models/retrain')}
              style={{ marginLeft: 'auto' }}>
           Retrain center &rarr;
         </Btn>
@@ -376,6 +376,12 @@ export function RunDetail() {
 
       {tab === 'candidates' && (
         <div style={{ ...card2, overflow: 'hidden' }}>
+          <div onClick={() => navigate(`/app/models/runs/${id}/leaderboard`)}
+               style={{ padding: '9px 16px', fontSize: 11.5, color: P.accent,
+                        cursor: 'pointer', fontFamily: FONT,
+                        borderBottom: `1px solid ${P.border}` }}>
+            Open the full leaderboard
+          </div>
           {trials.map((t, i) => (
             <div key={t.id} data-testid={`trial-row-${t.id}`}
                  style={{ display: 'flex', alignItems: 'center', gap: 12,
@@ -713,6 +719,543 @@ export function ModelCard() {
             {a.title}
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+// ── R33S1E4-US1 — Model ops (`Models Ops.dc.html` frames 01–03) ───────────
+// Leaderboard: single-card substrate — the trained winner holds the card, so
+// SELECT radios are omitted and Override registers this run's card as a real
+// challenger. RMSE replaces the frame's MAE/cost axes (no currency scale).
+const std = xs => {
+  if (!xs.length) return 0;
+  const mu = xs.reduce((a, b) => a + b, 0) / xs.length;
+  return Math.sqrt(xs.reduce((s, x) => s + (x - mu) ** 2, 0) / xs.length);
+};
+
+export function Leaderboard() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [state, setState] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState('');
+
+  const load = async () => {
+    try {
+      const job = await api.trainingJob(id);
+      const [trials, card, regs] = await Promise.all([
+        api.jobTrials(id).catch(() => []),
+        job.model_card_id ? api.modelCard(job.model_card_id) : null,
+        job.session_id ? api.registryModels(job.session_id).catch(() => []) : [],
+      ]);
+      setState({ job, trials: [...trials].sort((a, b) => a.mape - b.mape), card, regs });
+    } catch { setState(false); }
+  };
+  useEffect(() => { load(); }, [id]);
+
+  if (state === null) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
+        <Spinner size={24} />
+      </div>
+    );
+  }
+  if (!state || !state.job) {
+    return (
+      <div style={{ maxWidth: 700 }}>
+        <PageHeader title="Run not found" sub="No leaderboard without a training run." />
+        <Btn size="sm" variant="outline" onClick={() => navigate('/app/models')}>
+          Back to models
+        </Btn>
+      </div>
+    );
+  }
+  const { job, trials, card, regs } = state;
+  const promoted = card && regs.some(r => r.model_card_id === card.id && r.status === 'active');
+  const foldsOf = t => t.folds || [];
+  const winner = trials[0];
+  const nWindows = foldsOf(winner || {}).length
+    || (card?.metrics?.folds || []).length;
+  const winsOf = fam => {
+    let wins = 0;
+    for (let i = 0; i < nWindows; i++) {
+      let best = null;
+      for (const t of trials) {
+        const f = foldsOf(t)[i];
+        if (f && (best === null || f.mape < best.m)) {
+          best = { m: f.mape, fam: t.params?.family };
+        }
+      }
+      if (best && best.fam === fam) wins += 1;
+    }
+    return wins;
+  };
+  const maxM = Math.max(...trials.map(t => t.mape || 0), 1);
+  const rmseOf = t => {
+    const rs = foldsOf(t).map(f => f.rmse).filter(x => x != null);
+    return rs.length ? Math.round(rs.reduce((a, b) => a + b, 0) / rs.length) : null;
+  };
+  const maxR = Math.max(...trials.map(t => rmseOf(t) || 0), 1);
+  const doPromote = async () => {
+    if (busy) return;
+    setBusy(true);
+    try { await api.promote(job.id); setNote('Champion promoted.'); }
+    catch (e) { setNote('Promotion needs a completed run.'); }
+    await load(); setBusy(false);
+  };
+  const doOverride = async () => {
+    if (busy || !card) return;
+    setBusy(true);
+    try {
+      await api.registerChallenger({ sessionId: job.session_id, modelCardId: card.id });
+      setNote('Registered as challenger — evaluate it from the models overview.');
+    } catch { setNote('Override needs an active champion on this session.'); }
+    await load(); setBusy(false);
+  };
+  const gateNote = card
+    ? 'promotion gate: ' + Object.entries(card.gates || {}).map(([k, v]) =>
+        `${k.replace(/_gate$/, '').replace(/_/g, ' ')} ${v.status === 'PASS' ? '✓' : '·'} `)
+        .join('· ')
+    : 'promotion gate: run the training first';
+
+  return (
+    <div style={{ maxWidth: 960 }}>
+      <div onClick={() => navigate(`/app/models/runs/${id}`)}
+           style={{ fontSize: 12, color: P.accent, cursor: 'pointer', marginBottom: 10,
+                    fontFamily: FONT }}>
+        &larr; Run detail
+      </div>
+      <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: P.ink,
+                   fontFamily: FONT }}>
+        Candidate leaderboard &middot; run {job.id}
+      </h1>
+      <div style={{ fontSize: 12, color: P.muted, fontFamily: FONT, margin: '4px 0 14px' }}>
+        ranked by mean MAPE across {nWindows} backtest windows
+      </div>
+
+      <div style={{ ...card2, overflow: 'hidden', marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '50px 1.6fr 1fr 1fr .8fr',
+                      gap: 10, padding: '0 16px', height: 34, alignItems: 'center',
+                      background: P.tableHeadBg, borderBottom: `1px solid ${P.border}`,
+                      ...label }}>
+          <span>RANK</span><span>CANDIDATE</span><span>MAPE</span><span>RMSE</span>
+          <span>WINDOWS</span>
+        </div>
+        {trials.map((t, i) => {
+          const fam = t.params?.family || 'seasonal-trend';
+          const band = std(foldsOf(t).map(f => f.mape).filter(x => x != null));
+          return (
+            <div key={t.id} data-testid={`lb-row-${t.id}`}
+                 style={{ display: 'grid',
+                          gridTemplateColumns: '50px 1.6fr 1fr 1fr .8fr', gap: 10,
+                          padding: '9px 16px', alignItems: 'center',
+                          borderBottom: `1px solid ${P.borderRow}`,
+                          background: i === 0 ? '#f8faff' : '#fff' }}>
+              <span data-testid="lb-rank"
+                    style={{ fontFamily: MONO, fontSize: 11, color: P.muted }}>
+                #{i + 1}
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700,
+                               color: P.ink }}>{fam}</span>
+                {i === 0 && (
+                  <span data-testid="lb-champion-pill"
+                        style={{ display: 'inline-flex', alignItems: 'center',
+                                 height: 17, padding: '0 8px', borderRadius: 999,
+                                 background: P.greenBg, color: P.green,
+                                 fontFamily: MONO, fontSize: 8.5, fontWeight: 700 }}>
+                    WINNER{promoted ? ' · CHAMPION' : ''}
+                  </span>
+                )}
+              </span>
+              <span data-testid="lb-mape"
+                    style={{ fontFamily: MONO, fontSize: 11.5, color: P.body }}>
+                {t.mape}% &plusmn;{band.toFixed(1)}
+              </span>
+              <span style={{ fontFamily: MONO, fontSize: 11.5, color: P.body }}>
+                {rmseOf(t)?.toLocaleString('en-US') ?? '—'}
+              </span>
+              <span style={{ fontFamily: MONO, fontSize: 11.5, color: P.muted }}>
+                {foldsOf(t).length}
+              </span>
+            </div>
+          );
+        })}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '11px 16px' }}>
+          <Btn data-testid="lb-promote" size="sm" onClick={doPromote}
+               disabled={busy || promoted || job.status !== 'done'}>
+            {promoted ? 'Champion promoted' : 'Promote champion'}
+          </Btn>
+          <Btn data-testid="lb-override" size="sm" variant="outline" onClick={doOverride}
+               disabled={busy || !card}>
+            Override champion&hellip;
+          </Btn>
+          {note && (
+            <span style={{ fontSize: 11.5, color: P.body, fontFamily: FONT }}>{note}</span>
+          )}
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14,
+                    marginBottom: 14 }}>
+        <div style={{ ...card2, padding: 16 }}>
+          <div style={{ ...label, marginBottom: 10 }}>TRADE-OFF · ERROR VS RMSE</div>
+          <svg data-testid="lb-scatter" width="100%" height="170"
+               viewBox="0 0 300 170">
+            <line x1="34" y1="8" x2="34" y2="146" stroke="#dde3ec" />
+            <line x1="34" y1="146" x2="292" y2="146" stroke="#dde3ec" />
+            <text x="4" y="14" fontSize="8" fill="#94a3b8">error</text>
+            <text x="252" y="164" fontSize="8" fill="#94a3b8">rmse</text>
+            {trials.map(t => {
+              const cx = 34 + ((rmseOf(t) || 0) / maxR) * 240;
+              const cy = 146 - ((t.mape || 0) / maxM) * 125;
+              return (
+                <g key={t.id}>
+                  <circle data-testid={`lb-dot-${t.id}`} cx={cx} cy={cy} r="5"
+                          fill={P.accent} opacity="0.8" />
+                  <text x={Math.min(cx + 7, 240)} y={cy + 3} fontSize="8"
+                        fontFamily="monospace" fill="#64748b">
+                    {(t.params?.family || '').slice(0, 12)}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+        <div style={{ ...card2, padding: 16 }}>
+          <div style={{ ...label, marginBottom: 8 }}>
+            WHY {(winner?.params?.family || 'THE WINNER').toUpperCase()} WON
+          </div>
+          <div data-testid="lb-why"
+               style={{ fontSize: 12.5, lineHeight: 1.65, color: P.body,
+                        fontFamily: FONT }}>
+            Best error on {winsOf(winner?.params?.family)} of {nWindows} backtest
+            windows, with the tightest band
+            (&plusmn;{std(foldsOf(winner || {}).map(f => f.mape)).toFixed(1)} MAPE) —
+            the most stable candidate across the rolling folds.
+            {trials[1] && ` ${trials[1].params?.family} trails by ${
+              (trials[1].mape - (winner?.mape || 0)).toFixed(1)}pt on mean error.`}
+          </div>
+          <div data-testid="lb-gate-note"
+               style={{ fontFamily: MONO, fontSize: 9.5, color: P.faint, marginTop: 12 }}>
+            {gateNote}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Feature manifest viewer (`Models Ops.dc.html` frame 02) ───────────────
+const encOf = f => f.name.startsWith('rolling_') ? 'rolling mean'
+  : f.name.startsWith('lag_') ? 'lag'
+  : f.dtype === 'measure' ? 'numeric' : f.dtype === 'flag' ? 'boolean'
+  : f.dtype === 'date' ? 'calendar parts' : 'one-hot';
+const impOf = f => /^(rolling_|lag_)/.test(f.name) ? 'ffill'
+  : f.dtype === 'measure' ? 'zero' : '—';
+
+export function FeatureManifestViewer() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [state, setState] = useState(null);
+  const [cf, setCf] = useState({ name: '', expr: '' });
+  const [cfMsg, setCfMsg] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const mf = await api.featureManifest(id);
+        const [gold, result] = await Promise.all([
+          api.goldTables(mf.session_id).catch(() => []),
+          api.trainingResult(mf.session_id).catch(() => null),
+        ]);
+        const card = result?.model_card_id
+          ? await api.modelCard(result.model_card_id).catch(() => null) : null;
+        setState({ mf, leakage: gold[0]?.dq_gates?.leakage || {},
+                   feats: card?.top_features || [], sessionId: mf.session_id });
+      } catch { setState(false); }
+    })();
+  }, [id]);
+
+  if (state === null) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
+        <Spinner size={24} />
+      </div>
+    );
+  }
+  if (!state || !state.mf) {
+    return (
+      <div style={{ maxWidth: 700 }}>
+        <PageHeader title="Feature manifest not found" sub="It may belong to a cleaned-up session." />
+        <Btn size="sm" variant="outline" onClick={() => navigate('/app/models')}>
+          Back to models
+        </Btn>
+      </div>
+    );
+  }
+  const { mf, leakage, feats, sessionId } = state;
+  const dropped = leakage.dropped || [];
+  const scan = leakage.report || leakage.features || [];
+  const riskOf = name => {
+    const r = (scan || []).find(x => x.feature === name);
+    if (!r) return ['LOW', P.greenBg, P.green];
+    const v = r.risk ?? 0;
+    return v > 0.7 ? ['HIGH', P.redBg, P.red]
+      : v > 0.3 ? ['MEDIUM', P.amberBg, P.amber] : ['LOW', P.greenBg, P.green];
+  };
+  const importanceOf = name => feats.find(f => f.name === name)?.importance;
+  const holdSet = new Set((scan || []).filter(r => r.action === 'HOLD').map(r => r.feature));
+  const applyCf = async () => {
+    setCfMsg('');
+    try {
+      const created = await api.customFeatures({ sessionId, name: cf.name, expr: cf.expr });
+      await api.approveFeature(created.id);
+      await api.applyFeature(created.id);
+      if (created.leakage?.action === 'HOLD') {
+        await api.confirmLeakage({ sessionId, features: [created.name],
+                                   justification: 'confirmed from the manifest viewer' });
+        setCfMsg('Feature applied — leakage HOLD explicitly confirmed.');
+      } else {
+        setCfMsg('Feature reviewed, approved and applied.');
+      }
+    } catch (e) {
+      let m = e.message; try { m = JSON.parse(e.message)?.error || m; } catch { /* raw */ }
+      setCfMsg(m);
+    }
+  };
+  const grid = { display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr .9fr .9fr',
+                 gap: 10, padding: '8px 16px', alignItems: 'center' };
+
+  return (
+    <div style={{ maxWidth: 980 }}>
+      <div onClick={() => navigate('/app/models')}
+           style={{ fontSize: 12, color: P.accent, cursor: 'pointer', marginBottom: 10,
+                    fontFamily: FONT }}>
+        &larr; Models
+      </div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
+        <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: P.ink,
+                     fontFamily: FONT }}>
+          Feature manifest
+        </h1>
+        <span data-testid="fm-sub"
+              style={{ fontFamily: MONO, fontSize: 10.5, color: P.muted }}>
+          v{mf.manifest_version} &middot; {mf.feature_list.length} used &middot;{' '}
+          {dropped.length} dropped &middot; immutable
+        </span>
+      </div>
+      <div style={{ fontSize: 12.5, color: P.muted, fontFamily: FONT, marginBottom: 14 }}>
+        Exactly what the model trained on — encodings and imputation derived from the
+        stored feature types, leakage from the modeler&rsquo;s scan.
+      </div>
+
+      <div style={{ ...card2, overflow: 'hidden', marginBottom: 14 }}>
+        <div style={{ ...grid, height: 34, padding: '0 16px',
+                      background: P.tableHeadBg, borderBottom: `1px solid ${P.border}`,
+                      ...label }}>
+          <span>FEATURE</span><span>ENCODING</span><span>IMPUTATION</span>
+          <span>LEAKAGE RISK</span><span>IMPORTANCE</span><span>STATUS</span>
+        </div>
+        {mf.feature_list.map(f => {
+          const [risk, rb, rf] = riskOf(f.name);
+          const hold = holdSet.has(f.name);
+          const imp = importanceOf(f.name);
+          return (
+            <div key={f.name} data-testid={`fm-row-${f.name}`}
+                 style={{ ...grid, borderBottom: `1px solid ${P.borderRow}` }}>
+              <span data-testid="fm-name"
+                    style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 600,
+                             color: P.ink, overflow: 'hidden', textOverflow: 'ellipsis',
+                             whiteSpace: 'nowrap' }}>{f.name}</span>
+              <span data-testid="fm-encoding"
+                    style={{ fontFamily: MONO, fontSize: 10.5, color: P.body }}>
+                {encOf(f)}
+              </span>
+              <span style={{ fontFamily: MONO, fontSize: 10.5, color: P.body }}>
+                {impOf(f)}
+              </span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', height: 17,
+                             padding: '0 8px', borderRadius: 999, background: rb,
+                             color: rf, fontFamily: MONO, fontSize: 8.5,
+                             fontWeight: 700, justifySelf: 'start' }}>
+                {risk}
+              </span>
+              <span style={{ fontFamily: MONO, fontSize: 10.5, color: P.body }}>
+                {imp != null ? imp : '—'}
+              </span>
+              <span data-testid="fm-status"
+                    style={{ display: 'inline-flex', alignItems: 'center', height: 17,
+                             padding: '0 8px', borderRadius: 999,
+                             background: hold ? P.amberBg : P.greenBg,
+                             color: hold ? P.amber : P.green, fontFamily: MONO,
+                             fontSize: 8.5, fontWeight: 700, justifySelf: 'start' }}>
+                {hold ? 'REVIEW' : 'APPROVED'}
+              </span>
+            </div>
+          );
+        })}
+        {dropped.map(name => (
+          <div key={name} data-testid={`fm-row-${name}`}
+               style={{ ...grid, borderBottom: `1px solid ${P.borderRow}`,
+                        background: '#fafbfc' }}>
+            <span data-testid="fm-name"
+                  style={{ fontFamily: MONO, fontSize: 11.5, color: P.faint,
+                           textDecoration: 'line-through' }}>{name}</span>
+            <span data-testid="fm-encoding"
+                  style={{ fontFamily: MONO, fontSize: 10.5, color: P.faint }}>—</span>
+            <span style={{ fontFamily: MONO, fontSize: 10.5, color: P.faint }}>—</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', height: 17,
+                           padding: '0 8px', borderRadius: 999, background: P.redBg,
+                           color: P.red, fontFamily: MONO, fontSize: 8.5,
+                           fontWeight: 700, justifySelf: 'start' }}>
+              HIGH
+            </span>
+            <span style={{ fontFamily: MONO, fontSize: 10.5, color: P.faint }}>—</span>
+            <span data-testid="fm-status"
+                  style={{ display: 'inline-flex', alignItems: 'center', height: 17,
+                           padding: '0 8px', borderRadius: 999, background: P.tableHeadBg,
+                           color: P.faint, fontFamily: MONO, fontSize: 8.5,
+                           fontWeight: 700, justifySelf: 'start' }}>
+              DROPPED
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ ...card2, padding: 14 }}>
+        <div style={{ ...label, marginBottom: 8 }}>ADD A REVIEWED CUSTOM FEATURE</div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <input data-testid="cf-name" value={cf.name} placeholder="feature name"
+                 onChange={e => setCf(x => ({ ...x, name: e.target.value }))}
+                 style={{ height: 30, width: 200, borderRadius: 7, fontFamily: MONO,
+                          border: `1px solid ${P.borderStrong}`, padding: '0 10px',
+                          fontSize: 12, outline: 'none' }} />
+          <input data-testid="cf-expr" value={cf.expr}
+                 placeholder="expression, e.g. a 7-day rolling mean of the target"
+                 onChange={e => setCf(x => ({ ...x, expr: e.target.value }))}
+                 style={{ height: 30, flex: 1, minWidth: 260, borderRadius: 7,
+                          border: `1px solid ${P.borderStrong}`, padding: '0 10px',
+                          fontSize: 12, fontFamily: MONO, outline: 'none' }} />
+          <Btn data-testid="cf-apply" size="sm" onClick={applyCf}
+               disabled={!cf.name || !cf.expr}>
+            Add + review + apply
+          </Btn>
+        </div>
+        {cfMsg && (
+          <div data-testid="cf-result"
+               style={{ fontSize: 11.5, color: P.body, fontFamily: FONT, marginTop: 8 }}>
+            {cfMsg}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Retrain center (`Models Ops.dc.html` frame 03) ────────────────────────
+export function RetrainCenter() {
+  const navigate = useNavigate();
+  const [data, setData] = useState(null);
+  const [filter, setFilter] = useState('all');
+  const [busy, setBusy] = useState({});
+
+  const load = () => api.retrainQueue().then(setData).catch(() => setData(false));
+  useEffect(() => { load(); }, []);
+
+  if (data === null) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
+        <Spinner size={24} />
+      </div>
+    );
+  }
+  const counts = data?.counts || { all: 0, drift: 0, failed: 0, scheduled: 0, healthy: 0 };
+  const rows = (data?.rows || []).filter(r => filter === 'all' || r.kind === filter);
+  const retrainNow = r => async () => {
+    if (busy[r.model_id] || !r.session_id) return;
+    setBusy(b => ({ ...b, [r.model_id]: true }));
+    try { await api.retrain(r.session_id); } catch { /* surfaced by reload */ }
+    await load();
+    setBusy(b => ({ ...b, [r.model_id]: false }));
+  };
+  const KIND_TINT2 = { drift: [P.amberBg, P.amber], failed: [P.redBg, P.red],
+                       healthy: [P.greenBg, P.green] };
+
+  return (
+    <div style={{ maxWidth: 860 }}>
+      <PageHeader title="Retrain center"
+                  sub="Everything that needs (or might soon need) a fresh training run — drift checks execute live against the monitor." />
+      <div style={{ display: 'flex', gap: 8, marginBottom: 14, alignItems: 'center' }}>
+        {[['all', 'All', counts.all], ['drift', 'Drift', counts.drift],
+          ['failed', 'Failed', counts.failed], ['healthy', 'Healthy', counts.healthy]]
+          .map(([key, name, n]) => {
+            const on = filter === key;
+            return (
+              <span key={key} data-testid={`rc-pill-${key}`} onClick={() => setFilter(key)}
+                    style={{ display: 'inline-flex', alignItems: 'center', height: 30,
+                             padding: '0 13px', borderRadius: 999, cursor: 'pointer',
+                             background: on ? P.ink : '#fff',
+                             border: on ? 'none' : `1px solid ${P.borderStrong}`,
+                             color: on ? '#fff' : P.itemInk, fontSize: 12.5,
+                             fontWeight: on ? 600 : 500, fontFamily: FONT }}>
+                {name} &middot; {n}
+              </span>
+            );
+          })}
+        <span title="Model-level refresh schedules ship with the gold-layer release (R36S1)"
+              style={{ display: 'inline-flex', alignItems: 'center', height: 30,
+                       padding: '0 13px', borderRadius: 999, background: '#fff',
+                       border: `1px dashed ${P.borderStrong}`, color: P.faint,
+                       fontSize: 12.5, fontFamily: FONT }}>
+          Scheduled &middot; 0
+        </span>
+      </div>
+
+      <div style={{ ...card2, overflow: 'hidden' }}>
+        {rows.length === 0 ? (
+          <div style={{ padding: 18, fontSize: 12.5, color: P.muted, fontFamily: FONT }}>
+            Nothing here — no models match this filter.
+          </div>
+        ) : rows.map(r => {
+          const [bg, fg] = KIND_TINT2[r.kind] || KIND_TINT2.healthy;
+          return (
+            <div key={r.model_id} data-testid={`rc-row-${r.model_id}`}
+                 style={{ display: 'flex', alignItems: 'center', gap: 12,
+                          padding: '11px 16px', borderBottom: `1px solid ${P.borderRow}` }}>
+              <span style={{ width: 7, height: 7, borderRadius: '50%', background: fg,
+                             flex: 'none' }} />
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700,
+                              color: P.ink }}>{r.model_id}</div>
+                <div style={{ fontSize: 11.5, color: P.body, fontFamily: FONT,
+                              overflow: 'hidden', textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap' }}>
+                  {r.reason}
+                </div>
+              </div>
+              <span style={{ display: 'inline-flex', alignItems: 'center', height: 18,
+                             padding: '0 8px', borderRadius: 999, background: bg,
+                             color: fg, fontFamily: MONO, fontSize: 8.5,
+                             fontWeight: 700 }}>
+                {r.kind.toUpperCase()}
+              </span>
+              {r.action === 'retrain' && (
+                <Btn data-testid="rc-retrain" size="sm" onClick={retrainNow(r)}
+                     disabled={!!busy[r.model_id]}>
+                  {r.kind === 'drift' ? 'Retrain now' : 'Retrain'}
+                </Btn>
+              )}
+              {r.action === 'logs' && r.job_id && (
+                <Btn size="sm" variant="outline"
+                     onClick={() => navigate(`/app/models/runs/${r.job_id}`)}>
+                  View logs
+                </Btn>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
