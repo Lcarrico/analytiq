@@ -2921,6 +2921,61 @@ def _mask_connection(row):
     return row
 
 
+KIND_OF_TYPE = {'snowflake': 'warehouse', 'bigquery': 'warehouse',
+                'redshift': 'warehouse', 'databricks': 'warehouse',
+                'postgres': 'database', 'mysql': 'database', 'duckdb': 'database',
+                'upload': 'file', 'file': 'file', 'sheets': 'file',
+                'rest': 'api poll', 'rest_api': 'api poll',
+                'webhook': 'webhook', 'dbt': 'models'}
+
+
+@app.get('/api/data/sources')
+def data_sources():
+    """R35S1E1: sources-list aggregate — one row per connection with health,
+    sync recency, SLA posture, table + issue counts."""
+    import dq as dq_mod
+    out = []
+    for c in many('SELECT * FROM connections ORDER BY id'):
+        run = one('SELECT * FROM governance_runs WHERE connection_id=? '
+                  'ORDER BY id DESC LIMIT 1', (c['id'],))
+        tables = many('SELECT * FROM cataloged_tables WHERE run_id=?',
+                      (run['id'],)) if run else []
+        health = (round(sum(t['health_score'] or 0 for t in tables) / len(tables))
+                  if tables else None)
+        poll = one('SELECT * FROM poll_runs WHERE connection_id=? '
+                   'ORDER BY id DESC LIMIT 1', (c['id'],))
+        last_sync = (poll or {}).get('created_at') or (run or {}).get('completed_at') \
+            or c['created_at']
+        slas = many('SELECT * FROM freshness_slas WHERE connection_id=?', (c['id'],))
+        sla = {'label': None, 'state': 'none'}
+        if slas:
+            tightest = min(s['max_age_hours'] for s in slas)
+            sla['label'] = f'{int(tightest)}h' if tightest >= 1 else f'{int(tightest * 60)}m'
+            fresh = {t['name']: t.get('freshness') for t in tables}
+            worst = 'met'
+            for s in slas:
+                age = dq_mod.parse_freshness_age(fresh.get(s['table_name']) or '')
+                if age is None:
+                    continue
+                if age > s['max_age_hours']:
+                    worst = 'breached'
+                    break
+                if age > s['max_age_hours'] * 0.75:
+                    worst = 'at risk'
+            sla['state'] = worst
+        issues = one('SELECT COUNT(*) AS n FROM alerts WHERE connection_id=?',
+                     (c['id'],))['n']
+        status = 'failing' if (poll or {}).get('status') == 'failed' \
+            else ('static' if KIND_OF_TYPE.get(c['type'], 'warehouse') == 'file'
+                  else ('connected' if run or poll else c['status'] or 'active'))
+        out.append({'id': c['id'], 'name': c['name'] or c['account'] or c['type'],
+                    'type': c['type'], 'kind': KIND_OF_TYPE.get(c['type'], 'warehouse'),
+                    'status': status, 'health': health, 'last_sync': last_sync,
+                    'sla': sla, 'tables': len(tables), 'issues': issues,
+                    'owner': c['owner_email']})
+    return jsonify({'sources': out, 'total': len(out)})
+
+
 @app.get('/api/connections')
 def list_connections():
     return jsonify([_mask_connection(r) for r in many('SELECT * FROM connections ORDER BY created_at DESC')])

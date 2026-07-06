@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R34 · Sprint R34S1 · Epic E1 (marketing nav/landing) · R34S1E1-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R35 · Sprint R35S1 · Epic E2 (connector grid) · R35S1E2-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R34 · Sprint R34S1 · Epic E1 (marketing nav/landing) · R34S1E1-US1  ← next story
+**Current position:** R35 · Sprint R35S1 · Epic E2 (connector grid) · R35S1E2-US1 — R34 delegated (junior), runs in parallel  ← next story
 
 > **Session 10 stop note (2026-07-06, RELEASE R33 CLOSED — one release per the
 > user's working rhythm):** 40/64 stories. This session shipped all 8 R33
@@ -384,7 +384,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 
 ## Release R35 — Unreviewed: Data layer (audit-first) (pending)
 ### Milestone UP-F — Data surfaces at parity
-- [ ] R35S1E1-US1 sources · E2 connect grid · E3 snowflake wizard · E4 imports ×4 [was R24S1]
+- [x] R35S1E1-US1 sources · E2 connect grid · E3 snowflake wizard · E4 imports ×4 [was R24S1] — done: DataSources (`/app/data/sources` — crumb + live count, filter, + Add source→/app/data/connect, rows w/ typed kind, status dot pill, colored health, last sync, SLA posture [met/at risk/breached from freshness vs SLA], owner, table+issue counts) over new `GET /api/data/sources` aggregate; S02 connect flow parked at /app/data/connect (kit spec migrated with the story); rest_api kind mapped. BE 450/450, UI 167/167.
 - [ ] R35S1 sprint regression recorded
 - [ ] R35S2E1-US1 source detail · E2 table detail [was R24S2]
 - [ ] R35S2 sprint regression recorded

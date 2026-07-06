@@ -161,6 +161,7 @@ export const api = {
   createCalculatedMetric: (body) => post('/semantic/default/metrics/calculated', body),   // R32S2E2
   semanticPreview:  (body) => post('/semantic/default/preview', body),   // R32S2E3 (DEP bounded)
   modelsOverview:   ()     => get('/models/overview'),                   // R33S1E1
+  dataSources:      ()     => get('/data/sources'),                      // R35S1E1
   trainingJob:      (id)   => get(`/training/jobs/${id}`),               // R33S1E2
   featureManifests: (sid)  => get(`/feature_manifests?session_id=${sid}`), // R33S1E2
   featureManifest:  (id)   => get(`/feature_manifests/${id}`),           // R33S1E4

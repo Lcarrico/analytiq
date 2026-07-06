@@ -39,6 +39,7 @@ import Screen12 from './screens/S12_Platform';
 // R33S1E1: S14 retired — /app/models belongs to the models pillar screens
 import ModelsOverview, { FeatureManifestViewer, Leaderboard, ModelCard, RetrainCenter, RunDetail } from './screens/Models';
 import EmbedPreview from './screens/EmbedPreview';   // R33S2E2
+import DataSources from './screens/DataSources';   // R35S1E1
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
@@ -118,6 +119,7 @@ function Layout() {
         <Route path="/app/models/runs/:id/leaderboard" element={<Leaderboard />} />  {/* R33S1E4 */}
         <Route path="/app/models/features/:id" element={<FeatureManifestViewer />} />  {/* R33S1E4 */}
         <Route path="/app/models/retrain" element={<RetrainCenter />} />  {/* R33S1E4 */}
+        <Route path="/app/data/sources" element={<DataSources />} />  {/* R35S1E1 — replaces the S02 list */}
         <Route path="/app/models/:cardId" element={<ModelCard />} />  {/* R33S1E3 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />

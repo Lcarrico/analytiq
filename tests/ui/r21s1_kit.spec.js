@@ -120,7 +120,10 @@ test('legacy call sites render the NEW badge/btn visuals (compat layer)', async 
   // connector tiles in its picker view — the pill spec must show through the
   // old API. (Picker opens via "+ Add new data source"; empty DBs land on the
   // picker directly, seeded DBs show the list first.)
-  await page.goto('/app/data/sources');
+  // R35S1E1: the sources LIST owns /app/data/sources now; the legacy S02
+  // picker (which exercises the old Badge API) lives at /app/data/connect
+  // until R35S1E2 replaces it.
+  await page.goto('/app/data/connect');
   // S02 fetches connections first (spinner) — wait until either the list's
   // add button or the picker header is actually rendered, then open the
   // picker if we're on the list. (Was flaky: count() sampled mid-load.)

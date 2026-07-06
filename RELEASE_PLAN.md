@@ -1527,6 +1527,18 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ## Release R34 — PRD Phase 5: Marketing Site (ch01–07)
 
+> **DELEGATED (2026-07-06):** R34 is assigned to a second developer and runs in
+> parallel with R35+. Handoff brief: (1) frames are `docs/specs/mockups/Marketing*.dc.html`
+> + ch01–07 in the PRD package; (2) follow the story loop — RED spec first, full
+> `npm run test:ui` + `python -m pytest tests/` per story, tick both tracking files,
+> commit per story; (3) **hard lock: `tests/ui/r30s1_pricing_data.spec.js` must stay
+> green** — the pricing restyle may change styling only, never plan data; (4) rename
+> `r29s1_marketing.spec.js` → `r34s1_marketing.spec.js` on first touch (cite the story
+> in the header comment); (5) marketing is standalone routes — do not touch `Shell.jsx`,
+> `tokens.js` values, or anything under `/app`; new shared chrome lives in
+> `client/src/components/Marketing*.jsx`; (6) §5.1 vocab gate (`r30s3_vocab.spec.js`)
+> scans your files too — no snake_case ids or internal jargon in copy.
+
 ### Milestone UP-E — Marketing at parity
 - [ ] 7 marketing pages at designed routes; shared nav/footer; pricing restyle keeps R30S1E1 data lock green
 
@@ -1552,7 +1564,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ### Milestone UP-F — Data surfaces at parity
 ### Sprint R35S1 — Sources, connect grid, wizard, imports <!-- task elaboration pending Phase 1a -->
-- [ ] **R35S1E1-US1** — sources list (audit-first task line) · [was R24S1E1]
+- [x] **R35S1E1-US1** — sources list (audit-first task line) · [was R24S1E1]
 - [ ] **R35S1E2-US1** — add-source connector grid · [was R24S1E2]
 - [ ] **R35S1E3-US1** — snowflake connector wizard · [was R24S1E3]
 - [ ] **R35S1E4-US1** — import flows ×4 (file upload, REST API, webhook, dbt) over R2 connectors · [was R24S1E4]
