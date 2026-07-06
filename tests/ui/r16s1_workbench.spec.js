@@ -23,7 +23,7 @@ test('confident prompt produces an inline plan card with ACCESS row; approve sta
   const card = page.getByTestId('plan-card');
   await expect(card).toBeVisible();
   await expect(card.getByText('Goal')).toBeVisible();
-  await expect(card.getByText('Metric')).toBeVisible();
+  await expect(card.getByText('Metric', { exact: true })   /* R38S1E2: checklist header added */).toBeVisible();
   await expect(card.getByText('Access')).toBeVisible();
   await expect(card.getByText(/No PII restrictions|excluded \(masked\)/)).toBeVisible();
 

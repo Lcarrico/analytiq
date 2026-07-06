@@ -100,6 +100,51 @@ function PlanCard({ plan, onApprove, onEdit, onCancel, busy, approved }) {
           </span>
         </div>
       ))}
+      {(plan.metrics || []).length > 0 && (
+        <div data-testid="plan-metrics"
+             style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${P.accentBorder}` }}>
+          <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700,
+                        letterSpacing: '.06em', color: P.muted, marginBottom: 6 }}>
+            METRIC CHECKLIST · {plan.metrics.filter(m => m.resolved).length} resolved
+            · {plan.metrics.filter(m => !m.resolved).length} to resolve
+          </div>
+          {plan.metrics.map(m => (
+            <div key={m.id} data-testid={`pm-row-${m.id}`}
+                 style={{ display: 'flex', gap: 8, alignItems: 'center',
+                          padding: '3px 0', fontSize: 12.5, fontFamily: FONT }}>
+              <span style={{ color: P.ink, fontWeight: 600 }}>{m.label}</span>
+              <span data-testid="pm-role"
+                    style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700,
+                             color: P.accentHover, background: '#fff',
+                             border: `1px solid ${P.accentBorder}`,
+                             borderRadius: 8, padding: '1px 7px' }}>
+                {(m.role || '').toUpperCase()}
+              </span>
+              <span style={{ fontFamily: MONO, fontSize: 9.5, color: P.faint }}>
+                {m.format}{m.dependencies ? ` · ← ${m.dependencies.join(' + ')}` : ''}
+              </span>
+              {m.resolved ? (
+                <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 9.5,
+                               color: P.green, fontWeight: 700 }}>✓</span>
+              ) : (
+                <span data-testid="pm-unresolved" title={m.reason || 'Unresolved'}
+                      style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 8.5,
+                               fontWeight: 700, color: P.amber, background: P.amberBg,
+                               borderRadius: 8, padding: '2px 7px', cursor: 'help' }}>
+                  UNRESOLVED
+                </span>
+              )}
+            </div>
+          ))}
+          {(plan.components_intent || []).length > 0 && (
+            <div data-testid="plan-components"
+                 style={{ fontFamily: MONO, fontSize: 10, color: P.muted, marginTop: 8 }}>
+              {plan.components_intent.length} component(s) proposed ·{' '}
+              {[...new Set(plan.components_intent.map(c => c.type))].join(' · ')}
+            </div>
+          )}
+        </div>
+      )}
       {!approved && (
         <div style={{ display: 'flex', gap: 8, marginTop: 10, alignItems: 'center' }}>
           <Btn size="sm" data-testid="approve-build" disabled={busy} onClick={onApprove}>

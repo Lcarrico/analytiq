@@ -84,6 +84,165 @@ def _match_metric(text: str, manifest: dict | None, semantic_schema: dict | None
     return None
 
 
+def _slug(name):
+    return re.sub(r'[^a-z0-9]+', '_', (name or '').lower()).strip('_') or 'metric'
+
+
+def _fmt_for(name):
+    n = (name or '').lower()
+    if any(w in n for w in ('revenue', 'value', 'price', 'cost', 'sales')):
+        return 'currency'
+    if any(w in n for w in ('rate', 'pct', '%', 'gap', 'conversion', 'share')):
+        return 'percent'
+    return 'number'
+
+
+# R38S1E2 (deep-dive §5B–C): deterministic derived-metric registry — an LLM
+# may phrase the ask, but expansion into dependencies is server-defined.
+DERIVED_PATTERNS = (
+    (('target gap %', 'target gap pct', 'target gap', 'gap %', 'gap pct'), {
+        'id': 'target_gap_pct', 'label': 'Target Gap %',
+        'dependencies': ('__primary__', '__primary_target__'),
+        'expression': '({p} - {t}) / {t}',
+        'zero_denominator': 'null', 'format': 'percent', 'aggregation': 'ratio'}),
+    (('average order value', 'aov'), {
+        'id': 'average_order_value', 'label': 'Average Order Value',
+        'dependencies': ('net_revenue', 'order_count'),
+        'expression': 'net_revenue / order_count',
+        'zero_denominator': 'null', 'format': 'currency', 'aggregation': 'ratio'}),
+    (('conversion rate',), {
+        'id': 'conversion_rate', 'label': 'Conversion Rate',
+        'dependencies': ('order_count', 'eligible_sessions'),
+        'expression': 'order_count / eligible_sessions',
+        'zero_denominator': 'null', 'format': 'percent', 'aggregation': 'ratio'}),
+)
+
+_SPLIT = re.compile(r',|\band\b|\bvs\.?\b|\bwith\b|\bplus\b')
+_NOISE = re.compile(r'\b(forecast|show|display|compare|track|the|next|last|coming|'
+                    r'\d+|days?|weeks?|months?|daily|weekly|monthly|for|over|by|me)\b')
+
+
+def _catalog(manifest, semantic_schema):
+    """slug → display label for every governed metric candidate."""
+    out = {}
+    for d in (manifest or {}).get('definitions') or []:
+        if d.get('type') == 'Metric' and d.get('name'):
+            out[_slug(d['name'])] = d['name']
+    for cube in (semantic_schema or {}).get('cubes') or []:
+        for m in cube.get('measures') or []:
+            if m.get('name'):
+                out[_slug(m['name'])] = m['name'].replace('_', ' ').title()
+    return out
+
+
+def build_metric_inventory(message, manifest, semantic_schema, primary_label):
+    """Every named and implied metric, with roles, formats, dependency
+    expansion, and explicit unresolved entries (never silently dropped)."""
+    catalog = _catalog(manifest, semantic_schema)
+    primary_id = _slug(primary_label)
+    inv, order = {}, []
+
+    def add(entry):
+        if entry['id'] not in inv:
+            inv[entry['id']] = entry
+            order.append(entry['id'])
+        return inv[entry['id']]
+
+    def add_catalog_or_unresolved(slug_id, label, role='supporting'):
+        if slug_id in catalog or slug_id == primary_id:
+            return add({'id': slug_id, 'label': catalog.get(slug_id, label),
+                        'role': role, 'resolved': True,
+                        'format': _fmt_for(label), 'aggregation': 'sum'})
+        return add({'id': slug_id, 'label': label, 'role': role, 'resolved': False,
+                    'format': _fmt_for(label), 'aggregation': 'sum',
+                    'reason': 'Not in the governed catalog — run governance on the '
+                              'source that carries it, or pick a governed metric.',
+                    'suggestions': sorted(catalog.values())[:3]})
+
+    add({'id': primary_id, 'label': primary_label, 'role': 'primary',
+         'resolved': True, 'format': _fmt_for(primary_label), 'aggregation': 'sum'})
+
+    text = re.sub(r'[^a-z0-9%, ]', ' ', (message or '').lower())
+    for raw in _SPLIT.split(text):
+        phrase = _NOISE.sub(' ', raw)
+        phrase = re.sub(r'\s+', ' ', phrase).strip(' .')
+        if not phrase or _slug(phrase) == primary_id:
+            continue
+        matched = False
+        for keys, tpl in DERIVED_PATTERNS:
+            if any(k in phrase for k in keys):
+                deps = []
+                for d in tpl['dependencies']:
+                    if d == '__primary__':
+                        deps.append(primary_id)
+                    elif d == '__primary_target__':
+                        # reuse the target the ask already named (e.g.
+                        # 'revenue target'); only mint one if none exists
+                        existing = next((i for i in order
+                                         if inv[i]['role'] == 'target'), None)
+                        tid = existing or f'{primary_id}_target'
+                        if not existing:
+                            _target_entry(add, primary_id, primary_label)
+                        deps.append(tid)
+                    else:
+                        deps.append(d)
+                        add_catalog_or_unresolved(d, d.replace('_', ' ').title())
+                add({'id': tpl['id'], 'label': tpl['label'], 'role': 'derived',
+                     'resolved': all(inv[d]['resolved'] for d in deps if d in inv),
+                     'dependencies': deps,
+                     'expression': tpl['expression'].format(
+                         p=primary_id, t=f'{primary_id}_target'),
+                     'zero_denominator': tpl['zero_denominator'],
+                     'format': tpl['format'], 'aggregation': tpl['aggregation'],
+                     **({} if all(inv[d]['resolved'] for d in deps if d in inv)
+                        else {'reason': 'One or more dependencies are unresolved.'})})
+                matched = True
+                break
+        if matched:
+            continue
+        if phrase.endswith(' target') or phrase.startswith('target '):
+            base = phrase.replace(' target', '').replace('target ', '').strip()
+            _target_entry(add, _slug(base) or primary_id, base.title() or primary_label)
+            continue
+        add_catalog_or_unresolved(_slug(phrase), phrase.title())
+
+    metrics = [inv[i] for i in order]
+    unresolved = [{'id': m['id'], 'label': m['label'], 'reason': m.get('reason', '')}
+                  for m in metrics if not m['resolved']]
+    return metrics, unresolved
+
+
+def _target_entry(add, base_id, base_label):
+    add({'id': f'{base_id}_target', 'label': f'{base_label} Target',
+         'role': 'target', 'resolved': False,
+         'format': _fmt_for(base_label), 'aggregation': 'sum',
+         'reason': 'No governed target source configured yet — targets bind '
+                   'under Trust & targets (R42).'})
+
+
+def propose_components(metrics, intent):
+    """Deterministic role-driven component proposals (doc §5B step 5) —
+    replaces nothing yet; R38S2E2 swaps the fixed template for these."""
+    comps = []
+    resolved = [m for m in metrics if m['resolved']]
+    for m in resolved:
+        comps.append({'type': 'kpi', 'metric_refs': [m['id']],
+                      'rationale': f"headline for {m['label']}"})
+    primary = next((m for m in metrics if m['role'] == 'primary'), None)
+    if primary:
+        trend_refs = [primary['id']] + [m['id'] for m in resolved
+                                        if m['role'] == 'target']
+        comps.append({'type': 'line', 'metric_refs': trend_refs,
+                      'rationale': 'trend over the analysis window'})
+        if intent == 'predictive':
+            comps.append({'type': 'area', 'metric_refs': [primary['id']],
+                          'rationale': 'forecast with confidence interval'})
+        if intent == 'diagnostic':
+            comps.append({'type': 'bar', 'metric_refs': [primary['id']],
+                          'rationale': 'driver breakdown'})
+    return comps
+
+
 def _feature_candidates(semantic_schema: dict | None) -> tuple[list[str], list[str]]:
     feats, explores = [], []
     for cube in (semantic_schema or {}).get('cubes') or []:
@@ -136,7 +295,13 @@ def plan_session(message: str, semantic_schema: dict | None = None,
 
     horizon = _parse_horizon(message) or (DEFAULT_HORIZON if intent == 'predictive' else None)
     feats, explores = _feature_candidates(semantic_schema)
+    primary_label = metric or 'Net Revenue'
+    metrics_inv, unresolved = build_metric_inventory(message, manifest,
+                                                     semantic_schema, primary_label)
     return {
+        'metrics': metrics_inv,
+        'unresolved': unresolved,
+        'components_intent': propose_components(metrics_inv, intent),
         'intent': intent,
         'intent_confidence': conf,
         'analytic_goal': message.strip(),

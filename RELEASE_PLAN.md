@@ -1659,11 +1659,11 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
   - AC: approving a plan writes spec v1 derived from the (new multi-metric) plan; pipeline + canvas read the spec head; session_specs remains for session lifecycle but layout/content truth moves to DashboardSpec; existing artifacts keep working via a compat shim that synthesizes a spec view from layout_json (adaptation ledger).
   - Touches: server/app.py (approve path, pipeline read), planner.py, BuildCanvas.jsx (read path). Deps: R38S1E1-US1. DoD: standard 9 + legacy canvas specs green via shim.
 #### Epic E2 — Multi-metric planning (F-02 · doc §5B–C)
-- [ ] **R38S1E2-US1** — metric-inventory decomposition in the planner.
+- [x] **R38S1E2-US1** ✅ 2026-07-06 — metric-inventory decomposition in the planner.
   - AC: planner resolves every named and implied metric against the semantic catalog into metrics[] with roles; derived metrics expand into dependencies (e.g. target gap % → net revenue, revenue target, zero-denominator rule); targets/comparisons identified; unresolved/ambiguous items returned as a visible checklist, never silently dropped; validation accepts the collection (scalar target_metric retired with a compat read).
   - Tasks — BE: planner v2 (`plan_session` emits metrics[]/components-intent; deterministic catalog matching incl. synonyms table); validate_session_spec v2; the doc §5C example checklist (net revenue, revenue target, target gap %, order count, AOV, conversion, promo lift, forecast+CI) as the RED fixture. UI: N/A here.
   - Touches: server/planner.py, server/app.py (validation), tests. Deps: R38S1E1-US1. DoD: standard 9; acceptance-matrix row "Metric decomposition" (ask 5 incl. 1 derived → all 5 + deps + formats + unresolved + component mapping) green.
-- [ ] **R38S1E2-US2** — plan card shows the metric checklist + component plan.
+- [x] **R38S1E2-US2** ✅ 2026-07-06 — plan card shows the metric checklist + component plan.
   - AC: plan card lists resolved metrics with role pills + format, unresolved items as amber chips with "resolve in chat" affordance, and the proposed component plan (type + metrics + dims per component) before Approve & Build; plan-row edit remains.
   - Touches: Workbench.jsx, api.js. Deps: R38S1E2-US1. DoD: standard 9.
 
