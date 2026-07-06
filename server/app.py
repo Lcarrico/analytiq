@@ -493,6 +493,23 @@ CREATE TABLE IF NOT EXISTS artifact_shares (
     role        TEXT DEFAULT 'Viewer',
     shared_at   TEXT DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS billing_invoices (
+    id            INTEGER PRIMARY KEY,
+    number        TEXT NOT NULL UNIQUE,
+    period_start  TEXT NOT NULL,
+    period_end    TEXT NOT NULL,
+    amount_usd    REAL NOT NULL,
+    status        TEXT NOT NULL DEFAULT 'paid',
+    issued_at     TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS payment_methods (
+    id            INTEGER PRIMARY KEY,
+    brand         TEXT NOT NULL,
+    last4         TEXT NOT NULL,
+    exp           TEXT NOT NULL,
+    is_default    INTEGER DEFAULT 1,
+    created_at    TEXT DEFAULT (datetime('now'))
+);
 CREATE TABLE IF NOT EXISTS workspace_kv (
     workspace_id TEXT NOT NULL DEFAULT 'default',
     key          TEXT NOT NULL,
@@ -8814,6 +8831,77 @@ def apply_template(tid):
              json.dumps(spec)))
     log_action('template.applied', 'template', tid, {'session_id': sid, 'metric': metric})
     return jsonify({'session_id': sid, 'spec': spec, 'validation': {'errors': []}}), 201
+
+
+PLAN_META = {                      # R36S3E1 — display meta beside PLANS
+    'starter':    {'price_usd': 0,    'seats': 3,    'extra_seat_usd': 0},
+    'team':       {'price_usd': 149,  'seats': 10,   'extra_seat_usd': 18},
+    'business':   {'price_usd': 499,  'seats': 25,   'extra_seat_usd': 18},
+    'enterprise': {'price_usd': None, 'seats': None, 'extra_seat_usd': 0},
+}
+
+
+@app.get('/api/billing/overview')
+def billing_overview():
+    """R36S3E1: plan & seats + current-cycle line items. Local-first — Stripe
+    only reported as configured when keys exist."""
+    plan = _current_plan()
+    meta = PLAN_META[plan]
+    users = one("SELECT COUNT(*) AS n FROM users")['n'] or 1
+    invited = one("SELECT COUNT(*) AS n FROM invites WHERE status='pending'")['n'] \
+        if one("SELECT name FROM sqlite_master WHERE name='invites'") else 0
+    used = max(users, 1) + invited
+    sub = one("SELECT current_period_end FROM subscriptions "
+              "WHERE status='active' ORDER BY id DESC LIMIT 1")
+    renewal = (sub or {}).get('current_period_end') \
+        or one("SELECT date('now', 'start of month', '+1 month') AS d")['d']
+    tokens = one('SELECT COALESCE(SUM(tokens),0) AS t FROM task_dispatches')['t']
+    included_tokens = PLANS[plan]['tokens']
+    extra_seats = max(0, used - meta['seats']) if meta['seats'] else 0
+    overage_tokens = max(0, tokens - included_tokens)
+    base = meta['price_usd'] or 0
+    cycle = [
+        {'label': f'Base plan ({plan})', 'amount_usd': base},
+        {'label': f'Extra seats × {extra_seats}',
+         'amount_usd': extra_seats * meta['extra_seat_usd']},
+        {'label': 'Token overage (est.)',
+         'amount_usd': round(overage_tokens / 100000 * 8, 2)},
+    ]
+    return jsonify({'plan': plan, 'price_usd': meta['price_usd'],
+                    'seats': {'included': meta['seats'] or used, 'used': used,
+                              'members': users, 'invited': invited,
+                              'extra_rate_usd': meta['extra_seat_usd']},
+                    'renewal': renewal,
+                    'tokens': {'used': tokens, 'included': included_tokens},
+                    'cycle': cycle,
+                    'estimated_total_usd': round(sum(c['amount_usd'] for c in cycle), 2),
+                    'stripe_configured': bool(STRIPE_SECRET_KEY)})
+
+
+@app.get('/api/billing/invoices')
+def billing_invoices():
+    """R36S3E1 DEP: demo invoices materialize deterministically on first read
+    (this is the demo workspace's billing history), then stay stable."""
+    if not one('SELECT id FROM billing_invoices LIMIT 1'):
+        plan = _current_plan()
+        base = PLAN_META[plan]['price_usd'] or 0
+        for i in (3, 2, 1):
+            start = one(f"SELECT date('now', 'start of month', '-{i} months') AS d")['d']
+            end = one(f"SELECT date('now', 'start of month', '-{i - 1} months', '-1 day') AS d")['d']
+            execute('INSERT INTO billing_invoices (number, period_start, period_end, '
+                    "amount_usd, status, issued_at) VALUES (?,?,?,?,'paid',?)",
+                    (f"INV-{start[:7].replace('-', '')}", start, end, base, end))
+    return jsonify({'invoices': many('SELECT * FROM billing_invoices '
+                                     'ORDER BY period_start DESC')})
+
+
+@app.get('/api/billing/payment_methods')
+def billing_payment_methods():
+    """R36S3E1 DEP: the demo workspace's card on file (seeded once)."""
+    if not one('SELECT id FROM payment_methods LIMIT 1'):
+        execute("INSERT INTO payment_methods (brand, last4, exp) "
+                "VALUES ('visa', '4242', '09/28')")
+    return jsonify({'methods': many('SELECT * FROM payment_methods ORDER BY id')})
 
 
 @app.get('/api/billing/usage')

@@ -1594,7 +1594,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] **R36S2E5-US1** — usage & cost dashboard over `/api/billing/usage` :7449 (additive aggregate only) · [was R27S1E5] ✅ 2026-07-06 (GET /api/admin/usage aggregate + AdminUsage dashboard; spec r36s2_usage)
 - [ ] R36S2 sprint regression recorded
 ### Sprint R36S3 — Billing + Settings <!-- task elaboration pending Phase 1a -->
-- [ ] **R36S3E1-US1** — billing plan & seats, invoices + payment methods, token usage meters. `DEP:` seeded demo invoice/payment endpoints (Stripe checkout/portal exist :6914–6965) · [was R27S2E1]
+- [x] **R36S3E1-US1** — billing plan & seats, invoices + payment methods, token usage meters. `DEP:` seeded demo invoice/payment endpoints (Stripe checkout/portal exist :6914–6965) · [was R27S2E1] ✅ 2026-07-06 (overview + seeded invoices/payment methods + Billing rebuild w/ local plan change; spec r36s3_billing)
 - [ ] **R36S3E2-US1** — settings ×4 (profile, preferences, API keys, help center) + **app-wide technical-detail toggle** (admin-gated blocks flip from role-gated to toggle-gated; cite R30S3 panels). `DEP:` prefs kv + hashed API keys (revoke → 410) · [was R27S2E2]
 - [ ] R36S3 sprint regression recorded
 ### Release R36 close-out

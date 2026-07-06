@@ -112,6 +112,10 @@ export const api = {
   teamRoster:       ()      => get('/team/roster'),
   createInvites:    (body)  => post('/team/invites', body),
   billingUsage:     ()      => get('/billing/usage'),
+  billingOverview:  ()      => get('/billing/overview'),
+  billingInvoices:  ()      => get('/billing/invoices'),
+  billingPayments:  ()      => get('/billing/payment_methods'),
+  putBillingPlan:   (plan)  => req('/billing/plan', { method: 'PUT', body: JSON.stringify({ plan }) }),
   observabilityReport: ()   => post('/workspace/observability_report', {}),
   streamPipeline:   (id)    => new EventSource(`${BASE}/pipeline/stream/${id}`),
 
