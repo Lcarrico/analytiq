@@ -46,7 +46,7 @@ export function AdminOverview() {
      `${d.audit_24h.flagged} flagged · export ready`, '/app/admin/security'],
     ['tokens', 'TOKEN USAGE', `${d.token_usage.pct}%`,
      `${d.token_usage.used.toLocaleString('en-US')} / ${d.token_usage.cap.toLocaleString('en-US')}`,
-     '/app/billing'],
+     '/app/admin/usage'],
     ['security', 'SECURITY WARNINGS', d.security_warnings.total,
      d.security_warnings.notes[0] || 'nothing flagged', '/app/admin/security'],
     ['links', 'ACTIVE SHARE LINKS', d.share_links.total, 'all scoped + expiring', '/app/admin/security'],

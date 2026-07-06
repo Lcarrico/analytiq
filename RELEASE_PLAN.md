@@ -1591,7 +1591,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] **R36S2E2-US1** — admin overview + roles & permissions matrix. `DEP:` roles kv + audit row · [was R27S1E2] ✅ 2026-07-06 (workspace_kv + /api/admin/overview + roles matrix; spec r36s2_admin)
 - [x] **R36S2E3-US1** — SSO settings + workspace branding admin. `DEP:` workspace settings kv (branding API exists) · [was R27S1E3] ✅ 2026-07-06 (kv-backed SAML + test + branding preview; spec r36s2_sso)
 - [x] **R36S2E4-US1** — admin security ×4 (secrets, audit log, sharing governance, RLS w/ simulator) over :6885/:7518/:7488/:7504 · [was R27S1E4] ✅ 2026-07-06 (masked secrets + rotate, export, sharing kv, RLS simulator; S12 retired → /app/admin/platform direct-routed, vocab ledger empty; spec r36s2_security)
-- [ ] **R36S2E5-US1** — usage & cost dashboard over `/api/billing/usage` :7449 (additive aggregate only) · [was R27S1E5]
+- [x] **R36S2E5-US1** — usage & cost dashboard over `/api/billing/usage` :7449 (additive aggregate only) · [was R27S1E5] ✅ 2026-07-06 (GET /api/admin/usage aggregate + AdminUsage dashboard; spec r36s2_usage)
 - [ ] R36S2 sprint regression recorded
 ### Sprint R36S3 — Billing + Settings <!-- task elaboration pending Phase 1a -->
 - [ ] **R36S3E1-US1** — billing plan & seats, invoices + payment methods, token usage meters. `DEP:` seeded demo invoice/payment endpoints (Stripe checkout/portal exist :6914–6965) · [was R27S2E1]

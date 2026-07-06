@@ -101,3 +101,19 @@ def test_admin_security_endpoints(client):
     s2 = client.get('/api/admin/sharing').get_json()
     assert s2['rules']['max_expiration_days'] == 90
     assert s2['rules']['allowed_domains'] == ['*.acme.com']
+
+
+def test_admin_usage_aggregate(client):
+    """R36S2E5 — usage & cost dashboard aggregate: KPIs, daily series, top
+    consumers, and per-area cost derived from real dispatch/log tables."""
+    d = client.get('/api/admin/usage').get_json()
+    assert set(d) >= {'kpis', 'daily', 'consumers', 'areas', 'est_month_usd'}
+    k = d['kpis']
+    assert set(k) >= {'pipeline_runs', 'llm_calls', 'tokens_used',
+                      'tokens_pct', 'compute_ms'}
+    assert isinstance(d['daily'], list) and len(d['daily']) == 14
+    assert all({'day', 'views', 'builds'} <= set(r) for r in d['daily'])
+    # cost math is derived from the metered token rate, not invented
+    for a in d['areas']:
+        assert abs(a['usd'] - a['tokens'] / 100000 * 8) < 0.01
+    assert abs(d['est_month_usd'] - sum(a['usd'] for a in d['areas'])) < 0.01

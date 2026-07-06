@@ -3847,6 +3847,51 @@ def patch_roles_matrix():
     return jsonify({'ok': True})
 
 
+@app.get('/api/admin/usage')
+@require_role('admin')
+def admin_usage():
+    """R36S2E5: usage & cost analytics — additive aggregate over the real
+    dispatch/run/log tables; cost derives from the metered token rate."""
+    runs = one("SELECT COUNT(*) AS n FROM pipeline_runs "
+               "WHERE started_at >= datetime('now', '-30 days')")['n']
+    calls = one("SELECT COUNT(*) AS n FROM task_dispatches "
+                "WHERE created_at >= datetime('now', '-30 days')")['n']
+    tokens = one('SELECT COALESCE(SUM(tokens),0) AS t FROM task_dispatches')['t']
+    included = PLANS[_current_plan()]['tokens']
+    compute = one("SELECT COALESCE(SUM(duration_ms),0) AS d FROM service_logs "
+                  "WHERE created_at >= datetime('now', '-30 days')")['d']
+    daily = []
+    for i in range(13, -1, -1):
+        day = one(f"SELECT date('now', '-{i} days') AS d")['d']
+        views = one("SELECT COUNT(*) AS n FROM artifact_activity "
+                    "WHERE kind='viewed' AND date(created_at)=?", (day,))['n']
+        builds = one('SELECT COUNT(*) AS n FROM artifacts '
+                     'WHERE date(created_at)=?', (day,))['n']
+        daily.append({'day': day, 'views': views, 'builds': builds})
+    rate = 8 / 100000                       # $8 per 100k tokens (billing/usage)
+    consumers = [{'consumer': r['consumer'], 'tokens': r['tokens'] or 0,
+                  'calls': r['calls'],
+                  'usd': round((r['tokens'] or 0) * rate, 2)}
+                 for r in many("SELECT COALESCE(workspace_id,'default') AS consumer, "
+                               'SUM(tokens) AS tokens, COUNT(*) AS calls '
+                               'FROM task_dispatches GROUP BY workspace_id '
+                               'ORDER BY tokens DESC LIMIT 8')]
+    areas = [{'area': r['area'], 'tokens': r['tokens'] or 0,
+              'usd': round((r['tokens'] or 0) * rate, 2)}
+             for r in many('SELECT task_kind AS area, SUM(tokens) AS tokens '
+                           'FROM task_dispatches GROUP BY task_kind '
+                           'ORDER BY tokens DESC')]
+    trainings = one("SELECT COUNT(*) AS n FROM training_jobs "
+                    "WHERE created_at >= datetime('now', '-7 days')")['n']
+    return jsonify({'kpis': {'pipeline_runs': runs, 'llm_calls': calls,
+                             'tokens_used': tokens, 'included': included,
+                             'tokens_pct': round(tokens / included * 100, 1)
+                               if included else 0,
+                             'compute_ms': compute, 'trainings_7d': trainings},
+                    'daily': daily, 'consumers': consumers, 'areas': areas,
+                    'est_month_usd': round(sum(a['usd'] for a in areas), 2)})
+
+
 @app.get('/api/admin/secrets')
 @require_role('admin')
 def list_admin_secrets():

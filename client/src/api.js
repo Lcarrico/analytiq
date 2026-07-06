@@ -86,6 +86,7 @@ export const api = {
   adminOverview:    ()     => get('/admin/overview'),                    // R36S2E2
   rolesMatrix:      ()     => get('/admin/roles'),                       // R36S2E2
   patchRolesMatrix: (body) => patch('/admin/roles', body),               // R36S2E2
+  adminUsage: () => req('/admin/usage'),
   adminSecrets: () => req('/admin/secrets'),
   rotateSecret: (id) => req(`/admin/secrets/${id}/rotate`, { method: 'POST' }),
   auditLogs: (limit = 40) => req(`/audit-logs?limit=${limit}`),

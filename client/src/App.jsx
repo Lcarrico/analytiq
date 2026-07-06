@@ -50,6 +50,7 @@ import CommentsInbox from './screens/CommentsInbox';   // R36S2E1
 import { AdminOverview, RolesMatrix } from './screens/AdminOverview';   // R36S2E2
 import { AdminBranding, AdminSso } from './screens/AdminSso';   // R36S2E3
 import AdminSecurity from './screens/AdminSecurity';   // R36S2E4
+import AdminUsage from './screens/AdminUsage';   // R36S2E5
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
@@ -151,6 +152,8 @@ function Layout() {
                element={<AdminGate><Screen12 /></AdminGate>} />  {/* R36S2E4 */}
         <Route path="/app/admin/security"
                element={<AdminGate><AdminSecurity /></AdminGate>} />
+        <Route path="/app/admin/usage"
+               element={<AdminGate><AdminUsage /></AdminGate>} />  {/* R36S2E5 */}
         <Route path="/app/admin/roles" element={<RolesMatrix />} />  {/* R36S2E2 */}
         <Route path="/app/admin/sso" element={<AdminSso />} />  {/* R36S2E3 */}
         <Route path="/app/admin/branding" element={<AdminBranding />} />  {/* R36S2E3 */}
