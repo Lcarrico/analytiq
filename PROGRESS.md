@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R35 · Sprint R35S1 · Epic E2 (connector grid) · R35S1E2-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R35 · Sprint R35S1 · Epic E3 (snowflake wizard) · R35S1E3-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R35 · Sprint R35S1 · Epic E2 (connector grid) · R35S1E2-US1 — R34 delegated (junior), runs in parallel  ← next story
+**Current position:** R35 · Sprint R35S1 · Epic E3 (snowflake wizard) · R35S1E3-US1 — R34 delegated (junior), runs in parallel  ← next story
 
 > **Session 10 stop note (2026-07-06, RELEASE R33 CLOSED — one release per the
 > user's working rhythm):** 40/64 stories. This session shipped all 8 R33
