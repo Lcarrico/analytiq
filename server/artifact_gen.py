@@ -220,23 +220,33 @@ def _timeseries_panel(rows, sx, sy, ribbon, actual_path, predicted_path, cut_x,
 
 
 def _layout_panels(layout, rows, metric_format, top_features, model_card,
-                   component_rows, ts_args):
-    """Sections in layout order — the same spec the canvas edits (F-08)."""
+                   component_rows, ts_args, grid_cells=None):
+    """Sections in layout order, placed with the SAME grid geometry the
+    canvas edits (F-08 + R40S1E4 parity by construction)."""
+    cells = {c.get('component_id'): c for c in (grid_cells or [])}
     out = []
     for s in sorted(layout.get('sections', []), key=lambda x: x.get('position', 0)):
         sid = s.get('id')
         if sid == 'timeseries_ci':
-            out.append(_titled(s, _timeseries_panel(rows, *ts_args)))
+            panel = _titled(s, _timeseries_panel(rows, *ts_args))
         elif sid == 'forecast':
-            out.append(_titled(s, _forecast_panel(rows, metric_format)))
+            panel = _titled(s, _forecast_panel(rows, metric_format))
         elif sid == 'dimension_breakdown':
-            out.append(_titled(s, _breakdown_panel(rows)))
+            panel = _titled(s, _breakdown_panel(rows))
         elif sid == 'feature_importance':
-            out.append(_titled(s, _importance_panel(
-                top_features or (model_card or {}).get('top_features'))))
+            panel = _titled(s, _importance_panel(
+                top_features or (model_card or {}).get('top_features')))
         else:
-            out.append(_generic_panel(s, (component_rows or {}).get(sid)))
-    return '\n  '.join(out)
+            panel = _generic_panel(s, (component_rows or {}).get(sid))
+        c = cells.get(sid)
+        if c:
+            panel = (f'<div class="cell" style="grid-column:{c["x"] + 1} / span {c["w"]};'
+                     f'grid-row:{c["y"] + 1} / span {c["h"]}">{panel}</div>')
+        out.append(panel)
+    inner = '\n  '.join(out)
+    if cells:
+        return f'<div class="grid-wrap">{inner}</div>'
+    return inner
 
 
 def generate_artifact_html(artifact: dict, rows: list[dict], kpis: dict,
@@ -249,7 +259,8 @@ def generate_artifact_html(artifact: dict, rows: list[dict], kpis: dict,
                            branding: dict | None = None,
                            generated_at: str | None = None,
                            layout: dict | None = None,
-                           component_rows: dict | None = None) -> str:
+                           component_rows: dict | None = None,
+                           grid_cells: list | None = None) -> str:
     generated_at = generated_at or datetime.now(timezone.utc).isoformat()
     branding = branding or {}
     primary = branding.get('primary_color') or '#4f7cff'
@@ -292,6 +303,13 @@ def generate_artifact_html(artifact: dict, rows: list[dict], kpis: dict,
   .gbar {{ flex: 1; background: var(--primary); opacity: .85;
            border-radius: 3px 3px 0 0; }}
   .empty {{ color: var(--muted); font: 12px {font}; padding: 12px; }}
+  .grid-wrap {{ display: grid; grid-template-columns: repeat(12, 1fr);
+                grid-auto-rows: 46px; gap: 10px; }}
+  .cell {{ overflow: hidden; min-width: 0; }}
+  .cell .panel {{ height: 100%; box-sizing: border-box; margin: 0; }}
+  @media (max-width: 640px) {{
+    .grid-wrap {{ display: flex; flex-direction: column; }}
+  }}
   @media (prefers-color-scheme: dark) {{
     :root {{ --bg: #101418; --surface: #1a2027; --text: #e8edf3;
              --muted: #93a3b5; --border: #2a3441; }}
@@ -386,7 +404,8 @@ def generate_artifact_html(artifact: dict, rows: list[dict], kpis: dict,
 
   {_layout_panels(layout, rows, metric_format, top_features, model_card,
                   component_rows,
-                  (sx, sy, ribbon, actual_path, predicted_path, cut_x, forecast_start))
+                  (sx, sy, ribbon, actual_path, predicted_path, cut_x, forecast_start),
+                  grid_cells=grid_cells)
    if layout and layout.get('sections') else
    _timeseries_panel(rows, sx, sy, ribbon, actual_path, predicted_path, cut_x,
                      forecast_start)

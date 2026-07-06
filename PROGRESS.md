@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R40 · Sprint R40S1 · Epic E1 (grid model + patch semantics) · R40S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
+**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R41 · Sprint R41S1 · Epic E1 (patch engine) · R41S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -554,7 +554,7 @@ re-verify tails after any host-side write.
 
 # Agentic Dashboard Program (Deep-Dive v1.0) — R37–R43
 
-**Current position:** R40 · Sprint R40S1 · Epic E1 (grid model + patch semantics) · R40S1E1-US1  ← next story
+**Current position:** R41 · Sprint R41S1 · Epic E1 (patch engine) · R41S1E1-US1  ← next story
 **Spec:** `AnalytIQ Workspace Agentic Dashboard Deep Dive` (2026-07-06) — findings F-01…F-15 spot-verified in code before planning (seeded chart generator, scalar target_metric, un-gated section PATCH, format=html export all confirmed). Suite at planning time: backend 469/469 · UI 186/186 (R30–R36 close, 9b02c62).
 **Standing:** no multi-agents (lead executes inline) · R34 marketing surfaces locked to the junior · legacy workbench specs migrate only with an owning story ID.
 
@@ -584,12 +584,12 @@ re-verify tails after any host-side write.
 - [x] R39S1E3-US1 renderer unification [F-08] — done: `artifact_gen` composes panels from the artifact layout in position order (timeseries/forecast/breakdown/importance renderers + generic-bars for authored components w/ their executed rows; exact legacy fallback when no layout — r6 panel contracts intact); ONE assembly path `_rerender_artifact_html` (layout AND semantic edits re-render — canvas and shared artifact can no longer diverge; save renders once, post-layout); `export?format=html` serves the stored render (R37's deferred export menu promise fulfilled — spec migrated to assert the live anchor); r16s2 layout-edit contract migrated w/ citation. BE 495/495, UI 196/196.
 - [x] R39S1 sprint regression recorded — backend 495/495 · UI 196/196 (0 failed, 2026-07-06) · zero-key boot green — **RELEASE R39 CLOSED** (doc Phase-2 exit: agent and UI can create KPI, chart, and table components)
 
-## Release R40 — Grid editor (pending)
-- [ ] R40S1E1-US1 per-breakpoint geometry + layout-patch endpoint (normalize, collisions, optimistic concurrency) [F-04 server]
-- [ ] R40S1E2-US1 real drag + resize w/ placement preview; flex column retired [F-04 client]
-- [ ] R40S1E3-US1 undo/redo over patch history, keyboard ops, multi-select/duplicate/lock/grouping
-- [ ] R40S1E4-US1 tablet/mobile reflow + geometry parity across reload/artifact/share/export/present
-- [ ] R40S1 sprint regression recorded
+## Release R40 — Grid editor ✅ CLOSED 2026-07-06
+- [x] R40S1E1-US1 grid model + patch endpoint [F-04 server] — done: `server/grid_layout.py` (deterministic normalize: clamp→collision-push→vertical compaction; locked cells hold position, movers resolve around them) + `PATCH /api/sessions/<id>/dashboard-spec/grid` (per-breakpoint, base_version precondition → 409 w/ head_version + no version appended by the loser [tested], validated + appended; layout patches never rerun queries [tested]). BE 500/500, UI 201/201.
+- [x] R40S1E2-US1 real drag + resize [F-04 client] — done: canvas body is a real 12-col CSS grid (`grid-canvas`); every card gets always-on drag (⠿) + corner resize (◢) handles with live pointer preview; drop commits through the patch endpoint and applies the server-normalized result (409 → converge on head). Spec proves a drag-reorder swaps vertical order + invariants hold; resize narrows and persists. The audit's 'zero draggable elements' is dead. BE 500/500, UI 201/201.
+- [x] R40S1E3-US1 keyboard/undo/multi-select — done: arrows move, Shift+arrows resize the selected card(s) (input-focus guarded); Ctrl+Z / Ctrl+Shift+Z + toolbar ↩/↪ undo/redo over the SERVER version history (restore endpoint — not local state); shift-click multi-select (seeds from current selection) w/ bulk bar + lock/unlock; locked cells hold their spot through normalize (backend-tested); aria-live announcements (`grid-announce`). Grouping = multi-select acting as a unit for keyboard moves. BE 500/500, UI 201/201.
+- [x] R40S1E4-US1 responsive + parity — done: KPI strip actually reflows (4→2 columns off desktop) and mobile stacks sections full-width (audit's fixed-4 dies); artifact_gen places panels in a `.grid-wrap` CSS grid with the SAME spec geometry the canvas edits (mobile media-query stacks) — export/share/present read the stored render, so parity is by construction (BE-tested: exported html carries the patched spans). Workbench-tab reload hydration is R41S1E4's owned story (F-12, cited in spec). BE 500/500, UI 201/201.
+- [x] R40S1 sprint regression recorded — backend 500/500 · UI 201/201 (0 failed, 2026-07-06) · zero-key boot green — **RELEASE R40 CLOSED** (doc Phase-3 exit: grid persists and is identical across surfaces)
 
 ## Release R41 — Agentic refinement loop (pending)
 - [ ] R41S1E1-US1 patch engine: validated ops, layout-instant vs semantic-stale classification, versioned + audited
@@ -613,7 +613,7 @@ re-verify tails after any host-side write.
 - [ ] R43S1 sprint regression recorded
 - [ ] R43 release regression + zero-key boot + acceptance 14/14 — PROGRAM CLOSE (R37–R43)
 
-**Session stop note (2026-07-06, second stop):** RELEASE R39 CLOSED — stopped green. Next: R40S1E1-US1 (grid model + layout-patch endpoint: per-breakpoint x/y/w/h/min/max/lock/z in the spec grid section; normalize + collision resolution + optimistic concurrency 409; layout patches never rerun queries). Runners /tmp/{be,ui}_chunks.sh; recreate from ledger if the sandbox recycles.
+**Session stop note (2026-07-06, third stop):** RELEASE R40 CLOSED — stopped green. Next: R41S1E1-US1 (patch engine: dashboard patch ops add/modify/remove component + layout + semantic, validated + versioned + audited; layout-instant vs semantic-stale classification). Playwright gotchas learned this release: raw page.mouse uses VIEWPORT coords — scrollIntoViewIfNeeded before drags; vertical drags on full-width stacks normalize back (assert ORDER swaps, not y deltas); busy canvas → domClick pattern (evaluate el.click()).
 
 ## Adaptation ledger (program-specific, grows during execution)
 - "Source-bound" on the zero-key stack = bound to per-connection seeded fixture tables through warehouse.py dialect SQL; two-source fidelity is proven with two fixture connections (R38S2E1-US2).

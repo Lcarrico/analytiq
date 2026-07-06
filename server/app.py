@@ -9249,9 +9249,17 @@ def _rerender_artifact_html(art):
         return None
     art = one('SELECT * FROM artifacts WHERE id=?', (art['id'],))   # fresh layout
     layout = json.loads(art.get('layout_json') or 'null')
+    sess_row = one('SELECT session_id FROM pipeline_runs WHERE id=?', (rid,))
+    grid_cells = None
+    if sess_row:
+        spec_head = one('SELECT spec_json FROM dashboard_specs WHERE session_id=? '
+                        'ORDER BY spec_version DESC LIMIT 1', (sess_row['session_id'],))
+        if spec_head:
+            grid_cells = json.loads(spec_head['spec_json']).get('grid', {}).get('desktop')
     html = ag.generate_artifact_html(art, rows, compute_kpis(rows),
                                      layout=layout,
-                                     component_rows=_component_rows_for_run(rid))
+                                     component_rows=_component_rows_for_run(rid),
+                                     grid_cells=grid_cells)
     _att = []
     html, _c, validation = ag.validate_and_repair(html, attempt_log=_att)
     _persist_repair_attempts(get_db(), 'artifact_render', art['id'], rid, _att,
@@ -9419,6 +9427,41 @@ def get_dashboard_spec_head(id):
     out = dict(row)
     out['spec'] = json.loads(out.pop('spec_json'))
     return jsonify(out)
+
+
+@app.patch('/api/sessions/<int:id>/dashboard-spec/grid')
+@require_role('admin', 'analyst')
+def patch_dashboard_grid(id):
+    """R40S1E1 (deep-dive F-04): the layout-patch endpoint — normalized
+    geometry, optimistic concurrency, versioned, never reruns queries."""
+    import dashboard_spec as ds
+    import grid_layout as gl
+    b = request.get_json() or {}
+    head = one('SELECT * FROM dashboard_specs WHERE session_id=? '
+               'ORDER BY spec_version DESC LIMIT 1', (id,))
+    if not head:
+        return jsonify({'error': 'No dashboard spec for this session yet'}), 409
+    base = b.get('base_version')
+    if base is not None and base != head['spec_version']:
+        return jsonify({'error': 'Spec moved on — reload and retry',
+                        'code': 'version_conflict',
+                        'head_version': head['spec_version']}), 409
+    spec = json.loads(head['spec_json'])
+    try:
+        spec = gl.apply_grid_patch(spec, b.get('breakpoint', 'desktop'),
+                                   b.get('cells') or [])
+    except ValueError as e:
+        return jsonify({'error': str(e), 'code': 'invalid_grid_patch'}), 422
+    errs = ds.validate_spec(spec)
+    if errs:
+        return jsonify({'error': 'Patched spec failed validation', 'errors': errs}), 422
+    row = ds.persist(get_db(), id, spec,
+                     author=getattr(g, 'user_email', None) or 'user')
+    log_action('dashboard_spec.grid_patched', 'dashboard_spec', row['id'],
+               {'session_id': id, 'breakpoint': b.get('breakpoint', 'desktop'),
+                'version': row['spec_version']})
+    return jsonify({'spec_version': row['spec_version'],
+                    'grid': spec['grid']})
 
 
 @app.post('/api/sessions/<int:id>/dashboard-spec/restore')

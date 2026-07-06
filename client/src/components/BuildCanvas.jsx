@@ -110,6 +110,134 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
   const [canvasSessionId, setCanvasSessionId] = useState(null);
   const [componentRows, setComponentRows] = useState({});   // fresh add renders
   const [confirmDelete, setConfirmDelete] = useState(null);   // R39S1E2-US2
+  // R40S1E2 (deep-dive F-04): the canvas is a real 12-column grid
+  const [gridCells, setGridCells] = useState(null);      // desktop breakpoint
+  const [specVersion, setSpecVersion] = useState(null);
+  const dragRef = useRef(null);
+  const gridBodyRef = useRef(null);
+  const ROW_H = 46, GRID_GAP = 10;
+  const undoStack = useRef([]);                           // R40S1E3
+  const redoStack = useRef([]);
+  const [multiSel, setMultiSel] = useState([]);
+  const [announce, setAnnounce] = useState('');
+
+  const loadGrid = async () => {
+    if (!canvasSessionId) return;
+    try {
+      const d = await api.specHead(canvasSessionId);
+      setGridCells(d.spec.grid?.desktop || null);
+      setSpecVersion(d.spec_version);
+    } catch { setGridCells(null); }
+  };
+  useEffect(() => { if (artifact) loadGrid(); }, [canvasSessionId, artifact]);
+
+  const commitGrid = async (cells, note) => {
+    const prev = specVersion;
+    try {
+      const r = await api.patchGrid(canvasSessionId, {
+        base_version: prev, breakpoint: 'desktop', cells });
+      undoStack.current.push(prev);
+      redoStack.current = [];
+      setGridCells(r.grid.desktop);
+      setSpecVersion(r.spec_version);
+      setAnnounce(note || 'Layout updated');
+    } catch { loadGrid(); setAnnounce('Layout change rejected — reloaded.'); }
+  };
+
+  const undoGrid = async () => {
+    const v = undoStack.current.pop();
+    if (v == null) return;
+    try {
+      const r = await api.restoreSpec(canvasSessionId, v);
+      redoStack.current.push(specVersion);
+      setSpecVersion(r.spec_version);
+      setGridCells(JSON.parse(r.spec_json).grid?.desktop || null);
+      setAnnounce('Undid the last layout change');
+    } catch { loadGrid(); }
+  };
+
+  const redoGrid = async () => {
+    const v = redoStack.current.pop();
+    if (v == null) return;
+    try {
+      const r = await api.restoreSpec(canvasSessionId, v);
+      undoStack.current.push(specVersion);
+      setSpecVersion(r.spec_version);
+      setGridCells(JSON.parse(r.spec_json).grid?.desktop || null);
+      setAnnounce('Redid the layout change');
+    } catch { loadGrid(); }
+  };
+
+  // R40S1E3: keyboard move/resize on the selected card (accessible path)
+  useEffect(() => {
+    const onKey = e => {
+      if (!gridCells || !selected) return;
+      const tag = (document.activeElement?.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        (e.shiftKey ? redoGrid : undoGrid)();
+        return;
+      }
+      const dirs = { ArrowLeft: [-1, 0], ArrowRight: [1, 0],
+                     ArrowUp: [0, -1], ArrowDown: [0, 1] };
+      if (!dirs[e.key]) return;
+      e.preventDefault();
+      const [dx, dy] = dirs[e.key];
+      const ids = multiSel.length ? multiSel : [selected];
+      const next = gridCells.map(c => {
+        if (!ids.includes(c.component_id) || c.locked) return c;
+        if (e.shiftKey) {
+          return { ...c, w: Math.max(1, Math.min(c.w + dx, 12 - c.x)),
+                   h: Math.max(1, c.h + dy) };
+        }
+        return { ...c, x: Math.max(0, Math.min(c.x + dx, 12 - c.w)),
+                 y: Math.max(0, c.y + dy) };
+      });
+      commitGrid(next, e.shiftKey
+        ? `Resized ${ids.join(', ')} with the keyboard`
+        : `Moved ${ids.join(', ')} with the keyboard`);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [gridCells, selected, multiSel, specVersion, canvasSessionId]);
+
+  const startGridOp = (e, cellId, mode) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const el = gridBodyRef.current;
+    if (!el || !gridCells) return;
+    const colW = (el.offsetWidth - GRID_GAP * 11) / 12 + GRID_GAP;
+    const start = { px: e.clientX, py: e.clientY, mode, cellId, colW,
+                    cells: gridCells.map(c => ({ ...c })) };
+    dragRef.current = start;
+    const onMove = ev => {
+      const st = dragRef.current;
+      if (!st) return;
+      const dCol = Math.round((ev.clientX - st.px) / st.colW);
+      const dRow = Math.round((ev.clientY - st.py) / (ROW_H + GRID_GAP));
+      st.next = st.cells.map(c => {
+        if (c.component_id !== st.cellId) return c;
+        if (st.mode === 'move') {
+          return { ...c, x: Math.max(0, Math.min(c.x + dCol, 12 - c.w)),
+                   y: Math.max(0, c.y + dRow) };
+        }
+        return { ...c, w: Math.max(1, Math.min(c.w + dCol, 12 - c.x)),
+                 h: Math.max(1, c.h + dRow) };
+      });
+      setGridCells(st.next);
+    };
+    const onUp = async () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      const st = dragRef.current;
+      dragRef.current = null;
+      if (!st || !st.next) return;
+      await commitGrid(st.next, st.mode === 'move' ? 'Component moved' : 'Component resized');
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
   const [patchError, setPatchError] = useState('');
   // R30S2E3-US2/US3 — canvas chrome + section selection
   const [zoom, setZoom] = useState(1);
@@ -364,6 +492,14 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                         border: `1px solid ${P.border}`, borderRadius: 10, background: '#fff',
                         padding: '0 12px', boxSizing: 'border-box', overflowX: 'auto',
                         whiteSpace: 'nowrap' }}>
+            <button data-testid="canvas-undo" title="Undo layout change (Ctrl+Z)"
+                    onClick={undoGrid}
+                    style={{ border: 'none', background: 'none', cursor: 'pointer',
+                             color: P.muted, fontSize: 13, marginRight: 2 }}>↩</button>
+            <button data-testid="canvas-redo" title="Redo (Ctrl+Shift+Z)"
+                    onClick={redoGrid}
+                    style={{ border: 'none', background: 'none', cursor: 'pointer',
+                             color: P.muted, fontSize: 13, marginRight: 8 }}>↪</button>
             <button data-testid="add-component"
                     disabled={!artifact || !canvasSessionId}
                     title={artifact ? 'Add a component from the palette'
@@ -506,7 +642,10 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                         transform: `scale(${zoom})`, transformOrigin: 'top left',
                         display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div data-testid="kpi-strip"
-               style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
+               style={{ display: 'grid', gap: 10,
+                        /* R40S1E4: the KPI strip actually reflows */
+                        gridTemplateColumns: device === 'desktop'
+                          ? 'repeat(4,1fr)' : 'repeat(2,1fr)' }}>
             {kpis.map(([label, value]) => (
               <div key={label} style={{ border: `1px solid ${P.border}`, borderRadius: 10,
                                         background: '#fff', padding: 14 }}>
@@ -517,14 +656,34 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
               </div>
             ))}
           </div>
+          <div data-testid="grid-canvas" ref={gridBodyRef}
+               style={gridCells
+                 ? { display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)',
+                     gridAutoRows: 46, gap: 10, alignItems: 'stretch' }
+                 : { display: 'flex', flexDirection: 'column', gap: 12 }}>
           {(layout?.sections || [])
             .sort((a, b) => a.position - b.position)   /* R39S1E2: all sections render */
-            .map(s => (
+            .map(s => { const cell = gridCells?.find(c => c.component_id === s.id); return (
             <div key={s.id} data-testid={`section-${s.id === 'timeseries_ci' ? 'timeseries' : s.id}`}
-                 onClick={e => { e.stopPropagation(); setSelected(s.id); }}
+                 onClick={e => {
+                   e.stopPropagation();
+                   if (e.shiftKey) {
+                     setMultiSel(m => {
+                       const base = m.length ? m : (selected ? [selected] : []);
+                       return base.includes(s.id)
+                         ? base.filter(x => x !== s.id) : [...base, s.id];
+                     });
+                   } else { setMultiSel([]); }
+                   setSelected(s.id);
+                 }}
                  style={{ border: selected === s.id ? `2px solid ${P.accent}` : `1px solid ${P.border}`,
                           borderRadius: 10, background: '#fff', padding: selected === s.id ? 15 : 16,
                           position: 'relative',
+                          ...(cell ? (device === 'mobile'
+                            ? { gridColumn: '1 / span 12', overflow: 'hidden', margin: 0 }
+                            : { gridColumn: `${cell.x + 1} / span ${cell.w}`,
+                                gridRow: `${cell.y + 1} / span ${cell.h}`,
+                                overflow: 'hidden', margin: 0 }) : {}),
                           boxShadow: selected === s.id ? '0 8px 24px rgba(37,99,235,.13)' : 'none',
                           marginTop: selected === s.id ? 34 : 0, transition: 'margin .1s' }}>
               {(() => {
@@ -631,6 +790,32 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                         style={{ color: 'rgba(255,255,255,.5)', fontSize: 11, cursor: 'grab' }}>⠿</span>
                 </div>
               )}
+              {cell?.locked && (
+                <span data-testid="section-locked"
+                      style={{ position: 'absolute', top: 5, left: 8, fontSize: 10,
+                               color: P.amber, zIndex: 3 }}>🔒</span>
+              )}
+              {multiSel.includes(s.id) && (
+                <span data-testid="section-multisel"
+                      style={{ position: 'absolute', inset: 0, borderRadius: 10,
+                               border: `2px dashed ${P.accent}`, pointerEvents: 'none',
+                               zIndex: 2 }} />
+              )}
+              {cell && (
+                <>
+                  <span data-testid="section-drag" title="Drag to move"
+                        onPointerDown={e => startGridOp(e, s.id, 'move')}
+                        style={{ position: 'absolute', top: 5, right: 8, cursor: 'grab',
+                                 color: P.faint, fontSize: 12, userSelect: 'none',
+                                 touchAction: 'none', zIndex: 3 }}>⠿</span>
+                  <span data-testid="section-resize" title="Drag to resize"
+                        onPointerDown={e => startGridOp(e, s.id, 'resize')}
+                        style={{ position: 'absolute', right: 2, bottom: 0,
+                                 cursor: 'nwse-resize', color: P.faint, fontSize: 13,
+                                 userSelect: 'none', touchAction: 'none', zIndex: 3,
+                                 padding: '0 4px' }}>◢</span>
+                </>
+              )}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                 {renaming === s.id ? (
                   <input data-testid="section-rename-input" autoFocus value={nameDraft}
@@ -730,8 +915,33 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                       {s.mark} panel · data in artifact
                     </div>}
             </div>
-          ))}
+          ); })}
           </div>
+          </div>
+        </div>
+      )}
+      <div aria-live="polite" data-testid="grid-announce"
+           style={{ position: 'absolute', left: -9999, top: 0 }}>{announce}</div>
+      {multiSel.length > 1 && (
+        <div data-testid="bulk-bar"
+             style={{ position: 'fixed', bottom: 18, left: '50%',
+                      transform: 'translateX(-50%)', background: P.ink, color: '#fff',
+                      borderRadius: 999, padding: '8px 16px', display: 'flex', gap: 12,
+                      alignItems: 'center', zIndex: 65, fontFamily: FONT, fontSize: 12 }}>
+          {multiSel.length} selected
+          <button data-testid="bulk-lock"
+                  onClick={() => {
+                    const anyUnlocked = gridCells.some(
+                      c => multiSel.includes(c.component_id) && !c.locked);
+                    commitGrid(gridCells.map(c => multiSel.includes(c.component_id)
+                      ? { ...c, locked: anyUnlocked } : c),
+                      anyUnlocked ? 'Locked selection' : 'Unlocked selection');
+                  }}
+                  style={{ border: 'none', background: 'rgba(255,255,255,.15)',
+                           color: '#fff', borderRadius: 999, padding: '4px 12px',
+                           cursor: 'pointer', fontSize: 11.5, fontFamily: FONT }}>
+            Lock / unlock
+          </button>
         </div>
       )}
       {confirmDelete && (

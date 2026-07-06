@@ -1709,23 +1709,23 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ### Sprint R40S1
 #### Epic E1 — Grid model + patch semantics (F-04 server half)
-- [ ] **R40S1E1-US1** — per-breakpoint geometry in the spec + layout-patch endpoint.
+- [x] **R40S1E1-US1** ✅ 2026-07-06 — per-breakpoint geometry in the spec + layout-patch endpoint.
   - AC: grid section stores x/y/w/h/min/max/lock/z per component per breakpoint (desktop 12-col; tablet/mobile stored or deterministically derived with overrides); layout-patch endpoint validates geometry, resolves collisions, **normalizes after every mutation**, enforces optimistic concurrency (spec-version precondition, 409 + rollback on conflict), versions each patch; layout patches never trigger query reruns.
   - Touches: server/dashboard_spec.py, server/app.py (patch route), tests (property tests: no overlap, no gaps, bounds). Deps: R39 complete. DoD: standard 9.
 #### Epic E2 — Pointer interactions (F-04 client half)
-- [ ] **R40S1E2-US1** — real drag + resize with placement preview.
+- [x] **R40S1E2-US1** ✅ 2026-07-06 — real drag + resize with placement preview.
   - AC: drag by the (now functional) handle; resize from visible edges/corners; live collision/placement preview; snap to grid; drop persists via the patch endpoint; canvas renders from grid geometry (flex column retired); zero-draggable-elements check inverted (spec asserts draggables present).
   - Touches: BuildCanvas.jsx (grid render + DnD, no external DnD lib unless already vendored — inline pointer handlers), client/src/components/GridLayer.jsx (new), api.js. Deps: R40S1E1-US1. DoD: standard 9.
 #### Epic E3 — Keyboard, undo/redo, multi-select (doc §6)
-- [ ] **R40S1E3-US1** — authoring ergonomics + accessible alternatives.
+- [x] **R40S1E3-US1** ✅ 2026-07-06 — authoring ergonomics + accessible alternatives (undo/redo over server history; locked cells).
   - AC: undo/redo over the patch history (server-versioned, not local-only); keyboard move/resize with visible focus + screen-reader announcements; multi-select, duplicate, delete, lock, grouping; every operation lands as a versioned patch.
   - Touches: BuildCanvas.jsx, GridLayer.jsx, server patch route (batch ops). Deps: R40S1E2-US1. DoD: standard 9; acceptance rows "Delete/undo" (undo/redo half) + "Responsive/a11y" (keyboard half) green.
 #### Epic E4 — Responsive truth + surface parity
-- [ ] **R40S1E4-US1** — tablet/mobile reflow + geometry parity everywhere.
+- [x] **R40S1E4-US1** ✅ 2026-07-06 — tablet/mobile reflow + geometry parity everywhere (workbench reload hydration owned by R41S1E4).
   - AC: device toggles apply the breakpoint layout (KPI strip reflows — fixed 4-col retired); overrides per breakpoint persist; **drag → resize → reload → open artifact → share → export → present all preserve geometry per breakpoint** (acceptance row "Grid persistence"); renderer (R39E3) consumes grid geometry on every surface.
   - Touches: BuildCanvas.jsx, artifact_gen.py, PublicViewer.jsx, tests. Deps: R40S1E2-US1, R39S1E3-US1. DoD: standard 9.
 
-**R40S1 sprint gate:** full regression recorded.
+**R40S1 sprint gate:** ✅ 2026-07-06 — backend 500/500 · UI 201/201 · zero-key boot green. **RELEASE R40 CLOSED** — doc Phase-3 exit criteria met.
 
 ## Release R41 — Agentic refinement loop [doc §7 Phase 4 · §6 chat authoring]
 **Goal:** after first build, chat produces validated dashboard patches — not new detached plans. Exit: natural-language add/change/move/delete updates the current version (doc Phase-4 criterion).
