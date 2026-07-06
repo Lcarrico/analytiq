@@ -493,6 +493,27 @@ CREATE TABLE IF NOT EXISTS artifact_shares (
     role        TEXT DEFAULT 'Viewer',
     shared_at   TEXT DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS alert_rules (
+    id             INTEGER PRIMARY KEY,
+    name           TEXT NOT NULL,
+    kind           TEXT NOT NULL,
+    watch          TEXT,
+    connection_id  INTEGER, session_id INTEGER, artifact_id INTEGER,
+    condition_json TEXT DEFAULT '{}',
+    frequency      TEXT DEFAULT 'daily',
+    owner          TEXT,
+    deliver_json   TEXT DEFAULT '[]',
+    mute_until     TEXT,
+    created_at     TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS alert_triggers (
+    id         INTEGER PRIMARY KEY,
+    rule_id    INTEGER REFERENCES alert_rules(id),
+    status     TEXT NOT NULL,
+    message    TEXT,
+    delivered_json TEXT DEFAULT '[]',
+    created_at TEXT DEFAULT (datetime('now'))
+);
 CREATE TABLE IF NOT EXISTS embed_settings (
     artifact_id   INTEGER PRIMARY KEY REFERENCES artifacts(id),
     settings_json TEXT NOT NULL DEFAULT '{}',
@@ -3730,6 +3751,135 @@ def list_freshness_slas():
         return jsonify(many('SELECT * FROM freshness_slas WHERE connection_id=? ORDER BY id',
                             (cid,)))
     return jsonify(many('SELECT * FROM freshness_slas ORDER BY id'))
+
+
+ALERT_KINDS = ('threshold', 'anomaly', 'freshness', 'schema_drift',
+               'model_drift', 'artifact_health')
+
+
+def _rule_status(rule):
+    now = one("SELECT datetime('now') AS n")['n']
+    if rule['mute_until'] and rule['mute_until'] > now:
+        return 'muted'
+    t = one('SELECT status FROM alert_triggers WHERE rule_id=? '
+            'ORDER BY id DESC LIMIT 1', (rule['id'],))
+    return (t or {}).get('status') or 'ok'
+
+
+def _run_check(rule_id):
+    import alert_rules as ar
+    rule = one('SELECT * FROM alert_rules WHERE id=?', (rule_id,))
+    if not rule:
+        return None
+    status, message = ar.evaluate(get_db(), rule)
+    delivered = json.loads(rule['deliver_json'] or '[]') if status == 'firing' else []
+    execute('INSERT INTO alert_triggers (rule_id, status, message, delivered_json) '
+            'VALUES (?,?,?,?)', (rule_id, status, message, json.dumps(delivered)))
+    return status
+
+
+@app.get('/api/alert_rules')
+def list_alert_rules():
+    rules = many('SELECT * FROM alert_rules ORDER BY id DESC LIMIT 200')
+    out, counts = [], {'all': 0}
+    for r_ in rules:
+        status = _rule_status(r_)
+        last = one('SELECT created_at FROM alert_triggers WHERE rule_id=? '
+                   "AND status='firing' ORDER BY id DESC LIMIT 1", (r_['id'],))
+        out.append({'id': r_['id'], 'name': r_['name'], 'kind': r_['kind'],
+                    'watch': r_['watch'], 'status': status,
+                    'condition': json.loads(r_['condition_json'] or '{}'),
+                    'frequency': r_['frequency'], 'owner': r_['owner'],
+                    'last_fired': (last or {}).get('created_at')})
+        counts['all'] += 1
+        counts[r_['kind']] = counts.get(r_['kind'], 0) + 1
+    return jsonify({'rules': out, 'counts': counts})
+
+
+@app.post('/api/alert_rules')
+@require_role('admin', 'analyst')
+def create_alert_rule():
+    b = request.get_json() or {}
+    if not b.get('name') or b.get('kind') not in ALERT_KINDS:
+        return jsonify({'error': f'name and kind (one of {ALERT_KINDS}) required'}), 400
+    rid = execute('INSERT INTO alert_rules (name, kind, watch, connection_id, '
+                  'session_id, artifact_id, condition_json, frequency, owner, '
+                  'deliver_json) VALUES (?,?,?,?,?,?,?,?,?,?)',
+                  (b['name'], b['kind'], b.get('watch'), b.get('connection_id'),
+                   b.get('session_id'), b.get('artifact_id'),
+                   json.dumps(b.get('condition') or {}),
+                   b.get('frequency') or 'daily',
+                   b.get('owner') or getattr(g, 'user_email', None),
+                   json.dumps(b.get('deliver') or [])))
+    log_action('alert.created', 'alert_rule', rid, {'name': b['name'], 'kind': b['kind']})
+    _run_check(rid)   # seed trigger history with a real first verdict
+    return jsonify({'id': rid, 'name': b['name'], 'kind': b['kind']}), 201
+
+
+@app.get('/api/alert_rules/<int:id>')
+def get_alert_rule(id):
+    r_ = one('SELECT * FROM alert_rules WHERE id=?', (id,))
+    if not r_:
+        return jsonify({'error': 'Alert not found'}), 404
+    triggers = many('SELECT * FROM alert_triggers WHERE rule_id=? '
+                    'ORDER BY id DESC LIMIT 50', (id,))
+    for t in triggers:
+        t['delivered'] = json.loads(t.pop('delivered_json') or '[]')
+    arts = many('SELECT a.id, a.title FROM artifacts a JOIN pipeline_runs pr '
+                'ON a.pipeline_run_id = pr.id WHERE pr.session_id=? LIMIT 4',
+                (r_['session_id'],)) if r_['session_id'] else []
+    return jsonify({'rule': {**dict(r_),
+                             'condition': json.loads(r_.pop('condition_json') or '{}'),
+                             'deliver': json.loads(r_.pop('deliver_json') or '[]'),
+                             'status': _rule_status(r_)},
+                    'triggers': triggers, 'linked_artifacts': arts})
+
+
+@app.patch('/api/alert_rules/<int:id>')
+@require_role('admin', 'analyst')
+def patch_alert_rule(id):
+    r_ = one('SELECT * FROM alert_rules WHERE id=?', (id,))
+    if not r_:
+        return jsonify({'error': 'Alert not found'}), 404
+    b = request.get_json() or {}
+    if 'mute_hours' in b:
+        if b['mute_hours']:
+            execute("UPDATE alert_rules SET mute_until=datetime('now', ?) WHERE id=?",
+                    (f"+{int(b['mute_hours'])} hours", id))
+        else:
+            execute('UPDATE alert_rules SET mute_until=NULL WHERE id=?', (id,))
+    for k in ('name', 'frequency', 'owner', 'watch'):
+        if k in b:
+            execute(f'UPDATE alert_rules SET {k}=? WHERE id=?', (b[k], id))
+    if 'condition' in b:
+        execute('UPDATE alert_rules SET condition_json=? WHERE id=?',
+                (json.dumps(b['condition']), id))
+    if 'deliver' in b:
+        execute('UPDATE alert_rules SET deliver_json=? WHERE id=?',
+                (json.dumps(b['deliver']), id))
+    log_action('alert.updated', 'alert_rule', id, {k: b[k] for k in b})
+    return jsonify({'id': id, 'ok': True})
+
+
+@app.delete('/api/alert_rules/<int:id>')
+@require_role('admin', 'analyst')
+def delete_alert_rule(id):
+    if not one('SELECT id FROM alert_rules WHERE id=?', (id,)):
+        return jsonify({'error': 'Alert not found'}), 404
+    execute('DELETE FROM alert_triggers WHERE rule_id=?', (id,))
+    execute('DELETE FROM alert_rules WHERE id=?', (id,))
+    log_action('alert.deleted', 'alert_rule', id, {})
+    return '', 204
+
+
+@app.post('/api/alert_rules/<int:id>/check')
+@require_role('admin', 'analyst')
+def check_alert_rule(id):
+    status = _run_check(id)
+    if status is None:
+        return jsonify({'error': 'Alert not found'}), 404
+    log_action('alert.checked', 'alert_rule', id, {'status': status})
+    return jsonify({'id': id, 'status': status})
 
 
 @app.get('/api/alerts')

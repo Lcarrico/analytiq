@@ -52,9 +52,10 @@ test('topbar search overlay finds artifacts via workspace FTS', async ({ page, r
   expect(new URL(page.url()).pathname).toBe('/app/artifacts');
 });
 
-test('navigating an unbuilt area shows its placeholder', async ({ page }) => {
-  // R20S1E1 made Billing real — Alerts remains the placeholder (R18 scope note).
+test('every sidebar area is a built surface (placeholder era over)', async ({ page }) => {
+  // R36S1E3: Alerts — the last placeholder — went live; no unbuilt areas remain.
   await page.goto('/app');
   await page.getByTestId('app-sidebar').getByRole('link', { name: 'Alerts', exact: true }).click();
-  await expect(page.getByTestId('placeholder-page')).toContainText(/people layer/i);
+  await expect(page.getByTestId('placeholder-page')).toHaveCount(0);
+  await expect(page.locator('main h1')).toHaveText('Alerts');
 });

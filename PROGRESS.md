@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · Sprint R36S1 · Epic E3 (alerts CRUD DEP) · R36S1E3-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · Sprint R36S1 · Sprint R36S2 · Epic E1 (collaboration) · R36S2E1-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R36 · Sprint R36S1 · Epic E3 (alerts CRUD DEP) · R36S1E3-US1 — R34 delegated (junior), runs in parallel  ← next story
+**Current position:** R36 · Sprint R36S1 · Sprint R36S2 · Epic E1 (collaboration) · R36S2E1-US1 — R34 delegated (junior), runs in parallel  ← next story
 
 > **Session 11 stop note (2026-07-06, RELEASE R35 CLOSED):** 46/64. R34 runs in
 > parallel with Leo's junior (handoff brief at the top of the R34 section in
@@ -417,8 +417,8 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 ### Milestone UP-G — Operate & administer at parity
 - [x] R36S1E1-US1 gold list+detail [was R26S2E1] — done: GoldCatalog rewrite (`/app/gold` — modeler gold rows w/ grain/version/gate tallies/linked chips over new `GET /api/gold/tables`; legacy run-outputs section preserved [r17s1 green]) + GoldDetail (`/app/gold/:id` — IMMUTABLE header, 7 tabs: overview, PRAGMA schema, humanized dq_json gates, lineage `?node=gold:` deep link, artifacts, feature-manifest link, query contracts from the run). BE 457/457, UI 178/178.
 - [x] R36S1E2-US1 data + query contracts (admin) [was R26S2E2] — done: DataContracts (`/app/contracts/data` — posture rows over new `GET /api/contracts/overview` [required fields, SLA, 30-day failures, ENFORCED vs BLOCKING NOW from manifest violations, affected artifacts, expand] + real composer) + QueryContracts (`/app/contracts/queries` — artifact select → run query_contracts rows, substrate vocab EXECUTED accepted); GoldDetail contracts tab aligned. BE 458/458, UI 180/180.
-- [ ] R36S1E3-US1 alerts center / create / detail (DEP alerts CRUD) [was R26S2E3]
-- [ ] R36S1 sprint regression recorded
+- [x] R36S1E3-US1 alerts center / create / detail (DEP alerts CRUD) [was R26S2E3] — done: Alerts DEP (`server/alert_rules.py` — deterministic per-kind evaluation vs real substrate [threshold vs series, freshness vs SLA, schema/model drift, artifact health, 3σ anomaly]; alert_rules + alert_triggers tables; CRUD + mute + check-now, all audited; create seeds a real first verdict) + AlertsCenter/AlertDetail (`/app/alerts`, `/app/alerts/:id` — typed pills, live FIRING/OK/MUTED, create drawer, grounded trigger history w/ delivery marks, trigger logic, Mute 24h/Check now/Delete). Last placeholder retired (r15s1_shell migrated: placeholder era over). BE 460/460, UI 181/181 (+1 documented conditional skip). 
+- [x] R36S1 sprint regression recorded — backend 460/460 · UI 181/181 (2026-07-06); zero placeholders remain
 - [ ] R36S2E1-US1 comments inbox + team + invites [was R27S1E1]
 - [ ] R36S2E2-US1 admin overview + roles matrix (DEP roles kv) [was R27S1E2]
 - [ ] R36S2E3-US1 SSO settings + branding admin (DEP settings kv) [was R27S1E3]

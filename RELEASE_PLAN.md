@@ -1584,8 +1584,8 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 ### Sprint R36S1 — Gold & contracts + Alerts <!-- task elaboration pending Phase 1a -->
 - [x] **R36S1E1-US1** — gold tables list + gold detail · [was R26S2E1]
 - [x] **R36S1E2-US1** — data contracts + query contracts screens (admin) · [was R26S2E2]
-- [ ] **R36S1E3-US1** — alerts center / create alert / alert detail. `DEP:` alerts CRUD (`server/alerts.py` + SQLite tables + seeded trigger history; only GET :3437 exists) · [was R26S2E3]
-- [ ] R36S1 sprint regression recorded
+- [x] **R36S1E3-US1** — alerts center / create alert / alert detail. `DEP:` alerts CRUD (`server/alerts.py` + SQLite tables + seeded trigger history; only GET :3437 exists) · [was R26S2E3]
+- [x] R36S1 sprint regression recorded — backend 460/460 · UI 181/181 (2026-07-06); zero placeholders remain
 ### Sprint R36S2 — Collaboration + Admin control plane <!-- task elaboration pending Phase 1a -->
 - [ ] **R36S2E1-US1** — comments inbox + team members + invite members · [was R27S1E1]
 - [ ] **R36S2E2-US1** — admin overview + roles & permissions matrix. `DEP:` roles kv + audit row · [was R27S1E2]

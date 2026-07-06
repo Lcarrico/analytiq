@@ -45,6 +45,7 @@ import SourceDetail from './screens/SourceDetail';   // R35S2E1
 import TableDetail from './screens/TableDetail';   // R35S2E2
 import GoldDetail from './screens/GoldDetail';   // R36S1E1
 import { DataContracts, QueryContracts } from './screens/Contracts';   // R36S1E2
+import { AlertDetail, AlertsCenter } from './screens/Alerts';   // R36S1E3
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
@@ -91,9 +92,7 @@ function ScreenAt() {
 }
 
 // R15S1E2: placeholder routes for areas arriving with later releases
-const PLACEHOLDERS = {
-  '/app/alerts': ['Alerts', 'The alerts center (rules, mutes, delivery tracking) arrives with the people layer (R18).'],
-};
+const PLACEHOLDERS = {};   // R36S1E3: the last placeholder (alerts) went live
 
 function Layout() {
   return (
@@ -134,6 +133,8 @@ function Layout() {
         <Route path="/app/gold/:id" element={<GoldDetail />} />  {/* R36S1E1 */}
         <Route path="/app/contracts/data" element={<DataContracts />} />  {/* R36S1E2 */}
         <Route path="/app/contracts/queries" element={<QueryContracts />} />  {/* R36S1E2 */}
+        <Route path="/app/alerts" element={<AlertsCenter />} />  {/* R36S1E3 — retires the last placeholder */}
+        <Route path="/app/alerts/:id" element={<AlertDetail />} />  {/* R36S1E3 */}
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}
         <Route path="/app/__errors" element={<ErrorGallery />} />  {/* R33S2E4 board */}
         <Route path="/app/team" element={<Team />} />
