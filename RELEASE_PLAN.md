@@ -1520,8 +1520,8 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] **R33S2E1-US1** — public viewer parity (workspace-brand bar, viewer filter bar, KPI grid + 2 charts, Powered-by footer) + designed expired-token card · [was R28S2E2]
 - [x] **R33S2E2-US1** — embed preview page (fake browser frame live preview + settings: dark code block w/ Copy, scope checkboxes, expires/refresh, allowed-domains chips, Save). `DEP:` embed settings persistence (additive kv on artifact_shares) · [was R28S2E3a]
 - [x] **R33S2E3-US1** — present mode (dark stage, slide header `section n / m`, chart panel, floating control pill, presenter-notes drawer from narrative engine) wired from canvas ▶ + Solutions page · [was R28S2E3b]
-- [ ] **R33S2E4-US1** — error-page template ×8 states (404/403/token expired/workspace not found/artifact unavailable/pipeline failed/connector failed/data access denied) · [was R28S2E1]
-- [ ] R33S2 sprint regression recorded
+- [x] **R33S2E4-US1** — error-page template ×8 states (404/403/token expired/workspace not found/artifact unavailable/pipeline failed/connector failed/data access denied) · [was R28S2E1]
+- [x] R33S2 sprint regression recorded — backend 448/448 · UI 166/166 (2026-07-06)
 ### Release R33 close-out
 - [ ] Release regression + zero-key boot recorded · PAR-1 flips: Models ×3 · Models Ops ×3 · Artifact Sharing ×4 · Errors board
 

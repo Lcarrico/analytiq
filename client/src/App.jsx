@@ -40,6 +40,7 @@ import Screen12 from './screens/S12_Platform';
 import ModelsOverview, { FeatureManifestViewer, Leaderboard, ModelCard, RetrainCenter, RunDetail } from './screens/Models';
 import EmbedPreview from './screens/EmbedPreview';   // R33S2E2
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
+import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
 const SCREENS = {
   2:  Screen02,
@@ -121,6 +122,7 @@ function Layout() {
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}
+        <Route path="/app/__errors" element={<ErrorGallery />} />  {/* R33S2E4 board */}
         <Route path="/app/team" element={<Team />} />
         <Route path="/app/billing" element={<Billing />} />
         <Route path="/app/create/:sessionId" element={<WorkbenchGuard />} />

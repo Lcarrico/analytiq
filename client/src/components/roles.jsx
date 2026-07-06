@@ -1,4 +1,5 @@
 // R15S2E4: role-aware rendering. Role resolves from the logged-in user;
+import ErrorState from './ErrorState';
 // the legacy dev default (no login) is admin, matching the backend's
 // header-trust behavior.
 import { auth } from '../api';
@@ -37,15 +38,10 @@ export function AdminOnly({ children, label = 'Administrator access required' })
 }
 
 export function Forbidden() {
+  // R33S2E4: renders the shared error template (403 badge text preserved)
   return (
-    <div data-testid="forbidden-page" style={{ maxWidth: 520, margin: '96px auto', textAlign: 'center' }}>
-      <div style={{ fontSize: 44, fontWeight: 700, fontFamily: MONO, color: P.ink }}>403</div>
-      <div style={{ fontSize: 14, fontFamily: FONT, color: P.body, margin: '8px 0 4px' }}>
-        You don't have access to this area.
-      </div>
-      <div style={{ fontSize: 12, fontFamily: FONT, color: P.muted }}>
-        Ask a workspace admin to raise your role if you need it.
-      </div>
+    <div data-testid="forbidden-page">
+      <ErrorState kind="forbidden" />
     </div>
   );
 }

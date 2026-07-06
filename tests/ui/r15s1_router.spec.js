@@ -26,7 +26,8 @@ test('unknown route renders the 404 page', async ({ page }) => {
   const nf = page.getByTestId('notfound-page');
   await expect(nf).toBeVisible();
   await expect(nf.getByText('/app/definitely-not-a-route')).toBeVisible();
-  await nf.getByRole('link', { name: /Back to home/i }).click();
+  // R33S2E4: the 404 action label follows the error-template frame
+  await nf.getByTestId('error-action').click();
   expect(new URL(page.url()).pathname).toBe('/app');
 });
 
