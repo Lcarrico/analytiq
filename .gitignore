@@ -48,3 +48,4 @@ _sync_probe.txt
 t.spec.js
 pw.config.mjs
 tests/test_probe_tmp.py
+tests/test_probe2_tmp.py

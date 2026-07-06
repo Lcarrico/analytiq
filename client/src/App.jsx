@@ -36,7 +36,8 @@ import Artifacts from './screens/Artifacts';   // R30S1E2
 import ArtifactDetail from './screens/ArtifactDetail';   // R30S1E4
 import Screen11 from './screens/S11_Account';
 import Screen12 from './screens/S12_Platform';
-import Screen14 from './screens/S14_Models';
+// R33S1E1: S14 retired — /app/models belongs to the models pillar screens
+import ModelsOverview from './screens/Models';
 
 const SCREENS = {
   2:  Screen02,
@@ -45,7 +46,6 @@ const SCREENS = {
   10: Artifacts,   // R30S1E2 — Frame 01 library (cards + rail + ⋯ menus)
   11: Screen11,
   12: Screen12,
-  14: Screen14,
 };
 
 // R16S1E1: numeric session ids get the workbench; named legacy child routes
@@ -110,6 +110,7 @@ function Layout() {
         <Route path="/app/semantic/field-picker" element={<FieldPicker />} />  {/* R32S2E3 */}
         <Route path="/app/semantic/joins" element={<JoinPaths />} />  {/* R32S2E3 */}
         <Route path="/app/semantic/derived-tables" element={<DerivedTables />} />  {/* R32S2E3 */}
+        <Route path="/app/models" element={<ModelsOverview />} />  {/* R33S1E1 — replaces S14 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}

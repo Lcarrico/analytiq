@@ -13,7 +13,6 @@ export const SCREEN_ROUTES = {
   11: '/app/settings/profile',
   12: '/app/admin/platform',
   13: '/app/governance',
-  14: '/app/models',
 };
 
 export const ROUTE_SCREENS = Object.fromEntries(

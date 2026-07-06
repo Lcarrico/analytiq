@@ -6007,6 +6007,79 @@ def evaluate_challenger(id):
                     'improvement_pct': round(improvement, 2)})
 
 
+@app.get('/api/models/overview')
+def models_overview():
+    """R33S1E1: models pillar overview — 6 KPIs + a typed row per model.
+    Registry entries surface as CHAMPION / CHALLENGER / ARCHIVED; training
+    jobs without a registry entry surface as TRAINING or RUN FAILED."""
+    regs = many('SELECT * FROM model_registry ORDER BY id DESC LIMIT 100')
+    jobs = many('SELECT * FROM training_jobs ORDER BY id DESC LIMIT 200')
+    reg_jobs = set()
+    rows = []
+
+    def _accuracy(card):
+        # training metrics store MAPE values already in percent (e.g. 5.24)
+        m = json.loads((card or {}).get('metrics_json') or '{}')
+        mape = m.get('val_mape', m.get('test_mape', m.get('mape')))
+        if mape is not None:
+            return {'label': 'MAPE', 'value': f"{round(mape, 1)}%"}
+        if m.get('auc') is not None:
+            return {'label': 'AUC', 'value': f"{round(m['auc'], 2)}"}
+        if m.get('mae') is not None:
+            return {'label': 'MAE', 'value': f"{round(m['mae'], 1)}"}
+        return {'label': 'MAPE', 'value': None}
+
+    for r_ in regs:
+        card = one('SELECT * FROM model_cards WHERE id=?', (r_['model_card_id'],)) \
+            if r_['model_card_id'] else None
+        sess = one('SELECT * FROM sessions WHERE id=?', (r_['session_id'],)) \
+            if r_['session_id'] else None
+        job = one('SELECT * FROM training_jobs WHERE model_card_id=?',
+                  (r_['model_card_id'],)) if r_['model_card_id'] else None
+        if job:
+            reg_jobs.add(job['id'])
+        status = {'active': 'CHAMPION', 'challenger': 'CHALLENGER',
+                  'archived': 'ARCHIVED'}.get(r_['status'], 'CHAMPION')
+        rows.append({
+            'registry_id': r_['id'], 'model_id': r_['model_id'],
+            'version': r_['version'], 'status': status,
+            'purpose': f"{sess['metric']} forecast" if sess else 'Forecast model',
+            'algorithm': (card or {}).get('algorithm'),
+            'grain': sess['grain'] if sess else None,
+            'last_trained': (job or {}).get('completed_at') or r_['created_at'],
+            'accuracy': _accuracy(card),
+            'session_id': r_['session_id'], 'card_id': r_['model_card_id'],
+            'job_id': (job or {}).get('id'),
+        })
+    for j in jobs:
+        if j['id'] in reg_jobs or j['status'] == 'done':
+            continue
+        sess = one('SELECT * FROM sessions WHERE id=?', (j['session_id'],)) \
+            if j['session_id'] else None
+        rows.append({
+            'registry_id': None, 'model_id': f"job_{j['id']}", 'version': None,
+            'status': 'RUN FAILED' if j['status'] == 'failed' else 'TRAINING',
+            'purpose': f"{sess['metric']} forecast" if sess else 'Training run',
+            'algorithm': None, 'grain': sess['grain'] if sess else None,
+            'last_trained': j['completed_at'] or j['created_at'],
+            'accuracy': {'label': 'MAPE', 'value': None},
+            'session_id': j['session_id'], 'card_id': None, 'job_id': j['id'],
+            'error': j['error'],
+        })
+
+    kpis = {
+        'promoted': one("SELECT COUNT(*) AS n FROM model_registry WHERE status='active'")['n'],
+        'runs_30d': one("SELECT COUNT(*) AS n FROM training_jobs "
+                        "WHERE created_at >= datetime('now', '-30 days')")['n'],
+        'failed': one("SELECT COUNT(*) AS n FROM training_jobs WHERE status='failed'")['n'],
+        'retrain_due': one("SELECT COUNT(*) AS n FROM alerts WHERE type='drift'")['n'],
+        'champ_challenger': one("SELECT COUNT(*) AS n FROM model_registry "
+                                "WHERE status='challenger'")['n'],
+        'prediction_tables': one('SELECT COUNT(*) AS n FROM gold_tables')['n'],
+    }
+    return jsonify({'kpis': kpis, 'models': rows})
+
+
 @app.get('/api/registry/models')
 def list_registry_models():
     sid = request.args.get('session_id')

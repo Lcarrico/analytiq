@@ -160,6 +160,7 @@ export const api = {
   semanticConflicts: ()   => get('/semantic/default/conflicts'),        // R32S2E2
   createCalculatedMetric: (body) => post('/semantic/default/metrics/calculated', body),   // R32S2E2
   semanticPreview:  (body) => post('/semantic/default/preview', body),   // R32S2E3 (DEP bounded)
+  modelsOverview:   ()     => get('/models/overview'),                   // R33S1E1
   reuseCandidates:  (metric) => get(`/reuse_candidates?metric=${encodeURIComponent(metric)}`),
   explainArtifact:  (id)    => get(`/artifacts/${id}/explain`),
   pipelineReplay:   (runId) => get(`/pipeline/${runId}/replay`),
