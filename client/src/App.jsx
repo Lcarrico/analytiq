@@ -41,6 +41,7 @@ import ModelsOverview, { FeatureManifestViewer, Leaderboard, ModelCard, RetrainC
 import EmbedPreview from './screens/EmbedPreview';   // R33S2E2
 import DataSources from './screens/DataSources';   // R35S1E1
 import ConnectGrid from './screens/ConnectGrid';   // R35S1E2
+import ConnectorWizard from './screens/ConnectorWizard';   // R35S1E3
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
@@ -121,6 +122,7 @@ function Layout() {
         <Route path="/app/models/retrain" element={<RetrainCenter />} />  {/* R33S1E4 */}
         <Route path="/app/data/sources" element={<DataSources />} />  {/* R35S1E1 — replaces the S02 list */}
         <Route path="/app/data/connect" element={<ConnectGrid />} />  {/* R35S1E2 — replaces S02 */}
+        <Route path="/app/data/connect/snowflake" element={<ConnectorWizard />} />  {/* R35S1E3 */}
         <Route path="/app/models/:cardId" element={<ModelCard />} />  {/* R33S1E3 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />

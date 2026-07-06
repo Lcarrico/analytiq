@@ -1324,6 +1324,7 @@ def init_db():
         for ddl in ('ALTER TABLE task_dispatches ADD COLUMN tokens INTEGER NOT NULL DEFAULT 0',
                     'ALTER TABLE audit_logs ADD COLUMN severity TEXT DEFAULT \'info\'',
                     'ALTER TABLE dq_custom_tests ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1',
+                    'ALTER TABLE connections ADD COLUMN scope_json TEXT',
                     'ALTER TABLE artifacts ADD COLUMN layout_json TEXT',
                     'ALTER TABLE artifacts ADD COLUMN confidence REAL',
                     'ALTER TABLE artifacts ADD COLUMN confidence_json TEXT',
@@ -1718,6 +1719,13 @@ def simulate_governance(run_id: int):
                     ('Metric',    'Avg Session Duration', 'Mean time in seconds a user spent in an active session.',                     0.59, 'Engagement'),
                     ('Dimension', 'Customer Segment',     'Behavioral segment label assigned to a customer by the ML pipeline.',         0.73, 'Customer'),
                 ]
+            scope_row = conn.execute('SELECT c.scope_json FROM connections c '
+                                     'JOIN governance_runs g ON g.connection_id = c.id '
+                                     'WHERE g.id=?', (run_id,)).fetchone()
+            if scope_row and scope_row['scope_json']:
+                allowed = set(json.loads(scope_row['scope_json']))
+                sim_tables = [t for t in sim_tables if t[0] in allowed]
+                sim_defs = [d_ for d_ in sim_defs]
             if not conn.execute('SELECT 1 FROM cataloged_tables WHERE run_id=?', (run_id,)).fetchone():
                 conn.executemany(
                     'INSERT INTO cataloged_tables (run_id,name,schema_name,health_score,freshness,row_count,'
@@ -2985,6 +2993,31 @@ def get_connection(id):
     row = one('SELECT * FROM connections WHERE id=?', (id,))
     return jsonify(_mask_connection(row)) if row else (jsonify({'error': 'Not found'}), 404)
 
+PREVIEW_SCOPE_CATALOG = {
+    'CORE': [('fact_revenue', '4.2M', False), ('dim_location', '12.8K', False),
+             ('fact_sessions', '2.1M', False), ('dim_customer', '84.2K', True)],
+    'STAGING': [('staging_events', '9.1M', True)],
+    'RAW': [('raw_clickstream', '124', False)],
+}
+
+
+@app.post('/api/connections/preview_scope')
+def preview_scope():
+    """R35S1E3: bounded scope discovery for the connector wizard —
+    deterministic for simulated warehouses (mirrors the governance catalog);
+    validation errors surface exactly like the test call."""
+    b = request.get_json() or {}
+    errors = validate_connection_payload(b)
+    if errors:
+        return jsonify({'error': 'Validation failed', 'fields': errors}), 422
+    schemas = [{'name': name,
+                'tables': [{'name': t, 'rows': r_, 'pii_likely': pii}
+                           for t, r_, pii in tables]}
+               for name, tables in PREVIEW_SCOPE_CATALOG.items()]
+    return jsonify({'schemas': schemas,
+                    'total_tables': sum(len(s['tables']) for s in schemas)})
+
+
 @app.post('/api/connections/test')
 @limiter.limit('10/minute')
 def test_connection():
@@ -3005,7 +3038,11 @@ def test_connection():
             simulated = True  # offline contract — no live warehouse in this stack
         else:
             return jsonify({'ok': False, 'error': f'Unknown connector type: {conn_type}'}), 400
-        return jsonify({'ok': True, 'message': 'Connection successful', 'simulated': simulated})
+        latency = round((time.time() - g._req_start) * 1000, 1) \
+            if hasattr(g, '_req_start') else 1.0
+        return jsonify({'ok': True, 'message': 'Connection successful',
+                        'simulated': simulated,
+                        'latency_ms': max(latency, 1.0)})
     except Exception as e:
         return jsonify({'ok': False, 'error': str(e)}), 422
 
@@ -3127,6 +3164,10 @@ def create_connection():
         (f['name'], f['type'], f['account'], f['username'], f['password'],
          f['warehouse'], f['database_name'], f['schema_name'], f['owner_email']),
     )
+    if isinstance(b.get('selected_tables'), list) and b['selected_tables']:
+        # R35S1E3: persisted scope — the governance run profiles only these
+        execute('UPDATE connections SET scope_json=? WHERE id=?',
+                (json.dumps(b['selected_tables']), lid))
     log_action('connection.created', 'connection', lid, {'name': f['name'], 'type': f['type']})
     resp = _mask_connection(one('SELECT * FROM connections WHERE id=?', (lid,)))
     if f['type'] == 'rest_api':

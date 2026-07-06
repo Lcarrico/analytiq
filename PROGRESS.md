@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R35 · Sprint R35S1 · Epic E3 (snowflake wizard) · R35S1E3-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R35 · Sprint R35S1 · Epic E4 (import flows ×4) · R35S1E4-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R35 · Sprint R35S1 · Epic E3 (snowflake wizard) · R35S1E3-US1 — R34 delegated (junior), runs in parallel  ← next story
+**Current position:** R35 · Sprint R35S1 · Epic E4 (import flows ×4) · R35S1E4-US1 — R34 delegated (junior), runs in parallel  ← next story
 
 > **Session 10 stop note (2026-07-06, RELEASE R33 CLOSED — one release per the
 > user's working rhythm):** 40/64 stories. This session shipped all 8 R33
@@ -386,7 +386,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 ### Milestone UP-F — Data surfaces at parity
 - [x] R35S1E1-US1 sources list [was R24S1E1] — done: DataSources (`/app/data/sources` — crumb + live count, filter, + Add source→/app/data/connect, rows w/ typed kind, status dot pill, colored health, last sync, SLA posture [met/at risk/breached], owner, table+issue counts) over new `GET /api/data/sources` aggregate; S02 parked at /app/data/connect (kit spec migrated). BE 450/450, UI 167/167.
 - [x] R35S1E2-US1 add-source connector grid [was R24S1E2] — done: ConnectGrid (`/app/data/connect` — 12 typed cards w/ category pills + search + read-only note; snowflake→wizard route, upload/REST/webhook/dbt→import routes, 7 types open a credentials drawer [S02 FORM_CONFIGS rehomed] w/ real POST + field errors; Request-a-connector→team); S02 retired; kit spec → permanent legacy-Badge exhibit on /app/__kit. BE 450/450, UI 169/169.
-- [ ] R35S1E3-US1 snowflake connector wizard [was R24S1E3]
+- [x] R35S1E3-US1 snowflake connector wizard [was R24S1E3] — done: ConnectorWizard (`/app/data/connect/snowflake` — 4-step stepper; real Test connection w/ latency chip [test endpoint now returns latency_ms]; scope picker over new deterministic `POST /api/connections/preview_scope` [schema groups, row counts, PII LIKELY pills, N-of-M counter, filter]; scope REALLY enforced — connections.scope_json + governance sim filters the catalog to selection; per-table SLAs persist; step 4 = the live governance run, polled to done → View source). BE 453/453, UI 170/170.
 - [ ] R35S1E4-US1 import flows ×4 (upload, REST, webhook, dbt) [was R24S1E4]
 - [ ] R35S1 sprint regression recorded
 - [ ] R35S2E1-US1 source detail tabs [was R24S2E1]

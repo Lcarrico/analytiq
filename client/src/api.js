@@ -162,6 +162,7 @@ export const api = {
   semanticPreview:  (body) => post('/semantic/default/preview', body),   // R32S2E3 (DEP bounded)
   modelsOverview:   ()     => get('/models/overview'),                   // R33S1E1
   dataSources:      ()     => get('/data/sources'),                      // R35S1E1
+  previewScope:     (body) => post('/connections/preview_scope', body),  // R35S1E3
   trainingJob:      (id)   => get(`/training/jobs/${id}`),               // R33S1E2
   featureManifests: (sid)  => get(`/feature_manifests?session_id=${sid}`), // R33S1E2
   featureManifest:  (id)   => get(`/feature_manifests/${id}`),           // R33S1E4
