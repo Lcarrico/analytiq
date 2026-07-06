@@ -1651,11 +1651,11 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ### Sprint R38S1 — the spec and the plan
 #### Epic E1 — DashboardSpec substrate (doc §5A)
-- [ ] **R38S1E1-US1** — versioned DashboardSpec model + validator.
+- [x] **R38S1E1-US1** ✅ 2026-07-06 — versioned DashboardSpec model + validator.
   - AC: `dashboard_specs` table (immutable-append: spec_version, parent_version, patch_history JSON, author agent|user, validation_status, artifact/render version refs) with storage-layer bump enforcement (trigger, mirroring feature_manifests); `server/dashboard_spec.py` builds/validates the §5A shape — metrics[] (canonical id/version, label, role primary|supporting|derived|target, expression/dependencies, format, aggregation, owner, confidence, access), analysis (intent, questions, time range, grain, comparisons, forecast settings), dimensions[]/globalFilters[]/componentFilters[], components[] (id, type, title, metric refs, dimension refs, query spec, transform, encoding, interaction, empty/error state, contract id), grid (per-breakpoint x/y/w/h/min/max/lock/z), trust (lineage, semantic versions, query hash, row count, freshness, DQ gates, access, generated-at), lifecycle.
   - Tasks — BE: schema + trigger; builder/validator module (structured errors, stable hash); GET/POST spec endpoints (versions list, head). UI: N/A (surfaces in US2/E2). Test — BE: validator truth table incl. derived-metric dependency closure + zero-denominator rule flag; immutability trigger negative test.
   - Touches: server/app.py (schema+routes), server/dashboard_spec.py (new), tests. Deps: none. DoD: standard 9 (UI: N/A — no user-facing surface).
-- [ ] **R38S1E1-US2** — plan approval emits DashboardSpec v1 (session bridge).
+- [x] **R38S1E1-US2** ✅ 2026-07-06 — plan approval emits DashboardSpec v1 (session bridge).
   - AC: approving a plan writes spec v1 derived from the (new multi-metric) plan; pipeline + canvas read the spec head; session_specs remains for session lifecycle but layout/content truth moves to DashboardSpec; existing artifacts keep working via a compat shim that synthesizes a spec view from layout_json (adaptation ledger).
   - Touches: server/app.py (approve path, pipeline read), planner.py, BuildCanvas.jsx (read path). Deps: R38S1E1-US1. DoD: standard 9 + legacy canvas specs green via shim.
 #### Epic E2 — Multi-metric planning (F-02 · doc §5B–C)

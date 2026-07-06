@@ -501,6 +501,25 @@ CREATE TABLE IF NOT EXISTS api_keys (
     created_at    TEXT DEFAULT (datetime('now')),
     revoked_at    TEXT
 );
+CREATE TABLE IF NOT EXISTS dashboard_specs (
+    id                INTEGER PRIMARY KEY,
+    session_id        INTEGER NOT NULL REFERENCES sessions(id),
+    spec_version      INTEGER NOT NULL,
+    parent_version    INTEGER,
+    spec_json         TEXT NOT NULL,
+    spec_hash         TEXT NOT NULL,
+    patch_history_json TEXT NOT NULL DEFAULT '[]',
+    author            TEXT NOT NULL DEFAULT 'agent',
+    validation_status TEXT NOT NULL DEFAULT 'valid',
+    artifact_id       INTEGER,
+    created_at        TEXT DEFAULT (datetime('now')),
+    UNIQUE(session_id, spec_version)
+);
+CREATE TRIGGER IF NOT EXISTS dashboard_specs_immutable
+BEFORE UPDATE ON dashboard_specs
+BEGIN
+    SELECT RAISE(ABORT, 'dashboard_specs rows are immutable — append a new version');
+END;
 CREATE TABLE IF NOT EXISTS billing_invoices (
     id            INTEGER PRIMARY KEY,
     number        TEXT NOT NULL UNIQUE,
@@ -5862,6 +5881,14 @@ def persist_session_spec(id):
     version = (prev['v'] or 0) + 1
     execute('INSERT INTO session_specs (session_id, spec_version, idempotency_key, payload_hash, spec_json) '
             'VALUES (?,?,?,?,?)', (id, version, idem_key, payload_hash, json.dumps(spec)))
+    # R38S1E1-US2 (deep-dive §5A): a confirmed plan lands in the durable
+    # DashboardSpec — the bridge derivation encodes today's composition; the
+    # multi-metric planner (R38S1E2) and intent shaping (R38S2E2) replace it.
+    try:
+        import dashboard_spec as ds
+        _persist_bridge_dashboard_spec(id, spec)
+    except Exception as _ds_err:                      # never block confirmation
+        app.logger.warning('dashboard_spec bridge failed: %s', _ds_err)
     # R10S1E1: a confirmed spec is a real preference signal — remember the grain
     if spec.get('grain'):
         try:
@@ -8986,6 +9013,83 @@ def billing_payment_methods():
         execute("INSERT INTO payment_methods (brand, last4, exp) "
                 "VALUES ('visa', '4242', '09/28')")
     return jsonify({'methods': many('SELECT * FROM payment_methods ORDER BY id')})
+
+
+def _persist_bridge_dashboard_spec(session_id, plan):
+    """R38S1E1-US2: scalar plan → DashboardSpec v-next (validated, appended)."""
+    import re as _re
+
+    import dashboard_spec as ds
+    label = plan.get('target_metric') or 'Metric'
+    mid = _re.sub(r'[^a-z0-9]+', '_', label.lower()).strip('_') or 'metric'
+    intent = plan.get('analytic_goal') or plan.get('intent') or 'predictive'
+    if intent not in ds.INTENTS:
+        intent = 'predictive'
+    panels = [('kpi_row', 'kpi', 'Key metrics'),
+              ('timeseries_ci', 'line', f'{label} vs forecast'),
+              ('dimension_breakdown', 'bar', 'Dimension breakdown'),
+              ('forecast', 'area', 'Forecast'),
+              ('feature_importance', 'bar', 'Feature importance')]
+    comps = [{'id': cid, 'type': ctype, 'title': title,
+              'metric_refs': [mid], 'dimension_refs': [],
+              'query_spec': {'grain': plan.get('grain') or 'daily'},
+              'encoding': {}, 'interaction': {},
+              'empty_state': 'No data in range', 'error_state': 'Query failed'}
+             for cid, ctype, title in panels]
+    grid, y = [], 0
+    for c in comps:
+        h = 2 if c['type'] == 'kpi' else 6
+        grid.append({'component_id': c['id'], 'x': 0, 'y': y, 'w': 12, 'h': h})
+        y += h
+    spec = {'metrics': [{'id': mid, 'label': label, 'role': 'primary',
+                         'format': 'number', 'aggregation': 'sum'}],
+            'analysis': {'intent': intent,
+                         'questions': [plan.get('question') or f'How is {label} developing?'],
+                         'time_range': {'days': 90},
+                         'grain': plan.get('grain') or 'daily',
+                         'comparisons': []},
+            'dimensions': [], 'global_filters': [], 'component_filters': [],
+            'components': comps, 'grid': {'desktop': grid},
+            'trust': {}, 'lifecycle': {'author': 'agent', 'source': 'plan_confirmation'}}
+    ds.persist(get_db(), session_id, spec, author='agent')
+
+
+@app.post('/api/sessions/<int:id>/dashboard-spec')
+def post_dashboard_spec(id):
+    """R38S1E1 (deep-dive §5A): validate + append a DashboardSpec version."""
+    import dashboard_spec as ds
+    if not one('SELECT id FROM sessions WHERE id=?', (id,)):
+        return jsonify({'error': 'Session not found'}), 404
+    spec = request.get_json() or {}
+    errs = ds.validate_spec(spec)
+    if errs:
+        return jsonify({'error': 'Spec failed validation', 'errors': errs}), 422
+    row = ds.persist(get_db(), id, spec,
+                     author=(getattr(g, 'user_email', None) or 'agent'))
+    log_action('dashboard_spec.created', 'dashboard_spec', row['id'],
+               {'session_id': id, 'version': row['spec_version'],
+                'hash': row['spec_hash'][:12]})
+    return jsonify(row), 201
+
+
+@app.get('/api/sessions/<int:id>/dashboard-spec')
+def get_dashboard_spec_head(id):
+    """R38S1E1: the spec head (canvas/pipeline read path)."""
+    row = one('SELECT * FROM dashboard_specs WHERE session_id=? '
+              'ORDER BY spec_version DESC LIMIT 1', (id,))
+    if not row:
+        return jsonify({'error': 'No dashboard spec for this session yet'}), 404
+    out = dict(row)
+    out['spec'] = json.loads(out.pop('spec_json'))
+    return jsonify(out)
+
+
+@app.get('/api/sessions/<int:id>/dashboard-spec/versions')
+def list_dashboard_spec_versions(id):
+    return jsonify({'versions': many(
+        'SELECT id, spec_version, parent_version, spec_hash, author, '
+        'validation_status, created_at FROM dashboard_specs WHERE session_id=? '
+        'ORDER BY spec_version DESC', (id,))})
 
 
 @app.get('/api/billing/usage')

@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R38 · Sprint R38S1 · Epic E1 (DashboardSpec substrate) · R38S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
+**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R38 · Sprint R38S1 · Epic E2 (multi-metric planning) · R38S1E2-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -554,7 +554,7 @@ re-verify tails after any host-side write.
 
 # Agentic Dashboard Program (Deep-Dive v1.0) — R37–R43
 
-**Current position:** R38 · Sprint R38S1 · Epic E1 (DashboardSpec substrate) · R38S1E1-US1  ← next story
+**Current position:** R38 · Sprint R38S1 · Epic E2 (multi-metric planning) · R38S1E2-US1  ← next story
 **Spec:** `AnalytIQ Workspace Agentic Dashboard Deep Dive` (2026-07-06) — findings F-01…F-15 spot-verified in code before planning (seeded chart generator, scalar target_metric, un-gated section PATCH, format=html export all confirmed). Suite at planning time: backend 469/469 · UI 186/186 (R30–R36 close, 9b02c62).
 **Standing:** no multi-agents (lead executes inline) · R34 marketing surfaces locked to the junior · legacy workbench specs migrate only with an owning story ID.
 
@@ -566,8 +566,8 @@ re-verify tails after any host-side write.
 - [x] R37S1 sprint regression recorded — backend 475/475 · UI 192/192 (0 failed, 2026-07-06) · zero-key boot: shell 200 + 8/8 local — **RELEASE R37 CLOSED**
 
 ## Release R38 — DashboardSpec & source-bound data (pending)
-- [ ] R38S1E1-US1 versioned DashboardSpec model + validator (immutable-append, §5A shape, stable hash)
-- [ ] R38S1E1-US2 plan approval emits spec v1; pipeline + canvas read spec head; legacy shim
+- [x] R38S1E1-US1 versioned DashboardSpec model + validator — done: `dashboard_specs` table (UNIQUE(session,version), immutability trigger — UPDATE aborts, tested) + `server/dashboard_spec.py` (§5A shape: metric roles incl. derived dependency closure + zero-denominator rule, intent whitelist, component→metric/dimension ref checks, 12-col grid bounds per breakpoint; structured error codes; key-order-independent sha256) + POST/GET head/versions endpoints (422 w/ errors, nothing stored on invalid — tested). BE 479/479, UI 192/192.
+- [x] R38S1E1-US2 plan approval emits spec v1 — done: `POST /api/sessions/<id>/spec` (plan confirmation) derives + appends a validated DashboardSpec (bridge: primary metric from the scalar plan, intent-mapped analysis, today's 5 components, full-width stacked grid — every component placed, spec-pinned); derivation is non-blocking (confirmation never fails on bridge errors); head endpoint is the canvas/pipeline read path (renderer switch lands R39S1E3; multi-metric derivation replaces the bridge in E2/S2). BE 479/479, UI 192/192.
 - [ ] R38S1E2-US1 multi-metric planner: inventory w/ roles, derived deps, unresolved checklist [F-02]
 - [ ] R38S1E2-US2 plan card shows metric checklist + component plan before Approve & Build
 - [ ] R38S1 sprint regression recorded
