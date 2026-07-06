@@ -164,7 +164,6 @@ export const api = {
   trainingJob:      (id)   => get(`/training/jobs/${id}`),               // R33S1E2
   featureManifests: (sid)  => get(`/feature_manifests?session_id=${sid}`), // R33S1E2
   featureManifest:  (id)   => get(`/feature_manifests/${id}`),           // R33S1E4
-  registerChallenger: (body) => post('/registry/challenger', body),      // R33S1E4
   retrainQueue:     ()     => get('/models/retrain_queue'),              // R33S1E4
   reuseCandidates:  (metric) => get(`/reuse_candidates?metric=${encodeURIComponent(metric)}`),
   explainArtifact:  (id)    => get(`/artifacts/${id}/explain`),

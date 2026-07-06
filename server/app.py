@@ -7178,11 +7178,39 @@ def public_artifact_meta(token):
     fresh = one("SELECT CAST((julianday('now') - julianday(created_at)) * 24 AS INTEGER) AS h "
                 'FROM artifact_files WHERE artifact_id=? ORDER BY version DESC LIMIT 1',
                 (row['artifact_id'],))
+    owner = one("SELECT email FROM users WHERE role='admin' ORDER BY id LIMIT 1")
     return jsonify({'title': art['title'] if art else 'Artifact',
                     'freshness_hours': fresh['h'] if fresh else None,
                     'expires_at': row['expires_at'],
                     'password_protected': bool(row['password_hash']),
+                    'owner_email': owner['email'] if owner else None,
                     'view_count': row['view_count']})
+
+
+@app.get('/api/public/<token>/chart')
+@limiter.limit('60/minute')
+def public_artifact_chart(token):
+    """R33S2E1: read-only chart data for the branded viewer — identical
+    token checks to the html route (404 unknown · 410 expired · 401 pw)."""
+    import hashlib as _h
+    import authn
+    row = one('SELECT * FROM share_links WHERE token_hash=?',
+              (_h.sha256(token.encode()).hexdigest(),))
+    if not row:
+        return jsonify({'error': 'Unknown link'}), 404
+    if row['expires_at'] and row['expires_at'] <= one("SELECT datetime('now') AS n")['n']:
+        return jsonify({'error': 'This link has expired'}), 410
+    if row['password_hash']:
+        pw = request.args.get('password') or request.headers.get('X-Link-Password') or ''
+        if not authn.verify_password(pw, row['password_hash']):
+            return jsonify({'error': 'Password required'}), 401
+    art = one('SELECT * FROM artifacts WHERE id=?', (row['artifact_id'],))
+    if not art or not art['pipeline_run_id']:
+        return jsonify({'rows': [], 'kpis': {'avgActual': 0, 'mape': 0,
+                                             'forecast14Avg': 0}})
+    rows = many('SELECT * FROM chart_data WHERE pipeline_run_id=? ORDER BY day_index',
+                (art['pipeline_run_id'],))
+    return jsonify({'rows': rows, 'kpis': compute_kpis(rows)})
 
 
 @app.get('/api/public/<token>')
