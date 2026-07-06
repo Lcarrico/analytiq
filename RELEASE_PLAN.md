@@ -1595,8 +1595,8 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [ ] R36S2 sprint regression recorded
 ### Sprint R36S3 — Billing + Settings <!-- task elaboration pending Phase 1a -->
 - [x] **R36S3E1-US1** — billing plan & seats, invoices + payment methods, token usage meters. `DEP:` seeded demo invoice/payment endpoints (Stripe checkout/portal exist :6914–6965) · [was R27S2E1] ✅ 2026-07-06 (overview + seeded invoices/payment methods + Billing rebuild w/ local plan change; spec r36s3_billing)
-- [ ] **R36S3E2-US1** — settings ×4 (profile, preferences, API keys, help center) + **app-wide technical-detail toggle** (admin-gated blocks flip from role-gated to toggle-gated; cite R30S3 panels). `DEP:` prefs kv + hashed API keys (revoke → 410) · [was R27S2E2]
-- [ ] R36S3 sprint regression recorded
+- [x] **R36S3E2-US1** — settings ×4 (profile, preferences, API keys, help center) + **app-wide technical-detail toggle** (admin-gated blocks flip from role-gated to toggle-gated; cite R30S3 panels). `DEP:` prefs kv + hashed API keys (revoke → 410) · [was R27S2E2] ✅ 2026-07-06 (Settings area + AdminOnly toggle flip + S11 retired; spec r36s3_settings)
+- [x] R36S3 sprint regression recorded ✅ 2026-07-06 — backend 469/469 · UI 186/186
 ### Release R36 close-out
 - [ ] Release regression + zero-key boot recorded · PAR-1 flips: Gold Contracts ×4 · Alerts ×3 · Collaboration ×3 · Admin ×4 · Admin Security ×4 · Admin Usage · Billing ×3 · Settings ×4
 

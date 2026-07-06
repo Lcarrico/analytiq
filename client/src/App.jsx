@@ -32,7 +32,8 @@ import { DerivedTables, FieldPicker, JoinPaths } from './screens/SemanticTools';
 // R30S3E7: S06–S09 retired — the workbench owns the whole loop
 import Artifacts from './screens/Artifacts';   // R30S1E2
 import ArtifactDetail from './screens/ArtifactDetail';   // R30S1E4
-import Screen11 from './screens/S11_Account';
+import { SettingsHelp, SettingsKeys, SettingsPreferences, SettingsProfile }
+  from './screens/Settings';   // R36S3E2
 import Screen12 from './screens/S12_Platform';
 // R33S1E1: S14 retired — /app/models belongs to the models pillar screens
 import ModelsOverview, { FeatureManifestViewer, Leaderboard, ModelCard, RetrainCenter, RunDetail } from './screens/Models';
@@ -57,7 +58,6 @@ import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 const SCREENS = {
   // R35 close-out: S02–S04 wizard remnants fully retired — data surfaces own /app/data/*
   10: Artifacts,   // R30S1E2 — Frame 01 library (cards + rail + ⋯ menus)
-  11: Screen11,
 };
 
 // R16S1E1: numeric session ids get the workbench; named legacy child routes
@@ -152,6 +152,10 @@ function Layout() {
                element={<AdminGate><Screen12 /></AdminGate>} />  {/* R36S2E4 */}
         <Route path="/app/admin/security"
                element={<AdminGate><AdminSecurity /></AdminGate>} />
+        <Route path="/app/settings/profile" element={<SettingsProfile />} />  {/* R36S3E2 */}
+        <Route path="/app/settings/preferences" element={<SettingsPreferences />} />
+        <Route path="/app/settings/api-keys" element={<SettingsKeys />} />
+        <Route path="/app/settings/help" element={<SettingsHelp />} />
         <Route path="/app/admin/usage"
                element={<AdminGate><AdminUsage /></AdminGate>} />  {/* R36S2E5 */}
         <Route path="/app/admin/roles" element={<RolesMatrix />} />  {/* R36S2E2 */}

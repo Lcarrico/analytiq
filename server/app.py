@@ -493,6 +493,14 @@ CREATE TABLE IF NOT EXISTS artifact_shares (
     role        TEXT DEFAULT 'Viewer',
     shared_at   TEXT DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS api_keys (
+    id            INTEGER PRIMARY KEY,
+    name          TEXT NOT NULL,
+    prefix        TEXT NOT NULL,
+    key_hash      TEXT NOT NULL UNIQUE,
+    created_at    TEXT DEFAULT (datetime('now')),
+    revoked_at    TEXT
+);
 CREATE TABLE IF NOT EXISTS billing_invoices (
     id            INTEGER PRIMARY KEY,
     number        TEXT NOT NULL UNIQUE,
@@ -8831,6 +8839,74 @@ def apply_template(tid):
              json.dumps(spec)))
     log_action('template.applied', 'template', tid, {'session_id': sid, 'metric': metric})
     return jsonify({'session_id': sid, 'spec': spec, 'validation': {'errors': []}}), 201
+
+
+DEFAULT_PREFS = {'technical_detail': True, 'density': 'comfortable',
+                 'default_landing': '/app'}
+
+
+@app.get('/api/settings/preferences')
+def get_preferences():
+    """R36S3E2 DEP: workspace preferences over the kv (technical-detail
+    toggle flips the R30S3 admin blocks app-wide)."""
+    return jsonify({**DEFAULT_PREFS, **_kv_get('preferences', {})})
+
+
+@app.put('/api/settings/preferences')
+def put_preferences():
+    b = request.get_json() or {}
+    prefs = {**DEFAULT_PREFS, **_kv_get('preferences', {})}
+    for k in DEFAULT_PREFS:
+        if k in b:
+            prefs[k] = bool(b[k]) if isinstance(DEFAULT_PREFS[k], bool) else b[k]
+    _kv_put('preferences', prefs)
+    log_action('settings.preferences_updated', 'workspace', 'default', prefs)
+    return jsonify({'ok': True, **prefs})
+
+
+@app.post('/api/keys')
+def create_api_key():
+    """R36S3E2 DEP: workspace API keys — hashed at rest, revealed exactly
+    once, revoke answers 410 (distinct from unknown 401)."""
+    import hashlib as _hl
+    import secrets as _sec
+    name = ((request.get_json() or {}).get('name') or '').strip()
+    if not name:
+        return jsonify({'error': 'Give the key a name'}), 400
+    raw = 'aiq_' + _sec.token_hex(16)
+    kid = execute('INSERT INTO api_keys (name, prefix, key_hash) VALUES (?,?,?)',
+                  (name, raw[:9], _hl.sha256(raw.encode()).hexdigest()))
+    log_action('api_key.created', 'api_key', kid, {'name': name})
+    return jsonify({'id': kid, 'key': raw, 'prefix': raw[:9], 'name': name}), 201
+
+
+@app.get('/api/keys')
+def list_api_keys():
+    return jsonify({'keys': many('SELECT id, name, prefix, created_at, revoked_at '
+                                 'FROM api_keys ORDER BY id DESC')})
+
+
+@app.delete('/api/keys/<int:id>')
+def revoke_api_key(id):
+    row = one('SELECT id FROM api_keys WHERE id=?', (id,))
+    if not row:
+        return jsonify({'error': 'Key not found'}), 404
+    execute("UPDATE api_keys SET revoked_at=datetime('now') WHERE id=?", (id,))
+    log_action('api_key.revoked', 'api_key', id, {})
+    return jsonify({'ok': True})
+
+
+@app.get('/api/keys/verify')
+def verify_api_key():
+    import hashlib as _hl
+    raw = request.headers.get('X-Api-Key', '')
+    row = one('SELECT * FROM api_keys WHERE key_hash=?',
+              (_hl.sha256(raw.encode()).hexdigest(),))
+    if not row:
+        return jsonify({'error': 'Unknown key'}), 401
+    if row['revoked_at']:
+        return jsonify({'error': 'Key revoked', 'revoked_at': row['revoked_at']}), 410
+    return jsonify({'ok': True, 'name': row['name']})
 
 
 PLAN_META = {                      # R36S3E1 — display meta beside PLANS

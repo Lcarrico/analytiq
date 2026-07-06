@@ -7,7 +7,6 @@ export const SCREEN_ROUTES = {
   8: '/app/create/run',
   9: '/app/create/result',
   10: '/app/artifacts',
-  11: '/app/settings/profile',
   13: '/app/governance',
 };
 

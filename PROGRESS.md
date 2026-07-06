@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · Sprint R36S3 · Epic E1 (billing) · R36S3E1-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · release close-out (regression + zero-key boot) — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R36 · Sprint R36S3 · Epic E1 (billing) · R36S3E1-US1 — R34 delegated (junior), runs in parallel  ← next story
+**Current position:** R36 · release close-out (regression + zero-key boot) — R34 delegated (junior), runs in parallel  ← next story
 
 > **Session 11 stop note (2026-07-06, RELEASE R35 CLOSED):** 46/64. R34 runs in
 > parallel with Leo's junior (handoff brief at the top of the R34 section in
@@ -426,8 +426,8 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R36S2E5-US1 usage & cost dashboard [was R27S1E5] — done: `GET /api/admin/usage` (additive aggregate: pipeline runs + dispatches 30d, tokens vs plan pool, request compute from service_logs, 14-day views/builds series from artifact_activity, top consumers + per-area cost derived from the $8/100k metered rate — cost math asserted in test) → AdminUsage (`/app/admin/usage` — 4 KPI meters, stacked daily bars, consumers/areas tables, est. month total, export; overview tokens card retargeted). BE 465/465, UI 181/181.
 - [x] R36S2 sprint regression recorded — backend 465/465 · UI 181/181 across all 96 spec files, 0 failed (2026-07-06); admin pillar complete, vocab ledger empty
 - [x] R36S3E1-US1 billing plan/seats + invoices + tokens (DEP seeded invoices) [was R27S2E1] — done: `GET /api/billing/overview` (plan/price/renewal, live seat math from users+invites, cycle line items incl. seat overage + token overage at the metered rate, stripe_configured honest flag) + DEP `GET /api/billing/invoices` (3 demo invoices materialize deterministically once) + `GET /api/billing/payment_methods` (demo visa …4242) → Billing rebuild (`/app/billing` — plan card, seat block, token meter [r20s1 contract kept incl. capability rows], cycle card, 4-plan grid w/ REAL local plan change via PUT, invoices, card on file; checkout stated as key-gated, never faked). BE 467/467 (see sprint gate), UI green.
-- [ ] R36S3E2-US1 settings ×4 + app-wide technical-detail toggle (DEP prefs kv + API keys) [was R27S2E2]
-- [ ] R36S3 sprint regression recorded
+- [x] R36S3E2-US1 settings ×4 + app-wide technical-detail toggle (DEP prefs kv + API keys) [was R27S2E2] — done: DEPs (`GET/PUT /api/settings/preferences` over workspace_kv; api_keys table + `POST/GET/DELETE /api/keys` hashed-at-rest sha256, raw revealed once, `GET /api/keys/verify` 200/401/**410 on revoked** — all audited) → Settings area (`/app/settings/{profile,preferences,api-keys,help}` — S11 identity card + R10 memory affordance rehomed w/ testids intact [r10s1 + r31s1 green]; **technical-detail toggle flips the R30S3 §5.6 admin blocks app-wide** from role-gated to toggle-gated, default on, off yields a plain-language notice [r15s2 green]; API keys w/ one-time reveal + REVOKED rows; help w/ real destinations). **S11 retired** (tombstone, SCREENS + routes.js pruned). BE 469/469, UI 186/186.
+- [x] R36S3 sprint regression recorded — backend 469/469 · UI 186/186 across all 98 spec files, 0 failed (2026-07-06); zero legacy wizard screens remain in SCREENS beyond the R34-owned marketing remnants (S02–S04)
 - [ ] R36 release regression + zero-key boot recorded
 
 ## Adaptation ledger (UI Parity & Build-Out Program)
