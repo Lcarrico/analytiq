@@ -1510,7 +1510,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ### Sprint R33S1 — Models & model ops (ch18) <!-- task elaboration pending Phase 1a -->
 - [x] **R33S1E1-US1** — models overview (6 KPI cards + table w/ CHAMPION/DRIFT/RUN FAILED pills, per-state actions Retrain/Card/Retrain-now/View-logs) over model_cards/trials APIs; replaces S14 · [was R26S1E1]
-- [ ] **R33S1E2-US1** — training run detail (tabs Summary/Backtest/Candidates/Features/Leakage/Logs; 3 stat cards; backtest bar chart; dark mono log) · [was R26S1E2]
+- [x] **R33S1E2-US1** — training run detail (tabs Summary/Backtest/Candidates/Features/Leakage/Logs; 3 stat cards; backtest bar chart; dark mono log) · [was R26S1E2]
 - [ ] **R33S1E3-US1** — model card (purpose/target/algo/data/features, MAPE/MAE/RMSE tiles, purple importance bars, SHAP dot plot, linked artifacts) — deep-linked from inspector/detail/driver card · [was R26S1E3]
 - [ ] **R33S1E4-US1** — leaderboard (ranked table ±bands, trade-off scatter, WHY panel, promotion-gate footnote, Promote/Override) + feature manifest (encoding/imputation/leakage/importance/status, dropped strike-through row) + retrain center (filter pills w/ counts, reason rows + actions) · [was R26S1E4]
 - [ ] R33S1 sprint regression recorded

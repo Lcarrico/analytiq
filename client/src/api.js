@@ -161,6 +161,8 @@ export const api = {
   createCalculatedMetric: (body) => post('/semantic/default/metrics/calculated', body),   // R32S2E2
   semanticPreview:  (body) => post('/semantic/default/preview', body),   // R32S2E3 (DEP bounded)
   modelsOverview:   ()     => get('/models/overview'),                   // R33S1E1
+  trainingJob:      (id)   => get(`/training/jobs/${id}`),               // R33S1E2
+  featureManifests: (sid)  => get(`/feature_manifests?session_id=${sid}`), // R33S1E2
   reuseCandidates:  (metric) => get(`/reuse_candidates?metric=${encodeURIComponent(metric)}`),
   explainArtifact:  (id)    => get(`/artifacts/${id}/explain`),
   pipelineReplay:   (runId) => get(`/pipeline/${runId}/replay`),

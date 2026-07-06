@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R33 · Sprint R33S1 · Epic E2 (run detail) · R33S1E2-US1  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R33 · Sprint R33S1 · Epic E3 (model card) · R33S1E3-US1  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R33 · Sprint R33S1 · Epic E2 (run detail) · R33S1E2-US1  ← next story
+**Current position:** R33 · Sprint R33S1 · Epic E3 (model card) · R33S1E3-US1  ← next story
 
 > **Session 9 stop note (2026-07-05, paused green for GitHub push):** RELEASE R32
 > CLOSED — 32/64 stories, program halfway. This session shipped 7 stories:
@@ -337,7 +337,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 ## Release R33 — PRD Phase 4: Prediction & distribution (pending)
 ### Milestone UP-D — Models trusted, artifacts delivered
 - [x] R33S1E1-US1 models overview (KPIs + status pills + per-state actions) [was R26S1E1] — done: Models.jsx (`/app/models` — 6 live KPI cards, typed rows CHAMPION/CHALLENGER/TRAINING/RUN FAILED/ARCHIVED, real Retrain/Evaluate/Archive actions, Card→E3 + View-logs→E2 deep links, retrain-center link owned by E4); `GET /api/models/overview` (KPIs + typed rows, MAPE from val/test metrics); S14 retired (tombstone; deep ops rehome E2/E4). BE 442/442, UI 154/154.
-- [ ] R33S1E2-US1 training run detail (tabs, stat cards, backtest chart, log) [was R26S1E2]
+- [x] R33S1E2-US1 training run detail (tabs, stat cards, backtest chart, log) [was R26S1E2] — done: RunDetail (`/app/models/runs/:id` — status pill + duration, 3 stat cards, tabs: backtest fold bars, candidate trials w/ WINNER, immutable feature manifest, leakage scan w/ struck DROPPED rows, dark log from run truth); substrate fix: physical gold tables session-scoped + delete-then-insert (identical specs used to collide → grain block; RED repro in test_r33s1_models). BE 443/443, UI 155/155.
 - [ ] R33S1E3-US1 model card (metrics tiles, importance bars, SHAP, linked artifacts) [was R26S1E3]
 - [ ] R33S1E4-US1 leaderboard + feature manifest + retrain center [was R26S1E4]
 - [ ] R33S1 sprint regression recorded

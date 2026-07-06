@@ -5268,11 +5268,16 @@ def modeler_generate():
     import splits as splits_mod
     import warehouse as _wh
     d = _wh.get_dialect('sqlite')
-    physical = out['table_name'].replace('.', '__')
+    # R33S1E2 fix: physical gold tables are session-scoped — identical specs
+    # across sessions used to share one table, so the second write duplicated
+    # grain keys and blocked itself. Re-executes for the same session start
+    # from a clean slate (delete-then-insert keeps the write idempotent).
+    physical = f"{out['table_name'].replace('.', '__')}__s{sid}"
     db = get_db()
     ddl_physical = d.compile_create_table({'table': physical, 'if_not_exists': True,
                                            'columns': out['columns']})
     db.execute(ddl_physical)
+    db.execute(f'DELETE FROM {d.quote_identifier(physical)}')
     db.commit()
     expected = 8 * (( __import__('datetime').date.fromisoformat(date_range['end'])
                     - __import__('datetime').date.fromisoformat(date_range['start'])).days + 1)

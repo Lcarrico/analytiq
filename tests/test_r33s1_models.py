@@ -63,3 +63,30 @@ def test_models_overview_empty_db(client):
     d = client.get('/api/models/overview').get_json()
     assert d['models'] == []
     assert d['kpis']['promoted'] == 0
+
+
+def test_two_sessions_same_spec_get_isolated_gold(client):
+    """R33S1E2 collateral: identical specs across sessions must not share a
+    physical gold table — the second write used to collide (duplicate grain
+    keys -> status 'blocked' -> training 409)."""
+    conn = client.post('/api/connections', json={'type': 'snowflake', 'account': 'a',
+                                                 'username': 'u', 'password': 'p'}).get_json()
+    client.post('/api/governance/run', json={'connectionId': conn['id']})
+    wait_until(lambda: len(client.get(
+        f"/api/integrations/{conn['id']}/manifest/versions").get_json() or []) >= 1,
+        timeout=15)
+    client.post('/api/semantic/default/generate', json={'connectionId': conn['id']})
+
+    golds = []
+    for _ in range(2):
+        sid = client.post('/api/sessions', json={'metric': 'Net Revenue'}).get_json()['id']
+        client.post(f'/api/sessions/{sid}/spec', json=dict(SPEC))
+        r = client.post('/api/modeler/generate', json={'sessionId': sid, 'mode': 'execute'})
+        assert r.status_code in (200, 201), r.get_json()
+        g = client.get(f'/api/modeler/gold/{sid}').get_json()[0]
+        golds.append(g)
+        assert g['status'] == 'written', g['dq_gates'].get('grain')
+        j = client.post('/api/training/run', json={'sessionId': sid})
+        assert j.status_code == 201, j.get_json()
+
+    assert golds[0]['physical_table'] != golds[1]['physical_table']
