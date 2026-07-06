@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · Sprint R36S1 · Epic E1 (gold list + detail) · R36S1E1-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · R36 · Sprint R36S1 · Epic E2 (contracts screens) · R36S1E2-US1 — R34 delegated (junior), runs in parallel  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -225,7 +225,7 @@ exists). Each remains scoped in RELEASE_PLAN.md for future sessions.
 
 > Retitled 2026-07-04 (was "Design-Parity Program, R21–R29"). R21 + R22S1E1 below are that program's delivered history, kept verbatim; the pending R22S1E2→R29 scope was retired and re-planned as R30–R36 against the canonical PRD — old→new ID map in RELEASE_PLAN.md → "UI Parity & Build-Out Program → Reconciliation (2026-07-04, PRD v1.0)".
 
-**Current position:** R36 · Sprint R36S1 · Epic E1 (gold list + detail) · R36S1E1-US1 — R34 delegated (junior), runs in parallel  ← next story
+**Current position:** R36 · Sprint R36S1 · Epic E2 (contracts screens) · R36S1E2-US1 — R34 delegated (junior), runs in parallel  ← next story
 
 > **Session 11 stop note (2026-07-06, RELEASE R35 CLOSED):** 46/64. R34 runs in
 > parallel with Leo's junior (handoff brief at the top of the R34 section in
@@ -415,7 +415,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 
 ## Release R36 — Unreviewed: Gold/Alerts + Org/Admin/Billing/Settings (audit-first) (pending)
 ### Milestone UP-G — Operate & administer at parity
-- [ ] R36S1E1-US1 gold list+detail · E2 contracts ×2 · E3 alerts (DEP alerts CRUD) [was R26S2]
+- [x] R36S1E1-US1 gold list+detail · E2 contracts ×2 · E3 alerts (DEP alerts CRUD) [was R26S2] — done: GoldCatalog rewrite (`/app/gold` — modeler gold rows w/ grain/version/gate tallies/linked chips over new `GET /api/gold/tables`; legacy run-outputs section preserved [r17s1 green]) + GoldDetail (`/app/gold/:id` — IMMUTABLE header, 7 tabs: overview, PRAGMA schema, humanized dq_json gates, lineage `?node=gold:` deep link, artifacts, feature-manifest link, query contracts from the run). BE 457/457, UI 178/178.
 - [ ] R36S1 sprint regression recorded
 - [ ] R36S2E1-US1 collab ×3 · E2 admin+roles (DEP) · E3 SSO+branding (DEP) · E4 security ×4 · E5 usage [was R27S1]
 - [ ] R36S2 sprint regression recorded

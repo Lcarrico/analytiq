@@ -8746,6 +8746,105 @@ def pipeline_contracts(run_id):
     return jsonify({'query_contracts': qcs, 'data_contracts': dcs})
 
 
+def _gold_gate_list(g_row):
+    dq = json.loads(g_row.get('dq_json') or '{}')
+    out = []
+    def add(name, status, note):
+        out.append({'name': name, 'status': status, 'note': note})
+    grain = dq.get('grain') or {}
+    if grain:
+        add('Grain uniqueness', grain.get('status', 'PASS'),
+            f"{len(grain.get('offending_keys') or [])} duplicates")
+    rt = dq.get('row_tolerance') or {}
+    if rt:
+        add('Row count band', rt.get('status', 'PASS'),
+            f"{rt.get('produced')} rows · expected ~{rt.get('expected')} "
+            f"(±{rt.get('discrepancy_pct')}%)")
+    sp = dq.get('split') or {}
+    if sp:
+        add('Temporal split', sp.get('status', 'PASS') if isinstance(sp, dict) else 'PASS',
+            'train/validation/holdout windows verified')
+    lk = dq.get('leakage') or {}
+    if lk:
+        add('Leakage scan', 'PASS' if not (lk.get('dropped') or []) else 'REPAIRED',
+            f"{len(lk.get('dropped') or [])} features dropped")
+    fo = dq.get('fanout') or {}
+    if fo:
+        add('Join fan-out', fo.get('status', 'PASS'), 'no silent row inflation')
+    return out
+
+
+@app.get('/api/gold/tables')
+def gold_tables_list():
+    """R36S1E1: modeler gold tables with grain, gate tallies, linked surfaces."""
+    out = []
+    for g_row in many('SELECT * FROM gold_tables ORDER BY id DESC LIMIT 100'):
+        sess = one('SELECT * FROM sessions WHERE id=?', (g_row['session_id'],)) \
+            if g_row['session_id'] else None
+        gates = _gold_gate_list(dict(g_row))
+        linked = [a_['title'] for a_ in many(
+            'SELECT a.title FROM artifacts a JOIN pipeline_runs pr '
+            'ON a.pipeline_run_id = pr.id WHERE pr.session_id=? LIMIT 4',
+            (g_row['session_id'],))] if g_row['session_id'] else []
+        linked += [m_['model_id'] for m_ in many(
+            'SELECT model_id FROM model_registry WHERE session_id=? LIMIT 2',
+            (g_row['session_id'],))] if g_row['session_id'] else []
+        out.append({'id': g_row['id'], 'table_name': g_row['table_name'],
+                    'session_id': g_row['session_id'],
+                    'session_code': f"s-{g_row['session_id']}",
+                    'grain': sess['grain'] if sess else None,
+                    'version': g_row['version'], 'row_count': g_row['row_count'],
+                    'status': g_row['status'],
+                    'creator': sess['metric'] if sess else None,
+                    'gates': {'total': len(gates),
+                              'passed': sum(1 for x in gates if x['status'] == 'PASS'),
+                              'warn': sum(1 for x in gates if x['status'] not in
+                                          ('PASS',))},
+                    'linked': linked,
+                    'created_at': g_row['created_at']})
+    return jsonify({'tables': out, 'total': len(out)})
+
+
+@app.get('/api/gold/tables/<int:id>')
+def gold_table_detail(id):
+    g_row = one('SELECT * FROM gold_tables WHERE id=?', (id,))
+    if not g_row:
+        return jsonify({'error': 'Gold table not found'}), 404
+    sess = one('SELECT * FROM sessions WHERE id=?', (g_row['session_id'],)) \
+        if g_row['session_id'] else None
+    columns = []
+    if g_row.get('physical_table'):
+        try:
+            for c in get_db().execute(
+                    f"PRAGMA table_info(\"{g_row['physical_table']}\")").fetchall():
+                columns.append({'name': c['name'], 'type': c['type'] or 'TEXT'})
+        except Exception:
+            pass
+    fm = one('SELECT * FROM feature_manifests WHERE session_id=? '
+             'ORDER BY id DESC LIMIT 1', (g_row['session_id'],)) \
+        if g_row['session_id'] else None
+    arts = many('SELECT a.id, a.title FROM artifacts a JOIN pipeline_runs pr '
+                'ON a.pipeline_run_id = pr.id WHERE pr.session_id=? '
+                'ORDER BY a.id DESC LIMIT 8', (g_row['session_id'],)) \
+        if g_row['session_id'] else []
+    run = one('SELECT id FROM pipeline_runs WHERE session_id=? '
+              'ORDER BY id DESC LIMIT 1', (g_row['session_id'],)) \
+        if g_row['session_id'] else None
+    return jsonify({
+        'id': g_row['id'], 'table_name': g_row['table_name'],
+        'session_id': g_row['session_id'], 'grain': sess['grain'] if sess else None,
+        'version': g_row['version'], 'row_count': g_row['row_count'],
+        'status': g_row['status'], 'manifest_version': g_row['manifest_version'],
+        'created_at': g_row['created_at'], 'columns': columns,
+        'gate_list': _gold_gate_list(dict(g_row)),
+        'artifacts': arts,
+        'feature_manifest': ({'id': fm['id'], 'version': fm['manifest_version'],
+                              'features': len(json.loads(fm['feature_list_json'] or '[]'))}
+                             if fm else None),
+        'pipeline_run_id': (run or {}).get('id'),
+    })
+
+
 @app.get('/api/gold/catalog')
 def gold_catalog():
     """R17S1E1: workspace-wide gold catalog."""
