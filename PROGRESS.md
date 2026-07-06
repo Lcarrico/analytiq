@@ -384,9 +384,13 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 
 ## Release R35 — Unreviewed: Data layer (audit-first) (pending)
 ### Milestone UP-F — Data surfaces at parity
-- [x] R35S1E1-US1 sources · E2 connect grid · E3 snowflake wizard · E4 imports ×4 [was R24S1] — done: DataSources (`/app/data/sources` — crumb + live count, filter, + Add source→/app/data/connect, rows w/ typed kind, status dot pill, colored health, last sync, SLA posture [met/at risk/breached from freshness vs SLA], owner, table+issue counts) over new `GET /api/data/sources` aggregate; S02 connect flow parked at /app/data/connect (kit spec migrated with the story); rest_api kind mapped. BE 450/450, UI 167/167.
+- [x] R35S1E1-US1 sources list [was R24S1E1] — done: DataSources (`/app/data/sources` — crumb + live count, filter, + Add source→/app/data/connect, rows w/ typed kind, status dot pill, colored health, last sync, SLA posture [met/at risk/breached], owner, table+issue counts) over new `GET /api/data/sources` aggregate; S02 parked at /app/data/connect (kit spec migrated). BE 450/450, UI 167/167.
+- [x] R35S1E2-US1 add-source connector grid [was R24S1E2] — done: ConnectGrid (`/app/data/connect` — 12 typed cards w/ category pills + search + read-only note; snowflake→wizard route, upload/REST/webhook/dbt→import routes, 7 types open a credentials drawer [S02 FORM_CONFIGS rehomed] w/ real POST + field errors; Request-a-connector→team); S02 retired; kit spec → permanent legacy-Badge exhibit on /app/__kit. BE 450/450, UI 169/169.
+- [ ] R35S1E3-US1 snowflake connector wizard [was R24S1E3]
+- [ ] R35S1E4-US1 import flows ×4 (upload, REST, webhook, dbt) [was R24S1E4]
 - [ ] R35S1 sprint regression recorded
-- [ ] R35S2E1-US1 source detail · E2 table detail [was R24S2]
+- [ ] R35S2E1-US1 source detail tabs [was R24S2E1]
+- [ ] R35S2E2-US1 table detail (profile, columns, PII flags) [was R24S2E2]
 - [ ] R35S2 sprint regression recorded
 - [ ] R35 release regression + zero-key boot recorded
 
