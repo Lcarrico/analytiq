@@ -38,6 +38,7 @@ import Screen11 from './screens/S11_Account';
 import Screen12 from './screens/S12_Platform';
 // R33S1E1: S14 retired — /app/models belongs to the models pillar screens
 import ModelsOverview, { FeatureManifestViewer, Leaderboard, ModelCard, RetrainCenter, RunDetail } from './screens/Models';
+import EmbedPreview from './screens/EmbedPreview';   // R33S2E2
 
 const SCREENS = {
   2:  Screen02,
@@ -122,6 +123,7 @@ function Layout() {
         <Route path="/app/team" element={<Team />} />
         <Route path="/app/billing" element={<Billing />} />
         <Route path="/app/create/:sessionId" element={<WorkbenchGuard />} />
+        <Route path="/app/artifacts/:id/embed" element={<EmbedPreview />} />  {/* R33S2E2 */}
         <Route path="/app/artifacts/:id" element={<ArtifactDetail />} />  {/* R30S1E4 */}
         {Object.entries(PLACEHOLDERS).map(([path, [title, note]]) => (
           <Route key={path} path={path} element={<Placeholder title={title} note={note} />} />

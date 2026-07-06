@@ -39,3 +39,28 @@ def test_meta_owner_contact(client):
     # contract: the field is always present; populated once a workspace admin
     # account exists (fresh test DBs have none — the viewer hides the mailto)
     assert 'owner_email' in meta
+
+
+def test_embed_settings_persistence(client):
+    """R33S2E2 (DEP): embed settings persist per artifact — the preview page
+    reloads with the saved scope/expiry/domains."""
+    art, _ = _shared_artifact(client)
+    # defaults before any save
+    d = client.get(f"/api/artifacts/{art['id']}/embed_settings").get_json()
+    assert d['scope'] == 'read_only' and d['allowed_origins'] == ['*']
+
+    r = client.put(f"/api/artifacts/{art['id']}/embed_settings",
+                   json={'scope': 'interactive', 'expires_in_hours': 168,
+                         'allowed_origins': ['https://acme-portal.example.com'],
+                         'refresh': 'on_load'})
+    assert r.status_code == 200
+    d = client.get(f"/api/artifacts/{art['id']}/embed_settings").get_json()
+    assert d['scope'] == 'interactive'
+    assert d['expires_in_hours'] == 168
+    assert d['allowed_origins'] == ['https://acme-portal.example.com']
+
+    assert client.put('/api/artifacts/999999/embed_settings',
+                      json={'scope': 'read_only'}).status_code == 404
+    bad = client.put(f"/api/artifacts/{art['id']}/embed_settings",
+                     json={'scope': 'nope'})
+    assert bad.status_code == 400

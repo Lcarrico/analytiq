@@ -493,6 +493,11 @@ CREATE TABLE IF NOT EXISTS artifact_shares (
     role        TEXT DEFAULT 'Viewer',
     shared_at   TEXT DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS embed_settings (
+    artifact_id   INTEGER PRIMARY KEY REFERENCES artifacts(id),
+    settings_json TEXT NOT NULL DEFAULT '{}',
+    updated_at    TEXT DEFAULT (datetime('now'))
+);
 CREATE TABLE IF NOT EXISTS chart_data (
     id              INTEGER PRIMARY KEY,
     pipeline_run_id INTEGER, day_index INTEGER,
@@ -7071,6 +7076,39 @@ def artifact_activity(id):
         return jsonify({'error': 'Not found'}), 404
     return jsonify(many('SELECT * FROM artifact_activity WHERE artifact_id=? '
                         'ORDER BY id DESC LIMIT 200', (id,)))
+
+
+EMBED_DEFAULTS = {'scope': 'read_only', 'expires_in_hours': 24,
+                  'allowed_origins': ['*'], 'refresh': 'on_load'}
+
+
+@app.get('/api/artifacts/<int:id>/embed_settings')
+def get_embed_settings(id):
+    if not one('SELECT id FROM artifacts WHERE id=?', (id,)):
+        return jsonify({'error': 'Not found'}), 404
+    row = one('SELECT settings_json FROM embed_settings WHERE artifact_id=?', (id,))
+    return jsonify({**EMBED_DEFAULTS, **(json.loads(row['settings_json']) if row else {})})
+
+
+@app.put('/api/artifacts/<int:id>/embed_settings')
+@require_role('admin', 'analyst')
+def put_embed_settings(id):
+    """R33S2E2 (DEP): persisted embed configuration per artifact."""
+    if not one('SELECT id FROM artifacts WHERE id=?', (id,)):
+        return jsonify({'error': 'Not found'}), 404
+    b = request.get_json() or {}
+    if b.get('scope') and b['scope'] not in ('read_only', 'interactive'):
+        return jsonify({'error': "scope must be 'read_only' or 'interactive'"}), 400
+    if b.get('allowed_origins') is not None and not isinstance(b['allowed_origins'], list):
+        return jsonify({'error': 'allowed_origins must be a list'}), 400
+    row = one('SELECT settings_json FROM embed_settings WHERE artifact_id=?', (id,))
+    merged = {**EMBED_DEFAULTS, **(json.loads(row['settings_json']) if row else {}),
+              **{k: v for k, v in b.items() if k in EMBED_DEFAULTS}}
+    execute('INSERT INTO embed_settings (artifact_id, settings_json) VALUES (?,?) '
+            'ON CONFLICT(artifact_id) DO UPDATE SET settings_json=excluded.settings_json, '
+            "updated_at=datetime('now')", (id, json.dumps(merged)))
+    log_action('embed.settings_saved', 'artifact', id, merged)
+    return jsonify(merged)
 
 
 @app.post('/api/artifacts/<int:id>/embed_tokens')
