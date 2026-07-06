@@ -40,9 +40,10 @@ def test_layout_edit_is_deterministic_and_versioned(client, db):
                                    (art['id'],)).fetchone()['layout_json'])
     sec = next(s for s in layout['sections'] if s['id'] == 'timeseries_ci')
     assert sec['title'] == 'Revenue trajectory'
-    # layout-only: no re-render of the assembled html
+    # R39S1E3 (deep-dive F-08): layout edits now re-render the assembled html
+    # so the canvas and the shared artifact never diverge (was: no re-render)
     assert db.execute('SELECT COUNT(*) c FROM artifact_files WHERE artifact_id=?',
-                      (art['id'],)).fetchone()['c'] == files_before
+                      (art['id'],)).fetchone()['c'] == files_before + 1
     # but the edit is versioned in the store
     assert db.execute("SELECT COUNT(*) c FROM uas_artifacts WHERE logical_key LIKE ? ",
                       (f"%artifact_layout:a{art['id']}",)).fetchone()['c'] >= 1

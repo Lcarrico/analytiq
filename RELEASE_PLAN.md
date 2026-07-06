@@ -1691,18 +1691,18 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
   - AC: registry declares types (kpi, line, bar, area, scatter, table, heatmap, treemap, narrative, filter, spacer) with schema per type; POST /components validates the definition (metric refs resolve, query plan validates) then appends a spec version; DELETE/duplicate likewise; every mutation creates the component's query + data contract rows (F-11) and an audit entry; role-gated analyst+.
   - Touches: server/component_registry.py (new), server/dashboard_spec.py, server/app.py (routes), tests. Deps: R38 complete. DoD: standard 9.
 #### Epic E2 — Builder UI (doc §6 workbench authoring)
-- [ ] **R39S1E2-US1** — Add Component palette + builder with live preview.
+- [x] **R39S1E2-US1** ✅ 2026-07-06 — Add Component palette + builder with live preview.
   - AC: palette lists registry types (none silently disabled — unavailable types state why); builder picks metrics/dimensions/aggregation/filters/comparison/sort/top-N/format from the semantic catalog; live data preview via the R38 preview endpoint with query/contract status; encoding recommendation shown without hiding alternatives; Add creates the same component schema chat will use.
   - Touches: client/src/components/ComponentBuilder.jsx (new), Inspector.jsx (enable metric/dimension/grain controls), BuildCanvas.jsx, api.js. Deps: R39S1E1-US1. DoD: standard 9; acceptance row "Create via workbench" green.
-- [ ] **R39S1E2-US2** — delete/duplicate with downstream impact + reversible versions.
+- [x] **R39S1E2-US2** ✅ 2026-07-06 — delete/duplicate with downstream impact + reversible versions (restore endpoint).
   - AC: deleting shows affected contracts/filters/dependents; operation creates a reversible spec version (restore verified); duplicate places a valid copy with fresh id/contracts.
   - Touches: ComponentBuilder.jsx, BuildCanvas.jsx, server routes. Deps: R39S1E1-US1. DoD: standard 9; acceptance row "Delete/undo" (version-restore half) green.
 #### Epic E3 — Renderer unification (F-08 · closes the R37 html-export deferral)
-- [ ] **R39S1E3-US1** — every surface renders from DashboardSpec.
+- [x] **R39S1E3-US1** ✅ 2026-07-06 — every surface renders from DashboardSpec. (one assembly path; html export restored; r16s2 + r37s1_controls migrated w/ citations)
   - AC: artifact_gen gains per-type component renderers driven by the spec (no fixed panel markup); canvas, saved artifact HTML, public viewer, present mode, and a restored html export render the same components with the same data; rename/type edits re-render the artifact; layout-only edits re-render without query rerun.
   - Touches: server/artifact_gen.py (rewrite core), server/app.py (export html), BuildCanvas.jsx, PublicViewer.jsx (read path), tests. Deps: R39S1E1-US1, R38S2E1-US2. DoD: standard 9; acceptance row "Edit parity" (canvas↔export) green; R37's export menu gains html (cite this ID).
 
-**R39S1 sprint gate:** full regression recorded.
+**R39S1 sprint gate:** ✅ 2026-07-06 — backend 495/495 · UI 196/196 · zero-key boot green. **RELEASE R39 CLOSED** — doc Phase-2 exit criteria met.
 
 ## Release R40 — Grid editor [doc §7 Phase 3 · §6 grid behavior]
 **Goal:** components live on a persisted, responsive 12-column grid the user can really manipulate. Exit: grid persists and is identical after reload/export/share (doc Phase-3 criterion). Sequencing note honored: this release starts only after R38's spec + R39's mutation semantics exist — geometry always has a durable target.

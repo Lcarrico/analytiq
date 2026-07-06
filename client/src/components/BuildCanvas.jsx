@@ -3,7 +3,8 @@
 // on completion the canvas renders real chart data from the saved artifact.
 import { useEffect, useRef, useState } from 'react';
 import { api } from '../api';
-import { Spinner, StatusBadge } from './ui';
+import ComponentBuilder from './ComponentBuilder';
+import { Btn, Spinner, StatusBadge } from './ui';
 import { FONT, MONO, P } from '../tokens';
 import { Icon } from './icons';   // R21S1E3
 
@@ -105,6 +106,10 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
   const [techOpen, setTechOpen] = useState(false);
   const [skipped, setSkipped] = useState(false);
   const [layoutVersion, setLayoutVersion] = useState(1);   // R37S1E2 (F-14)
+  const [builderOpen, setBuilderOpen] = useState(false);   // R39S1E2
+  const [canvasSessionId, setCanvasSessionId] = useState(null);
+  const [componentRows, setComponentRows] = useState({});   // fresh add renders
+  const [confirmDelete, setConfirmDelete] = useState(null);   // R39S1E2-US2
   const [patchError, setPatchError] = useState('');
   // R30S2E3-US2/US3 — canvas chrome + section selection
   const [zoom, setZoom] = useState(1);
@@ -131,6 +136,11 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
       setPatchError('');
     }
     prevRun.current = runId;
+  }, [runId]);
+
+  useEffect(() => {
+    if (!runId) return;
+    api.getPipelineRun(runId).then(r => setCanvasSessionId(r.session_id)).catch(() => {});
   }, [runId]);
 
   const [contractIds, setContractIds] = useState(null);   // R37S1E1 (F-10)
@@ -354,6 +364,19 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                         border: `1px solid ${P.border}`, borderRadius: 10, background: '#fff',
                         padding: '0 12px', boxSizing: 'border-box', overflowX: 'auto',
                         whiteSpace: 'nowrap' }}>
+            <button data-testid="add-component"
+                    disabled={!artifact || !canvasSessionId}
+                    title={artifact ? 'Add a component from the palette'
+                      : 'Available after the first build'}
+                    onClick={() => setBuilderOpen(true)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 5,
+                             height: 26, padding: '0 11px', borderRadius: 999,
+                             border: `1px solid ${P.accentBorder}`,
+                             background: P.selectedRow, color: P.accentHover,
+                             fontFamily: MONO, fontSize: 10.5, fontWeight: 600,
+                             cursor: artifact ? 'pointer' : 'default', marginRight: 8 }}>
+              + ADD COMPONENT
+            </button>
             <button data-testid="zoom-out" onClick={() => setZoom(z => Math.max(0.7, +(z - 0.15).toFixed(2)))}
                     style={{ border: 'none', background: 'none', cursor: 'pointer', color: P.muted,
                              fontSize: 14 }} aria-label="Zoom out">−</button>
@@ -400,7 +423,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                     ? ` · ${comments.filter(c => !c.parent_id && !c.resolved).length}` : ''}
                 </button>
                 <span data-testid="export-menu" style={{ display: 'inline-flex', gap: 6 }}>
-                  {['csv', 'json'].map(f => (
+                  {['csv', 'json', 'html'].map(f => (
                     <a key={f} data-testid={`export-${f}`}
                        href={artifact ? `/api/artifacts/${artifact.id}/export?format=${f}` : undefined}
                        target="_blank" rel="noreferrer"
@@ -411,12 +434,6 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                       Export {f.toUpperCase()}
                     </a>
                   ))}
-                  <button data-testid="export-html" disabled
-                          title="HTML export arrives with the spec-driven component renderers (R39)"
-                          style={{ border: 'none', background: 'none', cursor: 'default',
-                                   color: P.faint, fontSize: 10.5, fontFamily: FONT, padding: '3px 4px' }}>
-                    HTML
-                  </button>
                 </span>
                 <a href={`/app/artifacts/${artifact.id}?tab=lineage`} title="Lineage"
                    style={{ fontSize: 11, fontFamily: FONT, color: P.muted, textDecoration: 'none' }}>Lineage</a>
@@ -501,9 +518,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
             ))}
           </div>
           {(layout?.sections || [])
-            .filter(s => ['timeseries_ci', 'forecast', 'dimension_breakdown', 'feature_importance']
-              .includes(s.id))
-            .sort((a, b) => a.position - b.position)
+            .sort((a, b) => a.position - b.position)   /* R39S1E2: all sections render */
             .map(s => (
             <div key={s.id} data-testid={`section-${s.id === 'timeseries_ci' ? 'timeseries' : s.id}`}
                  onClick={e => { e.stopPropagation(); setSelected(s.id); }}
@@ -649,6 +664,23 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                         style={{ fontFamily: MONO, fontSize: 10, color: P.faint }}>NO CONTRACT</span>
                 )}
                 <span style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+                  <button data-testid="section-duplicate" title="duplicate"
+                          onClick={async e => {
+                            e.stopPropagation();
+                            try {
+                              const r = await api.duplicateComponent(canvasSessionId, s.id);
+                              if (r?.data) setComponentRows(m => ({ ...m, [r.component.id]: r.data }));
+                              const fresh = await api.getArtifact(artifact.id);
+                              setArtifact(fresh);
+                              setLayout(JSON.parse(fresh.layout_json || 'null'));
+                            } catch { setPatchError('Duplicate failed — nothing was saved.'); }
+                          }}
+                          style={{ border: 'none', background: 'none', cursor: 'pointer',
+                                   color: P.muted, fontSize: 12 }}>⧉</button>
+                  <button data-testid="section-delete" title="delete"
+                          onClick={e => { e.stopPropagation(); setConfirmDelete(s.id); }}
+                          style={{ border: 'none', background: 'none', cursor: 'pointer',
+                                   color: P.muted, fontSize: 12 }}>🗑</button>
                   <button data-testid="section-rename-btn" title="rename"
                           onClick={() => { setRenaming(s.id); setNameDraft(s.title); }}
                           style={{ border: 'none', background: 'none', cursor: 'pointer',
@@ -679,13 +711,78 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                       </div>
                     </>
                   )
-                  : <div style={{ fontFamily: MONO, fontSize: 11, color: P.faint }}>
+                  : componentRows[s.id]?.length ? (
+                    <div data-testid="generic-bars"
+                         style={{ display: 'flex', alignItems: 'flex-end', gap: 5,
+                                  height: 90 }}>
+                      {componentRows[s.id].slice(0, 10).map((r, i) => {
+                        const vals = componentRows[s.id].map(x => Math.abs(Number(x[1]) || 0));
+                        const max = Math.max(...vals, 1);
+                        return (
+                          <div key={i} title={`${r[0]}: ${r[1]}`}
+                               style={{ flex: 1, borderRadius: '3px 3px 0 0',
+                                        background: P.accent, opacity: .85,
+                                        height: Math.max(4, (Math.abs(Number(r[1]) || 0) / max) * 90) }} />
+                        );
+                      })}
+                    </div>
+                  ) : <div style={{ fontFamily: MONO, fontSize: 11, color: P.faint }}>
                       {s.mark} panel · data in artifact
                     </div>}
             </div>
           ))}
           </div>
         </div>
+      )}
+      {confirmDelete && (
+        <div data-testid="del-impact"
+             style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,.35)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      zIndex: 70 }}>
+          <div style={{ background: '#fff', borderRadius: 12, padding: 22, width: 380 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: P.ink, fontFamily: FONT }}>
+              Delete this component?
+            </div>
+            <div style={{ fontSize: 12.5, color: P.body, fontFamily: FONT,
+                          margin: '10px 0 14px', lineHeight: 1.55 }}>
+              {contractIds?.has(confirmDelete)
+                ? 'Its query contract stays in the run history. ' : ''}
+              This creates a <strong>reversible version</strong> — the previous
+              layout can be restored from version history.
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <Btn data-testid="del-confirm" size="sm" onClick={async () => {
+                try {
+                  await api.deleteComponent(canvasSessionId, confirmDelete);
+                  const fresh = await api.getArtifact(artifact.id);
+                  setArtifact(fresh);
+                  setLayout(JSON.parse(fresh.layout_json || 'null'));
+                } catch { setPatchError('Delete failed — nothing was removed.'); }
+                setConfirmDelete(null);
+              }}>
+                Delete
+              </Btn>
+              <Btn size="sm" variant="outline" onClick={() => setConfirmDelete(null)}>
+                Cancel
+              </Btn>
+            </div>
+          </div>
+        </div>
+      )}
+      {builderOpen && canvasSessionId && (
+        <ComponentBuilder sessionId={canvasSessionId}
+                          onClose={() => setBuilderOpen(false)}
+                          onCreated={async r => {
+                            if (r?.data) {
+                              setComponentRows(m => ({ ...m, [r.component.id]: r.data }));
+                            }
+                            try {
+                              const fresh = await api.getArtifact(artifact.id);
+                              setArtifact(fresh);
+                              const lay = JSON.parse(fresh.layout_json || 'null');
+                              if (lay) setLayout(lay);
+                            } catch { /* noop */ }
+                          }} />
       )}
       {status === 'failed' && (
         <div style={{ border: `1px solid ${P.red}`, borderRadius: 10, background: P.redBg,

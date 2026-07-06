@@ -181,6 +181,64 @@ def _annotations_block(annotations):
     return f'<div class="annotations" aria-label="Viewer annotations">{items}</div>'
 
 
+def _titled(section, inner):
+    t = html_mod.escape(str(section.get('title') or ''))
+    head = f'<div class="sec-title">{t}</div>' if t else ''
+    return head + inner
+
+
+def _generic_panel(section, comp_rows):
+    """R39S1E3: authored components render from their own executed rows."""
+    sid = html_mod.escape(str(section.get('id')))
+    rows = comp_rows or []
+    if not rows:
+        return (f'<div class="panel" data-panel="{sid}">'
+                '<div class="empty">No data in range</div></div>')
+    vals = [abs(float(r[1]) if len(r) > 1 and r[1] is not None else 0) for r in rows]
+    mx = max(vals) or 1
+    bars = ''.join(
+        f'<div class="gbar" title="{html_mod.escape(str(r[0]))}" '
+        f'style="height:{max(4, round(v / mx * 90))}px"></div>'
+        for r, v in zip(rows[:12], vals[:12]))
+    return (f'<div class="panel" data-panel="{sid}">'
+            f'{_titled(section, "")}<div class="gbars">{bars}</div></div>')
+
+
+def _timeseries_panel(rows, sx, sy, ribbon, actual_path, predicted_path, cut_x,
+                      forecast_start):
+    return f"""<div class="panel" data-panel="timeseries">
+    <svg viewBox="0 0 {_W} {_H}" width="100%" role="img"
+         aria-label="Actual versus predicted time series with confidence interval ribbon">
+      <polygon class="ci-ribbon" points="{ribbon}"></polygon>
+      {f'<line class="cut" x1="{cut_x}" y1="{_PAD}" x2="{cut_x}" y2="{_H - _PAD}"></line>' if cut_x else ''}
+      <path class="series-actual" d="{actual_path}"></path>
+      <path class="series-predicted" d="{predicted_path}"></path>
+    </svg>
+    <div class="legend">— actual &nbsp;· · · predicted &nbsp;▦ 95% confidence interval
+      {f"&nbsp;| forecast starts at {html_mod.escape(str(rows[forecast_start].get('date', '')))}" if forecast_start is not None else ''}</div>
+  </div>"""
+
+
+def _layout_panels(layout, rows, metric_format, top_features, model_card,
+                   component_rows, ts_args):
+    """Sections in layout order — the same spec the canvas edits (F-08)."""
+    out = []
+    for s in sorted(layout.get('sections', []), key=lambda x: x.get('position', 0)):
+        sid = s.get('id')
+        if sid == 'timeseries_ci':
+            out.append(_titled(s, _timeseries_panel(rows, *ts_args)))
+        elif sid == 'forecast':
+            out.append(_titled(s, _forecast_panel(rows, metric_format)))
+        elif sid == 'dimension_breakdown':
+            out.append(_titled(s, _breakdown_panel(rows)))
+        elif sid == 'feature_importance':
+            out.append(_titled(s, _importance_panel(
+                top_features or (model_card or {}).get('top_features'))))
+        else:
+            out.append(_generic_panel(s, (component_rows or {}).get(sid)))
+    return '\n  '.join(out)
+
+
 def generate_artifact_html(artifact: dict, rows: list[dict], kpis: dict,
                            model_card: dict | None = None,
                            trials: list | None = None,
@@ -189,7 +247,9 @@ def generate_artifact_html(artifact: dict, rows: list[dict], kpis: dict,
                            annotations: list | None = None,
                            versions: list | None = None,
                            branding: dict | None = None,
-                           generated_at: str | None = None) -> str:
+                           generated_at: str | None = None,
+                           layout: dict | None = None,
+                           component_rows: dict | None = None) -> str:
     generated_at = generated_at or datetime.now(timezone.utc).isoformat()
     branding = branding or {}
     primary = branding.get('primary_color') or '#4f7cff'
@@ -227,6 +287,11 @@ def generate_artifact_html(artifact: dict, rows: list[dict], kpis: dict,
     --bg: #f7f8fa; --surface: #fff; --text: #1a202c; --muted: #64748b;
     --border: #e2e8f0;
   }}
+  .sec-title {{ font: 600 13px {font}; color: var(--text); margin: 14px 0 6px; }}
+  .gbars {{ display: flex; align-items: flex-end; gap: 5px; height: 96px; }}
+  .gbar {{ flex: 1; background: var(--primary); opacity: .85;
+           border-radius: 3px 3px 0 0; }}
+  .empty {{ color: var(--muted); font: 12px {font}; padding: 12px; }}
   @media (prefers-color-scheme: dark) {{
     :root {{ --bg: #101418; --surface: #1a2027; --text: #e8edf3;
              --muted: #93a3b5; --border: #2a3441; }}
@@ -319,22 +384,17 @@ def generate_artifact_html(artifact: dict, rows: list[dict], kpis: dict,
       <div class="l">Validation error</div></div>
   </div>
 
-  <div class="panel" data-panel="timeseries">
-    <svg viewBox="0 0 {_W} {_H}" width="100%" role="img"
-         aria-label="Actual versus predicted time series with confidence interval ribbon">
-      <polygon class="ci-ribbon" points="{ribbon}"></polygon>
-      {f'<line class="cut" x1="{cut_x}" y1="{_PAD}" x2="{cut_x}" y2="{_H - _PAD}"></line>' if cut_x else ''}
-      <path class="series-actual" d="{actual_path}"></path>
-      <path class="series-predicted" d="{predicted_path}"></path>
-    </svg>
-    <div class="legend">— actual &nbsp;· · · predicted &nbsp;▦ 95% confidence interval
-      {f"&nbsp;| forecast starts at {html_mod.escape(str(rows[forecast_start].get('date','')))}" if forecast_start is not None else ''}</div>
-  </div>
-
-  {_annotations_block(annotations)}
-  {_importance_panel(top_features or (model_card or {}).get('top_features'))}
-  {_breakdown_panel(rows)}
-  {_forecast_panel(rows, metric_format)}
+  {_layout_panels(layout, rows, metric_format, top_features, model_card,
+                  component_rows,
+                  (sx, sy, ribbon, actual_path, predicted_path, cut_x, forecast_start))
+   if layout and layout.get('sections') else
+   _timeseries_panel(rows, sx, sy, ribbon, actual_path, predicted_path, cut_x,
+                     forecast_start)
+   + _annotations_block(annotations)
+   + _importance_panel(top_features or (model_card or {}).get('top_features'))
+   + _breakdown_panel(rows)
+   + _forecast_panel(rows, metric_format)}
+  {_annotations_block(annotations) if layout and layout.get('sections') else ''}
   {_leaderboard_panel(trials or [])}
   {_versions_panel(versions)}
   {_dq_footer(artifact, model_card, generated_at)}

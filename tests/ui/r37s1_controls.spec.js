@@ -17,9 +17,11 @@ test('export menu: csv/json live, html stated as R39; no 400 route reachable', a
   await build(page);
   await expect(page.getByTestId('export-csv')).toHaveAttribute('href', /format=csv/);
   await expect(page.getByTestId('export-json')).toHaveAttribute('href', /format=json/);
-  const html = page.getByTestId('export-html');
-  await expect(html).toBeDisabled();
-  await expect(html).toHaveAttribute('title', /R39/);
+  // R39S1E3 delivered the deferred html export — now a live, working anchor
+  await expect(page.getByTestId('export-html')).toHaveAttribute('href', /format=html/);
+  const rh = await page.request.get(
+    (await page.getByTestId('export-html').getAttribute('href')));
+  expect(rh.status()).toBe(200);
 
   const r = await page.request.get(
     (await page.getByTestId('export-csv').getAttribute('href')));

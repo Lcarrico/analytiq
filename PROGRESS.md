@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R39 · Sprint R39S1 · Epic E2 (builder UI) · R39S1E2-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
+**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R40 · Sprint R40S1 · Epic E1 (grid model + patch semantics) · R40S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -554,7 +554,7 @@ re-verify tails after any host-side write.
 
 # Agentic Dashboard Program (Deep-Dive v1.0) — R37–R43
 
-**Current position:** R39 · Sprint R39S1 · Epic E2 (builder UI) · R39S1E2-US1  ← next story
+**Current position:** R40 · Sprint R40S1 · Epic E1 (grid model + patch semantics) · R40S1E1-US1  ← next story
 **Spec:** `AnalytIQ Workspace Agentic Dashboard Deep Dive` (2026-07-06) — findings F-01…F-15 spot-verified in code before planning (seeded chart generator, scalar target_metric, un-gated section PATCH, format=html export all confirmed). Suite at planning time: backend 469/469 · UI 186/186 (R30–R36 close, 9b02c62).
 **Standing:** no multi-agents (lead executes inline) · R34 marketing surfaces locked to the junior · legacy workbench specs migrate only with an owning story ID.
 
@@ -577,12 +577,12 @@ re-verify tails after any host-side write.
 - [x] R38S2 sprint regression recorded — backend 487/487 · UI 194/194 (0 failed, 2026-07-06)
 - [x] R38 release regression recorded — backend 487/487 · UI 194/194 · zero-key boot green (shell 200, 8/8 local) · two-source fidelity fixture pinned in test_r38s2_queries — **RELEASE R38 CLOSED** (doc Phase-1 exit: two different metrics/sources produce provably different, correct datasets)
 
-## Release R39 — Component engine (pending)
+## Release R39 — Component engine ✅ CLOSED 2026-07-06
 - [x] R39S1E1-US1 registry + component CRUD [F-05 server] — done: `server/component_registry.py` (11 types w/ authoring defaults + default grid sizes; build/validate → prove the query plans → append immutable spec version → persist query contract + executed result rows against the session's latest run); POST/DELETE/duplicate endpoints (+ GET /api/component-registry palette read path), role-gated admin/analyst (viewer 403 tested), audited; invalid refs/types → 422 nothing stored; delete scrubs grid cells; duplicates get fresh ids + contracts. BE 490/490, UI 194/194.
-- [ ] R39S1E2-US1 Add Component palette + builder w/ live preview + encoding recommendation
-- [ ] R39S1E2-US2 delete/duplicate w/ downstream impact + reversible versions
-- [ ] R39S1E3-US1 renderer unification: every surface renders from DashboardSpec; html export restored [F-08]
-- [ ] R39S1 sprint regression recorded
+- [x] R39S1E2-US1 Add Component palette + builder — done: ComponentBuilder drawer (+ ADD COMPONENT on the canvas toolbar): registry palette (GET /api/component-registry), metric picker over the plan's resolved inventory, debounced LIVE preview through the validated read-only path (draft-component preview added to the endpoint; row shape/count, real mini-bars, `SELECT-only ✓ · hash · rows scanned`), encoding recommendation that never disables alternatives; Add posts the same schema chat will use; new section renders immediately (whitelist retired — every layout section renders; authored components draw real rows via generic-bars) w/ CONTRACT ✓ at birth. BE 495/495, UI 196/196.
+- [x] R39S1E2-US2 delete/duplicate w/ impact + reversible versions — done: section header gains duplicate (⧉ → placed copy w/ fresh id + contracts + data) and delete (🗑 → impact dialog stating contract retention + reversibility) — both bridge into the artifact layout; `POST /api/sessions/<id>/dashboard-spec/restore` re-appends an older version as the new head (delete→restore round-trip tested; history immutable). BE 495/495, UI 196/196.
+- [x] R39S1E3-US1 renderer unification [F-08] — done: `artifact_gen` composes panels from the artifact layout in position order (timeseries/forecast/breakdown/importance renderers + generic-bars for authored components w/ their executed rows; exact legacy fallback when no layout — r6 panel contracts intact); ONE assembly path `_rerender_artifact_html` (layout AND semantic edits re-render — canvas and shared artifact can no longer diverge; save renders once, post-layout); `export?format=html` serves the stored render (R37's deferred export menu promise fulfilled — spec migrated to assert the live anchor); r16s2 layout-edit contract migrated w/ citation. BE 495/495, UI 196/196.
+- [x] R39S1 sprint regression recorded — backend 495/495 · UI 196/196 (0 failed, 2026-07-06) · zero-key boot green — **RELEASE R39 CLOSED** (doc Phase-2 exit: agent and UI can create KPI, chart, and table components)
 
 ## Release R40 — Grid editor (pending)
 - [ ] R40S1E1-US1 per-breakpoint geometry + layout-patch endpoint (normalize, collisions, optimistic concurrency) [F-04 server]
@@ -613,7 +613,7 @@ re-verify tails after any host-side write.
 - [ ] R43S1 sprint regression recorded
 - [ ] R43 release regression + zero-key boot + acceptance 14/14 — PROGRAM CLOSE (R37–R43)
 
-**Session stop note (2026-07-06):** stopped green after R39S1E1-US1 (component CRUD substrate). Next: R39S1E2-US1 — builder UI (palette via GET /api/component-registry + pickers over the semantic catalog + live preview via POST /api/sessions/<id>/component-query/preview + Add via POST /api/sessions/<id>/components; unlock Inspector metric/dimension/grain selects). Then E2-US2 (delete/duplicate w/ impact), E3 (renderer unification — artifact_gen rewrite consuming the spec; restores html export promised at R37S1E2-US2). Environment: chunked runners /tmp/{be,ui}_chunks.sh (recreate from ledger if sandbox recycles); another Cowork session shares this mount (junior's R34) — pyc traces from foreign session paths are harmless.
+**Session stop note (2026-07-06, second stop):** RELEASE R39 CLOSED — stopped green. Next: R40S1E1-US1 (grid model + layout-patch endpoint: per-breakpoint x/y/w/h/min/max/lock/z in the spec grid section; normalize + collision resolution + optimistic concurrency 409; layout patches never rerun queries). Runners /tmp/{be,ui}_chunks.sh; recreate from ledger if the sandbox recycles.
 
 ## Adaptation ledger (program-specific, grows during execution)
 - "Source-bound" on the zero-key stack = bound to per-connection seeded fixture tables through warehouse.py dialect SQL; two-source fidelity is proven with two fixture connections (R38S2E1-US2).

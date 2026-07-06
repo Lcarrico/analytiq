@@ -85,3 +85,64 @@ def test_delete_and_duplicate_are_versioned(client, db):
                     json={'type': 'kpi', 'title': 'V', 'metric_refs': ['net_revenue']},
                     headers={'X-User-Role': 'viewer'})
     assert r.status_code == 403
+
+
+def test_preview_accepts_inline_draft_component(client):
+    """R39S1E2 read path: the builder previews a DRAFT before adding it."""
+    sid, rid = _built(client)
+    r = client.post(f'/api/sessions/{sid}/component-query/preview',
+                    json={'component': {'type': 'bar', 'title': 'Draft bar',
+                                        'metric_refs': ['net_revenue']}})
+    assert r.status_code == 200
+    d = r.get_json()
+    assert d['row_count'] > 0 and d['sql'].lower().startswith('select')
+    assert d['query_hash']
+
+    bad = client.post(f'/api/sessions/{sid}/component-query/preview',
+                      json={'component': {'type': 'hologram', 'title': 'X',
+                                          'metric_refs': ['net_revenue']}})
+    assert bad.status_code == 422
+
+
+def test_create_returns_data_and_bridges_artifact_layout(client, db):
+    """R39S1E2: the create response carries the executed rows, and an
+    existing artifact's layout gains the new section (canvas bridge until
+    the E3 renderer unification)."""
+    import json as _json
+    sid, rid = _built(client)
+    art = client.post(f'/api/sessions/{sid}/save_artifact', json={'title': 'B'}).get_json()
+
+    r = client.post(f'/api/sessions/{sid}/components',
+                    json={'type': 'bar', 'title': 'Revenue by location',
+                          'metric_refs': ['net_revenue']}).get_json()
+    assert r['data'] and len(r['data']) > 0               # real executed rows
+
+    art2 = client.get(f"/api/artifacts/{art['id']}").get_json()
+    sections = _json.loads(art2['layout_json'])['sections']
+    assert any(s['id'] == r['component']['id'] for s in sections)
+
+
+def test_spec_restore_makes_delete_reversible(client):
+    """R39S1E2-US2 — deleting creates a reversible version: restoring an
+    older version re-appends its content as the new head."""
+    sid, rid = _built(client)
+    made = client.post(f'/api/sessions/{sid}/components',
+                       json={'type': 'bar', 'title': 'Keep me',
+                             'metric_refs': ['net_revenue']}).get_json()
+    cid = made['component']['id']
+    v_with = made['spec_version']
+
+    client.delete(f'/api/sessions/{sid}/components/{cid}')
+    head = client.get(f'/api/sessions/{sid}/dashboard-spec').get_json()
+    assert cid not in {c['id'] for c in head['spec']['components']}
+
+    r = client.post(f'/api/sessions/{sid}/dashboard-spec/restore',
+                    json={'version': v_with})
+    assert r.status_code == 201
+    restored = client.get(f'/api/sessions/{sid}/dashboard-spec').get_json()
+    assert restored['spec_version'] == head['spec_version'] + 1   # append, not rewrite
+    assert cid in {c['id'] for c in restored['spec']['components']}
+
+    missing = client.post(f'/api/sessions/{sid}/dashboard-spec/restore',
+                          json={'version': 999})
+    assert missing.status_code == 404

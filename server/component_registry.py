@@ -84,6 +84,15 @@ def build_component(spec, body):
             'empty_state': 'No data in range', 'error_state': 'Query failed'}
 
 
+_LAST_PREVIEW = {}
+
+
+def last_preview_rows(comp_id):
+    """Rows executed during the most recent add (same process) — the create
+    response carries them so the canvas can render immediately."""
+    return _LAST_PREVIEW.pop(comp_id, [])
+
+
 def _persist_contract_and_data(conn, spec, comp, session_id):
     """Prove the query plans, then persist contract + rows for the latest run."""
     run = conn.execute("SELECT id FROM pipeline_runs WHERE session_id=? "
@@ -99,6 +108,7 @@ def _persist_contract_and_data(conn, spec, comp, session_id):
         return None
     sql, params = qp.compile_component_query(comp, spec, cid_conn)
     info = qp.preview(conn, sql, params, limit=500)
+    _LAST_PREVIEW[comp['id']] = info['sample']
     if run:
         conn.execute('INSERT INTO query_contracts (run_id, component_id, sql, '
                      "warehouse_dialect, expected_columns_json, status) "

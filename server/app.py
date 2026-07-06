@@ -7152,20 +7152,9 @@ def save_artifact_from_session(id):
 
     # auto-render the self-contained file (F-040: record → store)
     art = one('SELECT * FROM artifacts WHERE id=?', (aid,))
-    rows = many('SELECT * FROM chart_data WHERE pipeline_run_id=? ORDER BY day_index', (run['id'],))
+    # R39S1E3: rendering moved AFTER the layout write below — one assembly
+    # path, one file version per save (F-08).
     file_info = None
-    if rows:
-        html = ag.generate_artifact_html(art, rows, compute_kpis(rows))
-        # R11S2E3: assembly goes through the repair loop; attempts retained
-        _rep_attempts = []
-        html, _rep_cycles, validation = ag.validate_and_repair(html, max_cycles=2,
-                                                               attempt_log=_rep_attempts)
-        _persist_repair_attempts(get_db(), 'artifact_render', aid, run['id'],
-                                 _rep_attempts, validation['status'] == 'PASS')
-        fid, sha, _uri = _store_artifact_file(aid, 1, html, validation)
-        file_info = {'file_id': fid, 'version': 1, 'sha256': sha,
-                     'size_bytes': validation['size_bytes'],
-                     'validation_status': validation['status']}
     # R11S1E2: propagate stage confidences onto the assembled artifact
     import confidence as cf
     prop = cf.propagate(get_db(), id, run['id'])
@@ -7186,6 +7175,7 @@ def save_artifact_from_session(id):
     # R37S1E2 (deep-dive F-06): re-read AFTER the layout write — the response
     # must carry the four-section layout it just persisted, never a stale row.
     art = one('SELECT * FROM artifacts WHERE id=?', (aid,))
+    file_info = _rerender_artifact_html(art)   # R39S1E3: one render, layout-aware
     _register_artifact_html_uas(get_db(), aid, run['id'], title, file_info)
     import search as search_mod
     if not sess.get('is_sandbox'):      # R9S2E6: sandbox stays out of prod search
@@ -7485,12 +7475,22 @@ def get_chart(id):
 @app.get('/api/artifacts/<int:id>/export')
 def export_artifact(id):
     fmt = request.args.get('format', 'json')
-    if fmt not in ('csv', 'json'):
-        return jsonify({'error': 'format must be csv or json'}), 400
+    if fmt not in ('csv', 'json', 'html'):
+        return jsonify({'error': 'format must be csv, json or html'}), 400
 
     art = one('SELECT * FROM artifacts WHERE id=?', (id,))
     if not art:
         return jsonify({'error': 'Not found'}), 404
+    if fmt == 'html':
+        # R39S1E3: the stored self-contained render IS the export — one
+        # assembly path for canvas, share, present and download (F-08).
+        f = one('SELECT html FROM artifact_files WHERE artifact_id=? '
+                'ORDER BY version DESC LIMIT 1', (id,))
+        if not f:
+            return jsonify({'error': 'No rendered file for this artifact yet'}), 409
+        return Response(f['html'], mimetype='text/html',
+                        headers={'Content-Disposition':
+                                 f'attachment; filename=artifact_{id}.html'})
 
     rows = many(
         'SELECT day_index, date, actual, predicted, ci_low, ci_high, is_forecast '
@@ -9222,10 +9222,71 @@ def create_component(id):
                                      author=getattr(g, 'user_email', None) or 'user')
     except cr.RegistryError as e:
         return jsonify({'error': 'Component rejected', 'errors': e.errors}), e.status
+    data = cr.last_preview_rows(comp['id'])
+    _bridge_component_into_artifact_layout(id, comp)
     log_action('component.created', 'dashboard_spec', row['id'],
                {'session_id': id, 'component_id': comp['id'], 'type': comp['type']})
     return jsonify({'component': comp, 'spec_version': row['spec_version'],
-                    'spec_hash': row['spec_hash']}), 201
+                    'spec_hash': row['spec_hash'], 'data': data}), 201
+
+
+def _component_rows_for_run(run_id):
+    return {r['component_id']: json.loads(r['rows_json'])
+            for r in many('SELECT component_id, rows_json FROM component_data '
+                          'WHERE run_id=?', (run_id,))}
+
+
+def _rerender_artifact_html(art):
+    """R39S1E3 (deep-dive F-08): one assembly path — the artifact re-renders
+    from its layout (the spec the canvas edits) whenever it changes."""
+    import artifact_gen as ag
+    rid = art.get('pipeline_run_id')
+    if not rid:
+        return None
+    rows = many('SELECT * FROM chart_data WHERE pipeline_run_id=? ORDER BY day_index',
+                (rid,))
+    if not rows:
+        return None
+    art = one('SELECT * FROM artifacts WHERE id=?', (art['id'],))   # fresh layout
+    layout = json.loads(art.get('layout_json') or 'null')
+    html = ag.generate_artifact_html(art, rows, compute_kpis(rows),
+                                     layout=layout,
+                                     component_rows=_component_rows_for_run(rid))
+    _att = []
+    html, _c, validation = ag.validate_and_repair(html, attempt_log=_att)
+    _persist_repair_attempts(get_db(), 'artifact_render', art['id'], rid, _att,
+                             validation['status'] == 'PASS')
+    prev = one('SELECT MAX(version) AS v FROM artifact_files WHERE artifact_id=?',
+               (art['id'],))
+    v = (prev['v'] or 0) + 1
+    fid, sha, _uri = _store_artifact_file(art['id'], v, html, validation)
+    return {'file_id': fid, 'version': v, 'sha256': sha,
+            'size_bytes': validation['size_bytes'],
+            'validation_status': validation['status']}
+
+
+def _bridge_component_into_artifact_layout(session_id, comp):
+    """R39S1E2 bridge: until R39S1E3 renders every surface from the spec,
+    a freshly added component also lands in the latest artifact's
+    layout_json so the canvas shows it immediately."""
+    run = one("SELECT id FROM pipeline_runs WHERE session_id=? AND status='done' "
+              'ORDER BY id DESC LIMIT 1', (session_id,))
+    if not run:
+        return
+    art = one('SELECT * FROM artifacts WHERE pipeline_run_id=? ORDER BY id DESC LIMIT 1',
+              (run['id'],))
+    if not art or not art.get('layout_json'):
+        return
+    layout = json.loads(art['layout_json'])
+    if any(s['id'] == comp['id'] for s in layout['sections']):
+        return
+    mark = comp['type'] if comp['type'] in ('line', 'bar', 'area') else 'bar'
+    layout['sections'].append({'id': comp['id'], 'title': comp['title'],
+                               'mark': mark, 'top_n': None,
+                               'position': len(layout['sections'])})
+    execute('UPDATE artifacts SET layout_json=? WHERE id=?',
+            (json.dumps(layout), art['id']))
+    _rerender_artifact_html(art)
 
 
 @app.delete('/api/sessions/<int:id>/components/<comp_id>')
@@ -9237,9 +9298,28 @@ def remove_component(id, comp_id):
                                   author=getattr(g, 'user_email', None) or 'user')
     except cr.RegistryError as e:
         return jsonify({'error': 'Delete rejected', 'errors': e.errors}), e.status
+    _drop_component_from_artifact_layout(id, comp_id)
     log_action('component.deleted', 'dashboard_spec', row['id'],
                {'session_id': id, 'component_id': comp_id})
     return jsonify({'ok': True, 'spec_version': row['spec_version']})
+
+
+def _drop_component_from_artifact_layout(session_id, comp_id):
+    run = one("SELECT id FROM pipeline_runs WHERE session_id=? AND status='done' "
+              'ORDER BY id DESC LIMIT 1', (session_id,))
+    if not run:
+        return
+    art = one('SELECT * FROM artifacts WHERE pipeline_run_id=? ORDER BY id DESC LIMIT 1',
+              (run['id'],))
+    if not art or not art.get('layout_json'):
+        return
+    layout = json.loads(art['layout_json'])
+    layout['sections'] = [s for s in layout['sections'] if s['id'] != comp_id]
+    for i, s in enumerate(sorted(layout['sections'], key=lambda x: x['position'])):
+        s['position'] = i
+    execute('UPDATE artifacts SET layout_json=? WHERE id=?',
+            (json.dumps(layout), art['id']))
+    _rerender_artifact_html(art)
 
 
 @app.post('/api/sessions/<int:id>/components/<comp_id>/duplicate')
@@ -9251,9 +9331,12 @@ def duplicate_component_route(id, comp_id):
                                            author=getattr(g, 'user_email', None) or 'user')
     except cr.RegistryError as e:
         return jsonify({'error': 'Duplicate rejected', 'errors': e.errors}), e.status
+    data = cr.last_preview_rows(comp['id'])
+    _bridge_component_into_artifact_layout(id, comp)
     log_action('component.duplicated', 'dashboard_spec', row['id'],
                {'session_id': id, 'from': comp_id, 'component_id': comp['id']})
-    return jsonify({'component': comp, 'spec_version': row['spec_version']}), 201
+    return jsonify({'component': comp, 'spec_version': row['spec_version'],
+                    'data': data}), 201
 
 
 @app.get('/api/component-registry')
@@ -9280,10 +9363,20 @@ def preview_component_query(id):
     if not head:
         return jsonify({'error': 'No dashboard spec for this session yet'}), 409
     spec = json.loads(head['spec_json'])
-    comp_id = (request.get_json() or {}).get('component_id')
-    comp = next((c for c in spec.get('components', []) if c['id'] == comp_id), None)
-    if not comp:
-        return jsonify({'error': f'Component {comp_id!r} not in the spec'}), 404
+    body = request.get_json() or {}
+    comp_id = body.get('component_id')
+    if body.get('component'):
+        # R39S1E2: the builder previews a DRAFT before it exists in the spec
+        import component_registry as cr
+        try:
+            comp = cr.build_component(spec, body['component'])
+        except cr.RegistryError as e:
+            return jsonify({'error': 'Draft rejected', 'errors': e.errors}), e.status
+        comp_id = comp['id']
+    else:
+        comp = next((c for c in spec.get('components', []) if c['id'] == comp_id), None)
+        if not comp:
+            return jsonify({'error': f'Component {comp_id!r} not in the spec'}), 404
     try:
         sql, params = qp.compile_component_query(comp, spec, cid)
     except qp.QueryPlanError as e:
@@ -9326,6 +9419,24 @@ def get_dashboard_spec_head(id):
     out = dict(row)
     out['spec'] = json.loads(out.pop('spec_json'))
     return jsonify(out)
+
+
+@app.post('/api/sessions/<int:id>/dashboard-spec/restore')
+@require_role('admin', 'analyst')
+def restore_dashboard_spec(id):
+    """R39S1E2-US2: restore = re-append an older version's content as the
+    new head — history stays immutable, deletes stay reversible."""
+    import dashboard_spec as ds
+    v = (request.get_json() or {}).get('version')
+    row = one('SELECT * FROM dashboard_specs WHERE session_id=? AND spec_version=?',
+              (id, v))
+    if not row:
+        return jsonify({'error': f'No spec version {v} for this session'}), 404
+    new = ds.persist(get_db(), id, json.loads(row['spec_json']),
+                     author=getattr(g, 'user_email', None) or 'user')
+    log_action('dashboard_spec.restored', 'dashboard_spec', new['id'],
+               {'session_id': id, 'from_version': v, 'new_version': new['spec_version']})
+    return jsonify(new), 201
 
 
 @app.get('/api/sessions/<int:id>/dashboard-spec/versions')
@@ -10163,22 +10274,10 @@ def edit_artifact_section(id, sid):
                  logical_key=f'{ns}:artifact_layout:a{id}', workspace_id=ns,
                  agent='canvas_editor', run_id=art.get('pipeline_run_id'))
 
-    rendered_version = None
-    if edit_class == 'semantic' and art.get('pipeline_run_id'):
-        # re-route through the validated assembly path (§17.6.3)
-        import artifact_gen as ag
-        rows = many('SELECT * FROM chart_data WHERE pipeline_run_id=? ORDER BY day_index',
-                    (art['pipeline_run_id'],))
-        if rows:
-            html = ag.generate_artifact_html(art, rows, compute_kpis(rows))
-            _att = []
-            html, _c, validation = ag.validate_and_repair(html, attempt_log=_att)
-            _persist_repair_attempts(get_db(), 'artifact_render', id,
-                                     art.get('pipeline_run_id'), _att,
-                                     validation['status'] == 'PASS')
-            prev = one('SELECT MAX(version) AS v FROM artifact_files WHERE artifact_id=?', (id,))
-            rendered_version = (prev['v'] or 0) + 1
-            _store_artifact_file(id, rendered_version, html, validation)
+    # R39S1E3 (F-08): layout AND semantic edits re-render — the canvas and
+    # the shared artifact can no longer diverge.
+    _fi = _rerender_artifact_html(art)
+    rendered_version = _fi['version'] if _fi else None
     log_action('artifact.edited', 'artifact', id,
                {'section': sid, 'fields': sorted(fields), 'class': edit_class})
     return jsonify({'artifact_id': id, 'section': sid, 'edit_class': edit_class,
