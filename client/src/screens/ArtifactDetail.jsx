@@ -329,6 +329,14 @@ export default function ArtifactDetail() {
     Model: (
       <div data-testid="tab-model" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={monoLabel}>Model</div>
+        {explain && explain.model?.model_card_id && (
+          <span data-testid="open-model-card"
+                onClick={() => navigate(`/app/models/${explain.model.model_card_id}`)}
+                style={{ fontSize: 11.5, color: P.accent, cursor: 'pointer',
+                         fontFamily: FONT }}>
+            Open model card
+          </span>
+        )}
         {explain === null ? <Spinner /> : (explain === false || !explain.model) ? (
           <span style={{ fontSize: 12.5, color: P.muted, fontFamily: FONT }}>
             Descriptive artifact — no model attached.

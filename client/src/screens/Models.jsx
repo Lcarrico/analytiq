@@ -500,3 +500,220 @@ export function RunDetail() {
     </div>
   );
 }
+
+// ── R33S1E3-US1 — Model card (`Models.dc.html` frame 03) ──────────────────
+// Registry identity + gate pills, fact rows, metric tiles (RMSE from fold
+// means; directional accuracy replaces the frame's MAE — no currency-scale
+// MAE in the substrate), purple importance bars, SHAP dot plot from stored
+// shap_mean values, linked artifacts, and a real Retrain.
+export function ModelCard() {
+  const { cardId } = useParams();
+  const navigate = useNavigate();
+  const [state, setState] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const card = await api.modelCard(cardId);
+        const manifests = card.session_id
+          ? await api.featureManifests(card.session_id).catch(() => []) : [];
+        const gold = card.session_id
+          ? await api.goldTables(card.session_id).catch(() => []) : [];
+        setState({ card, manifest: manifests[0],
+                   dropped: gold[0]?.dq_gates?.leakage?.dropped || [] });
+      } catch { setState(false); }
+    })();
+  }, [cardId]);
+
+  if (state === null) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
+        <Spinner size={24} />
+      </div>
+    );
+  }
+  if (!state || !state.card || state.card.error) {
+    return (
+      <div style={{ maxWidth: 700 }}>
+        <PageHeader title="Model card not found" sub="It may belong to a cleaned-up run." />
+        <Btn size="sm" variant="outline" onClick={() => navigate('/app/models')}>
+          Back to models
+        </Btn>
+      </div>
+    );
+  }
+  const { card: mc, manifest, dropped } = state;
+  const m = mc.metrics || {};
+  const folds = m.folds || [];
+  const rmse = folds.length
+    ? Math.round(folds.reduce((s, f) => s + (f.rmse || 0), 0) / folds.length)
+    : null;
+  const dirAcc = folds.length
+    ? Math.round(folds.reduce((s, f) => s + (f.directional_accuracy || 0), 0)
+                 / folds.length * 100)
+    : null;
+  const overfitPass = (mc.gates?.overfit_gate?.status || 'PASS') === 'PASS';
+  const promoted = mc.registry?.status === 'active';
+  const feats = mc.top_features || [];
+  const maxImp = Math.max(...feats.map(f => f.importance || 0), 0.001);
+  const maxShap = Math.max(...feats.map(f => Math.abs(f.shap_mean || 0)), 0.001);
+  const retrain = async () => {
+    if (busy || !mc.session_id) return;
+    setBusy(true);
+    try { await api.retrain(mc.session_id); } catch { /* surfaced upstream */ }
+    setBusy(false);
+  };
+
+  return (
+    <div style={{ maxWidth: 940 }}>
+      <div onClick={() => navigate('/app/models')}
+           style={{ fontSize: 12, color: P.accent, cursor: 'pointer', marginBottom: 10,
+                    fontFamily: FONT }}>
+        &larr; Models
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 3 }}>
+        <h1 data-testid="card-headline"
+            style={{ margin: 0, fontSize: 20, fontWeight: 700, color: P.ink,
+                     fontFamily: MONO }}>
+          {mc.registry ? `${mc.registry.model_id} v${mc.registry.version}` : mc.algorithm}
+        </h1>
+        <span data-testid="card-status-pill"
+              style={{ display: 'inline-flex', alignItems: 'center', height: 20,
+                       padding: '0 10px', borderRadius: 999,
+                       background: promoted ? P.greenBg : P.tableHeadBg,
+                       color: promoted ? P.green : P.muted, fontFamily: MONO,
+                       fontSize: 9, fontWeight: 700, letterSpacing: '.05em' }}>
+          {promoted ? 'PROMOTED · CHAMPION'
+            : (mc.registry?.status || 'unregistered').toUpperCase()}
+        </span>
+        <span data-testid="card-overfit-pill"
+              style={{ display: 'inline-flex', alignItems: 'center', height: 20,
+                       padding: '0 10px', borderRadius: 999,
+                       background: overfitPass ? P.accentSoft : P.amberBg,
+                       color: overfitPass ? P.accentHover : P.amber, fontFamily: MONO,
+                       fontSize: 9, fontWeight: 700, letterSpacing: '.05em' }}>
+          {overfitPass ? 'NO OVERFIT' : 'OVERFIT REVIEW'}
+        </span>
+        <Btn data-testid="card-retrain" size="sm" style={{ marginLeft: 'auto' }}
+             onClick={retrain} disabled={busy || !mc.session_id}>
+          {busy ? 'Queuing…' : 'Retrain'}
+        </Btn>
+      </div>
+      <div data-testid="card-sub"
+           style={{ fontFamily: MONO, fontSize: 10.5, color: P.muted, marginBottom: 16 }}>
+        card {mc.id} &middot; {mc.algorithm} &middot; trained {(mc.created_at || '').slice(0, 16)}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14,
+                    marginBottom: 14 }}>
+        <div style={{ ...card2, padding: 16 }}>
+          {[['PURPOSE',
+             `Forecast ${manifest?.gold_table_name?.replace(/_/g, ' ') || 'the target metric'} · ${m.holdout_days || 14}-day horizon, backtested over ${folds.length} rolling windows.`,
+             'card-fact-purpose'],
+            ['TARGET', 'Net Revenue', 'card-fact-target'],
+            ['ALGORITHM', mc.algorithm, 'card-fact-algorithm'],
+            ['TRAINING DATA',
+             `${(m.training_rows ?? 0).toLocaleString('en-US')} rows · ${m.series_days || '—'} days`,
+             'card-fact-data'],
+            ['FEATURES',
+             `${manifest ? manifest.feature_list.length : '—'} used · ${dropped.length} dropped`,
+             'card-fact-features']].map(([k, v, tid]) => (
+            <div key={k} data-testid={tid}
+                 style={{ display: 'flex', gap: 12, padding: '7px 0',
+                          borderBottom: `1px solid ${P.borderRow}` }}>
+              <span style={{ ...label, width: 130, flex: 'none', paddingTop: 2 }}>{k}</span>
+              <span style={{ fontSize: 12.5, color: P.body, fontFamily: FONT,
+                             lineHeight: 1.5 }}>{v}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)', gap: 10 }}>
+          {[['tile-mape', 'MAPE', m.val_mape != null ? `${m.val_mape}%` : '—'],
+            ['tile-rmse', 'RMSE', rmse != null ? rmse.toLocaleString('en-US') : '—'],
+            ['tile-diracc', 'DIRECTIONAL ACC', dirAcc != null ? `${dirAcc}%` : '—']]
+            .map(([tid, k, v]) => (
+            <div key={tid} data-testid={tid}
+                 style={{ ...card2, padding: '12px 16px', display: 'flex',
+                          alignItems: 'baseline', gap: 10 }}>
+              <span style={label}>{k}</span>
+              <span style={{ marginLeft: 'auto', fontSize: 20, fontWeight: 700,
+                             color: P.ink, fontFamily: FONT }}>{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14,
+                    marginBottom: 14 }}>
+        <div style={{ ...card2, padding: 16 }}>
+          <div style={{ ...label, marginBottom: 10 }}>FEATURE IMPORTANCE</div>
+          {feats.map(f => (
+            <div key={f.name} style={{ display: 'flex', alignItems: 'center', gap: 8,
+                                       padding: '4px 0' }}>
+              <span style={{ fontFamily: MONO, fontSize: 10.5, color: P.body, width: 150,
+                             overflow: 'hidden', textOverflow: 'ellipsis',
+                             whiteSpace: 'nowrap', flex: 'none' }}>
+                {f.name}
+              </span>
+              <div style={{ flex: 1, height: 8, borderRadius: 999,
+                            background: P.tableHeadBg }}>
+                <div data-testid={`imp-bar-${f.name}`}
+                     style={{ height: 8, borderRadius: 999,
+                              width: `${Math.max(3, (f.importance / maxImp) * 100)}%`,
+                              background: '#7c3aed' }} />
+              </div>
+              <span style={{ fontFamily: MONO, fontSize: 9.5, color: P.faint, width: 38,
+                             textAlign: 'right' }}>
+                {f.importance}
+              </span>
+            </div>
+          ))}
+          {feats.length === 0 && (
+            <span style={{ fontSize: 12, color: P.faint, fontFamily: FONT }}>
+              No stored importances for this card.
+            </span>
+          )}
+        </div>
+        <div style={{ ...card2, padding: 16 }}>
+          <div style={{ ...label, marginBottom: 10 }}>SHAP CONTRIBUTIONS</div>
+          <svg data-testid="shap-plot" width="100%" height={Math.max(40, feats.length * 26)}
+               viewBox={`0 0 300 ${Math.max(40, feats.length * 26)}`}>
+            <line x1="150" y1="0" x2="150" y2={Math.max(40, feats.length * 26)}
+                  stroke="#dde3ec" strokeWidth="1" />
+            {feats.map((f, i) => {
+              const cx = 150 + ((f.shap_mean || 0) / maxShap) * 130;
+              return (
+                <g key={f.name}>
+                  <text x="4" y={i * 26 + 17} fontSize="8.5" fontFamily="monospace"
+                        fill="#64748b">
+                    {f.name.slice(0, 18)}
+                  </text>
+                  <circle data-testid={`shap-dot-${f.name}`} cx={cx} cy={i * 26 + 14}
+                          r="5" fill={(f.shap_mean || 0) >= 0 ? '#7c3aed' : '#f59e0b'}
+                          opacity="0.85" />
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      </div>
+
+      <div style={{ ...card2, padding: 16 }}>
+        <div style={{ ...label, marginBottom: 8 }}>LINKED ARTIFACTS</div>
+        {(mc.linked_artifacts || []).length === 0 ? (
+          <span style={{ fontSize: 12, color: P.faint, fontFamily: FONT }}>
+            Nothing built on this model yet.
+          </span>
+        ) : mc.linked_artifacts.map(a => (
+          <div key={a.id} data-testid={`card-artifact-${a.id}`}
+               onClick={() => navigate(`/app/artifacts/${a.id}`)}
+               style={{ fontSize: 12.5, color: P.accent, fontFamily: FONT,
+                        padding: '4px 0', cursor: 'pointer' }}>
+            {a.title}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

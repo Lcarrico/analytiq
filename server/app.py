@@ -6124,6 +6124,13 @@ def get_model_card(id):
                                'FROM gold_model_insights WHERE model_card_id=? '
                                'ORDER BY rank', (id,))
     row['lineage'] = json.loads(row.pop('lineage_json') or '{}')
+    # R33S1E3: registry identity + linked artifacts for the model-card page
+    row['registry'] = one('SELECT id, model_id, version, status FROM model_registry '
+                          'WHERE model_card_id=? ORDER BY id DESC LIMIT 1', (id,))
+    row['linked_artifacts'] = many(
+        'SELECT a.id, a.title FROM artifacts a JOIN pipeline_runs pr '
+        'ON a.pipeline_run_id = pr.id WHERE pr.session_id=? ORDER BY a.id DESC LIMIT 10',
+        (row['session_id'],)) if row.get('session_id') else []
     return jsonify(row)
 
 

@@ -90,3 +90,23 @@ def test_two_sessions_same_spec_get_isolated_gold(client):
         assert j.status_code == 201, j.get_json()
 
     assert golds[0]['physical_table'] != golds[1]['physical_table']
+
+
+def test_model_card_enriched_payload(client):
+    """R33S1E3: the card endpoint carries registry identity + linked artifacts
+    so the model-card page renders from one call."""
+    sid, job_id = _champion(client)
+    job = client.get(f'/api/training/jobs/{job_id}').get_json()
+
+    # build an artifact on the same session so linkage is real
+    run = client.post('/api/pipeline/run', json={'sessionId': sid}).get_json()
+    wait_until(lambda: client.get(f"/api/pipeline/{run['runId']}").get_json().get('status')
+               == 'done', timeout=30)
+    art = client.post(f'/api/sessions/{sid}/save_artifact',
+                      json={'title': 'Card Link Probe'}).get_json()
+
+    card = client.get(f"/api/model_cards/{job['model_card_id']}").get_json()
+    assert card['registry'] and card['registry']['model_id']
+    assert card['registry']['status'] in ('active', 'challenger', 'archived')
+    titles = [a['title'] for a in card['linked_artifacts']]
+    assert 'Card Link Probe' in titles
