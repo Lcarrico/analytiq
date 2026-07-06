@@ -220,15 +220,16 @@ export default function GoldDetail() {
             <span style={{ fontSize: 12, color: P.faint, fontFamily: FONT }}>
               Query contracts appear once a dashboard build runs on this table.
             </span>
-          ) : (contracts.contracts || contracts.panels || []).map((c, i) => (
+          ) : (contracts.query_contracts || []).map((c, i) => (
             <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'center',
                                   padding: '7px 0',
                                   borderBottom: `1px solid ${P.borderRow}` }}>
               <span style={{ ...mono, fontWeight: 600, color: P.ink, width: 160 }}>
-                {c.panel || c.component || `panel ${i + 1}`}
+                {c.component_id || `panel ${i + 1}`}
               </span>
               <span style={{ fontSize: 11.5, color: P.body, fontFamily: FONT }}>
-                {c.expected_shape || c.shape || 'validated shape'}
+                {(c.expected_columns || []).length} expected columns
+                {c.row_limit ? ` · ≤${c.row_limit} rows` : ''}
               </span>
               <span style={{ marginLeft: 'auto', display: 'inline-flex',
                              alignItems: 'center', height: 17, padding: '0 8px',

@@ -44,6 +44,7 @@ import ImportFlows from './screens/ImportFlows';   // R35S1E4
 import SourceDetail from './screens/SourceDetail';   // R35S2E1
 import TableDetail from './screens/TableDetail';   // R35S2E2
 import GoldDetail from './screens/GoldDetail';   // R36S1E1
+import { DataContracts, QueryContracts } from './screens/Contracts';   // R36S1E2
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
@@ -131,6 +132,8 @@ function Layout() {
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />
         <Route path="/app/gold/:id" element={<GoldDetail />} />  {/* R36S1E1 */}
+        <Route path="/app/contracts/data" element={<DataContracts />} />  {/* R36S1E2 */}
+        <Route path="/app/contracts/queries" element={<QueryContracts />} />  {/* R36S1E2 */}
         <Route path="/app/__kit" element={<KitGallery />} />  {/* R21S1E2 gallery */}
         <Route path="/app/__errors" element={<ErrorGallery />} />  {/* R33S2E4 board */}
         <Route path="/app/team" element={<Team />} />

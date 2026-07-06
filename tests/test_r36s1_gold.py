@@ -47,3 +47,28 @@ def test_gold_list_and_detail(client):
                                     for g_ in det['gate_list'])
     assert det['feature_manifest'] and det['feature_manifest']['version']
     assert client.get('/api/gold/tables/999999').status_code == 404
+
+
+def test_data_contracts_overview(client):
+    """R36S1E2 — data contracts overview: per-contract posture with 30-day
+    failure counts, blocking state from the latest manifest, and affected
+    artifacts."""
+    conn = client.post('/api/connections', json={'type': 'snowflake', 'account': 'dc',
+                                                 'username': 'u', 'password': 'p'}).get_json()
+    # contract that the sim catalog will violate (impossible min_rows)
+    client.put('/api/contracts', json={'connectionId': conn['id'], 'table': 'fact_revenue',
+                                       'required_columns': ['order_id_missing'],
+                                       'min_rows': 10})
+    rid = client.post('/api/governance/run', json={'connectionId': conn['id']}).get_json()['runId']
+    wait_until(lambda: client.get(f'/api/governance/{rid}').get_json().get('status')
+               in ('done', 'complete'), timeout=30)
+    wait_until(lambda: len(client.get(
+        f"/api/integrations/{conn['id']}/manifest/versions").get_json() or []) >= 1,
+        timeout=10)
+
+    d = client.get('/api/contracts/overview').get_json()
+    row = next(r for r in d['contracts'] if r['table'] == 'fact_revenue')
+    assert row['required_columns'] == ['order_id_missing']
+    assert row['blocking'] is True                 # violated on the latest run
+    assert row['failures_30d'] >= 1                # contract alert recorded
+    assert isinstance(row['affected'], list)

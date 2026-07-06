@@ -75,6 +75,7 @@ export const api = {
   goldCatalog:      ()      => get('/gold/catalog'),
   goldTablesList:   ()      => get('/gold/tables'),                      // R36S1E1
   goldTableDetail:  (id)    => get(`/gold/tables/${id}`),                // R36S1E1
+  contractsOverview: ()     => get('/contracts/overview'),               // R36S1E2
   notifications:    ()      => get('/notifications'),
   readAllNotifications: ()  => post('/notifications/read_all', {}),
   postComment:      (id, body) => post(`/artifacts/${id}/comments`, body),

@@ -3651,6 +3651,41 @@ def put_data_contract():
     return jsonify({'connection_id': cid, 'table': table, 'required_columns': cols})
 
 
+@app.get('/api/contracts/overview')
+def contracts_overview():
+    """R36S1E2: data-contract posture — failure counts, blocking state from
+    the latest manifest, affected artifacts per connection."""
+    out = []
+    for c in many('SELECT * FROM data_contracts ORDER BY id DESC LIMIT 100'):
+        conn_id = c['connection_id']
+        m_row = _manifest_row(conn_id)
+        blocking = False
+        if m_row:
+            m = json.loads(m_row['manifest_json'])
+            mt = next((t for t in m.get('tables', [])
+                       if t['name'] == c['table_name']), None)
+            blocking = bool((mt or {}).get('contract_violations'))
+        failures = one("SELECT COUNT(*) AS n FROM alerts WHERE type='contract' "
+                       "AND connection_id=? AND created_at >= datetime('now', '-30 days')",
+                       (conn_id,))['n']
+        affected = [a_['title'] for a_ in many(
+            'SELECT a.title FROM artifacts a JOIN pipeline_runs pr '
+            'ON a.pipeline_run_id = pr.id JOIN sessions s ON pr.session_id = s.id '
+            'WHERE s.connection_id=? ORDER BY a.id DESC LIMIT 5', (conn_id,))]
+        conn_row = one('SELECT name, account, type FROM connections WHERE id=?',
+                       (conn_id,))
+        out.append({'id': c['id'], 'connection_id': conn_id,
+                    'connection': (conn_row or {}).get('name')
+                    or (conn_row or {}).get('account')
+                    or (conn_row or {}).get('type'),
+                    'table': c['table_name'],
+                    'required_columns': json.loads(c['required_columns_json'] or '[]'),
+                    'min_rows': c['min_rows'], 'max_age_hours': c['max_age_hours'],
+                    'failures_30d': failures, 'blocking': blocking,
+                    'affected': affected})
+    return jsonify({'contracts': out, 'total': len(out)})
+
+
 @app.get('/api/contracts')
 def list_data_contracts():
     cid = request.args.get('connection_id')

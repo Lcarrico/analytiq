@@ -1583,7 +1583,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 ### Milestone UP-G — Operate & administer at parity
 ### Sprint R36S1 — Gold & contracts + Alerts <!-- task elaboration pending Phase 1a -->
 - [x] **R36S1E1-US1** — gold tables list + gold detail · [was R26S2E1]
-- [ ] **R36S1E2-US1** — data contracts + query contracts screens (admin) · [was R26S2E2]
+- [x] **R36S1E2-US1** — data contracts + query contracts screens (admin) · [was R26S2E2]
 - [ ] **R36S1E3-US1** — alerts center / create alert / alert detail. `DEP:` alerts CRUD (`server/alerts.py` + SQLite tables + seeded trigger history; only GET :3437 exists) · [was R26S2E3]
 - [ ] R36S1 sprint regression recorded
 ### Sprint R36S2 — Collaboration + Admin control plane <!-- task elaboration pending Phase 1a -->
