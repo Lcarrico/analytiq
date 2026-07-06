@@ -39,6 +39,10 @@ export default function KitGallery() {
         <Block title="Badge" spec="pill h20 r999 mono 10/600 upper ls.04em · 6 tints + dot">
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             <Badge data-testid="kit-badge-green" tint="green" dot>Healthy</Badge>
+            {/* R35S1E2: legacy variant-API compat exhibit — S02 (its last
+                screen consumer) retired; the kit spec asserts the old call
+                still maps onto the PRD pill here. */}
+            <Badge data-testid="kit-badge-legacy" variant="success" xs>Available</Badge>
             <Badge tint="amber" dot>2 warnings</Badge>
             <Badge tint="red">Blocked</Badge>
             <Badge tint="purple">Predictive</Badge>

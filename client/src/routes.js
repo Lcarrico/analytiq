@@ -2,7 +2,6 @@
 // Legacy wizard screens become route bodies; later releases replace them.
 export const SCREEN_ROUTES = {
   1: '/app',
-  2: '/app/data/connect',   // R35S1E1: S02 connect flow parked here until R35S1E2
   3: '/app/data/run',
   4: '/app/data/health',
   6: '/app/create/quick',   // R16S1E1: workbench owns /app/create

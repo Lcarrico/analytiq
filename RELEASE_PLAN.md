@@ -1565,7 +1565,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 ### Milestone UP-F — Data surfaces at parity
 ### Sprint R35S1 — Sources, connect grid, wizard, imports <!-- task elaboration pending Phase 1a -->
 - [x] **R35S1E1-US1** — sources list (audit-first task line) · [was R24S1E1]
-- [ ] **R35S1E2-US1** — add-source connector grid · [was R24S1E2]
+- [x] **R35S1E2-US1** — add-source connector grid · [was R24S1E2]
 - [ ] **R35S1E3-US1** — snowflake connector wizard · [was R24S1E3]
 - [ ] **R35S1E4-US1** — import flows ×4 (file upload, REST API, webhook, dbt) over R2 connectors · [was R24S1E4]
 - [ ] R35S1 sprint regression recorded

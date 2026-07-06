@@ -24,7 +24,7 @@ import { ForgotPassword, Login, Register, SsoCallback, VerifyEmail } from './scr
 import { OnboardingSourceHealth, OnboardingStart, OnboardingTemplates, OnboardingWorkspace } from './screens/Onboarding';   // R31S1E3
 import { Forbidden, useRole } from './components/roles';
 import { ROUTE_SCREENS } from './routes';
-import Screen02 from './screens/S02_Connect';
+// R35S1E2: S02 retired — the connector grid + wizard + import flows own /app/data/*
 import Screen03 from './screens/S03_Governance';
 import Screen04 from './screens/S04_TableHealth';
 // R32S2E1: S05 retired — /app/semantic belongs to the semantic layer screens
@@ -40,11 +40,11 @@ import Screen12 from './screens/S12_Platform';
 import ModelsOverview, { FeatureManifestViewer, Leaderboard, ModelCard, RetrainCenter, RunDetail } from './screens/Models';
 import EmbedPreview from './screens/EmbedPreview';   // R33S2E2
 import DataSources from './screens/DataSources';   // R35S1E1
+import ConnectGrid from './screens/ConnectGrid';   // R35S1E2
 import PresentMode from './screens/PresentMode';   // R33S2E3 — chrome-free
 import { ErrorGallery } from './components/ErrorState';   // R33S2E4
 
 const SCREENS = {
-  2:  Screen02,
   3:  Screen03,
   4:  Screen04,
   10: Artifacts,   // R30S1E2 — Frame 01 library (cards + rail + ⋯ menus)
@@ -120,6 +120,7 @@ function Layout() {
         <Route path="/app/models/features/:id" element={<FeatureManifestViewer />} />  {/* R33S1E4 */}
         <Route path="/app/models/retrain" element={<RetrainCenter />} />  {/* R33S1E4 */}
         <Route path="/app/data/sources" element={<DataSources />} />  {/* R35S1E1 — replaces the S02 list */}
+        <Route path="/app/data/connect" element={<ConnectGrid />} />  {/* R35S1E2 — replaces S02 */}
         <Route path="/app/models/:cardId" element={<ModelCard />} />  {/* R33S1E3 */}
         <Route path="/app/create" element={<Navigate to="/app/create/new" replace />} />
         <Route path="/app/gold" element={<GoldCatalog />} />

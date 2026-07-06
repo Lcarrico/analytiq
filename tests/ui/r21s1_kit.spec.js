@@ -120,19 +120,10 @@ test('legacy call sites render the NEW badge/btn visuals (compat layer)', async 
   // connector tiles in its picker view — the pill spec must show through the
   // old API. (Picker opens via "+ Add new data source"; empty DBs land on the
   // picker directly, seeded DBs show the list first.)
-  // R35S1E1: the sources LIST owns /app/data/sources now; the legacy S02
-  // picker (which exercises the old Badge API) lives at /app/data/connect
-  // until R35S1E2 replaces it.
-  await page.goto('/app/data/connect');
-  // S02 fetches connections first (spinner) — wait until either the list's
-  // add button or the picker header is actually rendered, then open the
-  // picker if we're on the list. (Was flaky: count() sampled mid-load.)
-  const addBtn = page.getByText('+ Add new data source');
-  const pickerHead = page.getByText('Choose a connector');
-  await expect(addBtn.or(pickerHead).first()).toBeVisible();
-  if (await addBtn.isVisible()) await addBtn.click();
-  await expect(pickerHead).toBeVisible();
-  const legacyBadge = page.getByText('Available', { exact: true }).first();
+  // R35S1E2: S02 (the last screen consumer of the legacy Badge variant API)
+  // is retired — the kit gallery carries a permanent compat exhibit.
+  await page.goto('/app/__kit');
+  const legacyBadge = page.getByTestId('kit-badge-legacy');
   await expect(legacyBadge).toBeVisible();
   expect(await css(legacyBadge, 'borderRadius')).toBe('999px'); // was 4px
   expect(await css(legacyBadge, 'fontFamily')).toContain('Mono');
