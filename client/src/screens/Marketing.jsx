@@ -1,6 +1,10 @@
-// R30S1E1 (program R30–R36): marketing landing + pricing — plan data per PRD ch02.
+// R30S1E1 (pricing data lock — do not change plan facts, r30s1_pricing_data.spec.js
+// enforces it) · R34S1E1: marketing landing + pricing now use the shared
+// MarketingNav/MarketingFooter chrome instead of a local inline Nav().
 import { Link } from 'react-router-dom';
 import { FONT, MONO, P } from '../tokens';
+import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 
 const VALUE_CARDS = [
   ['Governed metrics', 'One metric, one definition — everywhere.'],
@@ -28,30 +32,10 @@ const PLANS = [
    []],
 ];
 
-function Nav() {
-  return (
-    <nav style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 10,
-                  borderBottom: `1px solid ${P.border}`, display: 'flex', alignItems: 'center',
-                  gap: 18, padding: '0 28px', height: 60 }}>
-      <span style={{ fontWeight: 700, fontSize: 16, fontFamily: FONT, color: P.ink }}>
-        Analyt<span style={{ color: P.accent }}>IQ</span>
-      </span>
-      <Link to="/pricing" style={{ fontSize: 13, fontFamily: FONT, color: P.body }}>Pricing</Link>
-      <span style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
-        <Link to="/app" style={{ fontSize: 13, fontFamily: FONT, color: P.body,
-                                 alignSelf: 'center' }}>Login</Link>
-        <Link to="/app" data-testid="start-free"
-              style={{ fontSize: 13, fontWeight: 600, fontFamily: FONT, background: P.accent,
-                       color: '#fff', borderRadius: 8, padding: '8px 14px' }}>Start Free</Link>
-      </span>
-    </nav>
-  );
-}
-
 export function Landing() {
   return (
     <div data-testid="marketing-landing" style={{ minHeight: '100vh', background: '#fff' }}>
-      <Nav />
+      <MarketingNav />
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '72px 28px',
                         display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 40 }}>
         <div>
@@ -87,10 +71,7 @@ export function Landing() {
           </div>
         ))}
       </section>
-      <footer style={{ borderTop: `1px solid ${P.border}`, padding: '20px 28px',
-                       fontFamily: MONO, fontSize: 10.5, color: P.faint }}>
-        SOC 2 TYPE II · GDPR · ISO 27001 — Powered by AnalytIQ
-      </footer>
+      <MarketingFooter />
     </div>
   );
 }
@@ -98,7 +79,7 @@ export function Landing() {
 export function Pricing() {
   return (
     <div data-testid="marketing-pricing" style={{ minHeight: '100vh', background: '#fff' }}>
-      <Nav />
+      <MarketingNav />
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '56px 28px' }}>
         <h1 style={{ fontSize: 30, fontFamily: FONT, color: P.ink }}>Pricing</h1>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
@@ -123,6 +104,7 @@ export function Pricing() {
           ))}
         </div>
       </section>
+      <MarketingFooter />
     </div>
   );
 }

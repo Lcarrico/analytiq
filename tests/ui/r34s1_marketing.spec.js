@@ -1,0 +1,50 @@
+// R34S1E1 (renamed from r29s1_marketing.spec.js — R29S1 precursor slice, itself
+// renamed from r23s1 2026-07-04): shared MarketingNav + MarketingFooter chrome,
+// wired into Landing + Pricing. Marketing.jsx / MarketingNav.jsx / MarketingFooter.jsx.
+import { test, expect } from '@playwright/test';
+
+const NAV_LINKS = ['product', 'solutions', 'templates', 'pricing', 'security', 'docs'];
+const FOOTER_COLUMNS = ['PRODUCT', 'SOLUTIONS', 'RESOURCES', 'COMPANY'];
+
+async function expectSharedChrome(page) {
+  const nav = page.getByTestId('marketing-nav');
+  await expect(nav).toBeVisible();
+  for (const link of NAV_LINKS) {
+    await expect(nav.getByTestId(`nav-${link}`)).toBeVisible();
+  }
+  await expect(nav.getByTestId('start-free')).toBeVisible();
+
+  const footer = page.getByTestId('marketing-footer');
+  await expect(footer).toBeVisible();
+  for (const heading of FOOTER_COLUMNS) {
+    await expect(footer.getByText(heading, { exact: true })).toBeVisible();
+  }
+  await expect(footer.getByText('SOC 2 Type II · GDPR · ISO 27001', { exact: true })).toBeVisible();
+}
+
+test('landing renders hero, value cards, shared nav and footer', async ({ page }) => {
+  await page.goto('/');
+  const landing = page.getByTestId('marketing-landing');
+  await expect(landing).toBeVisible();
+  await expect(landing.getByText('0 RAW ROWS TO LLM')).toBeVisible();
+  await expect(landing.getByText('Governed metrics')).toBeVisible();
+  await expect(page.getByTestId('app-sidebar')).toHaveCount(0);   // shell-free
+  await expectSharedChrome(page);
+});
+
+test('pricing shows the four plan cards plus shared nav and footer', async ({ page }) => {
+  await page.goto('/pricing');
+  for (const plan of ['starter', 'team', 'business', 'enterprise']) {
+    await expect(page.getByTestId(`plan-${plan}`)).toBeVisible();
+  }
+  await expect(page.getByTestId('plan-business').getByText(/most popular/i)).toBeVisible();
+  await expectSharedChrome(page);
+});
+
+test('Start Free (nav) still enters the app from both pages', async ({ page }) => {
+  // r15s1_router.spec.js already covers Landing; this locks the same contract
+  // now that the button lives inside the shared MarketingNav, reused on Pricing too.
+  await page.goto('/pricing');
+  await page.getByTestId('marketing-nav').getByTestId('start-free').click();
+  await expect.poll(() => new URL(page.url()).pathname).toBe('/app');
+});

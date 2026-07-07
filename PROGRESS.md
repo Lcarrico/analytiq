@@ -391,8 +391,19 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R33 release regression + zero-key boot recorded: backend 448/448 · UI 166/166 · boot check PASSED — 8 services local, client shell 200 (2026-07-06) — **RELEASE R33 CLOSED (8/8 stories)**
 
 ## Release R34 — PRD Phase 5: Marketing (pending)
+
+> **Environment note (found 2026-07-06, applies to all of R34):** `playwright.config.mjs`
+> launches its browser via `@sparticuz/chromium` (Lambda-only package); on a native
+> Windows checkout it extracts a Linux ELF binary that cannot execute, so every
+> Playwright UI spec fails with `spawn ENOENT` regardless of what it asserts —
+> confirmed pre-existing (unrelated specs fail identically) and out of scope for
+> a marketing-content release to fix. Each R34 story still gets a written/updated
+> spec for RED/GREEN discipline and future execution, but specs are not run in
+> this environment; verification instead relies on `npm run build` + the backend
+> `pytest` suite + manual review. Flagged for a separate, scoped fix later.
+
 ### Milestone UP-E — Marketing at parity
-- [ ] R34S1E1-US1 MarketingNav + dark 5-col footer [was R29S1E1]
+- [x] R34S1E1-US1 MarketingNav + dark 5-col footer [was R29S1E1] ✅ 2026-07-06 (MarketingNav.jsx + MarketingFooter.jsx; wired into Landing/Pricing; Logo extended w/ markFill/iqColor; spec r34s1_marketing written, not executed — see environment note; backend 467/469, 2 pre-existing unrelated failures — test_pdf_and_png_export ModuleNotFoundError, test_schedule_accepts_timezone assertion, confirmed untouched by this change)
 - [ ] R34S1E2-US1 landing rebuild (hero preview, BI compare, use cases, trust, CTA) [was R29S1E2]
 - [ ] R34S1E3-US1 product page (stepper + 5 stages) [was R29S1E3]
 - [ ] R34S1E4-US1 pricing restyle (toggle/table/FAQ; r30s1 data lock stays green) [was R29S1E4]

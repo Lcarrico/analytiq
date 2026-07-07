@@ -1543,7 +1543,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [ ] 7 marketing pages at designed routes; shared nav/footer; pricing restyle keeps R30S1E1 data lock green
 
 ### Sprint R34S1 — Shared chrome + Landing + Product + Pricing restyle <!-- task elaboration pending Phase 1a -->
-- [ ] **R34S1E1-US1** — MarketingNav (logo mark + 6 links + Log in/Start free) + dark 5-col MarketingFooter (+legal bar) shared components · [was R29S1E1]
+- [x] **R34S1E1-US1** — MarketingNav (logo mark + 6 links + Log in/Start free) + dark 5-col MarketingFooter (+legal bar) shared components · [was R29S1E1] ✅ 2026-07-06 (MarketingNav.jsx + MarketingFooter.jsx, wired into Landing/Pricing; Logo extended with markFill/iqColor; spec r34s1_marketing — written, not executed, see PROGRESS.md environment note)
 - [ ] **R34S1E2-US1** — landing rebuild (dark hero + populated live-build preview, BI comparison, value props w/ icon chips, use-cases 3×2, trust strip, CTA band w/ mono terminal); `r29s1_marketing.spec.js` → `r34s1_marketing.spec.js` rename-on-touch · [was R29S1E2]
 - [ ] **R34S1E3-US1** — product page (header, sticky 5-step stepper, 5 alternating stage sections, dark CTA) · [was R29S1E3]
 - [ ] **R34S1E4-US1** — pricing restyle (header + Monthly/Annual −20% toggle, /mo mono prices, descriptors, CTAs per card, floating MOST POPULAR pill + 2px glow, dark Enterprise card, comparison table, FAQ accordion, footer). **AC: plan data still matches ch02 exactly — `r30s1_pricing_data.spec.js` stays green (regression lock)** · [was R29S1E4]

@@ -58,12 +58,15 @@ export function Icon({ name, size = 15, style, ...rest }) {
 }
 
 // Shared logo — 22px shell · 24px marketing · 30px hub (§0.2 row 2).
-export function Logo({ size = 22, withWordmark = true, wordmarkSize = 14.5, dark = false }) {
+// markFill/iqColor let a darker host surface (e.g. the marketing footer, R34S1E1)
+// request the mockup's slightly lighter mark/accent without a second component.
+export function Logo({ size = 22, withWordmark = true, wordmarkSize = 14.5, dark = false,
+                       markFill = '#0f172a', iqColor = '#2563eb' }) {
   const u = size / 24;
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: Math.round(size * 0.41) }}>
       <svg width={size} height={size} viewBox="0 0 24 24" aria-label="AnalytIQ">
-        <rect width="24" height="24" rx="6" fill="#0f172a" />
+        <rect width="24" height="24" rx="6" fill={markFill} />
         <rect x="5.5" y="12" width="3.2" height="6.5" rx="1.2" fill="#60a5fa" />
         <rect x="10.4" y="8.5" width="3.2" height="10" rx="1.2" fill="#3b82f6" />
         <rect x="15.3" y="5" width="3.2" height="13.5" rx="1.2" fill="#2563eb" />
@@ -71,7 +74,7 @@ export function Logo({ size = 22, withWordmark = true, wordmarkSize = 14.5, dark
       {withWordmark && (
         <span style={{ fontSize: wordmarkSize, fontWeight: 700, fontFamily: FONT,
                        color: dark ? '#e2e8f0' : '#0f172a' }}>
-          Analyt<span style={{ color: '#2563eb' }}>IQ</span>
+          Analyt<span style={{ color: iqColor }}>IQ</span>
         </span>
       )}
     </span>
