@@ -104,3 +104,18 @@ A running log of every meaningful change made while implementing Release R34 (th
 - **`<Navigate to="..." replace />`** — the React Router component used for the bare `/solutions` → `/solutions/executives` redirect. `replace` means it swaps the browser history entry instead of adding a new one, so the back button doesn't get stuck bouncing between the two.
 
 ---
+
+## R34S2E2 — Templates gallery
+
+**What changed:** New file `client/src/screens/MarketingTemplates.jsx` (route `/templates`): a 250px filter rail (category — single-select, "All templates" or one of 7 categories; type — multi-select checkboxes for Predictive/Monitoring/Diagnostic) plus a search box, filtering a grid of the 10 template cards from `docs/specs/mockups/Marketing Templates.dc.html`. Filtering is **real**, not decorative — implemented as plain array `.filter()` over a static `TEMPLATES` data array, computed with `useMemo` so it only recalculates when category/types/search actually change.
+
+**Why real filtering, not just a static grid:** the mockup's filter rail has genuine checkbox interactivity (a filled checkbox with a checkmark icon for the selected state vs. an empty bordered box) — building it as inert decoration would leave a UI that visibly invites clicking but does nothing, which is worse than not having the control at all. Since there are only 10 static items, `.filter()` in memory is trivially fast; no backend/API call is needed for something this small.
+
+**A small pre-existing inconsistency in the mockup itself, preserved rather than "fixed":** one template ("Margin Variance") is tagged `REVENUE · VARIANCE`, but the Type filter only offers 3 checkboxes — Predictive, Monitoring, Diagnostic — with no "Variance" option. That means this one card can never be *shown or hidden* by the Type filter (it simply isn't affected either way), only by the Category filter. This is a literal, faithful reproduction of what the mockup itself specifies (its own Type checkbox list is genuinely incomplete relative to its own tag vocabulary) — not a bug introduced here, and not something to silently "fix" by inventing a 4th checkbox the mockup never asked for.
+
+**Tech concepts worth knowing:**
+- **`useMemo`** — a React hook that caches (memoizes) the result of a calculation and only redoes it when its listed dependencies (`[category, types, search]`) actually change, rather than on every single re-render. For 10 items this has no real performance impact; the value here is mostly about the pattern (deriving one piece of state from others cleanly) rather than raw speed.
+- **`Set` for multi-select state** — `types` is a JS `Set` of currently-checked type names rather than an array. Checking whether something is selected (`types.has(t)`) and adding/removing it are both simpler and slightly faster with a `Set` than searching/splicing an array by value every time.
+- **Single-select vs. multi-select filters modeled differently on purpose** — Category uses one plain string (`category === 'All templates'`), Type uses a `Set` — because the mockup itself shows only one category ever "checked" at a time (acts like a radio group even though it's drawn with checkbox visuals) while all 3 type boxes are independent. The data model follows the actual intended interaction, not just "everything is a checkbox so everything is a Set."
+
+---

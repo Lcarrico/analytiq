@@ -1,6 +1,8 @@
 // R34S2E1 — Solutions template (/solutions/:persona), 6 persona routes sharing
 // one component. Per docs/specs/mockups/Marketing Solutions.dc.html.
 // MarketingSolutions.jsx.
+// R34S2E2 — Templates gallery (/templates): filter rail + search + 10 cards.
+// Per Marketing Templates.dc.html. MarketingTemplates.jsx.
 import { test, expect } from '@playwright/test';
 
 const NAV_LINKS = ['product', 'solutions', 'templates', 'pricing', 'security', 'docs'];
@@ -46,4 +48,23 @@ test('all 6 persona tabs are present and switch the page content', async ({ page
 test('bare /solutions redirects to the Executives persona', async ({ page }) => {
   await page.goto('/solutions');
   await expect.poll(() => new URL(page.url()).pathname).toBe('/solutions/executives');
+});
+
+test('templates gallery shows all 10 cards and filters by category, type, and search', async ({ page }) => {
+  await page.goto('/templates');
+  const templates = page.getByTestId('marketing-templates');
+  await expect(templates).toBeVisible();
+  await expect(templates.getByText('10', { exact: true })).toBeVisible();
+  await expect(templates.getByTestId('template-card-revenue-forecast')).toBeVisible();
+  await expect(templates.getByTestId('template-card-anomaly-monitor')).toBeVisible();
+
+  await templates.getByText('Churn', { exact: true }).click();
+  await expect(templates.getByTestId('template-card-customer-churn-risk')).toBeVisible();
+  await expect(templates.getByTestId('template-card-revenue-forecast')).toHaveCount(0);
+
+  await templates.getByText('All templates', { exact: true }).click();
+  await templates.getByTestId('templates-search').fill('margin');
+  await expect(templates.getByTestId('template-card-margin-variance')).toBeVisible();
+  await expect(templates.getByTestId('template-card-revenue-forecast')).toHaveCount(0);
+  await expectSharedChrome(page);
 });
