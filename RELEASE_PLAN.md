@@ -1550,7 +1550,7 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 - [x] R34S1 sprint regression recorded — backend 467/469 (same 2 pre-existing failures across all 4 stories, confirmed unrelated); UI not executed this engagement — see environment note above
 
 ### Sprint R34S2 — Solutions + Templates + Security + Docs <!-- task elaboration pending Phase 1a -->
-- [ ] **R34S2E1-US1** — solutions template ×6 persona routes (tabs, hero + dark digest card, starting points ×3, quote band, callouts, CTA) · [was R29S2E1]
+- [x] **R34S2E1-US1** — solutions template ×6 persona routes (tabs, hero + dark digest card, starting points ×3, quote band, callouts, CTA) · [was R29S2E1] ✅ 2026-07-06 (new MarketingSolutions.jsx, /solutions/:persona route + /solutions redirect; 5 of 6 personas' copy extrapolated — user-approved — since the mockup only specifies Executives; spec r34s2_marketing written, not executed; backend 465/469, 2 more flaky failures confirmed pass-in-isolation/unrelated)
 - [ ] **R34S2E2-US1** — templates gallery (250px filter rail, grid header w/ count + search, 10 template cards w/ SVG art) · [was R29S2E2]
 - [ ] **R34S2E3-US1** — security page (compliance pills, sticky jump nav, 8 tinted section cards) · [was R29S2E3]
 - [ ] **R34S2E4-US1** — docs page (slim docs nav w/ ⌘K, nav tree, Quickstart article w/ terminal block + amber callout, on-this-page rail) · [was R29S2E4]
