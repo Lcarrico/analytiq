@@ -23,6 +23,7 @@ import { Landing, Pricing } from './screens/Marketing';
 import MarketingProduct from './screens/MarketingProduct';   // R34S1E3
 import MarketingSolutions from './screens/MarketingSolutions';   // R34S2E1
 import MarketingTemplates from './screens/MarketingTemplates';   // R34S2E2
+import MarketingSecurity from './screens/MarketingSecurity';   // R34S2E3
 import { ForgotPassword, Login, Register, SsoCallback, VerifyEmail } from './screens/Auth';   // R31S1E1/E2 — standalone
 import { OnboardingSourceHealth, OnboardingStart, OnboardingTemplates, OnboardingWorkspace } from './screens/Onboarding';   // R31S1E3
 import { Forbidden, useRole } from './components/roles';
@@ -210,6 +211,7 @@ export default function App() {
           <Route path="/solutions/:persona" element={<MarketingSolutions />} />   {/* R34S2E1 */}
           <Route path="/solutions" element={<Navigate to="/solutions/executives" replace />} />
           <Route path="/templates" element={<MarketingTemplates />} />   {/* R34S2E2 */}
+          <Route path="/security" element={<MarketingSecurity />} />   {/* R34S2E3 */}
           <Route path="/login" element={<Login />} />       {/* R31S1E1 */}
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />  {/* R31S1E2 */}

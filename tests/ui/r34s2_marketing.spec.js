@@ -3,6 +3,8 @@
 // MarketingSolutions.jsx.
 // R34S2E2 — Templates gallery (/templates): filter rail + search + 10 cards.
 // Per Marketing Templates.dc.html. MarketingTemplates.jsx.
+// R34S2E3 — Security page (/security): compliance pills, jump nav, 8 section
+// cards. Per Marketing Security.dc.html. MarketingSecurity.jsx.
 import { test, expect } from '@playwright/test';
 
 const NAV_LINKS = ['product', 'solutions', 'templates', 'pricing', 'security', 'docs'];
@@ -66,5 +68,24 @@ test('templates gallery shows all 10 cards and filters by category, type, and se
   await templates.getByTestId('templates-search').fill('margin');
   await expect(templates.getByTestId('template-card-margin-variance')).toBeVisible();
   await expect(templates.getByTestId('template-card-revenue-forecast')).toHaveCount(0);
+  await expectSharedChrome(page);
+});
+
+test('security page renders header, compliance pills, jump nav, and all 8 sections', async ({ page }) => {
+  await page.goto('/security');
+  const security = page.getByTestId('marketing-security');
+  await expect(security).toBeVisible();
+  await expect(security.getByRole('heading', { name: 'Built so your data team says yes' })).toBeVisible();
+  for (const pill of ['SOC 2 Type II', 'ISO 27001', 'GDPR / CCPA']) {
+    await expect(security.getByText(pill, { exact: true })).toBeVisible();
+  }
+  for (const title of [
+    'No raw data ever reaches an LLM', 'Read-only warehouse access', 'Deterministic validation gates',
+    'PII detected, masked, human-reviewed', 'Every action in the audit log',
+    'Row-level security with a simulator', 'Signed, expiring share & embed tokens',
+    'Workspace-scoped everything',
+  ]) {
+    await expect(security.getByText(title, { exact: true })).toBeVisible();
+  }
   await expectSharedChrome(page);
 });
