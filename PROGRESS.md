@@ -405,7 +405,7 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 ### Milestone UP-E — Marketing at parity
 - [x] R34S1E1-US1 MarketingNav + dark 5-col footer [was R29S1E1] ✅ 2026-07-06 (MarketingNav.jsx + MarketingFooter.jsx; wired into Landing/Pricing; Logo extended w/ markFill/iqColor; spec r34s1_marketing written, not executed — see environment note; backend 467/469, 2 pre-existing unrelated failures — test_pdf_and_png_export ModuleNotFoundError, test_schedule_accepts_timezone assertion, confirmed untouched by this change)
 - [x] R34S1E2-US1 landing rebuild (hero preview, BI compare, use cases, trust, CTA) [was R29S1E2] ✅ 2026-07-06 (7 sub-components in Marketing.jsx; hero CTA intentionally points at /app matching nav, not mockup's /register — flagged as a follow-up product decision in tracked_changes.md; backend 467/469, pre-existing failures unchanged)
-- [ ] R34S1E3-US1 product page (stepper + 5 stages) [was R29S1E3]
+- [x] R34S1E3-US1 product page (stepper + 5 stages) [was R29S1E3] ✅ 2026-07-06 (new file, data-driven STAGES array w/ reverse-layout flag; caught+fixed a Fragment-key JSX bug before running anything)
 - [ ] R34S1E4-US1 pricing restyle (toggle/table/FAQ; r30s1 data lock stays green) [was R29S1E4]
 - [ ] R34S1 sprint regression recorded
 - [ ] R34S2E1-US1 solutions ×6 · R34S2E2-US1 templates · R34S2E3-US1 security · R34S2E4-US1 docs [was R29S2E1–E4]

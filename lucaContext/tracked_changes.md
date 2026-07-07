@@ -53,3 +53,20 @@ A running log of every meaningful change made while implementing Release R34 (th
 - **Inline SVG as illustration, not an image file** — every small chart/icon in the mockup (and now the rebuilt page) is literal SVG markup embedded directly in the component, not a `.png`/`.svg` file reference. This keeps everything in one file, lets colors reuse the same token system, and avoids an extra network request per icon.
 
 ---
+
+## R34S1E3 — Product page (new)
+
+**What changed:** New file `client/src/screens/MarketingProduct.jsx` — the `/product` page didn't exist before this story. Built per `docs/specs/mockups/Marketing Product.dc.html` and the `03 - Product Page` build spec: a centered header, a sticky 5-step anchor stepper (Understand → Validate → Build → Predict → Ship), 5 alternating-background/alternating-layout stage sections (each pairing explanatory text with a distinct visual — a plan-review chat card, a dark validation log, a gold-table build card with progress bar, a model leaderboard, and a mini dashboard preview), and a closing dark CTA band. New route `/product` added in `App.jsx`. Extended `r34s1_marketing.spec.js` with a test covering the header, all 5 stage headings, and the CTA.
+
+**Why:**
+- This is a genuinely new page (nothing to "rebuild," unlike Landing) — the mockup's `data-screen-label="Product page /product"` maps directly to the new route.
+- The 5 stages are data-driven (a `STAGES` array), each with a `reverse` flag controlling whether the text or the visual comes first in the grid — this mirrors the mockup's own alternating zebra layout (`1fr 1.1fr` vs `1.1fr 1fr` grid columns) without needing 5 near-duplicate JSX blocks; only the shared `Stage` component cares about the direction.
+- The sticky stepper's anchor links (`href="#stage-understand"`, etc.) are plain HTML fragment links, not React Router routes — clicking one just scrolls the browser to that section's `id` on the same page. No JavaScript needed for that part; it's a native browser feature.
+
+**A React-specific bug worth understanding — Fragment keys:** Initially wrote the stepper's repeating step+connector pairs using the JSX shorthand fragment (`<>...</>`) inside a `.map()`. This is a real mistake, not just style: React requires every element in a list (returned from `.map()`) to have a unique `key` prop so it can track which item is which across re-renders, but the shorthand `<>` fragment syntax **cannot accept a `key` prop at all** — only the explicit `<Fragment key={...}>` form (imported from `'react'`) can. Caught it before running anything by re-reading the code, not by a failed test — a good example of why "does this actually satisfy React's rules," not just "does this look right," matters when reviewing JSX.
+
+**Tech concepts worth knowing:**
+- **`useParams`-free routing for anchors** — same-page navigation (the stepper) doesn't need React Router at all; only *different* URLs (`/product` → `/pricing`) go through `<Link>`. A common beginner confusion is reaching for router features for in-page scrolling, which plain `#id` anchors already handle natively.
+- **Grid column order via a boolean flag** (`stage.reverse`) instead of writing the JSX twice — a small example of the same "data describes the difference, one component renders it" idea used for `USE_CASES` and `VALUE_CARDS` in the Landing rebuild.
+
+---

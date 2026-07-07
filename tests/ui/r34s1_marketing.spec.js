@@ -3,6 +3,8 @@
 // wired into Landing + Pricing. Marketing.jsx / MarketingNav.jsx / MarketingFooter.jsx.
 // R34S1E2: extended for the Landing rebuild (dark hero, BI comparison, value
 // props, use cases, trust strip, CTA band) per Marketing Landing.dc.html.
+// R34S1E3: extended for the new Product page (stepper + 5 stages) per
+// Marketing Product.dc.html. MarketingProduct.jsx.
 import { test, expect } from '@playwright/test';
 
 const NAV_LINKS = ['product', 'solutions', 'templates', 'pricing', 'security', 'docs'];
@@ -47,6 +49,23 @@ test('pricing shows the four plan cards plus shared nav and footer', async ({ pa
     await expect(page.getByTestId(`plan-${plan}`)).toBeVisible();
   }
   await expect(page.getByTestId('plan-business').getByText(/most popular/i)).toBeVisible();
+  await expectSharedChrome(page);
+});
+
+test('product page renders header, stepper, all 5 stages, and CTA band', async ({ page }) => {
+  await page.goto('/product');
+  const product = page.getByTestId('marketing-product');
+  await expect(product).toBeVisible();
+  await expect(product.getByRole('heading', { name: 'A governed pipeline, not a chatbot' })).toBeVisible();
+  for (const label of ['Understand', 'Validate metrics', 'Build gold data', 'Train & backtest', 'Assemble & share']) {
+    await expect(product.getByText(label, { exact: true })).toBeVisible();
+  }
+  await expect(product.getByText('Your question becomes a reviewable plan')).toBeVisible();
+  await expect(product.getByText('Deterministic gates, not vibes')).toBeVisible();
+  await expect(product.getByText('An immutable gold table per answer')).toBeVisible();
+  await expect(product.getByText('Forecasts earn their place')).toBeVisible();
+  await expect(product.getByText('A living artifact, not a screenshot')).toBeVisible();
+  await expect(product.getByRole('heading', { name: 'Watch it build your first dashboard' })).toBeVisible();
   await expectSharedChrome(page);
 });
 
