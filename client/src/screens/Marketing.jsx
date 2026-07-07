@@ -2,6 +2,9 @@
 // enforces it) · R34S1E1: shared MarketingNav/MarketingFooter chrome · R34S1E2:
 // Landing rebuild per docs/specs/mockups/Marketing Landing.dc.html (dark hero +
 // live-build preview, BI comparison, value props, use cases, trust strip, CTA band).
+// R34S1E4: Pricing restyle (toggle, /mo cards, comparison table, FAQ) — PLANS
+// data below is untouched, only its presentation changed.
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FONT, MONO, P } from '../tokens';
 import MarketingNav from '../components/MarketingNav';
@@ -567,34 +570,214 @@ const PLANS = [
    []],
 ];
 
+// Presentation-only metadata, keyed by PLANS index — descriptor/CTA copy is new
+// content (not covered by the data lock, which only governs name/price/feats/excluded).
+const PLAN_META = [
+  { descriptor: 'Try the loop on one dataset.', cta: 'Start free', filled: false },
+  { descriptor: 'For teams shipping weekly answers.', cta: 'Start trial', filled: false },
+  { descriptor: 'Governance for the whole org.', cta: 'Start trial', filled: true },
+  { descriptor: 'Scale, isolation, and guarantees.', cta: 'Talk to sales', filled: true, dark: true },
+];
+
+const COMPARE_ROWS = [
+  ['Monthly tokens included', ['100K', '500K', '2M', 'custom']],
+  ['Predictive models + model cards', ['—', '✓', '✓', '✓']],
+  ['SSO (SAML/OIDC) + row-level security', ['—', '—', '✓', '✓']],
+  ['Signed public links + embeds', ['—', 'links only', '✓', '✓']],
+  ['Audit log export · VPC · SLA', ['—', '—', 'audit only', '✓']],
+];
+
+const FAQ_ITEMS = [
+  ['What counts as a token?',
+    "Tokens meter the AI planning work — understanding questions, planning dashboards, writing narratives. Viewing dashboards, filtering, and scheduled refreshes of existing artifacts don't consume tokens."],
+  ['What happens when we hit our token limit?',
+    'Overage billing kicks in on plans that support it (Business); Starter and Team pause new AI-planning work until the next cycle or an upgrade.'],
+  ['Does my data ever leave my warehouse?',
+    'No. AnalytIQ connects read-only and sends the model schemas and aggregate shapes — never raw rows.'],
+  ['Can we switch plans or cancel anytime?',
+    'Yes, from Billing at any time — changes apply at the start of your next cycle.'],
+];
+
+function PriceToggle({ annual, onChange }) {
+  // Cosmetic only: PLANS has one price per plan (no separate monthly/annual
+  // figures), so toggling never changes a displayed number — there's no
+  // annual-pricing data model yet. Matches the mockup's visual state.
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${P.borderStrong}`,
+                  borderRadius: 999, overflow: 'hidden', marginTop: 6 }}>
+      <span onClick={() => onChange(false)} style={{ display: 'inline-flex', alignItems: 'center',
+                  height: 34, padding: '0 17px', background: annual ? '#fff' : P.ink,
+                  color: annual ? P.muted : '#fff', fontSize: 12.5,
+                  fontWeight: annual ? 500 : 600, fontFamily: FONT, cursor: 'pointer' }}>
+        Monthly
+      </span>
+      <span onClick={() => onChange(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: 7,
+                  height: 34, padding: '0 17px', background: annual ? P.ink : '#fff',
+                  color: annual ? '#fff' : P.muted, fontSize: 12.5,
+                  fontWeight: annual ? 600 : 500, fontFamily: FONT, cursor: 'pointer' }}>
+        Annual
+        <span style={{ display: 'inline-flex', height: 17, padding: '0 7px', borderRadius: 999,
+                      background: P.green, fontFamily: MONO, fontSize: 8.5, fontWeight: 600,
+                      alignItems: 'center' }}>−20%</span>
+      </span>
+    </div>
+  );
+}
+
+function PlanCard({ name, price, feats, excluded, i }) {
+  const meta = PLAN_META[i];
+  const isBusiness = i === 2;
+  const isDark = !!meta.dark;
+  return (
+    <div data-testid={`plan-${name.toLowerCase()}`} style={{
+      position: 'relative', borderRadius: 13, padding: 24, display: 'flex', flexDirection: 'column',
+      gap: 13,
+      border: isBusiness ? `2px solid ${P.accent}` : isDark ? `1px solid ${P.darkBg}` : `1px solid ${P.border}`,
+      boxShadow: isBusiness ? '0 16px 40px rgba(37,99,235,.12)' : 'none',
+      background: isDark ? P.darkBg : '#fff',
+    }}>
+      {isBusiness && (
+        <span style={{ position: 'absolute', top: -11, left: 20, display: 'inline-flex', height: 22,
+                      padding: '0 11px', borderRadius: 999, background: P.accent, color: '#fff',
+                      fontFamily: MONO, fontSize: 9, fontWeight: 600, alignItems: 'center',
+                      letterSpacing: '.06em' }}>
+          MOST POPULAR
+        </span>
+      )}
+      <span style={{ fontSize: 15, fontWeight: 600, color: isDark ? '#f1f5f9' : P.ink, fontFamily: FONT }}>
+        {name}
+      </span>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 5 }}>
+        <span style={{ fontFamily: MONO, fontSize: 30, fontWeight: 600, color: isDark ? '#f1f5f9' : P.ink }}>
+          {price}
+        </span>
+        {price !== 'Custom' && <span style={{ fontSize: 12, color: P.faint }}>/mo</span>}
+      </div>
+      <span style={{ fontSize: 12, color: isDark ? P.darkMuted : P.muted, lineHeight: 1.5, fontFamily: FONT }}>
+        {meta.descriptor}
+      </span>
+      <Link to={name === 'Enterprise' ? '/' : '/app'} style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: 38, borderRadius: 9,
+        fontSize: 13, fontWeight: 600, fontFamily: FONT, textDecoration: 'none',
+        ...(meta.filled
+          ? { background: P.accent, color: '#fff' }
+          : { border: `1px solid ${P.borderStrong}`, color: isDark ? '#f1f5f9' : P.ink }),
+      }}>
+        {meta.cta}
+      </Link>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 12.5, fontFamily: FONT,
+                    paddingTop: 4 }}>
+        {/* r30s1_pricing_data.spec.js asserts the exact text "✓ {f}" / "— {f}" (with a
+            real space) and reads this element's own color — a flex `gap` only adds
+            visual spacing, not a text character, so the space here must be literal. */}
+        {feats.map(f => (
+          <div key={f} style={{ color: isDark ? '#cbd5e1' : P.body }}>
+            <span style={{ color: isDark ? P.codeGreen : P.green, fontWeight: 700 }}>✓</span> {f}
+          </div>
+        ))}
+        {excluded.map(f => (
+          <div key={f} style={{ color: P.faint }}>
+            <span style={{ color: P.grayBar, fontWeight: 700 }}>—</span> {f}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CompareTable() {
+  return (
+    <div style={{ padding: '14px 64px 40px', maxWidth: 1328, margin: '0 auto', width: '100%' }}>
+      <div style={{ border: `1px solid ${P.border}`, borderRadius: 12, overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr 1fr', padding: '0 22px',
+                      height: 42, alignItems: 'center', background: P.tableHeadBg,
+                      borderBottom: `1px solid ${P.border}`, fontFamily: MONO, fontSize: 9.5,
+                      fontWeight: 600, letterSpacing: '.06em', color: P.muted }}>
+          <span>COMPARE</span>
+          <span style={{ textAlign: 'center' }}>STARTER</span>
+          <span style={{ textAlign: 'center' }}>TEAM</span>
+          <span style={{ textAlign: 'center', color: P.accentHover }}>BUSINESS</span>
+          <span style={{ textAlign: 'center' }}>ENTERPRISE</span>
+        </div>
+        {COMPARE_ROWS.map(([label, cells], i) => (
+          <div key={label} style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr 1fr',
+                      padding: '0 22px', height: 42, alignItems: 'center', fontSize: 12.5, color: P.body,
+                      borderBottom: i < COMPARE_ROWS.length - 1 ? `1px solid ${P.rowFaint}` : 'none' }}>
+            <span>{label}</span>
+            {cells.map((cell, ci) => (
+              <span key={ci} style={{
+                textAlign: 'center',
+                ...(cell === '✓' ? { color: P.green, fontWeight: 700 }
+                  : cell === '—' ? { color: P.grayBar, fontWeight: 700 }
+                  : { fontFamily: MONO, fontSize: cell.length > 4 ? 10.5 : 11, color: P.muted }),
+              }}>
+                {cell}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Faq() {
+  const [openIndex, setOpenIndex] = useState(0);
+  return (
+    <div style={{ padding: '24px 64px 64px', maxWidth: 860, margin: '0 auto', width: '100%',
+                  display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <h2 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 700, color: P.ink, textAlign: 'center',
+                  fontFamily: FONT }}>
+        Questions
+      </h2>
+      {FAQ_ITEMS.map(([q, a], i) => {
+        const open = openIndex === i;
+        return (
+          <div key={q} onClick={() => setOpenIndex(open ? -1 : i)}
+               style={{ border: `1px solid ${P.border}`, borderRadius: 10, padding: '15px 18px',
+                        display: 'flex', flexDirection: 'column', gap: 8, cursor: 'pointer' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 13.5, fontWeight: 600, color: P.ink, fontFamily: FONT }}>{q}</span>
+              <svg width="10" height="10" viewBox="0 0 9 9">
+                {open
+                  ? <path d="m2 3.5 2.5 2.5L7 3.5" fill="none" stroke={P.muted} strokeWidth="1.4" strokeLinecap="round" />
+                  : <path d="m3 2 3 2.5L3 7" fill="none" stroke={P.muted} strokeWidth="1.4" strokeLinecap="round" />}
+              </svg>
+            </div>
+            {open && (
+              <span style={{ fontSize: 13, lineHeight: 1.6, color: P.muted, fontFamily: FONT }}>{a}</span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function Pricing() {
+  const [annual, setAnnual] = useState(true);
   return (
     <div data-testid="marketing-pricing" style={{ minHeight: '100vh', background: '#fff' }}>
       <MarketingNav />
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '56px 28px' }}>
-        <h1 style={{ fontSize: 30, fontFamily: FONT, color: P.ink }}>Pricing</h1>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
-          {PLANS.map(([name, price, feats, excluded], i) => (
-            <div key={name} data-testid={`plan-${name.toLowerCase()}`}
-                 style={{ border: `1px solid ${i === 2 ? P.accent : P.border}`, borderRadius: 12,
-                          padding: 18 }}>
-              {i === 2 && <div style={{ fontFamily: MONO, fontSize: 9.5, color: P.accentHover,
-                                        textTransform: 'uppercase' }}>most popular</div>}
-              <div style={{ fontSize: 16, fontWeight: 700, fontFamily: FONT, color: P.ink }}>{name}</div>
-              <div style={{ fontSize: 26, fontFamily: MONO, fontWeight: 600, color: P.ink,
-                            margin: '6px 0' }}>{price}</div>
-              {feats.map(f => (
-                <div key={f} style={{ fontSize: 12.5, fontFamily: FONT, color: P.body,
-                                      padding: '3px 0' }}>✓ {f}</div>
-              ))}
-              {excluded.map(f => (
-                <div key={f} style={{ fontSize: 12.5, fontFamily: FONT, color: P.faint,
-                                      padding: '3px 0' }}>— {f}</div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </section>
+      <div style={{ padding: '56px 64px 22px', display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', gap: 14, textAlign: 'center' }}>
+        <h1 style={{ margin: 0, fontSize: 38, fontWeight: 700, letterSpacing: '-.02em', color: P.ink,
+                    fontFamily: FONT }}>
+          Pay for answers, not seats you don't use
+        </h1>
+        <p style={{ margin: 0, fontSize: 15, color: P.muted, fontFamily: FONT }}>
+          Every plan includes governed metrics, validation gates, and read-only connections.
+        </p>
+        <PriceToggle annual={annual} onChange={setAnnual} />
+      </div>
+      <div style={{ padding: '26px 64px 30px', maxWidth: 1328, margin: '0 auto', display: 'grid',
+                    gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
+        {PLANS.map(([name, price, feats, excluded], i) => (
+          <PlanCard key={name} name={name} price={price} feats={feats} excluded={excluded} i={i} />
+        ))}
+      </div>
+      <CompareTable />
+      <Faq />
       <MarketingFooter />
     </div>
   );

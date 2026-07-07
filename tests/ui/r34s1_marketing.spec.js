@@ -5,6 +5,9 @@
 // props, use cases, trust strip, CTA band) per Marketing Landing.dc.html.
 // R34S1E3: extended for the new Product page (stepper + 5 stages) per
 // Marketing Product.dc.html. MarketingProduct.jsx.
+// R34S1E4: extended for the Pricing restyle (toggle, comparison table, FAQ).
+// The plan-card data facts themselves are covered by the separate hard-lock
+// spec, r30s1_pricing_data.spec.js — this file only checks the new chrome.
 import { test, expect } from '@playwright/test';
 
 const NAV_LINKS = ['product', 'solutions', 'templates', 'pricing', 'security', 'docs'];
@@ -43,12 +46,20 @@ test('landing renders dark hero, BI comparison, value cards, use cases, trust st
   await expectSharedChrome(page);
 });
 
-test('pricing shows the four plan cards plus shared nav and footer', async ({ page }) => {
+test('pricing shows the four plan cards, toggle, compare table, FAQ, plus shared nav and footer', async ({ page }) => {
   await page.goto('/pricing');
+  const pricing = page.getByTestId('marketing-pricing');
+  await expect(pricing.getByRole('heading', { name: "Pay for answers, not seats you don't use" })).toBeVisible();
+  await expect(pricing.getByText('Monthly', { exact: true })).toBeVisible();
+  await expect(pricing.getByText('Annual', { exact: true })).toBeVisible();
   for (const plan of ['starter', 'team', 'business', 'enterprise']) {
     await expect(page.getByTestId(`plan-${plan}`)).toBeVisible();
   }
   await expect(page.getByTestId('plan-business').getByText(/most popular/i)).toBeVisible();
+  await expect(pricing.getByText('COMPARE', { exact: true })).toBeVisible();
+  await expect(pricing.getByText('Monthly tokens included', { exact: true })).toBeVisible();
+  await expect(pricing.getByRole('heading', { name: 'Questions' })).toBeVisible();
+  await expect(pricing.getByText('What counts as a token?', { exact: true })).toBeVisible();
   await expectSharedChrome(page);
 });
 
