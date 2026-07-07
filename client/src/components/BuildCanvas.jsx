@@ -288,10 +288,16 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
       try {
         const [r, g] = await Promise.all([api.getPipelineRun(runId), api.pipelineDag(runId)]);
         if (stop) return;
-        setDag(g);
         setRun(r);
         setStatus(r.status);
-        if (r.status === 'done' || r.status === 'failed') return;
+        if (r.status === 'done' || r.status === 'failed') {
+          // the dag snapshot raced the status fetch — reconcile once with the
+          // settled final state so no stage chip freezes mid-run (root-caused
+          // in R41's gate; the run itself is verified complete server-side)
+          try { setDag(await api.pipelineDag(runId)); } catch { setDag(g); }
+          return;
+        }
+        setDag(g);
       } catch { /* poll on */ }
       if (!stop) setTimeout(tick, 300);
     };
@@ -495,11 +501,13 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
             <button data-testid="canvas-undo" title="Undo layout change (Ctrl+Z)"
                     onClick={undoGrid}
                     style={{ border: 'none', background: 'none', cursor: 'pointer',
-                             color: P.muted, fontSize: 13, marginRight: 2 }}>↩</button>
+                             color: P.muted, fontSize: 10.5, fontFamily: FONT,
+                             fontWeight: 600, marginRight: 2 }}>Undo</button>
             <button data-testid="canvas-redo" title="Redo (Ctrl+Shift+Z)"
                     onClick={redoGrid}
                     style={{ border: 'none', background: 'none', cursor: 'pointer',
-                             color: P.muted, fontSize: 13, marginRight: 8 }}>↪</button>
+                             color: P.muted, fontSize: 10.5, fontFamily: FONT,
+                             fontWeight: 600, marginRight: 8 }}>Redo</button>
             <button data-testid="add-component"
                     disabled={!artifact || !canvasSessionId}
                     title={artifact ? 'Add a component from the palette'
@@ -792,8 +800,8 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
               )}
               {cell?.locked && (
                 <span data-testid="section-locked"
-                      style={{ position: 'absolute', top: 5, left: 8, fontSize: 10,
-                               color: P.amber, zIndex: 3 }}>🔒</span>
+                      style={{ position: 'absolute', top: 5, left: 8, fontSize: 8, fontFamily: MONO, fontWeight: 700, letterSpacing: '.05em',
+                               color: P.amber, zIndex: 3 }}>LOCKED</span>
               )}
               {multiSel.includes(s.id) && (
                 <span data-testid="section-multisel"
@@ -813,7 +821,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                         style={{ position: 'absolute', right: 2, bottom: 0,
                                  cursor: 'nwse-resize', color: P.faint, fontSize: 13,
                                  userSelect: 'none', touchAction: 'none', zIndex: 3,
-                                 padding: '0 4px' }}>◢</span>
+                                 padding: '0 4px' }}>⋱</span>
                 </>
               )}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
@@ -865,7 +873,7 @@ export default function BuildCanvas({ runId, sessionMetric, onArtifact,
                   <button data-testid="section-delete" title="delete"
                           onClick={e => { e.stopPropagation(); setConfirmDelete(s.id); }}
                           style={{ border: 'none', background: 'none', cursor: 'pointer',
-                                   color: P.muted, fontSize: 12 }}>🗑</button>
+                                   color: P.muted, fontSize: 12 }}>×</button>
                   <button data-testid="section-rename-btn" title="rename"
                           onClick={() => { setRenaming(s.id); setNameDraft(s.title); }}
                           style={{ border: 'none', background: 'none', cursor: 'pointer',

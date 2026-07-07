@@ -9,8 +9,9 @@ test('scan surfaces a proposal; admin approves it in place', async ({ page, requ
     await request.get(`/api/gold/default/gold_predictions?per_page=${i}&page=97`);
   }
 
-  await page.goto('/app');   // R23: '/' is the marketing landing
-  await page.getByTestId('app-sidebar').getByRole('link', { name: 'Admin', exact: true }).click();
+  // R36S2E4: the platform console is directly routed (sidebar Admin is the
+  // workspace overview now) — same nav as r13s1.
+  await page.goto('/app/admin/platform');
   const panel = page.getByTestId('optimizations-panel');
   await expect(panel).toBeVisible();
 

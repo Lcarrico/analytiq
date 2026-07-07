@@ -82,7 +82,7 @@ export default function AdminUsage() {
           <span style={label}>ARTIFACT VIEWS & BUILDS · DAILY · 14D</span>
           <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 9.5,
                          color: P.faint }}>
-            views ▮ light · builds ▮ dark
+            views (light) · builds (dark)
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 72 }}>

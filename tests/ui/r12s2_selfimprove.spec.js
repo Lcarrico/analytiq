@@ -15,8 +15,9 @@ test('signals panel mines and lists routed signals', async ({ page, request }) =
       semantic_layer_version: '1.0.0', governance_manifest_version: '1.0.0' } });
   }
 
-  await page.goto('/app');   // R23: '/' is the marketing landing
-  await page.getByTestId('app-sidebar').getByRole('link', { name: 'Admin', exact: true }).click();
+  // R36S2E4: sidebar Admin lands on the workspace overview; the platform
+  // console (these panels' home) is directly routed — same nav as r13s1.
+  await page.goto('/app/admin/platform');
   const panel = page.getByTestId('signals-panel');
   await expect(panel).toBeVisible();
   await panel.getByTestId('mine-signals-btn').click();

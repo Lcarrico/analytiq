@@ -9,8 +9,9 @@ test('platform screen shows recommendation acceptance rates', async ({ page, req
   await request.post('/api/feedback', {
     data: { rec_type: 'benchmark', rec_id: 2, decision: 'dismiss', category: 'historical' } });
 
-  await page.goto('/app');   // R23: '/' is the marketing landing
-  await page.getByTestId('app-sidebar').getByRole('link', { name: 'Admin', exact: true }).click();
+  // R36S2E4: sidebar Admin lands on the workspace overview; the platform
+  // console (these panels' home) is directly routed — same nav as r13s1.
+  await page.goto('/app/admin/platform');
   const panel = page.getByTestId('feedback-panel');
   await expect(panel).toBeVisible();
   const row = panel.getByTestId('fb-benchmark');

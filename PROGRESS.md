@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R41 · Sprint R41S1 · Epic E1 (patch engine) · R41S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
+**Current position:** Agentic Dashboard Program (Deep-Dive v1.0) · R42 · Sprint R42S1 · Epic E1 (contracts + evidence everywhere) · R42S1E1-US1 — R34 still on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section; R30–R36 closed 2026-07-06)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -554,7 +554,7 @@ re-verify tails after any host-side write.
 
 # Agentic Dashboard Program (Deep-Dive v1.0) — R37–R43
 
-**Current position:** R41 · Sprint R41S1 · Epic E1 (patch engine) · R41S1E1-US1  ← next story
+**Current position:** R42 · Sprint R42S1 · Epic E1 (contracts + evidence everywhere) · R42S1E1-US1  ← next story
 **Spec:** `AnalytIQ Workspace Agentic Dashboard Deep Dive` (2026-07-06) — findings F-01…F-15 spot-verified in code before planning (seeded chart generator, scalar target_metric, un-gated section PATCH, format=html export all confirmed). Suite at planning time: backend 469/469 · UI 186/186 (R30–R36 close, 9b02c62).
 **Standing:** no multi-agents (lead executes inline) · R34 marketing surfaces locked to the junior · legacy workbench specs migrate only with an owning story ID.
 
@@ -591,12 +591,12 @@ re-verify tails after any host-side write.
 - [x] R40S1E4-US1 responsive + parity — done: KPI strip actually reflows (4→2 columns off desktop) and mobile stacks sections full-width (audit's fixed-4 dies); artifact_gen places panels in a `.grid-wrap` CSS grid with the SAME spec geometry the canvas edits (mobile media-query stacks) — export/share/present read the stored render, so parity is by construction (BE-tested: exported html carries the patched spans). Workbench-tab reload hydration is R41S1E4's owned story (F-12, cited in spec). BE 500/500, UI 201/201.
 - [x] R40S1 sprint regression recorded — backend 500/500 · UI 201/201 (0 failed, 2026-07-06) · zero-key boot green — **RELEASE R40 CLOSED** (doc Phase-3 exit: grid persists and is identical across surfaces)
 
-## Release R41 — Agentic refinement loop (pending)
-- [ ] R41S1E1-US1 patch engine: validated ops, layout-instant vs semantic-stale classification, versioned + audited
-- [ ] R41S1E2-US1 chat patch intent post-build: proposed-patch card, preview, confirm; chips real; runId bug retired [F-09]
-- [ ] R41S1E3-US1 selective recompute: semantic patches rerun only dependents, visible refresh states
-- [ ] R41S1E4-US1 resumable sessions: /app/create/:sessionId hydrates messages/spec/runs/artifact/grid [F-12]
-- [ ] R41S1 sprint regression recorded
+## Release R41 — Agentic refinement loop ✅ CLOSED 2026-07-07
+- [x] R41S1E1-US1 patch engine — done: `server/dashboard_patch.py` (5 ops: add/remove/modify component, layout, semantic; every op validated [invalid rejects the whole patch, nothing stored — tested]; layout ops instant + never rerun queries [tested]; semantic ops mark dependents stale IN the spec head; per-op explanations for the preview card) + `POST /api/sessions/<id>/dashboard-patch`, role-gated + audited, one immutable version per patch. BE 507/507, UI 208/208.
+- [x] R41S1E2-US1 chat patch intent [F-09 KILLED] — done: `plan_from_message` (deterministic doc-§6 mapping: add-metric-as-type, grain switch [target = first-named grain], wider/narrower/taller layout, turn-into-type, remove; unresolved metrics come back as a visible checklist, never a bad op) + `POST /api/sessions/<id>/chat-patch` (proposal only; conversation persisted); Workbench: post-build messages propose PATCHES (proposed-patch card w/ per-op summaries + material-vs-instant label + Apply/Dismiss; applied → APPLIED ✓ + version); applied patches sync the artifact layout + re-render; spec proves the plan card count stays 1 (no detached re-plan). BE 507/507, UI 208/208.
+- [x] R41S1E3-US1 selective recompute — done: `recompute_stale` + `POST /api/sessions/<id>/recompute`: reruns EXACTLY the stale components' queries against the session source (weekly-bucket proof), refreshes contracts + component_data, untouched components keep identical data [tested], flags clear via one system-authored version; failures degrade to a visible error_state w/ previous data retained. BE 507/507, UI 208/208.
+- [x] R41S1E4-US1 resumable sessions [F-12 KILLED] — done: `session_messages` table (conversation persists at confirm + chat-patch turns) + `GET /api/sessions/<id>/hydrate` (messages, confirmed plan, runs, artifact, spec head); Workbench mount hydrates deep links (transcript + approved plan card + runId + artifact + grid); spec: reload restores everything AND the refinement loop still works — closes R40S1E4's deferral. BE 507/507, UI 208/208.
+- [x] R41S1 sprint regression recorded — backend 507/507 · UI 208/208 (0 failed, 2026-07-07) · zero-key boot green — **RELEASE R41 CLOSED** (doc Phase-4 exit: natural-language add/change/move/delete updates the current version). Gate cleanup, root-caused: 3 specs still nav'd via the pre-R36 sidebar-Admin path (migrated to the direct console route, cited); the icons gate flagged R39/R40 glyphs (🗑🔒◢▮ + undo arrows → text/kit-safe glyphs — the gate had been silently no-opping in mirror runs); stage-chip freeze was a REAL race (dag snapshot fetched concurrently with terminal status → poll stopped on stale chips) — fixed with a settled-state reconcile fetch, not masked.
 
 ## Release R42 — Trust & breadth (pending)
 - [ ] R42S1E1-US1 per-component evidence block (contracts, rows, freshness, lineage, DQ, access); failure states never claim GOVERNED [F-10/F-11]
@@ -613,7 +613,7 @@ re-verify tails after any host-side write.
 - [ ] R43S1 sprint regression recorded
 - [ ] R43 release regression + zero-key boot + acceptance 14/14 — PROGRAM CLOSE (R37–R43)
 
-**Session stop note (2026-07-06, third stop):** RELEASE R40 CLOSED — stopped green. Next: R41S1E1-US1 (patch engine: dashboard patch ops add/modify/remove component + layout + semantic, validated + versioned + audited; layout-instant vs semantic-stale classification). Playwright gotchas learned this release: raw page.mouse uses VIEWPORT coords — scrollIntoViewIfNeeded before drags; vertical drags on full-width stacks normalize back (assert ORDER swaps, not y deltas); busy canvas → domClick pattern (evaluate el.click()).
+**Session stop note (2026-07-07):** RELEASE R41 CLOSED — stopped green. Next: R42S1E1-US1 (per-component evidence blocks: contracts/rows/freshness/lineage/DQ/access in the Inspector Data tab; failure states never claim GOVERNED). NOTE: the junior's session shares this mount — uncommitted parity PNG changes under docs/specs/parity are THEIRS, commit only your own paths.
 
 ## Adaptation ledger (program-specific, grows during execution)
 - "Source-bound" on the zero-key stack = bound to per-connection seeded fixture tables through warehouse.py dialect SQL; two-source fidelity is proven with two fixture connections (R38S2E1-US2).

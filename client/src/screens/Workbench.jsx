@@ -207,6 +207,27 @@ export default function Workbench() {
   // planning turn exactly once, as if the user had typed it here.
   useEffect(() => {
     const seed = params.get('q');
+    // R41S1E4 (deep-dive F-12): a deep-linked session hydrates the full
+    // workbench — messages, confirmed plan, run, artifact — instead of an
+    // empty approval placeholder.
+    if (sessionId && !seeded.current && msgs.length === 0) {
+      seeded.current = true;
+      api.hydrateSession(sessionId).then(h => {
+        const restored = (h.messages || []).map(m => ({ role: m.role, text: m.text }));
+        if (h.plan) {
+          restored.push({ role: 'ai', plan: h.plan, approved: !!(h.runs || []).length,
+                          sid: Number(sessionId) });
+        }
+        setMsgs(restored);
+        const done = (h.runs || []).find(r => r.status === 'done');
+        if (done) setRunId(done.id);
+        if (h.artifact) setArtifact(h.artifact);
+        if (h.artifact?.layout_json) {
+          try { setLayout(JSON.parse(h.artifact.layout_json)); } catch { /* noop */ }
+        }
+      }).catch(() => {});
+      return;
+    }
     if (seed && !seeded.current && !sessionId && msgs.length === 0) {
       seeded.current = true;
       plan(seed);
@@ -241,6 +262,19 @@ export default function Workbench() {
   const plan = async (message) => {
     setBusy(true);
     setMsgs(m => [...m, { role: 'user', text: message }]);
+    // R41S1E2 (deep-dive F-09): after the first build, chat proposes
+    // dashboard PATCHES against the current artifact — never a detached plan.
+    if (artifact && sessionId) {
+      try {
+        const prop = await api.chatPatch(sessionId, message);
+        setMsgs(m => [...m, { role: 'ai', text: prop.explanation, patch: prop }]);
+      } catch (e) {
+        setMsgs(m => [...m, { role: 'ai',
+                              text: e?.message || 'Could not plan that change.' }]);
+      }
+      setBusy(false);
+      return;
+    }
     try {
       const p = await api.planSession({ message });
       if (p.trust) setTrust(p.trust);   // R37S1E1
@@ -456,6 +490,68 @@ export default function Workbench() {
                         {s}
                       </span>
                     ))}
+                  </div>
+                )}
+                {m.patch && m.patch.ops.length > 0 && (
+                  <div data-testid="patch-card"
+                       style={{ border: `1px solid ${P.accentBorder}`, borderRadius: 10,
+                                background: P.accentSoft, padding: 12,
+                                margin: '2px 0 10px 32px' }}>
+                    <div style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700,
+                                  letterSpacing: '.06em', color: P.muted,
+                                  marginBottom: 6 }}>
+                      PROPOSED PATCH · {m.patch.material
+                        ? 'needs your confirmation' : 'layout-only · instant'}
+                    </div>
+                    {m.patch.ops.map((o, oi) => (
+                      <div key={oi} data-testid="patch-op"
+                           style={{ fontSize: 12, fontFamily: FONT, color: P.body,
+                                    padding: '2px 0' }}>
+                        · {o.op === 'semantic'
+                            ? `${o.field} → ${o.value}`
+                            : o.op === 'layout'
+                              ? `move/resize ${o.component_id}`
+                              : o.op === 'add_component'
+                                ? `add ${o.component.type} '${o.component.title}'`
+                                : o.op === 'remove_component'
+                                  ? `remove ${o.component_id}`
+                                  : `modify ${o.component_id}`}
+                      </div>
+                    ))}
+                    {(m.patch.unresolved || []).length > 0 && (
+                      <div style={{ fontFamily: MONO, fontSize: 10, color: P.amber,
+                                    marginTop: 4 }}>
+                        unresolved: {m.patch.unresolved.join(', ')}
+                      </div>
+                    )}
+                    {!m.applied && (
+                      <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                        <Btn size="sm" data-testid="patch-apply" onClick={async () => {
+                          try {
+                            const r = await api.applyPatch(sessionId, m.patch.ops);
+                            setMsgs(ms => ms.map(x => x === m
+                              ? { ...x, applied: true,
+                                  text: `${x.text} — applied as v${r.spec_version}.` }
+                              : x));
+                          } catch (e) {
+                            setMsgs(ms => [...ms, { role: 'ai',
+                              text: e?.message || 'Patch failed — nothing changed.' }]);
+                          }
+                        }}>
+                          Apply patch
+                        </Btn>
+                        <Btn size="sm" variant="ghost"
+                             onClick={() => setMsgs(ms => ms.map(x => x === m
+                               ? { ...x, applied: true } : x))}>
+                          Dismiss
+                        </Btn>
+                      </div>
+                    )}
+                    {m.applied && (
+                      <span data-testid="patch-applied"
+                            style={{ fontFamily: MONO, fontSize: 10, color: P.green,
+                                     fontWeight: 700 }}>APPLIED ✓</span>
+                    )}
                   </div>
                 )}
                 {m.followups && (

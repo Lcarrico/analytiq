@@ -1732,23 +1732,23 @@ Mockup: `App Home.dc.html` frame 02 · PRD ch10 §1 · Current: no `/app/activit
 
 ### Sprint R41S1
 #### Epic E1 — Patch engine (F-05 chat half groundwork)
-- [ ] **R41S1E1-US1** — dashboard patch operations, classified and versioned.
+- [x] **R41S1E1-US1** ✅ 2026-07-07 — dashboard patch operations, classified and versioned.
   - AC: patch ops (add/modify/remove component, layout ops, semantic ops: metric/dimension/grain/filter changes) validate against the registry + query planner before apply; **layout-only patches apply instantly; semantic patches mark affected components stale** (rerun in E3); every patch appends a spec version with author + explanation; audited.
   - Touches: server/dashboard_patch.py (new), dashboard_spec.py, app.py (routes), tests. Deps: R40 complete. DoD: standard 9.
 #### Epic E2 — Chat patch planner (F-09)
-- [ ] **R41S1E2-US1** — post-build chat switches to patch intent with preview + confirm.
+- [x] **R41S1E2-US1** ✅ 2026-07-07 — post-build chat switches to patch intent with preview + confirm (F-09 killed).
   - AC: after the first build, chat requests classify as dashboard-patch intent (deterministic: catalog + registry matching over the doc §6 table — "Add AOV and order count as KPIs" → resolve 2 metrics + 2 KPI components + contracts + repack; "make it wider / move below KPIs" → layout-only; "weekly instead of daily" → semantic); the agent replies with a proposed patch card (affected metrics/queries/layout explained), preview renders, material changes apply only after confirm; follow-up chips generate patches; runId-replacement bug retired — the current artifact version advances instead (F-09).
   - Touches: Workbench.jsx, server/dashboard_patch.py (intent planner), BuildCanvas.jsx (preview overlay), api.js. Deps: R41S1E1-US1. DoD: standard 9; acceptance rows "Create via chat" + "Refinement lifecycle" (two consecutive edits → ordered patches, no lost state) green.
 #### Epic E3 — Selective recompute
-- [ ] **R41S1E3-US1** — semantic patches rerun only affected components.
+- [x] **R41S1E3-US1** ✅ 2026-07-07 — semantic patches rerun only affected components.
   - AC: a grain/metric/filter change reruns exactly the dependent components' queries (+ model retrain only when a predictive component depends on it), revalidates their contracts, leaves untouched components' data + geometry intact; visible per-component refresh states.
   - Touches: server/dashboard_patch.py, query_plan.py, pipeline stage, BuildCanvas.jsx (stale/refreshing chips). Deps: R41S1E1-US1, R38S2E1-US2. DoD: standard 9.
 #### Epic E4 — Resumable sessions (F-12)
-- [ ] **R41S1E4-US1** — /app/create/:sessionId hydrates the full workbench.
+- [x] **R41S1E4-US1** ✅ 2026-07-07 — /app/create/:sessionId hydrates the full workbench (F-12 killed).
   - AC: reload/deep-link restores messages, confirmed spec + metric checklist, run history, current artifact + spec version, and grid state; no empty-approval placeholder for a session with history.
   - Touches: server/app.py (session hydration endpoint), Workbench.jsx, BuildCanvas.jsx, context.jsx. Deps: R38S1E1-US2. DoD: standard 9.
 
-**R41S1 sprint gate:** full regression recorded.
+**R41S1 sprint gate:** ✅ 2026-07-07 — backend 507/507 · UI 208/208 · zero-key boot green · 3 owned nav migrations + icons-gate glyph cleanup + a root-caused stage-chip race fix. **RELEASE R41 CLOSED** — doc Phase-4 exit criteria met.
 
 ## Release R42 — Trust & breadth [doc §7 Phase 5]
 **Goal:** every component carries lineage/query/DQ/access evidence; the editor expresses common analysis patterns. Exit: doc Phase-5 criterion.

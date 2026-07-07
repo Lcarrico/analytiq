@@ -501,6 +501,13 @@ CREATE TABLE IF NOT EXISTS api_keys (
     created_at    TEXT DEFAULT (datetime('now')),
     revoked_at    TEXT
 );
+CREATE TABLE IF NOT EXISTS session_messages (
+    id            INTEGER PRIMARY KEY,
+    session_id    INTEGER NOT NULL REFERENCES sessions(id),
+    role          TEXT NOT NULL,
+    text          TEXT NOT NULL,
+    created_at    TEXT DEFAULT (datetime('now'))
+);
 CREATE TABLE IF NOT EXISTS component_data (
     id            INTEGER PRIMARY KEY,
     run_id        INTEGER NOT NULL,
@@ -6034,6 +6041,13 @@ def persist_session_spec(id):
     version = (prev['v'] or 0) + 1
     execute('INSERT INTO session_specs (session_id, spec_version, idempotency_key, payload_hash, spec_json) '
             'VALUES (?,?,?,?,?)', (id, version, idem_key, payload_hash, json.dumps(spec)))
+    # R41S1E4 (deep-dive F-12): the workbench conversation persists so a
+    # deep-linked session can hydrate.
+    execute('INSERT INTO session_messages (session_id, role, text) VALUES (?,?,?)',
+            (id, 'user', spec.get('analytic_goal') or f"Analyze {spec.get('target_metric')}"))
+    execute('INSERT INTO session_messages (session_id, role, text) VALUES (?,?,?)',
+            (id, 'ai', f"Plan confirmed for {spec.get('target_metric')} "
+                       f"({spec.get('grain')}, {spec.get('output_type')})."))
     # R38S1E1-US2 (deep-dive §5A): a confirmed plan lands in the durable
     # DashboardSpec — the bridge derivation encodes today's composition; the
     # multi-metric planner (R38S1E2) and intent shaping (R38S2E2) replace it.
@@ -9427,6 +9441,145 @@ def get_dashboard_spec_head(id):
     out = dict(row)
     out['spec'] = json.loads(out.pop('spec_json'))
     return jsonify(out)
+
+
+@app.post('/api/sessions/<int:id>/chat-patch')
+def chat_patch_plan(id):
+    """R41S1E2: post-build chat → a PROPOSED patch (preview; apply is a
+    separate, confirmed call to /dashboard-patch)."""
+    import dashboard_patch as dp
+    head = one('SELECT spec_json FROM dashboard_specs WHERE session_id=? '
+               'ORDER BY spec_version DESC LIMIT 1', (id,))
+    if not head:
+        return jsonify({'error': 'No dashboard spec for this session yet'}), 409
+    spec = json.loads(head['spec_json'])
+    msg = (request.get_json() or {}).get('message') or ''
+    proposal = dp.plan_from_message(spec, msg)
+    execute('INSERT INTO session_messages (session_id, role, text) VALUES (?,?,?)',
+            (id, 'user', msg))
+    execute('INSERT INTO session_messages (session_id, role, text) VALUES (?,?,?)',
+            (id, 'ai', proposal['explanation']))
+    return jsonify(proposal)
+
+
+@app.get('/api/sessions/<int:id>/hydrate')
+def hydrate_session(id):
+    """R41S1E4 (deep-dive F-12): everything a deep-linked workbench needs —
+    messages, confirmed plan, runs, artifact, spec head."""
+    sess = one('SELECT * FROM sessions WHERE id=?', (id,))
+    if not sess:
+        return jsonify({'error': 'Session not found'}), 404
+    plan_row = one('SELECT spec_json FROM session_specs WHERE session_id=? '
+                   'ORDER BY spec_version DESC LIMIT 1', (id,))
+    runs = many('SELECT id, status, mape, started_at, completed_at FROM pipeline_runs '
+                'WHERE session_id=? ORDER BY id DESC', (id,))
+    art = None
+    done = next((r for r in runs if r['status'] == 'done'), None)
+    if done:
+        art = one('SELECT * FROM artifacts WHERE pipeline_run_id=? '
+                  'ORDER BY id DESC LIMIT 1', (done['id'],))
+    spec_head = one('SELECT spec_version FROM dashboard_specs WHERE session_id=? '
+                    'ORDER BY spec_version DESC LIMIT 1', (id,))
+    return jsonify({
+        'session': sess,
+        'messages': many('SELECT role, text, created_at FROM session_messages '
+                         'WHERE session_id=? ORDER BY id', (id,)),
+        'plan': json.loads(plan_row['spec_json']) if plan_row else None,
+        'runs': runs,
+        'artifact': art,
+        'spec_version': (spec_head or {}).get('spec_version'),
+    })
+
+
+@app.post('/api/sessions/<int:id>/recompute')
+@require_role('admin', 'analyst')
+def recompute_session(id):
+    """R41S1E3: selective recompute — stale components only."""
+    import dashboard_patch as dp
+    sess = one('SELECT * FROM sessions WHERE id=?', (id,))
+    if not sess:
+        return jsonify({'error': 'Session not found'}), 404
+    cid = sess.get('connection_id') \
+        or (one('SELECT id FROM connections ORDER BY id DESC LIMIT 1') or {}).get('id')
+    if not cid:
+        return jsonify({'error': 'No connection available'}), 409
+    try:
+        result = dp.recompute_stale(get_db(), id, cid)
+    except dp.PatchError as e:
+        return jsonify({'error': 'Recompute rejected', 'errors': e.errors}), e.status
+    log_action('dashboard_spec.recomputed', 'dashboard_spec', id,
+               {'components': result['recomputed']})
+    return jsonify(result)
+
+
+@app.post('/api/sessions/<int:id>/dashboard-patch')
+@require_role('admin', 'analyst')
+def post_dashboard_patch(id):
+    """R41S1E1: validated, classified, versioned dashboard patches — the
+    shared mutation language of chat and the workbench."""
+    import component_registry as cr
+    import dashboard_patch as dp
+    if not one('SELECT id FROM sessions WHERE id=?', (id,)):
+        return jsonify({'error': 'Session not found'}), 404
+    b = request.get_json() or {}
+    try:
+        result = dp.apply_patch(get_db(), id, b.get('ops') or [],
+                                author=getattr(g, 'user_email', None) or 'agent')
+    except dp.PatchError as e:
+        return jsonify({'error': 'Patch rejected', 'errors': e.errors}), e.status
+    except cr.RegistryError as e:
+        return jsonify({'error': 'Patch rejected', 'errors': e.errors}), e.status
+    _sync_patch_into_artifact(id, b.get('ops') or [], result)
+    log_action('dashboard_patch.applied', 'dashboard_spec', result['spec_version'],
+               {'session_id': id, 'classification': result['classification'],
+                'ops': [o['op'] for o in result['ops']],
+                'stale': result['stale_components']})
+    return jsonify(result)
+
+
+def _sync_patch_into_artifact(session_id, ops, result):
+    """R41S1E2 (F-09 kill): patches advance the CURRENT artifact instead of
+    spawning detached plans — layout/title/type sync + one re-render."""
+    run = one("SELECT id FROM pipeline_runs WHERE session_id=? AND status='done' "
+              'ORDER BY id DESC LIMIT 1', (session_id,))
+    if not run:
+        return
+    art = one('SELECT * FROM artifacts WHERE pipeline_run_id=? ORDER BY id DESC LIMIT 1',
+              (run['id'],))
+    if not art or not art.get('layout_json'):
+        return
+    layout = json.loads(art['layout_json'])
+    head = one('SELECT spec_json FROM dashboard_specs WHERE session_id=? '
+               'ORDER BY spec_version DESC LIMIT 1', (session_id,))
+    spec = json.loads(head['spec_json']) if head else {'components': []}
+    comps = {c['id']: c for c in spec.get('components', [])}
+    for op, ex in zip(ops, result['ops']):
+        kind = op.get('op')
+        if kind == 'add_component':
+            comp = comps.get(ex.get('component_id'))
+            if comp and not any(s['id'] == comp['id'] for s in layout['sections']):
+                mark = comp['type'] if comp['type'] in ('line', 'bar', 'area') else 'bar'
+                layout['sections'].append({'id': comp['id'], 'title': comp['title'],
+                                           'mark': mark, 'top_n': None,
+                                           'position': len(layout['sections'])})
+        elif kind == 'remove_component':
+            layout['sections'] = [s for s in layout['sections']
+                                  if s['id'] != op.get('component_id')]
+        elif kind == 'modify_component':
+            sec = next((s for s in layout['sections']
+                        if s['id'] == op.get('component_id')), None)
+            ch = op.get('changes') or {}
+            if sec:
+                if 'title' in ch:
+                    sec['title'] = ch['title']
+                if 'type' in ch:
+                    sec['mark'] = ch['type'] if ch['type'] in ('line', 'bar', 'area') \
+                        else sec['mark']
+    for i, s in enumerate(sorted(layout['sections'], key=lambda x: x['position'])):
+        s['position'] = i
+    execute('UPDATE artifacts SET layout_json=? WHERE id=?',
+            (json.dumps(layout), art['id']))
+    _rerender_artifact_html(art)
 
 
 @app.patch('/api/sessions/<int:id>/dashboard-spec/grid')
