@@ -1,6 +1,8 @@
 // R34S1E1 (renamed from r29s1_marketing.spec.js — R29S1 precursor slice, itself
 // renamed from r23s1 2026-07-04): shared MarketingNav + MarketingFooter chrome,
 // wired into Landing + Pricing. Marketing.jsx / MarketingNav.jsx / MarketingFooter.jsx.
+// R34S1E2: extended for the Landing rebuild (dark hero, BI comparison, value
+// props, use cases, trust strip, CTA band) per Marketing Landing.dc.html.
 import { test, expect } from '@playwright/test';
 
 const NAV_LINKS = ['product', 'solutions', 'templates', 'pricing', 'security', 'docs'];
@@ -22,12 +24,19 @@ async function expectSharedChrome(page) {
   await expect(footer.getByText('SOC 2 Type II · GDPR · ISO 27001', { exact: true })).toBeVisible();
 }
 
-test('landing renders hero, value cards, shared nav and footer', async ({ page }) => {
+test('landing renders dark hero, BI comparison, value cards, use cases, trust strip, CTA', async ({ page }) => {
   await page.goto('/');
   const landing = page.getByTestId('marketing-landing');
   await expect(landing).toBeVisible();
-  await expect(landing.getByText('0 RAW ROWS TO LLM')).toBeVisible();
+  await expect(landing.getByRole('heading', { name: /Ask a question\./ })).toBeVisible();
+  await expect(landing.getByTestId('hero-start-free')).toBeVisible();
+  await expect(landing.getByText('raw rows sent to an LLM')).toBeVisible();
+  await expect(landing.getByText("Dashboards shouldn't take a sprint")).toBeVisible();
   await expect(landing.getByText('Governed metrics')).toBeVisible();
+  await expect(landing.getByText('Start from a question they already ask')).toBeVisible();
+  await expect(landing.getByText('Revenue Forecast')).toBeVisible();
+  await expect(landing.getByText('GOVERNED BY DESIGN')).toBeVisible();
+  await expect(landing.getByText('Your next dashboard is a sentence away')).toBeVisible();
   await expect(page.getByTestId('app-sidebar')).toHaveCount(0);   // shell-free
   await expectSharedChrome(page);
 });
