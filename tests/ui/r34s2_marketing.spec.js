@@ -5,6 +5,10 @@
 // Per Marketing Templates.dc.html. MarketingTemplates.jsx.
 // R34S2E3 — Security page (/security): compliance pills, jump nav, 8 section
 // cards. Per Marketing Security.dc.html. MarketingSecurity.jsx.
+// R34S2E4 — Docs page (/docs): standalone slim nav, nav tree, Quickstart
+// article, "on this page" rail. Per Marketing Docs.dc.html. No shared footer
+// on this page (Docs has its own distinct chrome throughout — see plan).
+// MarketingDocs.jsx. Closes Sprint R34S2 and Release R34.
 import { test, expect } from '@playwright/test';
 
 const NAV_LINKS = ['product', 'solutions', 'templates', 'pricing', 'security', 'docs'];
@@ -88,4 +92,22 @@ test('security page renders header, compliance pills, jump nav, and all 8 sectio
     await expect(security.getByText(title, { exact: true })).toBeVisible();
   }
   await expectSharedChrome(page);
+});
+
+test('docs page renders its own nav, nav tree, Quickstart article, and on-this-page rail', async ({ page }) => {
+  await page.goto('/docs');
+  const docs = page.getByTestId('marketing-docs');
+  await expect(docs).toBeVisible();
+  await expect(docs.getByRole('heading', { name: 'Quickstart: question → dashboard in 4 minutes' })).toBeVisible();
+  await expect(docs.getByText('Search docs…')).toBeVisible();
+  await expect(docs.getByText('Quickstart', { exact: true })).toBeVisible();
+  await expect(docs.getByText('Connect Snowflake', { exact: true })).toBeVisible();
+  for (const label of ['1 · Pick your data', '2 · Ask a question', '3 · Approve the plan', '4 · Refine and share']) {
+    await expect(docs.getByRole('heading', { name: label })).toBeVisible();
+  }
+  await expect(docs.getByText('8 tables profiled · health 94/100')).toBeVisible();
+  await expect(docs.getByText('Next: Connect Snowflake')).toBeVisible();
+  // Docs deliberately has no MarketingNav/MarketingFooter (its own distinct chrome).
+  await expect(page.getByTestId('marketing-nav')).toHaveCount(0);
+  await expect(page.getByTestId('marketing-footer')).toHaveCount(0);
 });

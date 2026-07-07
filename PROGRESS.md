@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · PROGRAM COMPLETE (R30–R36) — 52/52 lead-owned stories; R34 (12 marketing stories) on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · PROGRAM COMPLETE (R30–R36) — 52/52 lead-owned stories · R34 (8 marketing stories, junior's parallel track) ✅ 2026-07-07 — ALL RELEASES CLOSED  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -411,9 +411,9 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R34S2E1-US1 solutions ×6 persona routes [was R29S2E1] ✅ 2026-07-06 (one shared MarketingSolutions.jsx + /solutions/:persona dynamic route; only Executives copy was in the mockup, other 5 personas' copy extrapolated to match tone/structure per plan sign-off; 3 feature callouts reused across all personas rather than invented ×6; backend 465/469 — 2 known pre-existing + 2 more confirmed flaky in isolation, no backend touched)
 - [x] R34S2E2-US1 templates gallery [was R29S2E2] ✅ 2026-07-06 (real filter via useMemo/Set, not decorative; backend 466/469)
 - [x] R34S2E3-US1 security page [was R29S2E3] ✅ 2026-07-06 (8-section data-driven page, 4th reuse of the same {id,label,icon,title,body}.map() pattern; scroll-spy highlight deliberately left static; backend 466/469)
-- [ ] R34S2E4-US1 docs page [was R29S2E4]
-- [ ] R34S2 sprint regression recorded
-- [ ] R34 release regression + zero-key boot recorded
+- [x] R34S2E4-US1 docs page [was R29S2E4] ✅ 2026-07-07 (own distinct nav + no footer, confirmed with user; nav-tree non-Quickstart items are inert placeholders, not fabricated articles; backend 466/469)
+- [x] R34S2 sprint regression recorded ✅ 2026-07-07 — backend 466/469 (known pre-existing/flaky only); UI deferred, environment note above
+- [x] R34 release regression + zero-key boot recorded ✅ 2026-07-07 — backend 466/469; zero-key boot verified (shell 200, all 8 services local). **RELEASE R34 CLOSED** — all 7 marketing pages live at their designed routes (Landing/Product/Pricing/Solutions ×6/Templates/Security/Docs), pricing data lock intact throughout, UI suite deferred to a separate environment fix (native-Windows Playwright browser gap, unrelated to this content work)
 
 ## Release R35 — Unreviewed: Data layer (audit-first) (pending)
 ### Milestone UP-F — Data surfaces at parity
