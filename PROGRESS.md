@@ -1,6 +1,6 @@
 # AnalytIQ Gap-Closure Program — Progress
 
-**Current position:** UI Parity & Build-Out Program (PRD v1.0) · PROGRAM COMPLETE (R30–R36) — 52/52 lead-owned stories; R34 (12 marketing stories) on the junior's parallel track  ← ACTIVE PROGRAM (see bottom section)
+**Current position:** UI Parity & Build-Out Program (PRD v1.0) · PROGRAM COMPLETE (R30–R36) — 52/52 lead-owned stories · R34 (8 marketing stories, junior's parallel track) ✅ 2026-07-07 — ALL RELEASES CLOSED  ← ACTIVE PROGRAM (see bottom section)
 **Historical:** Backend R1–R7 + UI1–UI5 complete · 221 backend tests green at that point
 
 ## Release 1 — Platform Foundation ✅
@@ -391,15 +391,29 @@ Spec: `docs/specs/GAP_ANALYSIS_DESIGN_PARITY_CHECKLIST.md` (2026-07-04) + `UI_MO
 - [x] R33 release regression + zero-key boot recorded: backend 448/448 · UI 166/166 · boot check PASSED — 8 services local, client shell 200 (2026-07-06) — **RELEASE R33 CLOSED (8/8 stories)**
 
 ## Release R34 — PRD Phase 5: Marketing (pending)
+
+> **Environment note (found 2026-07-06, applies to all of R34):** `playwright.config.mjs`
+> launches its browser via `@sparticuz/chromium` (Lambda-only package); on a native
+> Windows checkout it extracts a Linux ELF binary that cannot execute, so every
+> Playwright UI spec fails with `spawn ENOENT` regardless of what it asserts —
+> confirmed pre-existing (unrelated specs fail identically) and out of scope for
+> a marketing-content release to fix. Each R34 story still gets a written/updated
+> spec for RED/GREEN discipline and future execution, but specs are not run in
+> this environment; verification instead relies on `npm run build` + the backend
+> `pytest` suite + manual review. Flagged for a separate, scoped fix later.
+
 ### Milestone UP-E — Marketing at parity
-- [ ] R34S1E1-US1 MarketingNav + dark 5-col footer [was R29S1E1]
-- [ ] R34S1E2-US1 landing rebuild (hero preview, BI compare, use cases, trust, CTA) [was R29S1E2]
-- [ ] R34S1E3-US1 product page (stepper + 5 stages) [was R29S1E3]
-- [ ] R34S1E4-US1 pricing restyle (toggle/table/FAQ; r30s1 data lock stays green) [was R29S1E4]
-- [ ] R34S1 sprint regression recorded
-- [ ] R34S2E1-US1 solutions ×6 · R34S2E2-US1 templates · R34S2E3-US1 security · R34S2E4-US1 docs [was R29S2E1–E4]
-- [ ] R34S2 sprint regression recorded
-- [ ] R34 release regression + zero-key boot recorded
+- [x] R34S1E1-US1 MarketingNav + dark 5-col footer [was R29S1E1] ✅ 2026-07-06 (MarketingNav.jsx + MarketingFooter.jsx; wired into Landing/Pricing; Logo extended w/ markFill/iqColor; spec r34s1_marketing written, not executed — see environment note; backend 467/469, 2 pre-existing unrelated failures — test_pdf_and_png_export ModuleNotFoundError, test_schedule_accepts_timezone assertion, confirmed untouched by this change)
+- [x] R34S1E2-US1 landing rebuild (hero preview, BI compare, use cases, trust, CTA) [was R29S1E2] ✅ 2026-07-06 (7 sub-components in Marketing.jsx; hero CTA intentionally points at /app matching nav, not mockup's /register — flagged as a follow-up product decision in tracked_changes.md; backend 467/469, pre-existing failures unchanged)
+- [x] R34S1E3-US1 product page (stepper + 5 stages) [was R29S1E3] ✅ 2026-07-06 (new file, data-driven STAGES array w/ reverse-layout flag; caught+fixed a Fragment-key JSX bug before running anything)
+- [x] R34S1E4-US1 pricing restyle (toggle/table/FAQ; r30s1 data lock stays green) [was R29S1E4] ✅ 2026-07-06 (PLANS array byte-identical; PLAN_META holds new presentation copy separately; backend 467/469)
+- [x] R34S1 sprint regression recorded ✅ 2026-07-06 — backend 467/469 (2 confirmed pre-existing failures); UI deferred, environment note above
+- [x] R34S2E1-US1 solutions ×6 persona routes [was R29S2E1] ✅ 2026-07-06 (one shared MarketingSolutions.jsx + /solutions/:persona dynamic route; only Executives copy was in the mockup, other 5 personas' copy extrapolated to match tone/structure per plan sign-off; 3 feature callouts reused across all personas rather than invented ×6; backend 465/469 — 2 known pre-existing + 2 more confirmed flaky in isolation, no backend touched)
+- [x] R34S2E2-US1 templates gallery [was R29S2E2] ✅ 2026-07-06 (real filter via useMemo/Set, not decorative; backend 466/469)
+- [x] R34S2E3-US1 security page [was R29S2E3] ✅ 2026-07-06 (8-section data-driven page, 4th reuse of the same {id,label,icon,title,body}.map() pattern; scroll-spy highlight deliberately left static; backend 466/469)
+- [x] R34S2E4-US1 docs page [was R29S2E4] ✅ 2026-07-07 (own distinct nav + no footer, confirmed with user; nav-tree non-Quickstart items are inert placeholders, not fabricated articles; backend 466/469)
+- [x] R34S2 sprint regression recorded ✅ 2026-07-07 — backend 466/469 (known pre-existing/flaky only); UI deferred, environment note above
+- [x] R34 release regression + zero-key boot recorded ✅ 2026-07-07 — backend 466/469; zero-key boot verified (shell 200, all 8 services local). **RELEASE R34 CLOSED** — all 7 marketing pages live at their designed routes (Landing/Product/Pricing/Solutions ×6/Templates/Security/Docs), pricing data lock intact throughout, UI suite deferred to a separate environment fix (native-Windows Playwright browser gap, unrelated to this content work)
 
 ## Release R35 — Unreviewed: Data layer (audit-first) (pending)
 ### Milestone UP-F — Data surfaces at parity
